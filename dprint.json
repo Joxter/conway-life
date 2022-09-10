@@ -1,0 +1,14 @@
+{
+  "typescript": {
+    "semiColons": "always",
+    "quoteStyle": "preferSingle",
+    "arrowFunction.useParentheses": "force",
+    "lineWidth": 100
+  },
+  "includes": [
+    "src/**/*.{ts,js,json}"
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.71.2.wasm"
+  ]
+}

@@ -1,30 +1,26 @@
 import './style.css';
-import typescriptLogo from './typescript.svg';
-import { using, h } from 'forest';
-import { Counter } from './counter';
-
-function Logo(href: string, img: string, alt: string) {
-  h('a', {
-    attr: { href, target: '_blank' },
-    fn() {
-      h('img', {
-        attr: { src: img, alt },
-        classList: ['logo'],
-      });
-    },
-  });
-}
+import { h, spec, using } from 'forest';
+import { $field, rawClicked, tick } from './model';
+import { field } from './ui-components/field';
 
 function App() {
   h('div', () => {
-    Logo('https://vitejs.dev', '/vite.svg', 'Vite logo');
-    Logo('https://www.typescriptlang.org/', typescriptLogo, 'TypeScript logo');
-    h('h1', { text: 'Vite + TypeScript + Forest' });
-    Counter();
-    h('p', {
-      classList: ['read-the-docs'],
-      text: 'Click on the Vite and TypeScript logos to learn more',
+    spec({
+      style: {
+        margin: '40px auto',
+        maxWidth: '600px',
+        border: '2px solid lightblue',
+        padding: '16px',
+      },
     });
+    h('h1', { text: 'Game of Life' });
+
+    h('button', {
+      text: 'Tick',
+      handler: { click: tick },
+    });
+
+    field($field, rawClicked);
   });
 }
 

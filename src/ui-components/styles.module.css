@@ -1,0 +1,20 @@
+.field {
+  --size: 30;
+  display: grid;
+  grid-template-columns: repeat(var(--size), auto);
+  grid-template-rows: repeat(var(--size), auto);
+
+}
+
+.cell {
+  aspect-ratio: 1;
+  box-shadow: inset 0px 0px 2px 0px #56595c;
+}
+
+.cell:hover {
+  box-shadow: inset 0px 0px 0px 3px #4d97ec;
+}
+
+.cell.on {
+  background: #213547;
+}
