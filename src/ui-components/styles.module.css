@@ -3,12 +3,12 @@
   display: grid;
   grid-template-columns: repeat(var(--size), auto);
   grid-template-rows: repeat(var(--size), auto);
-
 }
 
 .cell {
   aspect-ratio: 1;
   box-shadow: inset 0px 0px 2px 0px #56595c;
+  transition: background-color 0.1s ease-in-out;
 }
 
 .cell:hover {
@@ -16,5 +16,5 @@
 }
 
 .cell.on {
-  background: #e55562;
+  background-color: #e55562;
 }

@@ -2,12 +2,12 @@ import { createEvent, createStore, sample } from 'effector';
 import { interval } from 'patronum';
 import { getInitFromLS, getRowColFromEvent, makeGo, saveToLS } from './utils';
 
-export const FIELD_SIZE = 40;
+export const FIELD_SIZE = 100;
 
-const initField: boolean[][] = Array(FIELD_SIZE).fill(false).map(() => {
+const emptyField: boolean[][] = Array(FIELD_SIZE).fill(false).map(() => {
   return Array(FIELD_SIZE).fill(false);
 });
-export const $field = createStore<boolean[][]>(getInitFromLS() || initField);
+export const $field = createStore<boolean[][]>(getInitFromLS() || emptyField);
 
 export const rawClicked = createEvent<any>();
 const toggleCell = createEvent<{ row: number; col: number; }>();
@@ -30,13 +30,7 @@ export const gameTimer = {
   isRunning: timer.isRunning,
 };
 
-const $isMouseDown = createStore(false);
-
 export const cellHovered = createEvent<any>();
-const mouseDownEv = createEvent<any>();
-const mouseUpEv = createEvent<any>();
-
-$isMouseDown.on(mouseDownEv, () => true).on(mouseUpEv, () => false);
 
 sample({
   clock: [timer.tick, startTimer],
@@ -66,14 +60,7 @@ $field
     return newField;
   })
   .on(tick, (field) => makeGo(field))
-  .reset(reset);
-
-document.addEventListener('mousedown', () => {
-  mouseDownEv();
-});
-document.addEventListener('mouseup', () => {
-  mouseUpEv();
-});
+  .on(reset, () => emptyField);
 
 $field.watch((field) => {
   saveToLS(field);
