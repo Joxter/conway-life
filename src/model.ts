@@ -1,5 +1,6 @@
 import { createEvent, createStore, sample } from 'effector';
-import { checkNeighbors } from './utils';
+import { interval } from 'patronum';
+import { checkNeighbors, getRowColFromEvent, makeGo } from './utils';
 
 export const FIELD_SIZE = 40;
 
@@ -9,21 +10,52 @@ const initField: boolean[][] = Array(FIELD_SIZE).fill(false).map(() => {
 export const $field = createStore<boolean[][]>(initField);
 
 export const rawClicked = createEvent<any>();
-const cellClicked = createEvent<{ row: number; col: number; }>();
+const toggleCell = createEvent<{ row: number; col: number; }>();
 
 export const tick = createEvent<any>();
+export const reset = createEvent<any>();
+
+const startTimer = createEvent<any>();
+const stopTimer = createEvent<any>();
+
+const timer = interval({
+  timeout: 500,
+  start: startTimer,
+  stop: stopTimer,
+});
+
+export const gameTimer = {
+  start: startTimer,
+  stop: stopTimer,
+  isRunning: timer.isRunning,
+};
+
+const $isMouseDown = createStore(false);
+
+export const cellHovered = createEvent<any>();
+const mouseDownEv = createEvent<any>();
+const mouseUpEv = createEvent<any>();
+
+$isMouseDown.on(mouseDownEv, () => true).on(mouseUpEv, () => false);
 
 sample({
-  clock: rawClicked.filterMap((ev) => {
-    if (ev.target.dataset && ev.target.dataset.row && ev.target.dataset.col) {
-      return { row: +ev.target.dataset.row, col: +ev.target.dataset.col };
-    }
-  }),
-  target: cellClicked,
+  clock: timer.tick,
+  target: tick,
+});
+
+sample({
+  clock: cellHovered.filterMap(getRowColFromEvent),
+  filter: $isMouseDown,
+  target: toggleCell,
+});
+
+sample({
+  clock: rawClicked.filterMap(getRowColFromEvent),
+  target: toggleCell,
 });
 
 $field
-  .on(cellClicked, (field, { row, col }) => {
+  .on(toggleCell, (field, { row, col }) => {
     const newField = [...field];
     const newRow = [...field[row]];
 
@@ -31,21 +63,12 @@ $field
     newField[row] = newRow;
 
     return newField;
-  }).on(tick, (field) => {
-    return field.map((rowArr, row) => {
-      return rowArr.map((colVal, col) => {
-        let cellVal = colVal;
-        let nCount = checkNeighbors(field, { row, col });
+  })
+  .on(tick, (field) => makeGo(field)).reset(reset);
 
-        if (cellVal && nCount < 2) { // If live and <2 live neighbors
-          return false;
-        } else if (cellVal && nCount > 3) { // If live and >3 live neighbors
-          return false;
-        } else if (!cellVal && nCount == 3) { // If dead and 3 live neighbors
-          return true;
-        }
-
-        return cellVal;
-      });
-    });
-  });
+document.addEventListener('mousedown', () => {
+  mouseDownEv();
+});
+document.addEventListener('mouseup', () => {
+  mouseUpEv();
+});

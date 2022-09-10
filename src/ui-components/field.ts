@@ -3,7 +3,7 @@ import { h, list } from 'forest';
 import { FIELD_SIZE } from '../model';
 import css from './styles.module.css';
 
-export function field($field: Store<boolean[][]>, rawClicked: Event<any>) {
+export function field($field: Store<boolean[][]>, rawClicked: Event<any>, hoverEv: Event<any>) {
   h('div', {
     classList: [css.field],
     styleVar: { size: FIELD_SIZE },
@@ -15,6 +15,7 @@ export function field($field: Store<boolean[][]>, rawClicked: Event<any>) {
         list($rowStore, ({ store: $colStore, key: $colkey }) => {
           h('div', {
             data: { row: $rowKey, col: $colkey },
+            handler: { mouseover: hoverEv },
             classList: { [css.cell]: true, [css.on]: $colStore },
           });
         });
