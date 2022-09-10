@@ -18,6 +18,7 @@ function App() {
 
     h('p', () => {
       // todo
+      //  - add Elsa for Alisa mode
       //  - move to a separate component
       //  - add color picker
       //  - add paint/erase mode
