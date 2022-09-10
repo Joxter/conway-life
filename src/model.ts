@@ -44,8 +44,9 @@ sample({
 });
 
 sample({
-  clock: cellHovered.filterMap(getRowColFromEvent),
-  filter: $isMouseDown,
+  clock: cellHovered.filterMap((ev) => {
+    if (ev.shiftKey) return getRowColFromEvent(ev)
+  }),
   target: toggleCell,
 });
 
