@@ -1,4 +1,4 @@
-export function checkNeighbors(field: boolean[][], { row, col }: { row: number; col: number; }) {
+function checkNeighbors(field: boolean[][], { row, col }: { row: number; col: number; }) {
   let count = 0;
 
   if (field[row - 1]) {
@@ -44,4 +44,17 @@ export function makeGo(field: boolean[][]): boolean[][] {
       return cellVal;
     });
   });
+}
+
+export function saveToLS(field: boolean[][]) {
+  localStorage.setItem('field', JSON.stringify(field));
+}
+
+export function getInitFromLS(): boolean[][] | null {
+  try {
+    return JSON.parse(localStorage.getItem('field') || '') || null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 }

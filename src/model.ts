@@ -1,13 +1,13 @@
 import { createEvent, createStore, sample } from 'effector';
 import { interval } from 'patronum';
-import { checkNeighbors, getRowColFromEvent, makeGo } from './utils';
+import { getInitFromLS, getRowColFromEvent, makeGo, saveToLS } from './utils';
 
 export const FIELD_SIZE = 40;
 
 const initField: boolean[][] = Array(FIELD_SIZE).fill(false).map(() => {
   return Array(FIELD_SIZE).fill(false);
 });
-export const $field = createStore<boolean[][]>(initField);
+export const $field = createStore<boolean[][]>(getInitFromLS() || initField);
 
 export const rawClicked = createEvent<any>();
 const toggleCell = createEvent<{ row: number; col: number; }>();
@@ -39,13 +39,13 @@ const mouseUpEv = createEvent<any>();
 $isMouseDown.on(mouseDownEv, () => true).on(mouseUpEv, () => false);
 
 sample({
-  clock: timer.tick,
+  clock: [timer.tick, startTimer],
   target: tick,
 });
 
 sample({
   clock: cellHovered.filterMap((ev) => {
-    if (ev.shiftKey) return getRowColFromEvent(ev)
+    if (ev.shiftKey) return getRowColFromEvent(ev);
   }),
   target: toggleCell,
 });
@@ -65,11 +65,16 @@ $field
 
     return newField;
   })
-  .on(tick, (field) => makeGo(field)).reset(reset);
+  .on(tick, (field) => makeGo(field))
+  .reset(reset);
 
 document.addEventListener('mousedown', () => {
   mouseDownEv();
 });
 document.addEventListener('mouseup', () => {
   mouseUpEv();
+});
+
+$field.watch((field) => {
+  saveToLS(field);
 });
