@@ -33,6 +33,10 @@ export function makeGo(field: boolean[][]): boolean[][] {
       let cellVal = colVal;
       let nCount = checkNeighbors(field, { row, col });
 
+      // if (nCount === 0 && cellVal === false) {
+      //   return Math.random() > 0.9999;
+      // }
+
       if (cellVal && nCount < 2) { // If live and <2 live neighbors
         return false;
       } else if (cellVal && nCount > 3) { // If live and >3 live neighbors
