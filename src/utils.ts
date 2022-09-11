@@ -54,7 +54,7 @@ export function saveToLS(field: boolean[][]) {
   localStorage.setItem('field', JSON.stringify(field));
 }
 
-export function getInitFromLS(): boolean[][] | null {
+export function getSavedFromLS(): boolean[][] | null {
   try {
     return JSON.parse(localStorage.getItem('field') || '') || null;
   } catch (err) {

@@ -16,7 +16,13 @@ export function field($field: Store<boolean[][]>, rawClicked: Event<any>, hoverE
           h('div', {
             data: { row: $rowKey, col: $colkey },
             handler: { mouseover: hoverEv },
-            classList: { [css.cell]: true, [css.on]: $colStore },
+            classList: {
+              [css.cell]: true,
+              [css.on]: $colStore,
+              [css.roundCell]: $colkey.map((n) => {
+                return n >= FIELD_SIZE / 2;
+              }),
+            },
           });
         });
       });

@@ -16,5 +16,10 @@
 }
 
 .cell.on {
-  background-color: #e55562;
+  background-color: #63e555;
 }
+
+.roundCell {
+  border-radius: 50%;
+}
+

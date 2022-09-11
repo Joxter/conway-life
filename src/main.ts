@@ -1,7 +1,15 @@
 import './style.css';
-import { createEvent } from 'effector';
 import { h, spec, text, using } from 'forest';
-import { $field, cellHovered, gameTimer, rawClicked, reset, tick } from './model';
+import {
+  $field,
+  cellHovered,
+  gameTimer,
+  rawClicked,
+  reset,
+  restoreClicked,
+  saveClicked,
+  tick,
+} from './model';
 import { field } from './ui-components/field';
 
 function App() {
@@ -25,7 +33,7 @@ function App() {
       //  - add input timer interval
       //  - add dynamic field size
       //  - add undo/redo
-      //  - saved states, return to saved
+      //  + saved states, return to saved
 
       spec({ style: { display: 'flex', gap: '8px' } });
       h('button', { text: 'Tick', handler: { click: tick } });
@@ -33,7 +41,12 @@ function App() {
       h('button', { text: 'Start', handler: { click: gameTimer.start } });
       h('button', { text: 'Stop', handler: { click: gameTimer.stop } });
 
-      h('button', { style: { marginLeft: 'auto' }, text: 'Reset', handler: { click: reset } });
+      h('button', {
+        style: { marginLeft: 'auto' },
+        text: 'Restore',
+        handler: { click: restoreClicked },
+      });
+      h('button', { text: 'Save', handler: { click: saveClicked } });
 
       // const colorChanged = createEvent<any>();
       // colorChanged.watch((ev) => console.log(ev.target.value));
@@ -41,6 +54,7 @@ function App() {
     });
 
     field($field, rawClicked, cellHovered);
+    h('button', { text: 'Reset', handler: { click: reset } });
   });
 }
 
