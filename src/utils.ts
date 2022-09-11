@@ -1,3 +1,5 @@
+import { Field } from './types';
+
 function checkNeighbors(field: boolean[][], { row, col }: { row: number; col: number; }) {
   let count = 0;
 
@@ -50,13 +52,14 @@ export function makeGo(field: boolean[][]): boolean[][] {
   });
 }
 
-export function saveToLS(field: boolean[][]) {
-  localStorage.setItem('field', JSON.stringify(field));
+export function saveToLS(history: { field: Field; name: string; }[]) {
+  localStorage.setItem('history', JSON.stringify(history));
 }
 
-export function getSavedFromLS(): boolean[][] | null {
+export function getSavedFromLS(): { field: Field; name: string; }[] | null {
   try {
-    return JSON.parse(localStorage.getItem('field') || '') || null;
+    // @ts-ignore
+    return JSON.parse(localStorage.getItem('history') || null) || null;
   } catch (err) {
     console.error(err);
     return null;

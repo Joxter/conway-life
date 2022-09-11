@@ -23,3 +23,8 @@
   border-radius: 50%;
 }
 
+.history {
+  display: flex;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+}

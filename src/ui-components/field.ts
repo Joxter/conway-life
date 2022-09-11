@@ -1,6 +1,6 @@
 import { Event, Store } from 'effector';
 import { h, list } from 'forest';
-import { FIELD_SIZE } from '../model';
+import { FIELD_SIZE } from '../model/field';
 import css from './styles.module.css';
 
 export function field($field: Store<boolean[][]>, rawClicked: Event<any>, hoverEv: Event<any>) {
