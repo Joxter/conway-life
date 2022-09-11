@@ -1,13 +1,11 @@
 import { createEvent, createStore, sample } from 'effector';
 import { interval } from 'patronum';
-import { getRowColFromEvent, makeGo } from '../utils';
+import { createEmpty, getRowColFromEvent, makeGo } from '../utils';
 
-export const FIELD_SIZE = 50;
-
-const emptyField: boolean[][] = Array(FIELD_SIZE).fill(false).map(() => {
-  return Array(FIELD_SIZE).fill(false);
+export const $field = createStore<boolean[][]>(createEmpty(50, 50));
+export const $fieldSize = $field.map((field) => {
+  return { height: field.length, width: field[0].length };
 });
-export const $field = createStore<boolean[][]>(emptyField);
 
 export const rawClicked = createEvent<any>();
 const toggleCell = createEvent<{ row: number; col: number; }>();
@@ -61,4 +59,4 @@ $field
     return newField;
   })
   .on(gameTick, (field) => makeGo(field))
-  .on(reset, () => emptyField);
+  .on(reset, () => createEmpty(50, 50));

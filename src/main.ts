@@ -1,6 +1,6 @@
 import './style.css';
 import { h, spec, text, using } from 'forest';
-import { $field, cellHovered, gameTimer, rawClicked, reset, saveClicked } from './model/field';
+import { gameTimer, reset, saveClicked } from './model/field';
 import { field } from './components/field';
 import { history } from './components/history';
 import './model/app';
@@ -21,14 +21,17 @@ function App() {
 
     h('p', () => {
       // todo
-      //  - add Elsa for Alisa mode
+      //  - add Elsa for Alisa mode, add "heart" cell design
       //  - move to a separate component
       //  - add color picker
       //  - add paint/erase mode
       //  - add input timer interval
-      //  - add dynamic field size
-      //  - add undo/redo
+      //  +-add dynamic field size
+      //  - add undo/redo !!!
       //  + saved states, return to saved
+      //  - different colors mode
+      //  - import/export blueprints
+      //  - select and move/delete parts
 
       spec({ style: { display: 'flex', gap: '8px' } });
       text` timer: ${gameTimer.isRunning.map((on) => on ? 'on' : 'off')} `;
@@ -42,7 +45,7 @@ function App() {
       // h('input', { attr: { type: 'color', value: '#e55562' }, handler: { change: colorChanged } });
     });
 
-    field($field, rawClicked, cellHovered);
+    field();
     h('button', { text: 'Reset', handler: { click: reset } });
   });
 }

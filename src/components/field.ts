@@ -1,12 +1,12 @@
-import { Event, Store } from 'effector';
+import { combine } from 'effector';
 import { h, list } from 'forest';
-import { FIELD_SIZE } from '../model/field';
+import { $field, $fieldSize, cellHovered, rawClicked } from '../model/field';
 import css from './styles.module.css';
 
-export function field($field: Store<boolean[][]>, rawClicked: Event<any>, hoverEv: Event<any>) {
+export function field() {
   h('div', {
     classList: [css.field],
-    styleVar: { size: FIELD_SIZE },
+    styleVar: { width: $fieldSize.map((it) => it.width) },
     handler: {
       click: rawClicked,
     },
@@ -15,12 +15,12 @@ export function field($field: Store<boolean[][]>, rawClicked: Event<any>, hoverE
         list($rowStore, ({ store: $colStore, key: $colkey }) => {
           h('div', {
             data: { row: $rowKey, col: $colkey },
-            handler: { mouseover: hoverEv },
+            handler: { mouseover: cellHovered },
             classList: {
               [css.cell]: true,
               [css.on]: $colStore,
-              [css.roundCell]: $colkey.map((n) => {
-                return n >= FIELD_SIZE / 2;
+              [css.roundCell]: combine($colkey, $fieldSize, (col, field) => {
+                return col >= field.width / 2;
               }),
             },
           });

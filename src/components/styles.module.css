@@ -1,22 +1,21 @@
 .field {
-  --size: 30;
+  --width: 30;
   display: grid;
-  grid-template-columns: repeat(var(--size), auto);
-  grid-template-rows: repeat(var(--size), auto);
+  grid-template-columns: repeat(var(--width), auto);
 }
 
 .cell {
   aspect-ratio: 1;
   box-shadow: inset 0px 0px 2px 0px #56595c;
-  transition: background-color 0.1s ease-in-out;
+  /*transition: background-color 0.1s linear;*/
 }
 
 .cell:hover {
-  box-shadow: inset 0px 0px 0px 3px #4d97ec;
+  box-shadow: inset 0px 0px 0px 3px #4dec7a;
 }
 
 .cell.on {
-  background-color: #63e555;
+  background-color: #5583e5;
 }
 
 .roundCell {

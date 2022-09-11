@@ -65,3 +65,9 @@ export function getSavedFromLS(): { field: Field; name: string; }[] | null {
     return null;
   }
 }
+
+export function createEmpty(width: number, height: number): boolean[][] {
+  return Array(height).fill(0).map(() => {
+    return Array(width).fill(false);
+  });
+}
