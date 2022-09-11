@@ -1,5 +1,5 @@
 import { sample } from 'effector';
-import { $field, saveClicked } from './field';
+import { $field, gameTimer, saveClicked } from './field';
 import { $history, addToHistory, historySelected } from './history';
 
 sample({
@@ -16,3 +16,5 @@ sample({
   },
   target: $field,
 });
+
+sample({ clock: historySelected, target: gameTimer.stop });
