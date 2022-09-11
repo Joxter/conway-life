@@ -1,8 +1,8 @@
 import './style.css';
 import { h, spec, text, using } from 'forest';
 import { $field, cellHovered, gameTimer, rawClicked, reset, saveClicked } from './model/field';
-import { field } from './ui-components/field';
-import { history } from './ui-components/history';
+import { field } from './components/field';
+import { history } from './components/history';
 import './model/app';
 
 function App() {
