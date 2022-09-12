@@ -1,4 +1,6 @@
 import { sample } from 'effector';
+import { exportToSting } from '../utils';
+import { $exported, exportClicked } from './export';
 import { $field, gameTimer, saveClicked } from './field';
 import { $history, addToHistory, historySelected } from './history';
 
@@ -18,3 +20,10 @@ sample({
 });
 
 sample({ clock: historySelected, target: gameTimer.stop });
+
+sample({
+  source: $field,
+  clock: exportClicked,
+  fn: exportToSting,
+  target: $exported,
+});

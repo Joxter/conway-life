@@ -29,15 +29,11 @@ export function getRowColFromEvent(ev: Event): { row: number; col: number; } | u
   }
 }
 
-export function makeGo(field: boolean[][]): boolean[][] {
+export function makeGo(field: Field): boolean[][] {
   return field.map((rowArr, row) => {
     return rowArr.map((colVal, col) => {
       let cellVal = colVal;
       let nCount = checkNeighbors(field, { row, col });
-
-      // if (nCount === 0 && cellVal === false) {
-      //   return Math.random() > 0.9999;
-      // }
 
       if (cellVal && nCount < 2) { // If live and <2 live neighbors
         return false;
@@ -50,6 +46,24 @@ export function makeGo(field: boolean[][]): boolean[][] {
       return cellVal;
     });
   });
+}
+
+export function exportToSting(field: Field): string {
+  let firstLive: number | null = null;
+  let lastLive: number | null = null;
+
+  const squash = field.map((row, i) => {
+    if (firstLive === null && row.includes(true)) firstLive = i;
+    if (row.includes(true)) lastLive = i;
+
+    return row.map((it) => +it).join('');
+  });
+
+  if (firstLive === null || lastLive === null) {
+    return '';
+  }
+
+  return squash.slice(firstLive, lastLive + 1).join('\n');
 }
 
 export function saveToLS(history: { field: Field; name: string; }[]) {
