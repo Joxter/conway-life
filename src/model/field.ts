@@ -68,14 +68,5 @@ sample({
 });
 
 $field
-  .on(toggleCell, (field, { row, col }) => {
-    const newField = [...field];
-    const newRow = [...field[row]];
-
-    newRow[col] = !newRow[col];
-    newField[row] = newRow;
-
-    return newField;
-  })
   .on(gameTick, (field) => makeGo(field))
   .on(reset, () => createEmpty(50, 50));
