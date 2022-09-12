@@ -4,6 +4,7 @@ import { field } from './components/field';
 import { history } from './components/history';
 import { $exported, exportClicked } from './model/export';
 import { gameTimer, reset, saveClicked } from './model/field';
+import { colorSelector } from './components/colorSelector';
 import './model/app';
 
 function App() {
@@ -19,12 +20,14 @@ function App() {
     h('h1', { text: 'Game of Life' });
 
     history();
+    colorSelector();
 
     h('p', () => {
       // todo
       //  - add Elsa for Alisa mode, add "heart" cell design
       //  - add color picker
-      //  - add paint/erase mode
+      //  + add paint/erase mode
+      //  - add keyboard support
       //  - add input timer interval
       //  +-add dynamic field size
       //  - add undo/redo !!!

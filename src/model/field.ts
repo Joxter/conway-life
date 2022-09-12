@@ -7,6 +7,10 @@ export const $fieldSize = $field.map((field) => {
   return { height: field.length, width: field[0].length };
 });
 
+export const $selectedColor = createStore(true);
+export const colorSelected = createEvent<boolean>();
+$selectedColor.on(colorSelected, (_, color) => color);
+
 export const rawClicked = createEvent<any>();
 const toggleCell = createEvent<{ row: number; col: number; }>();
 
@@ -46,6 +50,21 @@ sample({
 sample({
   clock: rawClicked.filterMap(getRowColFromEvent),
   target: toggleCell,
+});
+
+sample({
+  source: { field: $field, color: $selectedColor },
+  clock: toggleCell,
+  fn: ({ color, field }, { col, row }) => {
+    const newField = [...field];
+    const newRow = [...field[row]];
+
+    newRow[col] = color;
+    newField[row] = newRow;
+
+    return newField;
+  },
+  target: $field,
 });
 
 $field

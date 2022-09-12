@@ -6,7 +6,9 @@ import css from './styles.module.css';
 export function field() {
   h('div', {
     classList: [css.field],
-    styleVar: { width: $fieldSize.map((it) => it.width) },
+    styleVar: {
+      width: $fieldSize.map((it) => it.width),
+    },
     handler: {
       click: rawClicked,
     },
