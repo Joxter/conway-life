@@ -25,16 +25,24 @@ function App() {
     h('p', () => {
       // todo
       //  - add Elsa for Alisa mode, add "heart" cell design
+      //  - refactoring
+      //     - store only live cells
+      //     - recalculate only live cels
+      //     - canvas render
+      //     - boundaryless mode
+      //  - add keyboard support
+      //  - add more colors (paint, grey as fallback)
+      //  - boundless mode
+      //  - import/export blueprints from
+      //  - add input timer interval
+      //  - add undo/redo
+      //  - add more colors (live)
+      //  - select and move/delete parts
       //  - add color picker
       //  + add paint/erase mode
-      //  - add keyboard support
-      //  - add input timer interval
-      //  +-add dynamic field size
-      //  - add undo/redo !!!
-      //  - different colors mode
-      //  - import/export blueprints
-      //  - select and move/delete parts
       //  + remove from history
+      //  +-add dynamic field size
+      //  + two colors mode
 
       spec({ style: { display: 'flex', gap: '8px' } });
       text` timer: ${gameTimer.isRunning.map((on) => on ? 'on' : 'off')} `;
