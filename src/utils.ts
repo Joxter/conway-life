@@ -1,21 +1,27 @@
-import { Field } from './types';
+import { Field, FieldCell } from './types';
 
-function checkNeighbors(field: boolean[][], { row, col }: { row: number; col: number; }) {
-  let count = 0;
+function checkNeighbors(field: Field, { row, col }: { row: number; col: number; }) {
+  let count = [0, 0, 0]; // color 0 1 2
+
+  function inc(cell: FieldCell | undefined) {
+    if (typeof cell === 'number') {
+      count[cell]++;
+    }
+  }
 
   if (field[row - 1]) {
-    if (field[row - 1][col - 1]) count++;
-    if (field[row - 1][col]) count++;
-    if (field[row - 1][col + 1]) count++;
+    inc(field[row - 1][col - 1]);
+    inc(field[row - 1][col]);
+    inc(field[row - 1][col + 1]);
   }
   if (field[row]) {
-    if (field[row][col - 1]) count++;
-    if (field[row][col + 1]) count++;
+    inc(field[row][col - 1]);
+    inc(field[row][col + 1]);
   }
   if (field[row + 1]) {
-    if (field[row + 1][col - 1]) count++;
-    if (field[row + 1][col]) count++;
-    if (field[row + 1][col + 1]) count++;
+    inc(field[row + 1][col - 1]);
+    inc(field[row + 1][col]);
+    inc(field[row + 1][col + 1]);
   }
 
   return count;
@@ -29,18 +35,18 @@ export function getRowColFromEvent(ev: Event): { row: number; col: number; } | u
   }
 }
 
-export function makeGo(field: Field): boolean[][] {
+export function makeGo(field: Field): Field {
   return field.map((rowArr, row) => {
     return rowArr.map((colVal, col) => {
       let cellVal = colVal;
-      let nCount = checkNeighbors(field, { row, col });
+      let [deadCnt, oneCnt, twoCnt] = checkNeighbors(field, { row, col });
 
-      if (cellVal && nCount < 2) { // If live and <2 live neighbors
-        return false;
-      } else if (cellVal && nCount > 3) { // If live and >3 live neighbors
-        return false;
-      } else if (!cellVal && nCount == 3) { // If dead and 3 live neighbors
-        return true;
+      if (cellVal && (oneCnt + twoCnt) < 2) { // If live and <2 live neighbors
+        return 0;
+      } else if (cellVal && (oneCnt + twoCnt) > 3) { // If live and >3 live neighbors
+        return 0;
+      } else if (!cellVal && (oneCnt + twoCnt) == 3) { // If dead and 3 live neighbors
+        return oneCnt > twoCnt ? 1 : 2;
       }
 
       return cellVal;
@@ -53,8 +59,9 @@ export function exportToSting(field: Field): string {
   let lastLive: number | null = null;
 
   const squash = field.map((row, i) => {
-    if (firstLive === null && row.includes(true)) firstLive = i;
-    if (row.includes(true)) lastLive = i;
+    const notDead = row.includes(1) || row.includes(2);
+    if (firstLive === null && notDead) firstLive = i;
+    if (notDead) lastLive = i;
 
     return row.map((it) => +it).join('');
   });
@@ -80,8 +87,8 @@ export function getSavedFromLS(): { field: Field; name: string; }[] | null {
   }
 }
 
-export function createEmpty(width: number, height: number): boolean[][] {
+export function createEmpty(width: number, height: number): Field {
   return Array(height).fill(0).map(() => {
-    return Array(width).fill(false);
+    return Array(width).fill(0);
   });
 }

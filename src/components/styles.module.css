@@ -1,5 +1,7 @@
 .field {
   --width: 30;
+  --color1: red;
+  --color2: blue;
   display: grid;
   grid-template-columns: repeat(var(--width), auto);
 }
@@ -14,8 +16,11 @@
   box-shadow: inset 0px 0px 0px 3px #ec4dc7;
 }
 
-.cell.on {
-  background-color: #5583e5;
+.cell.on1 {
+  background-color: var(--color1);
+}
+.cell.on2 {
+  background-color: var(--color2);
 }
 
 .roundCell {

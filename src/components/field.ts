@@ -1,6 +1,6 @@
-import { combine } from 'effector';
 import { h, list } from 'forest';
 import { $field, $fieldSize, cellHovered, rawClicked } from '../model/field';
+import { Color1, Color2 } from '../types';
 import css from './styles.module.css';
 
 export function field() {
@@ -8,6 +8,8 @@ export function field() {
     classList: [css.field],
     styleVar: {
       width: $fieldSize.map((it) => it.width),
+      color1: Color1,
+      color2: Color2,
     },
     handler: {
       click: rawClicked,
@@ -20,10 +22,8 @@ export function field() {
             handler: { mouseover: cellHovered },
             classList: {
               [css.cell]: true,
-              [css.on]: $colStore,
-              [css.roundCell]: combine($colkey, $fieldSize, (col, field) => {
-                return col >= field.width / 2;
-              }),
+              [css.on1]: $colStore.map((it) => it === 1),
+              [css.on2]: $colStore.map((it) => it === 2),
             },
           });
         });

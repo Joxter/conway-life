@@ -1,14 +1,15 @@
 import { createEvent, createStore, sample } from 'effector';
 import { interval } from 'patronum';
+import { Field, FieldCell } from '../types';
 import { createEmpty, getRowColFromEvent, makeGo } from '../utils';
 
-export const $field = createStore<boolean[][]>(createEmpty(50, 50));
+export const $field = createStore<Field>(createEmpty(50, 50));
 export const $fieldSize = $field.map((field) => {
   return { height: field.length, width: field[0].length };
 });
 
-export const $selectedColor = createStore(true);
-export const colorSelected = createEvent<boolean>();
+export const $selectedColor = createStore<FieldCell>(1);
+export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
 export const rawClicked = createEvent<any>();

@@ -1,10 +1,10 @@
 import './style.css';
 import { h, spec, text, using } from 'forest';
+import { colorSelector } from './components/colorSelector';
 import { field } from './components/field';
 import { history } from './components/history';
 import { $exported, exportClicked } from './model/export';
 import { gameTimer, reset, saveClicked } from './model/field';
-import { colorSelector } from './components/colorSelector';
 import './model/app';
 
 function App() {
