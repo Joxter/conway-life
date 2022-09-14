@@ -9,16 +9,16 @@ export const removeFromHistory = createEvent<string>();
 export const historySelected = createEvent<string>();
 
 $history
-  // .on(addToHistory, (state, newField) => {
-  //   let lastName = state[state.length - 1]?.name || '0';
-  //   let match = lastName.match(/(\d+)/);
-  //   let lastId = match && +match[1] || 0;
-  //
-  //   return [...state, { field: newField, name: `save #${lastId + 1}` }];
-  // })
-  // .on(removeFromHistory, (state, name) => {
-  //   return state.filter((it) => it.name !== name);
-  // });
+  .on(addToHistory, (state, newField) => {
+    let lastName = state[state.length - 1]?.name || '0';
+    let match = lastName.match(/(\d+)/);
+    let lastId = match && +match[1] || 0;
+
+    return [...state, { field: newField, name: `save #${lastId + 1}` }];
+  })
+  .on(removeFromHistory, (state, name) => {
+    return state.filter((it) => it.name !== name);
+  });
 
 sample({
   source: $history,

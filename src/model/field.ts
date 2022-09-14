@@ -9,11 +9,14 @@ import {
   numbersToCoords,
 } from '../utils';
 
-export const $fieldSize = createStore({ height: 200, width: 100 });
+const initH = 50;
+const initW = 80;
+
+export const $fieldSize = createStore({ height: 50, width: 80 });
 
 const initFauna: Fauna = new Map();
 export const $fauna = createStore<Fauna>(initFauna);
-export const $focus = createStore({ x: -25, y: -25 });
+export const $focus = createStore({ x: -Math.ceil(initW / 2), y: -Math.ceil(initH / 2) });
 
 export const $field = combine(
   $fieldSize,

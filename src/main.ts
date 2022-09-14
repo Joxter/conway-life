@@ -12,7 +12,7 @@ function App() {
     spec({
       style: {
         margin: '40px auto',
-        maxWidth: '600px',
+        maxWidth: '900px',
         border: '2px solid lightblue',
         padding: '16px',
       },
@@ -24,14 +24,15 @@ function App() {
 
     h('p', () => {
       // todo
+      //  - add keyboard support
+      //  - move "camera"
       //  - add Elsa for Alisa mode, add "heart" cell design
       //  - refactoring
       //     + store only live cells
       //     + recalculate only live cels
       //     - canvas render
       //     +-boundaryless mode
-      //  - add keyboard support
-      //  - move "camera"
+      //     - fix history (save only live cells)
       //  - add more colors (paint, grey as fallback)
       //  - boundless mode
       //  - import/export blueprints from
@@ -52,7 +53,7 @@ function App() {
       h('button', { text: 'Start', handler: { click: gameTimer.start } });
       h('button', { text: 'Stop', handler: { click: gameTimer.stop } });
 
-      // h('button', { style: { marginLeft: 'auto' }, text: 'Save', handler: { click: saveClicked } });
+      h('button', { style: { marginLeft: 'auto' }, text: 'Save', handler: { click: saveClicked } });
     });
 
     field();
