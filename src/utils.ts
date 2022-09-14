@@ -1,30 +1,72 @@
-import { Field, FieldCell } from './types';
+import { CoordsStr, Fauna, FaunaInc, Field, FieldCell } from './types';
 
-function checkNeighbors(field: Field, { row, col }: { row: number; col: number; }) {
-  let count = [0, 0, 0]; // color 0 1 2
+function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
+  return Object.entries(obj) as Array<[T, R]>;
+}
 
-  function inc(cell: FieldCell | undefined) {
-    if (typeof cell === 'number') {
-      count[cell]++;
+export function newMakeGo(input: Fauna): Fauna {
+  let result: Fauna = new Map();
+  let faunaInc: FaunaInc = new Map();
+
+  input.forEach((color, coords) => {
+    incNeighbors(faunaInc, coords, color);
+  });
+
+  faunaInc.forEach(([oneCnt, twoCnt], coords) => {
+    let cellVal = input.get(coords) || 0 as const;
+    if (cellVal && (oneCnt + twoCnt) < 2) { // If live and <2 live neighbors
+    } else if (cellVal && (oneCnt + twoCnt) > 3) { // If live and >3 live neighbors
+    } else if (!cellVal && (oneCnt + twoCnt) == 3) { // If dead and 3 live neighbors
+      result.set(coords, oneCnt > twoCnt ? 1 : 2);
+    } else {
+      if (cellVal) {
+        result.set(coords, cellVal);
+      }
     }
-  }
+  });
 
-  if (field[row - 1]) {
-    inc(field[row - 1][col - 1]);
-    inc(field[row - 1][col]);
-    inc(field[row - 1][col + 1]);
-  }
-  if (field[row]) {
-    inc(field[row][col - 1]);
-    inc(field[row][col + 1]);
-  }
-  if (field[row + 1]) {
-    inc(field[row + 1][col - 1]);
-    inc(field[row + 1][col]);
-    inc(field[row + 1][col + 1]);
-  }
+  return result;
+}
 
-  return count;
+function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): FaunaInc {
+  const [x, y] = coordsStrToNumbers(coords);
+
+  let neighborCoords: CoordsStr[] = [
+    `${x - 1}|${y - 1}`,
+    `${x - 1}|${y}`,
+    `${x - 1}|${y + 1}`,
+
+    `${x}|${y - 1}`,
+    `${x}|${y + 1}`,
+
+    `${x + 1}|${y - 1}`,
+    `${x + 1}|${y}`,
+    `${x + 1}|${y + 1}`,
+  ];
+
+  neighborCoords.forEach((neibs) => {
+    if (!faunaInc.has(neibs)) {
+      faunaInc.set(neibs, [0, 0]);
+    }
+    let [cnt1, cnt2] = faunaInc.get(neibs)!;
+
+    if (value === 1) {
+      faunaInc.set(neibs, [cnt1 + 1, cnt2]);
+    } else {
+      faunaInc.set(neibs, [cnt1, cnt2 + 1]);
+    }
+  });
+
+  return faunaInc;
+}
+
+export function coordsStrToNumbers(coords: CoordsStr): [number, number] {
+  const coordsXY = coords.split('|');
+  return [+coordsXY[0], +coordsXY[1]];
+}
+
+export function numbersToCoords([x, y]: [number, number]): CoordsStr {
+  return `${x}|${y}`;
 }
 
 export function getRowColFromEvent(ev: Event): { row: number; col: number; } | undefined {
@@ -33,25 +75,6 @@ export function getRowColFromEvent(ev: Event): { row: number; col: number; } | u
     // @ts-ignore
     return { row: +ev.target.dataset.row, col: +ev.target.dataset.col };
   }
-}
-
-export function makeGo(field: Field): Field {
-  return field.map((rowArr, row) => {
-    return rowArr.map((colVal, col) => {
-      let cellVal = colVal;
-      let [deadCnt, oneCnt, twoCnt] = checkNeighbors(field, { row, col });
-
-      if (cellVal && (oneCnt + twoCnt) < 2) { // If live and <2 live neighbors
-        return 0;
-      } else if (cellVal && (oneCnt + twoCnt) > 3) { // If live and >3 live neighbors
-        return 0;
-      } else if (!cellVal && (oneCnt + twoCnt) == 3) { // If dead and 3 live neighbors
-        return oneCnt > twoCnt ? 1 : 2;
-      }
-
-      return cellVal;
-    });
-  });
 }
 
 export function exportToSting(field: Field): string {

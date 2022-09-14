@@ -4,7 +4,7 @@ import { colorSelector } from './components/colorSelector';
 import { field } from './components/field';
 import { history } from './components/history';
 import { $exported, exportClicked } from './model/export';
-import { gameTimer, reset, saveClicked } from './model/field';
+import { gameTick, gameTimer, reset, saveClicked } from './model/field';
 import './model/app';
 
 function App() {
@@ -26,11 +26,12 @@ function App() {
       // todo
       //  - add Elsa for Alisa mode, add "heart" cell design
       //  - refactoring
-      //     - store only live cells
-      //     - recalculate only live cels
+      //     + store only live cells
+      //     + recalculate only live cels
       //     - canvas render
-      //     - boundaryless mode
+      //     +-boundaryless mode
       //  - add keyboard support
+      //  - move "camera"
       //  - add more colors (paint, grey as fallback)
       //  - boundless mode
       //  - import/export blueprints from
@@ -45,11 +46,13 @@ function App() {
       //  + two colors mode
 
       spec({ style: { display: 'flex', gap: '8px' } });
+      h('button', { text: 'Step', handler: { click: gameTick } });
+
       text` timer: ${gameTimer.isRunning.map((on) => on ? 'on' : 'off')} `;
       h('button', { text: 'Start', handler: { click: gameTimer.start } });
       h('button', { text: 'Stop', handler: { click: gameTimer.stop } });
 
-      h('button', { style: { marginLeft: 'auto' }, text: 'Save', handler: { click: saveClicked } });
+      // h('button', { style: { marginLeft: 'auto' }, text: 'Save', handler: { click: saveClicked } });
     });
 
     field();
