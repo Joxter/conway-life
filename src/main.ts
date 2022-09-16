@@ -8,6 +8,7 @@ import {
   $focus,
   gameTick,
   gameTimer,
+  makeNSteps,
   moveFocus,
   reset,
   resetFocus,
@@ -33,6 +34,7 @@ function App() {
     h('p', () => {
       spec({ style: { display: 'flex', gap: '8px' } });
       h('button', { text: 'Step', handler: { click: gameTick } });
+      h('button', { text: '1000 steps', handler: { click: makeNSteps.prepend(() => 1000) } });
 
       text` timer: ${gameTimer.isRunning.map((on) => on ? 'on' : 'off')} `;
       h('button', { text: 'Start', handler: { click: gameTimer.start } });

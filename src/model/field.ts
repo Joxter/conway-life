@@ -31,6 +31,7 @@ const toggleCell = createEvent<{ row: number; col: number; }>();
 export const gameTick = createEvent<any>();
 export const saveClicked = createEvent<any>();
 export const reset = createEvent<any>();
+export const makeNSteps = createEvent<number>();
 
 const startTimer = createEvent<any>();
 const stopTimer = createEvent<any>();
@@ -76,6 +77,16 @@ export const $field = combine(
 $fauna
   .on(gameTick, (fauna) => {
     return newMakeGo(fauna);
+  })
+  .on(makeNSteps, (fauna, amount) => {
+    let f = fauna;
+    let start = Date.now();
+
+    for (let i = 1; i <= amount; i++) {
+      f = newMakeGo(f);
+    }
+
+    return f;
   })
   .on(reset, () => new Map());
 
