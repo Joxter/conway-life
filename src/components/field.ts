@@ -1,9 +1,53 @@
-import { h, list } from 'forest';
-import { $field, $fieldSize, cellHovered, rawClicked } from '../model/field';
+import { createEvent, sample } from 'effector';
+import { h, list, spec, text } from 'forest';
+import {
+  $field,
+  $fieldSize,
+  $focus,
+  cellHovered,
+  moveFocus,
+  resetFocus,
+  toggleCell,
+} from '../model/field';
 import { Color1, Color2 } from '../types';
+import { getRowColFromEvent } from '../utils';
 import css from './styles.module.css';
 
 export function field() {
+  h('p', () => {
+    spec({ style: { display: 'flex', gap: '8px' } });
+
+    text`Move: `;
+
+    const moveLeft = moveFocus.prepend<any>(() => {
+      return { x: 5 };
+    });
+    const moveRight = moveFocus.prepend<any>(() => {
+      return { x: -5 };
+    });
+    const moveUp = moveFocus.prepend<any>(() => {
+      return { y: 5 };
+    });
+    const moveDown = moveFocus.prepend<any>(() => {
+      return { y: -5 };
+    });
+
+    h('button', { text: '<-', handler: { click: moveLeft } });
+    h('button', { text: '^', handler: { click: moveUp } });
+    h('button', { text: 'v', handler: { click: moveDown } });
+    h('button', { text: '->', handler: { click: moveRight } });
+
+    text`(${$focus.map(({ x }) => x)}, ${$focus.map(({ y }) => y)})`;
+
+    h('button', { text: 'reset focus', handler: { click: resetFocus } });
+  });
+
+  const rawClicked = createEvent<any>();
+  sample({
+    clock: rawClicked.filterMap(getRowColFromEvent),
+    target: toggleCell,
+  });
+
   h('div', {
     classList: [css.field],
     styleVar: {

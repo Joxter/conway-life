@@ -1,5 +1,6 @@
 import { createEvent, sample } from 'effector';
 import { h, list, spec, text } from 'forest';
+import { saveClicked } from '../model/field';
 import { $history, historySelected, removeFromHistory } from '../model/history';
 import css from './styles.module.css';
 
@@ -35,6 +36,7 @@ export function history() {
           });
         });
       });
+      h('button', { style: { marginLeft: 'auto' }, text: 'Save', handler: { click: saveClicked } });
     },
   });
 }

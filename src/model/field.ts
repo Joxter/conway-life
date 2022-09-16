@@ -25,8 +25,7 @@ export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
-export const rawClicked = createEvent<any>();
-const toggleCell = createEvent<{ row: number; col: number; }>();
+export const toggleCell = createEvent<{ row: number; col: number; }>();
 
 export const gameTick = createEvent<any>();
 export const saveClicked = createEvent<any>();
@@ -107,11 +106,6 @@ sample({
   clock: cellHovered.filterMap((ev) => {
     if (ev.shiftKey) return getRowColFromEvent(ev);
   }),
-  target: toggleCell,
-});
-
-sample({
-  clock: rawClicked.filterMap(getRowColFromEvent),
   target: toggleCell,
 });
 

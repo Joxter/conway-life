@@ -17,6 +17,7 @@ $history
     return [...state, { field: newField, name: `save #${lastId + 1}` }];
   })
   .on(removeFromHistory, (state, name) => {
+    return; // todo make safe deleting
     return state.filter((it) => it.name !== name);
   });
 

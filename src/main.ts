@@ -12,7 +12,6 @@ import {
   moveFocus,
   reset,
   resetFocus,
-  saveClicked,
 } from './model/field';
 import './model/app';
 
@@ -34,41 +33,11 @@ function App() {
     h('p', () => {
       spec({ style: { display: 'flex', gap: '8px' } });
       h('button', { text: 'Step', handler: { click: gameTick } });
-      h('button', { text: '1000 steps', handler: { click: makeNSteps.prepend(() => 1000) } });
+      h('button', { text: '100 steps', handler: { click: makeNSteps.prepend(() => 100) } });
 
       text` timer: ${gameTimer.isRunning.map((on) => on ? 'on' : 'off')} `;
       h('button', { text: 'Start', handler: { click: gameTimer.start } });
       h('button', { text: 'Stop', handler: { click: gameTimer.stop } });
-
-      h('button', { style: { marginLeft: 'auto' }, text: 'Save', handler: { click: saveClicked } });
-    });
-
-    h('p', () => {
-      spec({ style: { display: 'flex', gap: '8px' } });
-
-      text`Move: `;
-
-      const moveLeft = moveFocus.prepend<any>(() => {
-        return { x: 5 };
-      });
-      const moveRight = moveFocus.prepend<any>(() => {
-        return { x: -5 };
-      });
-      const moveUp = moveFocus.prepend<any>(() => {
-        return { y: 5 };
-      });
-      const moveDown = moveFocus.prepend<any>(() => {
-        return { y: -5 };
-      });
-
-      h('button', { text: '<-', handler: { click: moveLeft } });
-      h('button', { text: '^', handler: { click: moveUp } });
-      h('button', { text: 'v', handler: { click: moveDown } });
-      h('button', { text: '->', handler: { click: moveRight } });
-
-      text`(${$focus.map(({ x }) => x)}, ${$focus.map(({ y }) => y)})`;
-
-      h('button', { text: 'reset focus', handler: { click: resetFocus } });
     });
 
     field();
@@ -88,6 +57,7 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  - add keyboard support
+//  - toggle color on click, instead of painting
 //  - safe delete (timer before real removing)
 //  - add Elsa for Alisa mode, add "heart" cell design
 //  - refactoring
