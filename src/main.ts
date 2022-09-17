@@ -1,39 +1,41 @@
 import './style.css';
-import { h, spec, using } from 'forest';
+import { h, using } from 'forest';
 import { colorSelector } from './components/colorSelector';
 import { field } from './components/field';
 import { history } from './components/history';
 import { progress } from './components/progress';
-import { $exported, exportClicked } from './model/export';
 import { resetFieldPressed } from './model/field';
 import './model/app';
 
 function App() {
   h('div', () => {
-    spec({
-      style: {
-        margin: '40px auto',
-        maxWidth: '900px',
-        border: '2px solid lightblue',
-        padding: '16px',
+    h('div', {
+      style: { position: 'absolute', width: '100%', backgroundColor: 'rgba(255,255,255, 0.9)' },
+      fn() {
+        h('h1', { text: 'Game of Life' });
+
+        history();
+        colorSelector();
+
+        progress();
       },
     });
-    h('h1', { text: 'Game of Life' });
 
-    history();
-    colorSelector();
-
-    progress();
     field();
-    h('button', { text: 'Reset', handler: { click: resetFieldPressed } });
-    h('hr', {});
+    h('button', {
+      text: 'Reset',
+      style: { position: 'absolute', bottom: '20px', left: '20px' },
+      handler: { click: resetFieldPressed },
+    });
 
+    /*
     h('button', { text: 'Export', handler: { click: exportClicked } });
     h('br', {});
     h('textarea', {
       style: { fontSize: '8px', width: '100%', height: '100px', lineHeight: 1 },
       text: $exported,
     });
+    */
   });
 }
 

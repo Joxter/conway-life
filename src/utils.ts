@@ -117,3 +117,10 @@ export function createEmpty(width: number, height: number): Field {
     return Array(width).fill(0);
   });
 }
+
+export function getWindowParams() {
+  return {
+    width: window.visualViewport.width,
+    height: window.visualViewport.height,
+  };
+}

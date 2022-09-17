@@ -1,20 +1,10 @@
 import { createEvent, sample } from 'effector';
-import { h, list, spec, text } from 'forest';
-import {
-  $field,
-  $fieldSize,
-  $focus,
-  cellHovered,
-  moveFocus,
-  resetFocus,
-  toggleCell,
-} from '../model/field';
+import { h, list, spec } from 'forest';
+import { $field, $fieldSize, cellHovered, moveFocus, resetFocus, toggleCell } from '../model/field';
 import { Color1, Color2 } from '../types';
 import { getRowColFromEvent } from '../utils';
-import css from './styles.module.css';
 import redo from './redo-arrow-icon.svg';
-
-console.log(redo);
+import css from './styles.module.css';
 
 export function field() {
   const moveLeft = moveFocus.prepend<any>(() => {

@@ -5,12 +5,15 @@ import {
   coordsStrToNumbers,
   createEmpty,
   getRowColFromEvent,
+  getWindowParams,
   newMakeGo,
   numbersToCoords,
 } from '../utils';
 
-const initH = 50;
-const initW = 80;
+const vp = getWindowParams();
+
+const initH = Math.ceil(vp.height / 10);
+const initW = Math.ceil(vp.width / 10);
 
 export const $fieldSize = createStore({ height: initH, width: initW });
 
@@ -60,8 +63,8 @@ export const $field = combine(
     fauna.forEach((val, coords) => {
       const coordsXY = coordsStrToNumbers(coords);
 
-      const fieldX = coordsXY[0] + width / 2 + focus.x;
-      const fieldY = coordsXY[1] + height / 2 + focus.y;
+      const fieldX = Math.ceil(coordsXY[0] + width / 2 + focus.x);
+      const fieldY = Math.ceil(coordsXY[1] + height / 2 + focus.y);
 
       if (fieldX >= 0 && fieldX < width) {
         if (fieldY >= 0 && fieldY < height) {
