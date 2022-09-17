@@ -43,3 +43,19 @@
 .currentColor {
   box-shadow: 0px 0px 0px 3px #ec4dc7;
 }
+
+.arrowBtn {
+  background-color: transparent;
+  border: 0;
+  border-radius: 4px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 24px;
+  background-image: url('./back-arrow-icon.svg');
+  cursor: pointer;
+}
+
+.arrowBtn:hover {
+  cursor: pointer;
+  background-color: #eee;
+}

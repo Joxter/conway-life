@@ -3,9 +3,9 @@ import { h, spec, using } from 'forest';
 import { colorSelector } from './components/colorSelector';
 import { field } from './components/field';
 import { history } from './components/history';
+import { progress } from './components/progress';
 import { $exported, exportClicked } from './model/export';
 import { resetFieldPressed } from './model/field';
-import { progress } from './components/progress';
 import './model/app';
 
 function App() {
