@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { interval } from 'patronum';
-import { Fauna, Field, FieldCell } from '../types';
+import { cellSizes, Fauna, Field, FieldCell, initCellSize } from '../types';
 import {
   coordsStrToNumbers,
   getRowColFromEvent,
@@ -10,13 +10,17 @@ import {
 } from '../utils';
 
 const vp = getWindowParams();
-export const initCellSize = 10;
 
 const initH = Math.ceil(vp.height / initCellSize);
 const initW = Math.ceil(vp.width / initCellSize);
 
 export const $cellSize = createStore(initCellSize);
-export const $fieldSize = createStore({ height: initH, width: initW });
+export const $cellSizeOptions = createStore(cellSizes);
+export const $fieldSize = $cellSize.map((size) => {
+  return { height: Math.ceil(vp.height / size), width: Math.ceil(vp.width / size) };
+});
+
+export const sizeChanged = createEvent<number>();
 
 const initFauna: Fauna = new Map();
 export const $fauna = createStore<Fauna>(initFauna);
@@ -78,6 +82,8 @@ export const $field = combine(
     return field;
   },
 );
+
+$cellSize.on(sizeChanged, (_, val) => val);
 
 $stepCount
   .on(gameTick, (cnt) => cnt + 1)

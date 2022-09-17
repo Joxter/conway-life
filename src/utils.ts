@@ -1,5 +1,4 @@
-import { initCellSize } from './model/field';
-import { CoordsStr, Fauna, FaunaInc, Field, FieldCell } from './types';
+import { CoordsStr, Fauna, FaunaInc, Field, FieldCell, initCellSize } from './types';
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;

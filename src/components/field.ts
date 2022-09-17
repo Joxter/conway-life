@@ -1,18 +1,21 @@
 import { createEvent, sample } from 'effector';
 import { h, list, spec } from 'forest';
 import {
+  $cellSize,
+  $cellSizeOptions,
   $field,
   $fieldSize,
   $hoveredCell,
   fieldMouseMove,
-  initCellSize,
   moveFocus,
   resetFocus,
+  sizeChanged,
   toggleCell,
 } from '../model/field';
-import { Color1, Color2 } from '../types';
+import { Color1, Color2, initCellSize } from '../types';
 import { getRowColFromEvent } from '../utils';
 import redo from './redo-arrow-icon.svg';
+import { select } from './stateless/form';
 import css from './styles.module.css';
 
 export function field() {
@@ -29,7 +32,7 @@ export function field() {
     return { y: -5 };
   });
 
-  h('p', () => {
+  h('div', () => {
     spec({
       style: {
         display: 'grid',
@@ -81,6 +84,22 @@ export function field() {
       handler: { click: moveDown },
     });
   });
+
+  h('div', () => {
+    spec({ style: { position: 'absolute', right: '150px', bottom: '20px', zIndex: 1 } });
+
+    select({
+      options: $cellSizeOptions.map((sizes) => {
+        return sizes.map((size) => {
+          return { label: `cell ${size}px`, value: String(size) };
+        });
+      }),
+      value: $cellSize.map((it) => String(it)),
+      onChange: sizeChanged.prepend((ev) => +ev.target.value),
+    });
+  });
+
+  $cellSize.watch(console.log);
 
   const rawClicked = createEvent<any>();
   sample({
