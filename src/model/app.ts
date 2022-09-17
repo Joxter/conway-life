@@ -2,7 +2,7 @@ import { sample } from 'effector';
 import { Fauna } from '../types';
 import { exportToSting, numbersToCoords } from '../utils';
 import { $exported, exportClicked } from './export';
-import { $fauna, $field, gameTimer, saveClicked } from './field';
+import { $fauna, $field, $stepCount, gameTimer, resetFieldPressed, saveClicked } from './field';
 import { $history, addToHistory, historySelected } from './history';
 
 sample({
@@ -31,7 +31,7 @@ sample({
   target: $fauna,
 });
 
-sample({ clock: historySelected, target: gameTimer.stop });
+sample({ clock: [historySelected, resetFieldPressed], target: gameTimer.stop });
 
 sample({
   source: $field,
@@ -39,3 +39,5 @@ sample({
   fn: exportToSting,
   target: $exported,
 });
+
+$stepCount.reset(historySelected);

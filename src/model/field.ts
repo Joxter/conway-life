@@ -12,7 +12,7 @@ import {
 const initH = 50;
 const initW = 80;
 
-export const $fieldSize = createStore({ height: 50, width: 80 });
+export const $fieldSize = createStore({ height: initH, width: initW });
 
 const initFauna: Fauna = new Map();
 export const $fauna = createStore<Fauna>(initFauna);
@@ -27,9 +27,10 @@ $selectedColor.on(colorSelected, (_, color) => color);
 
 export const toggleCell = createEvent<{ row: number; col: number; shift: boolean; }>();
 
+export const $stepCount = createStore(0);
 export const gameTick = createEvent<any>();
 export const saveClicked = createEvent<any>();
-export const reset = createEvent<any>();
+export const resetFieldPressed = createEvent<any>();
 export const makeNSteps = createEvent<number>();
 
 const startTimer = createEvent<any>();
@@ -73,13 +74,17 @@ export const $field = combine(
   },
 );
 
+$stepCount
+  .on(gameTick, (cnt) => cnt + 1)
+  .on(makeNSteps, (cnt, n) => cnt + n)
+  .reset(resetFieldPressed);
+
 $fauna
   .on(gameTick, (fauna) => {
     return newMakeGo(fauna);
   })
   .on(makeNSteps, (fauna, amount) => {
     let f = fauna;
-    let start = Date.now();
 
     for (let i = 1; i <= amount; i++) {
       f = newMakeGo(f);
@@ -87,7 +92,7 @@ $fauna
 
     return f;
   })
-  .on(reset, () => new Map());
+  .on(resetFieldPressed, () => new Map());
 
 $focus
   .on(moveFocus, (state, delta) => {
