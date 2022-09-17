@@ -25,7 +25,7 @@ export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
-export const toggleCell = createEvent<{ row: number; col: number; }>();
+export const toggleCell = createEvent<{ row: number; col: number; shift: boolean; }>();
 
 export const gameTick = createEvent<any>();
 export const saveClicked = createEvent<any>();
@@ -104,21 +104,37 @@ sample({
 
 sample({
   clock: cellHovered.filterMap((ev) => {
-    if (ev.shiftKey) return getRowColFromEvent(ev);
+    if (ev.shiftKey) {
+      return getRowColFromEvent(ev);
+    }
   }),
   target: toggleCell,
 });
 
 sample({
-  source: { fauna: $fauna, color: $selectedColor, size: $fieldSize, focus: $focus },
+  source: {
+    fauna: $fauna,
+    color: $selectedColor,
+    size: $fieldSize,
+    focus: $focus,
+  },
   clock: toggleCell,
-  fn: ({ color, fauna, focus, size }, { col, row }) => {
+  fn: ({ color, fauna, focus, size }, { col, row, shift }) => {
     const newFauna = new Map(fauna);
 
     const faunaX = col - size.width / 2 - focus.x;
     const faunaY = row - size.height / 2 - focus.y;
 
-    newFauna.set(numbersToCoords([faunaX, faunaY]), color);
+    const coords = numbersToCoords([faunaX, faunaY]);
+    if (shift) {
+      newFauna.set(coords, color);
+    } else {
+      if (newFauna.get(coords) === color) {
+        newFauna.delete(coords);
+      } else {
+        newFauna.set(coords, color);
+      }
+    }
 
     return newFauna;
   },

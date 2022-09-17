@@ -69,11 +69,13 @@ export function numbersToCoords([x, y]: [number, number]): CoordsStr {
   return `${x}|${y}`;
 }
 
-export function getRowColFromEvent(ev: Event): { row: number; col: number; } | undefined {
+export function getRowColFromEvent(
+  ev: Event,
+): { row: number; col: number; shift: boolean; } | undefined {
   // @ts-ignore
   if (ev.target && ev.target.dataset && ev.target.dataset.row && ev.target.dataset.col) {
     // @ts-ignore
-    return { row: +ev.target.dataset.row, col: +ev.target.dataset.col };
+    return { row: +ev.target.dataset.row, col: +ev.target.dataset.col, shift: ev.shiftKey };
   }
 }
 

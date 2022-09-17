@@ -57,7 +57,6 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  - add keyboard support
-//  - toggle color on click, instead of painting
 //  - safe delete (timer before real removing)
 //  - add Elsa for Alisa mode, add "heart" cell design
 //  - refactoring
@@ -79,3 +78,4 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 //  +-add dynamic field size
 //  + two colors mode
 //  + move "camera"
+//  + toggle color on click, instead of painting
