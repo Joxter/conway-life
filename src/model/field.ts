@@ -25,7 +25,7 @@ export const sizeChanged = createEvent<number>();
 const initFauna: Fauna = new Map();
 export const $fauna = createStore<Fauna>(initFauna);
 
-export const $focus = createStore({ x: -Math.ceil(initW / 2), y: -Math.ceil(initH / 2) });
+export const $focus = createStore({ x: -Math.ceil(initW / 2), y: -Math.ceil(initH / 2) }); // todo something wrong
 export const moveFocus = createEvent<{ x?: number; y?: number; }>();
 export const resetFocus = createEvent<any>();
 
@@ -63,7 +63,8 @@ export const $field = combine(
   $fieldSize,
   $fauna,
   $focus,
-  ({ width, height }, fauna, focus): Field => {
+  $cellSize,
+  ({ width, height }, fauna, focus, cellSize): Field => {
     const field: Field = [];
 
     fauna.forEach((val, coords) => {
@@ -74,7 +75,7 @@ export const $field = combine(
 
       if (fieldX >= 0 && fieldX < width) {
         if (fieldY >= 0 && fieldY < height) {
-          field.push({ x: fieldX, y: fieldY, val: val });
+          field.push({ x: fieldX * cellSize, y: fieldY * cellSize, val: val });
         }
       }
     });
@@ -119,11 +120,10 @@ sample({
 });
 
 sample({
-  source: $hoveredCell,
-  clock: fieldMouseMove.filterMap((ev) => {
-    return getRowColFromEvent(ev);
-  }),
-  fn: (current, evData) => {
+  source: { current: $hoveredCell, size: $cellSize },
+  clock: fieldMouseMove,
+  fn: ({ current, size }, evData) => {
+    evData = getRowColFromEvent(evData, size);
     if (
       current.col === evData.col && current.row === evData.row && current.shift === evData.shift
     ) {

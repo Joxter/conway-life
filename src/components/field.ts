@@ -1,4 +1,4 @@
-import { createEvent, sample } from 'effector';
+import { combine, createEvent, sample } from 'effector';
 import { h, list, spec } from 'forest';
 import {
   $cellSize,
@@ -14,6 +14,9 @@ import {
 } from '../model/field';
 import { Color1, Color2, initCellSize } from '../types';
 import { getRowColFromEvent } from '../utils';
+import cell10 from './cell-10.png';
+import cell20 from './cell-20.png';
+import cell5 from './cell-5.png';
 import redo from './redo-arrow-icon.svg';
 import { select } from './stateless/form';
 import css from './styles.module.css';
@@ -103,7 +106,11 @@ export function field() {
 
   const rawClicked = createEvent<any>();
   sample({
-    clock: rawClicked.filterMap(getRowColFromEvent),
+    source: $cellSize,
+    clock: rawClicked,
+    fn: (size, ev) => {
+      return getRowColFromEvent(ev, size);
+    },
     target: toggleCell,
   });
 
@@ -111,8 +118,17 @@ export function field() {
     classList: [css.field],
     styleVar: {
       width: $fieldSize.map((it) => it.width),
+      cellSize: $cellSize.map((it) => it + 'px'),
       color1: Color1,
       color2: Color2,
+    },
+    style: {
+      backgroundImage: $cellSize.map((it) => {
+        if (it === 5) return cell5;
+        if (it === 20) return cell20;
+        return cell10;
+      }).map((pic) => `url("${pic}")`),
+      backgroundSize: $cellSize.map((it) => it + 'px'),
     },
     handler: {
       click: rawClicked,
@@ -123,8 +139,8 @@ export function field() {
         h('div', {
           data: { row: $fieldStore.map((it) => it.x), col: $fieldStore.map((it) => it.y) },
           style: {
-            left: $fieldStore.map((it) => it.x * initCellSize + 'px'),
-            top: $fieldStore.map((it) => it.y * initCellSize + 'px'),
+            left: $fieldStore.map((it) => it.x + 'px'),
+            top: $fieldStore.map((it) => it.y + 'px'),
           },
           classList: {
             [css.cell10]: true,
@@ -134,14 +150,15 @@ export function field() {
         });
       });
 
-      h('div', {
-        style: {
-          boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
-          left: $hoveredCell.map((it) => it.col * initCellSize + 'px'),
-          top: $hoveredCell.map((it) => it.row * initCellSize + 'px'),
-        },
-        classList: [css.cell10],
-      });
+      // todo NEED TO FIX
+      // h('div', {
+      //   style: {
+      //     boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
+      //     left: combine($hoveredCell, $cellSize, (it, size) => it.col * size + 'px'),
+      //     top: combine($hoveredCell, $cellSize, (it, size) => it.row * size + 'px'),
+      //   },
+      //   classList: [css.cell10],
+      // });
     },
   });
 }

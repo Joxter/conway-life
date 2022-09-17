@@ -19,6 +19,8 @@ sample({
     const fauna: Fauna = new Map();
 
     saved.forEach((row, y) => {
+      // todo update types
+      // @ts-ignore
       row.forEach((col, x) => {
         if (col) {
           fauna.set(numbersToCoords([x, y]), col);
