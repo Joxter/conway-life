@@ -9,6 +9,7 @@ import './model/app';
 
 function App() {
   h('div', () => {
+    field();
     h('div', {
       style: { position: 'absolute', width: '100%', backgroundColor: 'rgba(255,255,255, 0.9)' },
       fn() {
@@ -21,7 +22,6 @@ function App() {
       },
     });
 
-    field();
     h('button', {
       text: 'Reset',
       style: { position: 'absolute', bottom: '20px', left: '20px' },

@@ -3,7 +3,6 @@ import { interval } from 'patronum';
 import { Fauna, Field, FieldCell } from '../types';
 import {
   coordsStrToNumbers,
-  createEmpty,
   getRowColFromEvent,
   getWindowParams,
   newMakeGo,
@@ -11,7 +10,7 @@ import {
 } from '../utils';
 
 const vp = getWindowParams();
-const initCellSize = 10;
+export const initCellSize = 10;
 
 const initH = Math.ceil(vp.height / initCellSize);
 const initW = Math.ceil(vp.width / initCellSize);
@@ -53,14 +52,15 @@ export const gameTimer = {
   isRunning: timer.isRunning,
 };
 
-export const cellHovered = createEvent<any>();
+export const $hoveredCell = createStore({ row: 0, col: 0, shift: false });
+export const fieldMouseMove = createEvent<any>();
 
 export const $field = combine(
   $fieldSize,
   $fauna,
   $focus,
   ({ width, height }, fauna, focus): Field => {
-    const field = createEmpty(width, height);
+    const field: Field = [];
 
     fauna.forEach((val, coords) => {
       const coordsXY = coordsStrToNumbers(coords);
@@ -70,7 +70,7 @@ export const $field = combine(
 
       if (fieldX >= 0 && fieldX < width) {
         if (fieldY >= 0 && fieldY < height) {
-          field[fieldY][fieldX] = val;
+          field.push({ x: fieldX, y: fieldY, val: val });
         }
       }
     });
@@ -113,12 +113,19 @@ sample({
 });
 
 sample({
-  clock: cellHovered.filterMap((ev) => {
-    if (ev.shiftKey) {
-      return getRowColFromEvent(ev);
-    }
+  source: $hoveredCell,
+  clock: fieldMouseMove.filterMap((ev) => {
+    return getRowColFromEvent(ev);
   }),
-  target: toggleCell,
+  fn: (current, evData) => {
+    if (
+      current.col === evData.col && current.row === evData.row && current.shift === evData.shift
+    ) {
+      return current;
+    }
+    return evData;
+  },
+  target: $hoveredCell,
 });
 
 sample({

@@ -1,3 +1,4 @@
+import { initCellSize } from './model/field';
 import { CoordsStr, Fauna, FaunaInc, Field, FieldCell } from './types';
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
@@ -70,16 +71,18 @@ export function numbersToCoords([x, y]: [number, number]): CoordsStr {
 }
 
 export function getRowColFromEvent(
-  ev: Event,
+  ev: { clientY: number; clientX: number; shiftKey: boolean; },
 ): { row: number; col: number; shift: boolean; } | undefined {
-  // @ts-ignore
-  if (ev.target && ev.target.dataset && ev.target.dataset.row && ev.target.dataset.col) {
-    // @ts-ignore
-    return { row: +ev.target.dataset.row, col: +ev.target.dataset.col, shift: ev.shiftKey };
-  }
+  return {
+    row: Math.floor(ev.clientY / initCellSize),
+    col: Math.floor(ev.clientX / initCellSize),
+    shift: ev.shiftKey,
+  };
 }
 
 export function exportToSting(field: Field): string {
+  return '';
+  /*
   let firstLive: number | null = null;
   let lastLive: number | null = null;
 
@@ -96,10 +99,11 @@ export function exportToSting(field: Field): string {
   }
 
   return squash.slice(firstLive, lastLive + 1).join('\n');
+  */
 }
 
 export function saveToLS(history: { field: Field; name: string; }[]) {
-  localStorage.setItem('history', JSON.stringify(history));
+  // localStorage.setItem('history', JSON.stringify(history));
 }
 
 export function getSavedFromLS(): { field: Field; name: string; }[] | null {
@@ -110,12 +114,6 @@ export function getSavedFromLS(): { field: Field; name: string; }[] | null {
     console.error(err);
     return null;
   }
-}
-
-export function createEmpty(width: number, height: number): Field {
-  return Array(height).fill(0).map(() => {
-    return Array(width).fill(0);
-  });
 }
 
 export function getWindowParams() {

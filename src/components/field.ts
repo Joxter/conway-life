@@ -1,6 +1,15 @@
 import { createEvent, sample } from 'effector';
 import { h, list, spec } from 'forest';
-import { $field, $fieldSize, cellHovered, moveFocus, resetFocus, toggleCell } from '../model/field';
+import {
+  $field,
+  $fieldSize,
+  $hoveredCell,
+  fieldMouseMove,
+  initCellSize,
+  moveFocus,
+  resetFocus,
+  toggleCell,
+} from '../model/field';
 import { Color1, Color2 } from '../types';
 import { getRowColFromEvent } from '../utils';
 import redo from './redo-arrow-icon.svg';
@@ -34,6 +43,7 @@ export function field() {
         padding: '8px',
         borderRadius: '4px',
         border: '1px solid #aaa',
+        zIndex: 1,
       },
     });
 
@@ -87,20 +97,31 @@ export function field() {
     },
     handler: {
       click: rawClicked,
+      mousemove: fieldMouseMove,
     },
     fn() {
-      list($field, ({ store: $rowStore, key: $rowKey }) => {
-        list($rowStore, ({ store: $colStore, key: $colkey }) => {
-          h('div', {
-            data: { row: $rowKey, col: $colkey },
-            handler: { mouseover: cellHovered },
-            classList: {
-              [css.cell10]: true,
-              [css.on1]: $colStore.map((it) => it === 1),
-              [css.on2]: $colStore.map((it) => it === 2),
-            },
-          });
+      list($field, ({ store: $fieldStore }) => {
+        h('div', {
+          data: { row: $fieldStore.map((it) => it.x), col: $fieldStore.map((it) => it.y) },
+          style: {
+            left: $fieldStore.map((it) => it.x * initCellSize + 'px'),
+            top: $fieldStore.map((it) => it.y * initCellSize + 'px'),
+          },
+          classList: {
+            [css.cell10]: true,
+            [css.on1]: $fieldStore.map((it) => it.val === 1),
+            [css.on2]: $fieldStore.map((it) => it.val === 2),
+          },
         });
+      });
+
+      h('div', {
+        style: {
+          boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
+          left: $hoveredCell.map((it) => it.col * initCellSize + 'px'),
+          top: $hoveredCell.map((it) => it.row * initCellSize + 'px'),
+        },
+        classList: [css.cell10],
       });
     },
   });
