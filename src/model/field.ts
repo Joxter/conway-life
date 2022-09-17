@@ -11,10 +11,12 @@ import {
 } from '../utils';
 
 const vp = getWindowParams();
+const initCellSize = 10;
 
-const initH = Math.ceil(vp.height / 10);
-const initW = Math.ceil(vp.width / 10);
+const initH = Math.ceil(vp.height / initCellSize);
+const initW = Math.ceil(vp.width / initCellSize);
 
+export const $cellSize = createStore(initCellSize);
 export const $fieldSize = createStore({ height: initH, width: initW });
 
 const initFauna: Fauna = new Map();

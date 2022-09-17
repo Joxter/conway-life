@@ -4,22 +4,23 @@
   --color2: blue;
   display: grid;
   grid-template-columns: repeat(var(--width), auto);
+  background-image: url("./cell-10.png");
+  background-size: 10px;
 }
 
-.cell {
-  aspect-ratio: 1;
-  box-shadow: inset 0px 0px 2px 0px #56595c;
-  /*transition: background-color 0.1s linear;*/
+.cell10 {
+  width: 10px;
+  height: 10px;
 }
 
 .cell:hover {
   box-shadow: inset 0px 0px 0px 3px #ec4dc7;
 }
 
-.cell.on1 {
+.cell10.on1 {
   background-color: var(--color1);
 }
-.cell.on2 {
+.cell10.on2 {
   background-color: var(--color2);
 }
 

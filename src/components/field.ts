@@ -95,7 +95,7 @@ export function field() {
             data: { row: $rowKey, col: $colkey },
             handler: { mouseover: cellHovered },
             classList: {
-              [css.cell]: true,
+              [css.cell10]: true,
               [css.on1]: $colStore.map((it) => it === 1),
               [css.on2]: $colStore.map((it) => it === 2),
             },
