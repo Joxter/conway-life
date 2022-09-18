@@ -4,7 +4,6 @@ import {
   $cellSize,
   $cellSizeOptions,
   $field,
-  $fieldSize,
   $hoveredCell,
   fieldMouseMove,
   moveFocus,
@@ -14,9 +13,11 @@ import {
 } from '../model/field';
 import { Color1, Color2, initCellSize } from '../types';
 import { getRowColFromEvent } from '../utils';
+import cell5 from './cell-5.png';
 import cell10 from './cell-10.png';
 import cell20 from './cell-20.png';
-import cell5 from './cell-5.png';
+import cell30 from './cell-30.png';
+import cell40 from './cell-40.png';
 import redo from './redo-arrow-icon.svg';
 import { select } from './stateless/form';
 import css from './styles.module.css';
@@ -102,8 +103,6 @@ export function field() {
     });
   });
 
-  $cellSize.watch(console.log);
-
   const rawClicked = createEvent<any>();
   sample({
     source: $cellSize,
@@ -125,6 +124,8 @@ export function field() {
       backgroundImage: $cellSize.map((it) => {
         if (it === 5) return cell5;
         if (it === 20) return cell20;
+        if (it === 30) return cell30;
+        if (it === 40) return cell40;
         return cell10;
       }).map((pic) => `url("${pic}")`),
       backgroundSize: $cellSize.map((it) => it + 'px'),
