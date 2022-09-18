@@ -43,20 +43,19 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  +- add Elsa for Alisa mode, add "heart" cell design
-//  - add keyboard support
 //  - safe delete (timer before real removing)
 //  - move camera with mouse or touch
+//  - import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  - tools:
 //      - toggle one cell,
 //      - draw like pen
+//      - add undo/redo
 //      ? line, area to move/remove
 //  - better progress:
 //      - different speed
 //      - return to zero fauna
 //      ? return go back to N steps
-//  - add more colors (paint, grey as fallback)
-//  - import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
-//  - add undo/redo
+//  - add keyboard support
 //  ? add more colors
 //  ? canvas render
 //  ? add color picker
