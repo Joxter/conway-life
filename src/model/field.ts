@@ -27,7 +27,16 @@ export const toggleCell = createEvent<{ row: number; col: number; shift: boolean
 export const saveClicked = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
-export const $hoveredCell = createStore({ row: 0, col: 0, shift: false });
+export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
+  updateFilter: (newState, state) => {
+    if (
+      newState.row === state.row && newState.col === state.col && newState.shift === state.shift
+    ) {
+      return false;
+    }
+    return true;
+  },
+});
 export const fieldMouseMove = createEvent<any>();
 
 export const $field = combine(
@@ -60,9 +69,10 @@ export const $viewField = combine($field, $cellSize, (field, size) => {
   });
 });
 
-export const $viewHoveredCell = $hoveredCell.map(({ col, row }) => {
-  return { y: row + 'px', x: col + 'px' };
+export const $viewHoveredCell = combine($hoveredCell, $cellSize, ({ col, row }, size) => {
+  return { y: row * size + 'px', x: col * size + 'px' };
 });
+
 $cellSize.on(sizeChanged, (_, val) => val);
 
 $fauna
@@ -77,11 +87,10 @@ $focus
   }).reset(resetFocus);
 
 sample({
-  source: { current: $hoveredCell, size: $cellSize },
+  source: $cellSize,
   clock: fieldMouseMove,
-  fn: ({ current, size }, evData) => {
-    evData = getRowColFromEvent(evData, size);
-    return evData;
+  fn: (size, evData) => {
+    return getRowColFromEvent(evData, size);
   },
   target: $hoveredCell,
 });
@@ -90,12 +99,10 @@ sample({
   source: {
     fauna: $fauna,
     color: $selectedColor,
-    size: $fieldSize,
     focus: $focus,
-    // hoveredCell: $hoveredCell, // todo refactor with this
   },
   clock: toggleCell,
-  fn: ({ color, fauna, focus, size }, { col, row, shift }) => {
+  fn: ({ color, fauna, focus }, { col, row, shift }) => {
     const newFauna = new Map(fauna);
 
     const faunaX = col - focus.col;
