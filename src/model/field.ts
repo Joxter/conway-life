@@ -14,41 +14,38 @@ export const sizeChanged = createEvent<number>();
 
 export const $fauna = createStore<Fauna>(new Map());
 
-export const $focus = createStore({ x: 0, y: 0 });
-export const moveFocus = createEvent<{ x?: number; y?: number; }>();
+export const $focus = createStore({ col: 0, row: 0 });
+export const moveFocus = createEvent<{ col?: number; row?: number; }>();
 export const resetFocus = createEvent<any>();
 
 export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
-export const toggleCell = createEvent<
-  { x: number; y: number; row: number; col: number; shift: boolean; }
->();
+export const toggleCell = createEvent<{ row: number; col: number; shift: boolean; }>();
 
 export const saveClicked = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
-export const $hoveredCell = createStore({ row: 0, col: 0, x: 0, y: 0, shift: false });
+export const $hoveredCell = createStore({ row: 0, col: 0, shift: false });
 export const fieldMouseMove = createEvent<any>();
 
 export const $field = combine(
   $fieldSize,
   $fauna,
   $focus,
-  $cellSize,
-  ({ width, height }, fauna, focus, cellSize): Field => {
+  ({ width, height }, fauna, focus): Field => {
     const field: Field = [];
 
     fauna.forEach((val, coords) => {
-      const coordsXY = coordsStrToNumbers(coords);
+      const [absCols, absRow] = coordsStrToNumbers(coords);
 
-      const fieldX = Math.ceil(coordsXY[0] + width / 2 + focus.x);
-      const fieldY = Math.ceil(coordsXY[1] + height / 2 + focus.y);
+      const col = Math.ceil(absCols + focus.col);
+      const row = Math.ceil(absRow + focus.row);
 
-      if (fieldX >= 0 && fieldX < width) {
-        if (fieldY >= 0 && fieldY < height) {
-          field.push({ x: fieldX * cellSize, y: fieldY * cellSize, val: val });
+      if (col >= 0 && col < width) {
+        if (row >= 0 && row < height) {
+          field.push({ col, row, val });
         }
       }
     });
@@ -57,6 +54,15 @@ export const $field = combine(
   },
 );
 
+export const $viewField = combine($field, $cellSize, (field, size) => {
+  return field.map(({ val, col, row }) => {
+    return { val, y: row * size + 'px', x: col * size + 'px' };
+  });
+});
+
+export const $viewHoveredCell = $hoveredCell.map(({ col, row }) => {
+  return { y: row + 'px', x: col + 'px' };
+});
 $cellSize.on(sizeChanged, (_, val) => val);
 
 $fauna
@@ -65,8 +71,8 @@ $fauna
 $focus
   .on(moveFocus, (state, delta) => {
     return {
-      x: state.x + (delta.x || 0),
-      y: state.y + (delta.y || 0),
+      col: state.col + (delta.col || 0),
+      row: state.row + (delta.row || 0),
     };
   }).reset(resetFocus);
 
@@ -75,11 +81,6 @@ sample({
   clock: fieldMouseMove,
   fn: ({ current, size }, evData) => {
     evData = getRowColFromEvent(evData, size);
-    if (
-      current.col === evData.col && current.row === evData.row && current.shift === evData.shift
-    ) {
-      return current;
-    }
     return evData;
   },
   target: $hoveredCell,
@@ -91,14 +92,14 @@ sample({
     color: $selectedColor,
     size: $fieldSize,
     focus: $focus,
-    hoveredCell: $hoveredCell,
+    // hoveredCell: $hoveredCell, // todo refactor with this
   },
   clock: toggleCell,
-  fn: ({ color, fauna, focus, size, hoveredCell }, { col, row, shift }) => {
+  fn: ({ color, fauna, focus, size }, { col, row, shift }) => {
     const newFauna = new Map(fauna);
 
-    const faunaX = col - Math.ceil(size.width / 2) - focus.x;
-    const faunaY = row - Math.ceil(size.height / 2) - focus.y;
+    const faunaX = col - focus.col;
+    const faunaY = row - focus.row;
 
     const coords = numbersToCoords([faunaX, faunaY]);
     if (shift) {

@@ -3,8 +3,8 @@ import { h, list, spec } from 'forest';
 import {
   $cellSize,
   $cellSizeOptions,
-  $field,
-  $hoveredCell,
+  $viewField,
+  $viewHoveredCell,
   fieldMouseMove,
   moveFocus,
   resetFocus,
@@ -25,16 +25,16 @@ import css from './styles.module.css';
 
 export function field() {
   const moveLeft = moveFocus.prepend<any>(() => {
-    return { x: 5 };
+    return { col: 5 };
   });
   const moveRight = moveFocus.prepend<any>(() => {
-    return { x: -5 };
+    return { col: -5 };
   });
   const moveUp = moveFocus.prepend<any>(() => {
-    return { y: 5 };
+    return { row: 5 };
   });
   const moveDown = moveFocus.prepend<any>(() => {
-    return { y: -5 };
+    return { row: -5 };
   });
 
   h('div', () => {
@@ -137,12 +137,11 @@ export function field() {
       mousemove: fieldMouseMove,
     },
     fn() {
-      list($field, ({ store: $fieldStore }) => {
+      list($viewField, ({ store: $fieldStore }) => {
         h('div', {
-          data: { row: $fieldStore.map((it) => it.x), col: $fieldStore.map((it) => it.y) },
           style: {
-            left: $fieldStore.map((it) => it.x + 'px'),
-            top: $fieldStore.map((it) => it.y + 'px'),
+            left: $fieldStore.map((it) => it.x),
+            top: $fieldStore.map((it) => it.y),
           },
           classList: {
             [css.heartMode]: true,
@@ -156,12 +155,8 @@ export function field() {
       h('div', {
         style: {
           boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
-          left: $hoveredCell.map((it) => {
-            return it.x + 'px';
-          }),
-          top: $hoveredCell.map((it) => {
-            return it.y + 'px';
-          }),
+          left: $viewHoveredCell.map((it) => it.x),
+          top: $viewHoveredCell.map((it) => it.y),
         },
         classList: [css.cell10],
       });

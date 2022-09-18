@@ -29,19 +29,19 @@ export function newMakeGo(input: Fauna): Fauna {
 }
 
 function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): FaunaInc {
-  const [x, y] = coordsStrToNumbers(coords);
+  const [col, row] = coordsStrToNumbers(coords);
 
   let neighborCoords: CoordsStr[] = [
-    `${x - 1}|${y - 1}`,
-    `${x - 1}|${y}`,
-    `${x - 1}|${y + 1}`,
+    `${col - 1}|${row - 1}`,
+    `${col - 1}|${row}`,
+    `${col - 1}|${row + 1}`,
 
-    `${x}|${y - 1}`,
-    `${x}|${y + 1}`,
+    `${col}|${row - 1}`,
+    `${col}|${row + 1}`,
 
-    `${x + 1}|${y - 1}`,
-    `${x + 1}|${y}`,
-    `${x + 1}|${y + 1}`,
+    `${col + 1}|${row - 1}`,
+    `${col + 1}|${row}`,
+    `${col + 1}|${row + 1}`,
   ];
 
   neighborCoords.forEach((neibs) => {
@@ -61,12 +61,12 @@ function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): 
 }
 
 export function coordsStrToNumbers(coords: CoordsStr): [number, number] {
-  const coordsXY = coords.split('|');
-  return [+coordsXY[0], +coordsXY[1]];
+  const [col, row] = coords.split('|');
+  return [+col, +row];
 }
 
-export function numbersToCoords([x, y]: [number, number]): CoordsStr {
-  return `${x}|${y}`;
+export function numbersToCoords([col, row]: [number, number]): CoordsStr {
+  return `${col}|${row}`;
 }
 
 export function getRowColFromEvent(
