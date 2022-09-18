@@ -11,9 +11,6 @@ import {
 
 const vp = getWindowParams();
 
-const initH = Math.ceil(vp.height / initCellSize);
-const initW = Math.ceil(vp.width / initCellSize);
-
 export const $cellSize = createStore(initCellSize);
 export const $cellSizeOptions = createStore(cellSizes);
 export const $fieldSize = $cellSize.map((size) => {
@@ -25,7 +22,7 @@ export const sizeChanged = createEvent<number>();
 const initFauna: Fauna = new Map();
 export const $fauna = createStore<Fauna>(initFauna);
 
-export const $focus = createStore({ x: -Math.ceil(initW / 2), y: -Math.ceil(initH / 2) }); // todo make focus simplier
+export const $focus = createStore({ x: 0, y: 0 });
 export const moveFocus = createEvent<{ x?: number; y?: number; }>();
 export const resetFocus = createEvent<any>();
 
@@ -33,7 +30,9 @@ export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
-export const toggleCell = createEvent<{ x: number, y: number, row: number; col: number; shift: boolean; }>();
+export const toggleCell = createEvent<
+  { x: number; y: number; row: number; col: number; shift: boolean; }
+>();
 
 export const $stepCount = createStore(0);
 export const gameTick = createEvent<any>();
@@ -143,7 +142,7 @@ sample({
     hoveredCell: $hoveredCell,
   },
   clock: toggleCell,
-  fn: ({ color, fauna, focus, size,hoveredCell }, { col, row, shift }) => {
+  fn: ({ color, fauna, focus, size, hoveredCell }, { col, row, shift }) => {
     const newFauna = new Map(fauna);
 
     const faunaX = col - Math.ceil(size.width / 2) - focus.x;

@@ -13,11 +13,11 @@ import {
 } from '../model/field';
 import { Color1, Color2 } from '../types';
 import { getRowColFromEvent } from '../utils';
-import cell5 from './cell-5.png';
 import cell10 from './cell-10.png';
 import cell20 from './cell-20.png';
 import cell30 from './cell-30.png';
 import cell40 from './cell-40.png';
+import cell5 from './cell-5.png';
 import heartLine from './heart-line-icon.svg';
 import redo from './redo-arrow-icon.svg';
 import { select } from './stateless/form';
@@ -123,7 +123,7 @@ export function field() {
     },
     style: {
       backgroundImage: $cellSize.map((it) => {
-        return  heartLine
+        return heartLine;
         if (it === 5) return cell5;
         if (it === 20) return cell20;
         if (it === 30) return cell30;

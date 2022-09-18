@@ -1,12 +1,12 @@
 import { sample } from 'effector';
 import { Fauna } from '../types';
-import { exportToSting, numbersToCoords } from '../utils';
+import { exportToSting } from '../utils';
 import { $exported, exportClicked } from './export';
 import { $fauna, $field, $stepCount, gameTimer, resetFieldPressed, saveClicked } from './field';
 import { $history, addToHistory, historySelected } from './history';
 
 sample({
-  source: $field,
+  source: $fauna,
   clock: saveClicked,
   target: addToHistory,
 });
@@ -15,19 +15,8 @@ sample({
   source: $history,
   clock: historySelected,
   fn: (history, selected) => {
-    const saved = history.find((it) => it.name === selected)!.field;
-    const fauna: Fauna = new Map();
-
-    saved.forEach((row, y) => {
-      // todo update types
-      // @ts-ignore
-      row.forEach((col, x) => {
-        if (col) {
-          fauna.set(numbersToCoords([x, y]), col);
-        }
-      });
-    });
-
+    const saved = history.find((it) => it.name === selected)!.fauna;
+    const fauna: Fauna = new Map(saved);
     return fauna;
   },
   target: $fauna,

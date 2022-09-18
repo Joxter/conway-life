@@ -15,7 +15,7 @@ function App() {
       fn() {
         h('h1', { text: 'Game of Life' });
 
-        // history();
+        history();
         colorSelector();
 
         progress();
@@ -43,26 +43,30 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  - add inputs for timer interval and field size
-//  +-add mobile layout
 //  - add keyboard support
 //  - safe delete (timer before real removing)
-//  - add Elsa for Alisa mode, add "heart" cell design
-//  - refactoring
-//     + store only live cells
-//     + recalculate only live cels
-//     - canvas render
-//     +-boundaryless mode
-//     - fix history (save only live cells, update types)
+//  - tools:
+//      - toggle one cell,
+//      - draw like pen
+//      ? line?, select area
+//  +- add Elsa for Alisa mode, add "heart" cell design
 //  - add more colors (paint, grey as fallback)
 //  - import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  - add undo/redo
 //  ? add more colors
 //  - select and move/delete parts
+//  ? canvas render
 //  ? add color picker
+//  + add mobile layout
+//  + refactoring
+//     + store only live cells
+//     + recalculate only live cels
+//     +-boundaryless mode
+//     + fix history (save only live cells, update types)
 //  + dynamic cell size
 //  + add paint/erase mode
 //  + remove from history
-//  +-add dynamic field size
+//  + add dynamic field size
 //  + two colors mode
 //  + move "camera"
 //  + toggle color on click, instead of painting

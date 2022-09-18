@@ -10,3 +10,4 @@ export type Field = { val: FieldCell; x: number; y: number; }[];
 export type CoordsStr = `${number}|${number}`;
 export type Fauna = Map<CoordsStr, FieldCell>; // x y value
 export type FaunaInc = Map<CoordsStr, [number, number]>; // [color1 count,color2 count]
+export type SavedFauna = Array<[CoordsStr, FieldCell]>;

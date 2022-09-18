@@ -1,4 +1,4 @@
-import { CoordsStr, Fauna, FaunaInc, Field, FieldCell, initCellSize } from './types';
+import { CoordsStr, Fauna, FaunaInc, Field, FieldCell, initCellSize, SavedFauna } from './types';
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -72,7 +72,7 @@ export function numbersToCoords([x, y]: [number, number]): CoordsStr {
 export function getRowColFromEvent(
   ev: { clientY: number; clientX: number; shiftKey: boolean; },
   cellSize: number,
-): { col: number; shift: boolean; x: number; y: number; row: number } {
+): { col: number; shift: boolean; x: number; y: number; row: number; } {
   let row = Math.floor(ev.clientY / cellSize);
   let col = Math.floor(ev.clientX / cellSize);
 
@@ -107,17 +107,29 @@ export function exportToSting(field: Field): string {
   */
 }
 
-export function saveToLS(history: { field: Field; name: string; }[]) {
-  // localStorage.setItem('history', JSON.stringify(history));
+export function saveToLS(history: { fauna: Fauna; name: string; }[]) {
+  let res: { fauna: SavedFauna; name: string; }[] = history.map(({ name, fauna }) => {
+    let savedF: SavedFauna = [...fauna.entries()];
+    return { fauna: savedF, name };
+  });
+  localStorage.setItem('history', JSON.stringify(res));
 }
 
-export function getSavedFromLS(): { field: Field; name: string; }[] | null {
+export function getSavedFromLS(): { fauna: Fauna; name: string; }[] {
   try {
     // @ts-ignore
-    return JSON.parse(localStorage.getItem('history') || null) || null;
+    let saved: { fauna: SavedFauna; name: string; }[] =
+      JSON.parse(localStorage.getItem('history') || 'null') || [];
+
+    let result: { fauna: Fauna; name: string; }[] = saved.map(({ fauna: savedF, name }) => {
+      let fauna: Fauna = new Map(savedF);
+      return { fauna, name };
+    });
+
+    return result;
   } catch (err) {
     console.error(err);
-    return null;
+    return [];
   }
 }
 
