@@ -1,4 +1,4 @@
-import { combine, createEvent, sample } from 'effector';
+import { createEvent, sample } from 'effector';
 import { h, list, spec } from 'forest';
 import {
   $cellSize,
@@ -11,7 +11,7 @@ import {
   sizeChanged,
   toggleCell,
 } from '../model/field';
-import { Color1, Color2, initCellSize } from '../types';
+import { Color1, Color2 } from '../types';
 import { getRowColFromEvent } from '../utils';
 import cell5 from './cell-5.png';
 import cell10 from './cell-10.png';

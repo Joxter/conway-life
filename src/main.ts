@@ -15,7 +15,7 @@ function App() {
       fn() {
         h('h1', { text: 'Game of Life' });
 
-        history();
+        // history();
         colorSelector();
 
         progress();
