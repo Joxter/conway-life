@@ -117,7 +117,6 @@ export function field() {
   h('div', {
     classList: [css.field],
     styleVar: {
-      width: $fieldSize.map((it) => it.width),
       cellSize: $cellSize.map((it) => it + 'px'),
       color1: Color1,
       color2: Color2,
@@ -150,15 +149,18 @@ export function field() {
         });
       });
 
-      // todo NEED TO FIX
-      // h('div', {
-      //   style: {
-      //     boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
-      //     left: combine($hoveredCell, $cellSize, (it, size) => it.col * size + 'px'),
-      //     top: combine($hoveredCell, $cellSize, (it, size) => it.row * size + 'px'),
-      //   },
-      //   classList: [css.cell10],
-      // });
+      h('div', {
+        style: {
+          boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
+          left: $hoveredCell.map((it) => {
+            return it.x + 'px';
+          }),
+          top: $hoveredCell.map((it) => {
+            return it.y + 'px';
+          }),
+        },
+        classList: [css.cell10],
+      });
     },
   });
 }

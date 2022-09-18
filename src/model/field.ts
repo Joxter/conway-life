@@ -25,7 +25,7 @@ export const sizeChanged = createEvent<number>();
 const initFauna: Fauna = new Map();
 export const $fauna = createStore<Fauna>(initFauna);
 
-export const $focus = createStore({ x: -Math.ceil(initW / 2), y: -Math.ceil(initH / 2) }); // todo something wrong
+export const $focus = createStore({ x: -Math.ceil(initW / 2), y: -Math.ceil(initH / 2) });
 export const moveFocus = createEvent<{ x?: number; y?: number; }>();
 export const resetFocus = createEvent<any>();
 
@@ -56,7 +56,7 @@ export const gameTimer = {
   isRunning: timer.isRunning,
 };
 
-export const $hoveredCell = createStore({ row: 0, col: 0, shift: false });
+export const $hoveredCell = createStore({ row: 0, col: 0, x: 0, y: 0, shift: false });
 export const fieldMouseMove = createEvent<any>();
 
 export const $field = combine(

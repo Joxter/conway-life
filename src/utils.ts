@@ -72,10 +72,15 @@ export function numbersToCoords([x, y]: [number, number]): CoordsStr {
 export function getRowColFromEvent(
   ev: { clientY: number; clientX: number; shiftKey: boolean; },
   cellSize: number,
-): { row: number; col: number; shift: boolean; } {
+): { col: number; shift: boolean; x: number; y: number; row: number } {
+  let row = Math.floor(ev.clientY / cellSize);
+  let col = Math.floor(ev.clientX / cellSize);
+
   return {
-    row: Math.floor(ev.clientY / cellSize),
-    col: Math.floor(ev.clientX / cellSize),
+    row,
+    col,
+    y: row * cellSize,
+    x: col * cellSize,
     shift: ev.shiftKey,
   };
 }
