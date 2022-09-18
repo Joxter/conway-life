@@ -1,5 +1,5 @@
 import { h, spec, text, variant } from 'forest';
-import { $stepCount, gameTick, gameTimer, makeNSteps } from '../model/field';
+import { $stepCount, gameTick, gameTimer, makeNSteps } from '../model/progress';
 
 export function progress() {
   h('p', () => {

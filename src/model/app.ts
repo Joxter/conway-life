@@ -1,9 +1,10 @@
 import { sample } from 'effector';
 import { Fauna } from '../types';
-import { exportToSting } from '../utils';
+import { exportToSting, newMakeGo } from '../utils';
 import { $exported, exportClicked } from './export';
-import { $fauna, $field, $stepCount, gameTimer, resetFieldPressed, saveClicked } from './field';
+import { $fauna, $field, resetFieldPressed, saveClicked } from './field';
 import { $history, addToHistory, historySelected } from './history';
+import { $stepCount, gameTick, gameTimer, makeNSteps } from './progress';
 
 sample({
   source: $fauna,
@@ -31,4 +32,17 @@ sample({
   target: $exported,
 });
 
-$stepCount.reset(historySelected);
+$fauna.on(gameTick, (fauna) => {
+  return newMakeGo(fauna);
+})
+  .on(makeNSteps, (fauna, amount) => {
+    let f = fauna;
+
+    for (let i = 1; i <= amount; i++) {
+      f = newMakeGo(f);
+    }
+
+    return f;
+  });
+
+$stepCount.reset(historySelected, resetFieldPressed);
