@@ -42,19 +42,22 @@ function App() {
 using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
-//  - add inputs for timer interval and field size
+//  +- add Elsa for Alisa mode, add "heart" cell design
 //  - add keyboard support
 //  - safe delete (timer before real removing)
+//  - move camera with mouse or touch
 //  - tools:
 //      - toggle one cell,
 //      - draw like pen
-//      ? line?, select area
-//  +- add Elsa for Alisa mode, add "heart" cell design
+//      ? line, area to move/remove
+//  - better progress:
+//      - different speed
+//      - return to zero fauna
+//      ? return go back to N steps
 //  - add more colors (paint, grey as fallback)
 //  - import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  - add undo/redo
 //  ? add more colors
-//  - select and move/delete parts
 //  ? canvas render
 //  ? add color picker
 //  + add mobile layout

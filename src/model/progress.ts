@@ -2,6 +2,7 @@ import { createEvent, createStore, sample } from 'effector';
 import { interval } from 'patronum';
 
 export const $stepCount = createStore(0);
+export const $startFauna = createStore(0);
 export const gameTick = createEvent<any>();
 export const makeNSteps = createEvent<number>();
 
