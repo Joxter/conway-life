@@ -1,14 +1,16 @@
 import './style.css';
 import { h, using } from 'forest';
 import { colorSelector } from './components/ColorSelector';
-import { field } from './components/Field';
+import { field } from './components/Field/Field';
 import { history } from './components/History';
+import { navigation } from './components/Navigation';
 import { progress } from './components/Progress';
 import { resetFieldPressed } from './model/field';
 import './model/app';
 
 function App() {
   h('div', () => {
+    navigation();
     field();
     h('div', {
       style: { position: 'absolute', width: '100%', backgroundColor: 'rgba(255,255,255, 0.9)' },

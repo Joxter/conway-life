@@ -1,30 +1,10 @@
-import { createEvent, sample } from 'effector';
 import { h, list, spec } from 'forest';
-import {
-  $cellSize,
-  $cellSizeOptions,
-  $isElsaMode,
-  $viewField,
-  $viewHoveredCell,
-  fieldMouseMove,
-  moveFocus,
-  resetFocus,
-  sizeChanged,
-  toggleCell,
-} from '../model/field';
-import { Color1, Color2 } from '../types';
-import { getRowColFromEvent } from '../utils';
-import cell10 from './cell-10.png';
-import cell20 from './cell-20.png';
-import cell30 from './cell-30.png';
-import cell40 from './cell-40.png';
-import cell5 from './cell-5.png';
-import heartLine from './heart-line-icon.svg';
+import { $cellSize, $cellSizeOptions, moveFocus, resetFocus, sizeChanged } from '../model/field';
 import redo from './redo-arrow-icon.svg';
 import { select } from './stateless/form';
 import css from './styles.module.css';
 
-export function field() {
+export function navigation() {
   const moveLeft = moveFocus.prepend<any>(() => {
     return { col: 5 };
   });
@@ -103,64 +83,5 @@ export function field() {
       value: $cellSize.map((it) => String(it)),
       onChange: sizeChanged.prepend((ev) => +ev.target.value),
     });
-  });
-
-  const rawClicked = createEvent<any>();
-  sample({
-    source: $cellSize,
-    clock: rawClicked,
-    fn: (size, ev) => {
-      return getRowColFromEvent(ev, size);
-    },
-    target: toggleCell,
-  });
-
-  h('div', {
-    classList: [css.field],
-    styleVar: {
-      cellSize: $cellSize.map((it) => it + 'px'),
-      color1: Color1,
-      color2: Color2,
-    },
-    style: {
-      backgroundImage: $cellSize.map((it) => {
-        return heartLine;
-        if (it === 5) return cell5;
-        if (it === 20) return cell20;
-        if (it === 30) return cell30;
-        if (it === 40) return cell40;
-        return cell10;
-      }).map((pic) => `url("${pic}")`),
-      backgroundSize: $cellSize.map((it) => it + 'px'),
-    },
-    handler: {
-      click: rawClicked,
-      mousemove: fieldMouseMove,
-    },
-    fn() {
-      list($viewField, ({ store: $fieldStore }) => {
-        h('div', {
-          style: {
-            left: $fieldStore.map((it) => it.x),
-            top: $fieldStore.map((it) => it.y),
-          },
-          classList: {
-            [css.heartMode]: $isElsaMode,
-            [css.cell10]: true,
-            [css.on1]: $fieldStore.map((it) => it.val === 1),
-            [css.on2]: $fieldStore.map((it) => it.val === 2),
-          },
-        });
-      });
-
-      h('div', {
-        style: {
-          boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
-          left: $viewHoveredCell.map((it) => it.x),
-          top: $viewHoveredCell.map((it) => it.y),
-        },
-        classList: [css.cell10],
-      });
-    },
   });
 }
