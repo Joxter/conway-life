@@ -1,9 +1,10 @@
 import { createEvent, sample } from 'effector';
 import { h, list } from 'forest';
 import {
-  $isElsaMode,
+  $fieldTilesStyle,
   $viewField,
   $viewHoveredCell,
+  elsaMode,
   fieldMouseMove,
   fieldSize,
   toggleCell,
@@ -41,11 +42,11 @@ export function field() {
       color2: Color2,
     },
     style: {
-      backgroundImage: fieldSize.$cellSize.map((it) => {
-        return heartLine;
-        return getSvgSquareUrl(it);
-      }).map((pic) => `url("${pic}")`),
-      backgroundSize: fieldSize.$cellSize.map((it) => it + 'px'),
+      backgroundImage: $fieldTilesStyle.map((mode) => {
+        let picUrl = mode === 'elsa' ? heartLine : getSvgSquareUrl(mode);
+        return `url("${picUrl}")`;
+      }),
+      backgroundSize: fieldSize.$cellSize.map((it) => `${it}px ${it}px`),
     },
     handler: {
       click: rawClicked,
@@ -59,7 +60,7 @@ export function field() {
             top: $fieldStore.map((it) => it.y),
           },
           classList: {
-            [css.heartMode]: $isElsaMode,
+            [css.heartMode]: elsaMode.$isOn,
             [css.cell]: true,
             [css.on1]: $fieldStore.map((it) => it.val === 1),
             [css.on2]: $fieldStore.map((it) => it.val === 2),

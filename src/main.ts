@@ -44,10 +44,10 @@ function App() {
 using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
-//  +- add Elsa for Alisa mode, add "heart" cell design
 //  - safe delete (timer before real removing)
 //  - move camera with mouse or touch
 //  - import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
+//  - refactoring navigation (move by mouse)
 //  - tools:
 //      - toggle one cell,
 //      - draw like pen
@@ -61,6 +61,7 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 //  ? add more colors
 //  ? canvas render
 //  ? add color picker
+//  + add Elsa for Alisa mode, add "heart" cell design
 //  + add mobile layout
 //  + refactoring
 //     + store only live cells

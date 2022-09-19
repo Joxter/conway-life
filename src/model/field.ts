@@ -1,9 +1,10 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { Fauna, Field, FieldCell } from '../types';
 import { coordsStrToNumbers, getRowColFromEvent, numbersToCoords } from '../utils';
-import { createFieldSize } from './fieldParams';
+import { createELsaMode, createFieldSize } from './fieldParams';
 
 export const fieldSize = createFieldSize();
+export const elsaMode = createELsaMode();
 
 export const $fauna = createStore<Fauna>(new Map());
 
@@ -31,6 +32,10 @@ export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
   },
 });
 export const fieldMouseMove = createEvent<any>();
+
+export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
+  return isElsa ? 'elsa' as const : cellSize;
+});
 
 export const $field = combine(
   fieldSize.$fieldSize,
@@ -114,8 +119,3 @@ sample({
   },
   target: $fauna,
 });
-
-export const $isElsaMode = createStore(true);
-export const setElsaMode = createEvent<boolean>();
-
-$isElsaMode.on(setElsaMode, (_, val) => val);

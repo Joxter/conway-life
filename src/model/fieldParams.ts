@@ -16,3 +16,12 @@ export function createFieldSize() {
   const fieldSize = { $options, $cellSize, $fieldSize, cellSizeChanged };
   return fieldSize;
 }
+
+export function createELsaMode() {
+  const $isOn = createStore(true);
+  const changed = createEvent<boolean>();
+
+  $isOn.on(changed, (_, val) => val);
+  const elsaMode = { $isOn, changed };
+  return elsaMode;
+}
