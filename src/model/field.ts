@@ -1,16 +1,9 @@
 import { combine, createEvent, createStore, sample } from 'effector';
-import { cellSizes, Fauna, Field, FieldCell, initCellSize } from '../types';
-import { coordsStrToNumbers, getRowColFromEvent, getWindowParams, numbersToCoords } from '../utils';
+import { Fauna, Field, FieldCell } from '../types';
+import { coordsStrToNumbers, getRowColFromEvent, numbersToCoords } from '../utils';
+import { createFieldSize } from './fieldParams';
 
-const vp = getWindowParams();
-
-export const $cellSize = createStore(initCellSize);
-export const $cellSizeOptions = createStore(cellSizes);
-export const $fieldSize = $cellSize.map((size) => {
-  return { height: Math.ceil(vp.height / size), width: Math.ceil(vp.width / size) };
-});
-
-export const sizeChanged = createEvent<number>();
+export const fieldSize = createFieldSize();
 
 export const $fauna = createStore<Fauna>(new Map());
 
@@ -40,7 +33,7 @@ export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
 export const fieldMouseMove = createEvent<any>();
 
 export const $field = combine(
-  $fieldSize,
+  fieldSize.$fieldSize,
   $fauna,
   $focus,
   ({ width, height }, fauna, focus): Field => {
@@ -63,17 +56,15 @@ export const $field = combine(
   },
 );
 
-export const $viewField = combine($field, $cellSize, (field, size) => {
+export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => {
   return field.map(({ val, col, row }) => {
     return { val, y: row * size + 'px', x: col * size + 'px' };
   });
 });
 
-export const $viewHoveredCell = combine($hoveredCell, $cellSize, ({ col, row }, size) => {
+export const $viewHoveredCell = combine($hoveredCell, fieldSize.$cellSize, ({ col, row }, size) => {
   return { y: row * size + 'px', x: col * size + 'px' };
 });
-
-$cellSize.on(sizeChanged, (_, val) => val);
 
 $fauna
   .on(resetFieldPressed, () => new Map());
@@ -87,7 +78,7 @@ $focus
   }).reset(resetFocus);
 
 sample({
-  source: $cellSize,
+  source: fieldSize.$cellSize,
   clock: fieldMouseMove,
   fn: (size, evData) => {
     return getRowColFromEvent(evData, size);

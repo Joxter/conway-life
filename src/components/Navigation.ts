@@ -1,5 +1,5 @@
 import { h, list, spec } from 'forest';
-import { $cellSize, $cellSizeOptions, moveFocus, resetFocus, sizeChanged } from '../model/field';
+import { fieldSize, moveFocus, resetFocus } from '../model/field';
 import redo from './redo-arrow-icon.svg';
 import { select } from './stateless/form';
 import css from './styles.module.css';
@@ -75,13 +75,13 @@ export function navigation() {
     spec({ style: { position: 'absolute', right: '150px', bottom: '20px', zIndex: 1 } });
 
     select({
-      options: $cellSizeOptions.map((sizes) => {
+      options: fieldSize.$options.map((sizes) => {
         return sizes.map((size) => {
           return { label: `cell ${size}px`, value: String(size) };
         });
       }),
-      value: $cellSize.map((it) => String(it)),
-      onChange: sizeChanged.prepend((ev) => +ev.target.value),
+      value: fieldSize.$cellSize.map((it) => String(it)),
+      onChange: fieldSize.cellSizeChanged.prepend((ev) => +ev.target.value),
     });
   });
 }

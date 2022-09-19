@@ -1,11 +1,11 @@
 import { createEvent, sample } from 'effector';
 import { h, list } from 'forest';
 import {
-  $cellSize,
   $isElsaMode,
   $viewField,
   $viewHoveredCell,
   fieldMouseMove,
+  fieldSize,
   toggleCell,
 } from '../../model/field';
 import { Color1, Color2 } from '../../types';
@@ -25,7 +25,7 @@ function getSvgSquareUrl(size: number) {
 export function field() {
   const rawClicked = createEvent<any>();
   sample({
-    source: $cellSize,
+    source: fieldSize.$cellSize,
     clock: rawClicked,
     fn: (size, ev) => {
       return getRowColFromEvent(ev, size);
@@ -36,16 +36,16 @@ export function field() {
   h('div', {
     classList: [css.field],
     styleVar: {
-      cellSize: $cellSize.map((it) => it + 'px'),
+      cellSize: fieldSize.$cellSize.map((it) => it + 'px'),
       color1: Color1,
       color2: Color2,
     },
     style: {
-      backgroundImage: $cellSize.map((it) => {
+      backgroundImage: fieldSize.$cellSize.map((it) => {
         return heartLine;
         return getSvgSquareUrl(it);
       }).map((pic) => `url("${pic}")`),
-      backgroundSize: $cellSize.map((it) => it + 'px'),
+      backgroundSize: fieldSize.$cellSize.map((it) => it + 'px'),
     },
     handler: {
       click: rawClicked,
