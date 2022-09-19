@@ -123,3 +123,8 @@ sample({
   },
   target: $fauna,
 });
+
+export const $isElsaMode = createStore(true);
+export const setElsaMode = createEvent<boolean>();
+
+$isElsaMode.on(setElsaMode, (_, val) => val);

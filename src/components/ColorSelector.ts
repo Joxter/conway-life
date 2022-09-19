@@ -1,9 +1,12 @@
 import { h } from 'forest';
-import { $selectedColor, colorSelected } from '../model/field';
+import { $isElsaMode, $selectedColor, colorSelected, setElsaMode } from '../model/field';
 import { Color1, Color2 } from '../types';
+import { checkbox } from './stateless/form';
 import css from './styles.module.css';
 
 export function colorSelector() {
+  checkbox({ label: 'Elsa', value: $isElsaMode, onChange: setElsaMode });
+
   h('div', {
     style: { display: 'flex', gap: '8px' },
     fn() {

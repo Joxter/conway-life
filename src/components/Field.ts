@@ -3,6 +3,7 @@ import { h, list, spec } from 'forest';
 import {
   $cellSize,
   $cellSizeOptions,
+  $isElsaMode,
   $viewField,
   $viewHoveredCell,
   fieldMouseMove,
@@ -144,7 +145,7 @@ export function field() {
             top: $fieldStore.map((it) => it.y),
           },
           classList: {
-            [css.heartMode]: true,
+            [css.heartMode]: $isElsaMode,
             [css.cell10]: true,
             [css.on1]: $fieldStore.map((it) => it.val === 1),
             [css.on2]: $fieldStore.map((it) => it.val === 2),

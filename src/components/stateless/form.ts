@@ -23,3 +23,29 @@ export function select<T extends string>(
     });
   });
 }
+
+export function checkbox(
+  props: {
+    label: string | Store<string>;
+    value: Store<boolean>;
+    onChange: Event<boolean>;
+  },
+) {
+  h('label', {
+    text: props.label,
+    fn: () => {
+      h('input', {
+        attr: {
+          type: 'checkbox',
+          checked: props.value,
+        },
+        handler: {
+          change: props.onChange.prepend((ev) => {
+            // @ts-ignore
+            return ev.target.checked as boolean;
+          }),
+        },
+      });
+    },
+  });
+}
