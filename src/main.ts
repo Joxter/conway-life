@@ -1,5 +1,5 @@
 import './style.css';
-import { h, using } from 'forest';
+import { h, spec, using } from 'forest';
 import { colorSelector } from './components/ColorSelector';
 import { field } from './components/Field/Field';
 import { history } from './components/History';
@@ -7,6 +7,7 @@ import { navigation } from './components/Navigation';
 import { progress } from './components/Progress';
 import { resetFieldPressed } from './model/field';
 import './model/app';
+import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
 
 function App() {
   h('div', () => {
@@ -30,14 +31,20 @@ function App() {
       handler: { click: resetFieldPressed },
     });
 
-    /*
-    h('button', { text: 'Export', handler: { click: exportClicked } });
-    h('br', {});
-    h('textarea', {
-      style: { fontSize: '8px', width: '100%', height: '100px', lineHeight: 1 },
-      text: $exported,
+    h('div', () => {
+      spec({ style: { position: 'absolute', bottom: '50px', left: '20px' } });
+      // h('button', { text: 'Export', handler: { click: exportClicked } });
+      h('button', { text: 'Import', handler: { click: importClicked } });
+      h('br', {});
+      h('textarea', {
+        style: { fontSize: '8px', width: '100%', height: '100px', lineHeight: 1 },
+        text: $exported,
+        handler: { change: exportFieldChanged.prepend((ev) => {
+            // @ts-ignore
+            return ev.target.value
+          }) },
+      });
     });
-    */
   });
 }
 
@@ -46,7 +53,7 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 // todo
 //  - safe delete (timer before real removing)
 //  - move camera with mouse or touch
-//  - import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
+//  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  - refactoring navigation (move by mouse)
 //  - tools:
 //      - toggle one cell,

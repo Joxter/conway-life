@@ -1,7 +1,7 @@
 import { sample } from 'effector';
 import { Fauna } from '../types';
-import { exportToSting, newMakeGo } from '../utils';
-import { $exported, exportClicked } from './export';
+import { exportToSting, makeFaunaFromLexicon, newMakeGo } from '../utils';
+import { $exported, exportClicked, importClicked } from './export';
 import { $fauna, $field, resetFieldPressed, saveClicked } from './field';
 import { $history, addToHistory, historySelected } from './history';
 import { $stepCount, gameTick, gameTimer, makeNSteps } from './progress';
@@ -22,6 +22,10 @@ sample({
   },
   target: $fauna,
 });
+
+sample({ source: $exported, clock: importClicked, fn: makeFaunaFromLexicon, target: $fauna });
+
+$fauna.watch(console.log);
 
 sample({ clock: [historySelected, resetFieldPressed], target: gameTimer.stop });
 
