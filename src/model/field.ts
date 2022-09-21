@@ -1,7 +1,7 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { Fauna, Field, FieldCell } from '../types';
 import { coordsStrToNumbers, getRowColFromEvent, numbersToCoords } from '../utils';
-import { createELsaMode, createFieldSize } from './fieldParams';
+import { createELsaMode, createFieldSize, createMoveCoords } from './fieldParams';
 
 export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
@@ -31,6 +31,21 @@ export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
     return true;
   },
 });
+
+const moveCoords = createMoveCoords($hoveredCell, $focus);
+
+$focus.on(moveCoords.$moveCoords, (f, { currentHovered, initHovered, initFocus }) => {
+  if (initHovered && initFocus && currentHovered) {
+    const deltaCol = currentHovered.col - initHovered.col;
+    const deltaRow = currentHovered.row - initHovered.row;
+
+    return {
+      col: initFocus.col + deltaCol,
+      row: initFocus.row + deltaRow,
+    };
+  }
+});
+
 export const fieldMouseMove = createEvent<any>();
 
 export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {

@@ -39,10 +39,12 @@ function App() {
       h('textarea', {
         style: { fontSize: '8px', width: '100%', height: '100px', lineHeight: 1 },
         text: $exported,
-        handler: { change: exportFieldChanged.prepend((ev) => {
+        handler: {
+          change: exportFieldChanged.prepend((ev) => {
             // @ts-ignore
-            return ev.target.value
-          }) },
+            return ev.target.value;
+          }),
+        },
       });
     });
   });
