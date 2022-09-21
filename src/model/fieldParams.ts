@@ -26,48 +26,46 @@ export function createELsaMode() {
   return elsaMode;
 }
 
-export function createMoveCoords(
+export function createDragTool(
   $hoveredCell: Store<{ col: number; row: number; shift: boolean; }>,
   $focus: Store<{ col: number; row: number; }>,
 ) {
-  const $moveCoords = createStore<
-    {
-      initFocus: { col: number; row: number; } | null;
-      initHovered: { col: number; row: number; } | null;
-      currentHovered: { col: number; row: number; } | null;
-    }
-  >({ initFocus: null, initHovered: null, currentHovered: null });
+  const $initFocus = createStore<{ col: number; row: number; } | null>(null);
+  const $initHovered = createStore<{ col: number; row: number; } | null>(null);
 
   const onMDown = createEvent<any>();
   const onMMove = createEvent<any>();
   const onMUp = createEvent<any>();
+  const focusMoved = createEvent<{ col: number; row: number; }>();
 
-  document.addEventListener('mousedown', onMDown);
-  document.addEventListener('mousemove', onMMove);
-  document.addEventListener('mouseup', onMUp);
+  function initEvents() {
+    document.addEventListener('mousedown', onMDown);
+    document.addEventListener('mousemove', onMMove);
+    document.addEventListener('mouseup', onMUp);
+  }
 
-  $moveCoords.reset(onMUp);
+  sample({ source: $focus, clock: onMDown, target: $initFocus });
+  sample({ source: $hoveredCell, clock: onMDown, target: $initHovered });
 
   sample({
-    source: { focus: $focus, hovered: $hoveredCell, coords: $moveCoords },
-    clock: onMDown,
-    fn: ({ focus, coords, hovered }) => {
-      return { ...coords, initFocus: focus, initHovered: hovered };
+    source: {
+      currentHovered: $hoveredCell,
+      initFocus: $initFocus,
+      initHovered: $initHovered,
     },
-    target: $moveCoords,
-  });
-
-  sample({
-    source: { hovered: $hoveredCell, coords: $moveCoords },
     clock: onMMove,
-    filter: $moveCoords.map((it) => !!it.initFocus),
-    fn: ({ hovered, coords }) => {
-      return { ...coords, currentHovered: { ...hovered } };
+    filter: (stores) => !!stores.initHovered && !!stores.initFocus && !!stores.currentHovered,
+    fn: ({ currentHovered, initHovered, initFocus }) => {
+      return {
+        col: initFocus!.col + (currentHovered!.col - initHovered!.col),
+        row: initFocus!.row + (currentHovered!.row - initHovered!.row),
+      };
     },
-    target: $moveCoords,
+    target: focusMoved,
   });
 
-  // $moveCoords.watch(data => console.log(JSON.stringify(data)))
+  $initFocus.reset(onMUp);
+  $initHovered.reset(onMUp);
 
-  return { $moveCoords };
+  return { focusMoved, initEvents };
 }

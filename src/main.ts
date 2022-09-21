@@ -5,9 +5,9 @@ import { field } from './components/Field/Field';
 import { history } from './components/History';
 import { navigation } from './components/Navigation';
 import { progress } from './components/Progress';
+import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
 import { resetFieldPressed } from './model/field';
 import './model/app';
-import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
 
 function App() {
   h('div', () => {
@@ -54,22 +54,22 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  - safe delete (timer before real removing)
-//  - move camera with mouse or touch
 //  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  - refactoring navigation (move by mouse)
 //  - tools:
 //      - toggle one cell,
-//      - draw like pen
+//      - draw pen
 //      - add undo/redo
-//      ? line, area to move/remove
+//      ? a line, selections to move/remove
 //  - better progress:
 //      - different speed
-//      - return to zero fauna
+//      - return to zero start
 //      ? return go back to N steps
 //  - add keyboard support
 //  ? add more colors
 //  ? canvas render
 //  ? add color picker
+//  + move camera with mouse or touch
 //  + add Elsa for Alisa mode, add "heart" cell design
 //  + add mobile layout
 //  + refactoring

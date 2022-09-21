@@ -25,8 +25,6 @@ sample({
 
 sample({ source: $exported, clock: importClicked, fn: makeFaunaFromLexicon, target: $fauna });
 
-$fauna.watch(console.log);
-
 sample({ clock: [historySelected, resetFieldPressed], target: gameTimer.stop });
 
 sample({

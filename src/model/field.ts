@@ -1,7 +1,7 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { Fauna, Field, FieldCell } from '../types';
 import { coordsStrToNumbers, getRowColFromEvent, numbersToCoords } from '../utils';
-import { createELsaMode, createFieldSize, createMoveCoords } from './fieldParams';
+import { createDragTool, createELsaMode, createFieldSize } from './fieldParams';
 
 export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
@@ -9,7 +9,6 @@ export const elsaMode = createELsaMode();
 export const $fauna = createStore<Fauna>(new Map());
 
 export const $focus = createStore({ col: 0, row: 0 });
-export const moveFocus = createEvent<{ col?: number; row?: number; }>();
 export const resetFocus = createEvent<any>();
 
 export const $selectedColor = createStore<FieldCell>(1);
@@ -32,19 +31,7 @@ export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
   },
 });
 
-const moveCoords = createMoveCoords($hoveredCell, $focus);
-
-$focus.on(moveCoords.$moveCoords, (f, { currentHovered, initHovered, initFocus }) => {
-  if (initHovered && initFocus && currentHovered) {
-    const deltaCol = currentHovered.col - initHovered.col;
-    const deltaRow = currentHovered.row - initHovered.row;
-
-    return {
-      col: initFocus.col + deltaCol,
-      row: initFocus.row + deltaRow,
-    };
-  }
-});
+export const dragTool = createDragTool($hoveredCell, $focus);
 
 export const fieldMouseMove = createEvent<any>();
 
@@ -90,11 +77,8 @@ $fauna
   .on(resetFieldPressed, () => new Map());
 
 $focus
-  .on(moveFocus, (state, delta) => {
-    return {
-      col: state.col + (delta.col || 0),
-      row: state.row + (delta.row || 0),
-    };
+  .on(dragTool.focusMoved, (state, newFocus) => {
+    return newFocus;
   }).reset(resetFocus);
 
 sample({
