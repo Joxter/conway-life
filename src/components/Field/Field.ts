@@ -1,3 +1,4 @@
+import { createEvent } from 'effector';
 import { h, list } from 'forest';
 import {
   $fieldTilesStyle,
@@ -20,6 +21,8 @@ function getSvgSquareUrl(size: number) {
   return `data:image/svg+xml;base64,` + btoa(svg.replace(/\n/g, ''));
 }
 
+const aaa = createEvent<any>();
+
 export function field() {
   h('div', {
     classList: [css.field],
@@ -37,6 +40,7 @@ export function field() {
     },
     handler: {
       mousemove: fieldMouseMove,
+      mouseleave: aaa, // todo add $hoverCell = null possibility
     },
     fn() {
       list($viewField, ({ store: $fieldStore }) => {

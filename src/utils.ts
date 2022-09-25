@@ -134,6 +134,23 @@ export function getWindowParams() {
   };
 }
 
+export function getMiddleOfFauna(fauna: Fauna) {
+  let col = 0;
+  let row = 0;
+  if (fauna.size === 0) return { col, row };
+
+  fauna.forEach((_, coords) => {
+    const [_col, _row] = coordsStrToNumbers(coords);
+    col += _col;
+    row += _row;
+  });
+
+  return {
+    col: Math.round(col / fauna.size),
+    row: Math.round(row / fauna.size),
+  };
+}
+
 /*
  *    .OO..
  *    O..O.

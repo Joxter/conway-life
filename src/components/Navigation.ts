@@ -1,5 +1,5 @@
 import { h, spec } from 'forest';
-import { dragTool, fieldSize, resetFocus } from '../model/field';
+import { dragTool, fieldSize, focusToTheMiddle } from '../model/field';
 import { select } from './stateless/form';
 import css from './styles.module.css';
 
@@ -8,8 +8,8 @@ export function navigation() {
 
   h('button', {
     classList: [css.arrowBtn],
-    handler: { click: resetFocus },
-    text: 'reset focus',
+    handler: { click: focusToTheMiddle },
+    text: 'to center',
   });
 
   h('div', () => {

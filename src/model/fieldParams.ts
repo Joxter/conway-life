@@ -42,7 +42,7 @@ export function createDragTool(
 
   const mouseEnd = createEvent<
     { start: ColRow; finish: ColRow; duration: number; shift: boolean; }
-    >();
+  >();
   const clicked = createEvent<
     { start: ColRow; finish: ColRow; duration: number; shift: boolean; }
   >();

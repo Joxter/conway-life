@@ -1,6 +1,11 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { Fauna, Field, FieldCell } from '../types';
-import { coordsStrToNumbers, getRowColFromEvent, numbersToCoords } from '../utils';
+import {
+  coordsStrToNumbers,
+  getMiddleOfFauna,
+  getRowColFromEvent,
+  numbersToCoords,
+} from '../utils';
 import { createDragTool, createELsaMode, createFieldSize } from './fieldParams';
 
 export const fieldSize = createFieldSize();
@@ -10,6 +15,7 @@ export const $fauna = createStore<Fauna>(new Map());
 
 export const $focus = createStore({ col: 0, row: 0 });
 export const resetFocus = createEvent<any>();
+export const focusToTheMiddle = createEvent<any>();
 
 export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
@@ -89,13 +95,26 @@ sample({
 });
 
 sample({
+  source: { fauna: $fauna, fieldSize: fieldSize.$fieldSize },
+  clock: focusToTheMiddle,
+  fn: ({ fauna, fieldSize }) => {
+    const middle = getMiddleOfFauna(fauna);
+    return {
+      col: Math.round(fieldSize.width / 2 - middle.col),
+      row: Math.round(fieldSize.height / 2 - middle.row),
+    };
+  },
+  target: $focus,
+});
+
+sample({
   source: {
     fauna: $fauna,
     color: $selectedColor,
     focus: $focus,
   },
   clock: dragTool.clicked,
-  fn: ({ color, fauna, focus }, { start: {col, row}, shift }) => {
+  fn: ({ color, fauna, focus }, { start: { col, row }, shift }) => {
     const newFauna = new Map(fauna);
 
     const faunaX = col - focus.col;
