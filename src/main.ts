@@ -54,18 +54,20 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  - safe delete (timer before real removing)
-//  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
-//  - refactoring navigation (move by mouse)
+//  - add presets by with 1 click
+//  - progress improvements:
+//      + play/pause
+//      - different speed
+//      - restart (restore to 0)
+//      - back to N steps
 //  - tools:
-//      - toggle one cell,
+//      + toggle one cell,
 //      - draw pen
 //      - add undo/redo
 //      ? a line, selections to move/remove
-//  - better progress:
-//      - different speed
-//      - return to zero start
-//      ? return go back to N steps
 //  - add keyboard support
+//  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
+//  +- refactoring navigation (move by mouse)
 //  ? add more colors
 //  ? canvas render
 //  ? add color picker

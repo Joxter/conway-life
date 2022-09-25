@@ -18,7 +18,7 @@ export function createFieldSize() {
 }
 
 export function createELsaMode() {
-  const $isOn = createStore(false);
+  const $isOn = createStore(true);
   const changed = createEvent<boolean>();
 
   $isOn.on(changed, (_, val) => val);
