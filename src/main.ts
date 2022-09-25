@@ -56,7 +56,7 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 //  - safe delete (timer before real removing)
 //  - add presets by with 1 click
 //  - better "reset focus" focus to the center of paint
-//  - better scale: "+" and "-" and with center in the middle of the sceen (maybe more with step = 3)
+//  - better scale: "+" and "-" and with center in the middle of the screen (maybe more with step = 3)
 //  - progress improvements:
 //      + play/pause
 //      - different speed
@@ -70,7 +70,7 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 //      ? a line, selections to move/remove
 //  - add keyboard support
 //  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
-//  +- refactoring navigation (move by mouse)
+//  + refactoring navigation (move by mouse)
 //  ? add more colors
 //  ? canvas render
 //  ? add color picker

@@ -15,8 +15,6 @@ export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
-export const toggleCell = createEvent<{ row: number; col: number; shift: boolean; }>();
-
 export const saveClicked = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
@@ -96,8 +94,8 @@ sample({
     color: $selectedColor,
     focus: $focus,
   },
-  clock: toggleCell,
-  fn: ({ color, fauna, focus }, { col, row, shift }) => {
+  clock: dragTool.clicked,
+  fn: ({ color, fauna, focus }, { start: {col, row}, shift }) => {
     const newFauna = new Map(fauna);
 
     const faunaX = col - focus.col;

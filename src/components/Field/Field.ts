@@ -1,4 +1,3 @@
-import { createEvent, sample } from 'effector';
 import { h, list } from 'forest';
 import {
   $fieldTilesStyle,
@@ -7,10 +6,8 @@ import {
   elsaMode,
   fieldMouseMove,
   fieldSize,
-  toggleCell,
 } from '../../model/field';
 import { Color1, Color2 } from '../../types';
-import { getRowColFromEvent } from '../../utils';
 import heartLine from './heart-line-icon.svg';
 import css from './styles.module.css';
 
@@ -24,16 +21,6 @@ function getSvgSquareUrl(size: number) {
 }
 
 export function field() {
-  const rawClicked = createEvent<any>();
-  sample({
-    source: fieldSize.$cellSize,
-    clock: rawClicked,
-    fn: (size, ev) => {
-      return getRowColFromEvent(ev, size);
-    },
-    target: toggleCell,
-  });
-
   h('div', {
     classList: [css.field],
     styleVar: {
@@ -49,7 +36,6 @@ export function field() {
       backgroundSize: fieldSize.$cellSize.map((it) => `${it}px ${it}px`),
     },
     handler: {
-      click: rawClicked,
       mousemove: fieldMouseMove,
     },
     fn() {
