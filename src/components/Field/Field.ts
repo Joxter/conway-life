@@ -1,10 +1,10 @@
-import { createEvent } from 'effector';
 import { h, list } from 'forest';
 import {
   $fieldTilesStyle,
   $viewField,
   $viewHoveredCell,
   elsaMode,
+  fieldMouseLeave,
   fieldMouseMove,
   fieldSize,
 } from '../../model/field';
@@ -20,8 +20,6 @@ function getSvgSquareUrl(size: number) {
 </svg>`;
   return `data:image/svg+xml;base64,` + btoa(svg.replace(/\n/g, ''));
 }
-
-const aaa = createEvent<any>();
 
 export function field() {
   h('div', {
@@ -40,7 +38,7 @@ export function field() {
     },
     handler: {
       mousemove: fieldMouseMove,
-      mouseleave: aaa, // todo add $hoverCell = null possibility
+      mouseleave: fieldMouseLeave,
     },
     fn() {
       list($viewField, ({ store: $fieldStore }) => {
@@ -61,8 +59,8 @@ export function field() {
       h('div', {
         style: {
           boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
-          left: $viewHoveredCell.map((it) => it.x),
-          top: $viewHoveredCell.map((it) => it.y),
+          left: $viewHoveredCell.map((it) => it ? it.x : '-100px'),
+          top: $viewHoveredCell.map((it) => it ? it.y : '-100px'),
         },
         classList: [css.cell],
       });

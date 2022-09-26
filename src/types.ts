@@ -4,6 +4,7 @@ export const Color2 = '#79e555';
 export const cellSizes = [5, 10, 20, 30, 40];
 export const initCellSize = cellSizes[2];
 
+export type ColRow = { col: number; row: number; };
 export type FieldCell = 0 | 1 | 2;
 export type Field = { val: FieldCell; col: number; row: number; }[];
 

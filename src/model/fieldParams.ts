@@ -1,5 +1,5 @@
 import { createEvent, createStore, sample, split, Store } from 'effector';
-import { cellSizes, initCellSize } from '../types';
+import { cellSizes, ColRow, initCellSize } from '../types';
 import { getWindowParams } from '../utils';
 
 const vp = getWindowParams();
@@ -27,8 +27,8 @@ export function createELsaMode() {
 }
 
 export function createDragTool(
-  $hoveredCell: Store<{ col: number; row: number; shift: boolean; }>,
-  $focus: Store<{ col: number; row: number; }>,
+  $hoveredCell: Store<ColRow | null>,
+  $focus: Store<ColRow>,
 ) {
   type ColRow = { col: number; row: number; };
 
@@ -40,15 +40,9 @@ export function createDragTool(
   const onMMove = createEvent<any>();
   const onMUp = createEvent<any>();
 
-  const mouseEnd = createEvent<
-    { start: ColRow; finish: ColRow; duration: number; shift: boolean; }
-  >();
-  const clicked = createEvent<
-    { start: ColRow; finish: ColRow; duration: number; shift: boolean; }
-  >();
-  const dragEnd = createEvent<
-    { start: ColRow; finish: ColRow; duration: number; shift: boolean; }
-  >();
+  const mouseEnd = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
+  const clicked = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
+  const dragEnd = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
 
   const focusMoved = createEvent<{ col: number; row: number; }>();
 
@@ -58,9 +52,13 @@ export function createDragTool(
     document.addEventListener('mouseup', onMUp);
   }
 
+  const $isHovered = $hoveredCell.map((it) => it !== null);
+  const $isNotHovered = $hoveredCell.map((it) => it == null);
+
   $startTime.on(onMDown, () => Date.now());
-  sample({ source: $focus, clock: onMDown, target: $initFocus });
-  sample({ source: $hoveredCell, clock: onMDown, target: $initHovered });
+
+  sample({ source: $focus, clock: onMDown, filter: $isHovered, target: $initFocus });
+  sample({ source: $hoveredCell, clock: onMDown, filter: $isHovered, target: $initHovered });
 
   sample({
     source: {
@@ -75,7 +73,6 @@ export function createDragTool(
         start: { col: currentHovered!.col, row: currentHovered!.row },
         finish: initHovered!,
         duration: Date.now() - startTime!,
-        shift: currentHovered!.shift,
       };
     },
     target: mouseEnd,
@@ -109,9 +106,9 @@ export function createDragTool(
     },
   });
 
-  $initFocus.reset(mouseEnd);
-  $initHovered.reset(mouseEnd);
-  $startTime.reset(mouseEnd);
+  $initFocus.reset(mouseEnd, $isNotHovered);
+  $initHovered.reset(mouseEnd, $isNotHovered);
+  $startTime.reset(mouseEnd, $isNotHovered);
 
   return { focusMoved, initEvents, clicked };
 }

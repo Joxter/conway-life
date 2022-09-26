@@ -1,5 +1,5 @@
 import { combine, createEvent, createStore, sample } from 'effector';
-import { Fauna, Field, FieldCell } from '../types';
+import { ColRow, Fauna, Field, FieldCell } from '../types';
 import {
   coordsStrToNumbers,
   getMiddleOfFauna,
@@ -13,7 +13,7 @@ export const elsaMode = createELsaMode();
 
 export const $fauna = createStore<Fauna>(new Map());
 
-export const $focus = createStore({ col: 0, row: 0 });
+export const $focus = createStore<ColRow>({ col: 0, row: 0 });
 export const resetFocus = createEvent<any>();
 export const focusToTheMiddle = createEvent<any>();
 
@@ -24,10 +24,11 @@ $selectedColor.on(colorSelected, (_, color) => color);
 export const saveClicked = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
-export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
+export const $hoveredCell = createStore<ColRow | null>(null, {
   updateFilter: (newState, state) => {
     if (
-      newState.row === state.row && newState.col === state.col && newState.shift === state.shift
+      newState && state
+      && newState.row === state.row && newState.col === state.col
     ) {
       return false;
     }
@@ -38,6 +39,7 @@ export const $hoveredCell = createStore({ row: 0, col: 0, shift: false }, {
 export const dragTool = createDragTool($hoveredCell, $focus);
 
 export const fieldMouseMove = createEvent<any>();
+export const fieldMouseLeave = createEvent<any>();
 
 export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
   return isElsa ? 'elsa' as const : cellSize;
@@ -73,8 +75,11 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
   });
 });
 
-export const $viewHoveredCell = combine($hoveredCell, fieldSize.$cellSize, ({ col, row }, size) => {
-  return { y: row * size + 'px', x: col * size + 'px' };
+export const $viewHoveredCell = combine($hoveredCell, fieldSize.$cellSize, (hovered, size) => {
+  if (hovered) {
+    return { y: hovered.row * size + 'px', x: hovered.col * size + 'px' };
+  }
+  return null;
 });
 
 $fauna
@@ -84,6 +89,8 @@ $focus
   .on(dragTool.focusMoved, (state, newFocus) => {
     return newFocus;
   }).reset(resetFocus);
+
+$hoveredCell.on(fieldMouseLeave, () => null);
 
 sample({
   source: fieldSize.$cellSize,
@@ -114,14 +121,14 @@ sample({
     focus: $focus,
   },
   clock: dragTool.clicked,
-  fn: ({ color, fauna, focus }, { start: { col, row }, shift }) => {
+  fn: ({ color, fauna, focus }, { start: { col, row } }) => {
     const newFauna = new Map(fauna);
 
     const faunaX = col - focus.col;
     const faunaY = row - focus.row;
 
     const coords = numbersToCoords([faunaX, faunaY]);
-    if (shift) {
+    if (false) { // used to be "shift" to force color instead of toggle
       newFauna.set(coords, color);
     } else {
       if (newFauna.get(coords) === color) {
