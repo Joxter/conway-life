@@ -1,6 +1,6 @@
 import { h, spec } from 'forest';
 import { dragTool, fieldSize, focusToTheMiddle } from '../model/field';
-import { select } from './stateless/form';
+import { PlusMinus } from './stateless/plusMinus';
 import css from './styles.module.css';
 
 export function navigation() {
@@ -15,14 +15,12 @@ export function navigation() {
   h('div', () => {
     spec({ style: { position: 'absolute', right: '150px', bottom: '20px', zIndex: 1 } });
 
-    select({
-      options: fieldSize.$options.map((sizes) => {
-        return sizes.map((size) => {
-          return { label: `cell ${size}px`, value: String(size) };
-        });
-      }),
-      value: fieldSize.$cellSize.map((it) => String(it)),
-      onChange: fieldSize.cellSizeChanged.prepend((ev) => +ev.target.value),
+    PlusMinus({
+      value: fieldSize.$cellSize,
+      onPlusClicked: fieldSize.plus,
+      onMinusClicked: fieldSize.minus,
+      range: fieldSize.options,
+      classList: [css.roundBox],
     });
   });
 }

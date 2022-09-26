@@ -5,15 +5,19 @@ import { getWindowParams } from '../utils';
 const vp = getWindowParams();
 
 export function createFieldSize() {
-  const $options = createStore(cellSizes);
+  const options = cellSizes;
   const $cellSize = createStore(initCellSize);
   const $fieldSize = $cellSize.map((size) => {
     return { height: Math.ceil(vp.height / size), width: Math.ceil(vp.width / size) };
   });
-  const cellSizeChanged = createEvent<number>();
-  $cellSize.on(cellSizeChanged, (_, val) => val);
 
-  const fieldSize = { $options, $cellSize, $fieldSize, cellSizeChanged };
+  const plus = createEvent();
+  const minus = createEvent();
+  $cellSize
+    .on(minus, (size) => size - 3)
+    .on(plus, (size) => size + 3);
+
+  const fieldSize = { options, $cellSize, $fieldSize, plus, minus };
   return fieldSize;
 }
 
