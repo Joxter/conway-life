@@ -3,6 +3,7 @@ import {
   $fieldTilesStyle,
   $viewField,
   $viewHoveredCell,
+  $viewLabels,
   elsaMode,
   fieldMouseLeave,
   fieldMouseMove,
@@ -63,6 +64,17 @@ export function field() {
           top: $viewHoveredCell.map((it) => it ? it.y : '-100px'),
         },
         classList: [css.cell],
+      });
+
+      list($viewLabels, ({ store: $labelStore }) => {
+        h('div', {
+          style: {
+            left: $labelStore.map((it) => it.x),
+            top: $labelStore.map((it) => it.y),
+          },
+          text: $labelStore.map((it) => it.label),
+          classList: [css.label],
+        });
       });
     },
   });

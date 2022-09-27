@@ -32,3 +32,12 @@
   background-color: transparent;
   background-image: url("./red-heart-icon.svg");
 }
+
+.label {
+  box-shadow: inset 0px 0px 0px 2px #bda3d7;
+  position: absolute;
+  color: #3b1069;
+  width: var(--cellSize);
+  height: var(--cellSize);
+
+}

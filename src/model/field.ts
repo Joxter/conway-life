@@ -12,6 +12,9 @@ export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
 
 export const $fauna = createStore<Fauna>(new Map());
+export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
+  [{ col: 0, row: 0, label: '0,0' }],
+);
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
 export const resetFocus = createEvent<any>();
@@ -69,6 +72,28 @@ export const $field = combine(
   },
 );
 
+export const $labelsOnField = combine(
+  fieldSize.$fieldSize,
+  $labels,
+  $focus,
+  ({ width, height }, labels, focus): { col: number; row: number; label: string; }[] => {
+    const labelsOnField: { col: number; row: number; label: string; }[] = [];
+
+    labels.forEach(({ col, row, label }) => {
+      const _col = Math.ceil(col + focus.col);
+      const _row = Math.ceil(row + focus.row);
+
+      if (col >= 0 && col < width) {
+        if (row >= 0 && row < height) {
+          labelsOnField.push({ col: _col, row: _row, label });
+        }
+      }
+    });
+
+    return labelsOnField;
+  },
+);
+
 export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => {
   return field.map(({ val, col, row }) => {
     return { val, y: row * size + 'px', x: col * size + 'px' };
@@ -80,6 +105,12 @@ export const $viewHoveredCell = combine($hoveredCell, fieldSize.$cellSize, (hove
     return { y: hovered.row * size + 'px', x: hovered.col * size + 'px' };
   }
   return null;
+});
+
+export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, size) => {
+  return ls.map(({ row, col, label }) => {
+    return { y: row * size + 'px', x: col * size + 'px', label };
+  });
 });
 
 $fauna
