@@ -9,7 +9,17 @@ export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
 
 export const $fauna = createStore<Fauna>(new Map());
 export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
-  [{ col: 0, row: 0, label: '0,0' }],
+  [
+    { col: 0, row: 0, label: '0,0' },
+    { col: 10, row: 10, label: '10,10' },
+    { col: 10, row: -10, label: '10,-10' },
+    { col: -10, row: 10, label: '-10,10' },
+    { col: -10, row: -10, label: '-10,-10' },
+    { col: 10, row: 0, label: '10,0' },
+    { col: 0, row: 10, label: '0,10' },
+    { col: -10, row: 0, label: '-10,0' },
+    { col: 0, row: -10, label: '0,-10' },
+  ],
 );
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
@@ -39,8 +49,8 @@ export const $field = combine(
     fauna.forEach((val, coords) => {
       const [absCols, absRow] = coordsStrToNumbers(coords);
 
-      const col = Math.ceil(absCols + focus.col);
-      const row = Math.ceil(absRow + focus.row);
+      const col = absCols + focus.col;
+      const row = absRow + focus.row;
 
       if (col >= 0 && col < width) {
         if (row >= 0 && row < height) {
@@ -61,11 +71,11 @@ export const $labelsOnField = combine(
     const labelsOnField: { col: number; row: number; label: string; }[] = [];
 
     labels.forEach(({ col, row, label }) => {
-      const _col = Math.ceil(col + focus.col);
-      const _row = Math.ceil(row + focus.row);
+      const _col = col + focus.col;
+      const _row = row + focus.row;
 
-      if (col >= 0 && col < width) {
-        if (row >= 0 && row < height) {
+      if (_col >= 0 && _col < width) {
+        if (_row >= 0 && _row < height) {
           labelsOnField.push({ col: _col, row: _row, label });
         }
       }
