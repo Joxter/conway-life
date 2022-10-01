@@ -147,3 +147,10 @@ export function createDragTool(
 
   return { focusMoved, initEvents, clicked };
 }
+
+export function createCursor() {
+  // todo
+  //   move without pressed
+  //   move with pressed
+  //   move clicked
+}
