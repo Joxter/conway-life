@@ -1,15 +1,11 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { ColRow, Fauna, Field, FieldCell } from '../types';
-import {
-  coordsStrToNumbers,
-  getMiddleOfFauna,
-  getRowColFromEvent,
-  numbersToCoords,
-} from '../utils';
-import { createDragTool, createELsaMode, createFieldSize } from './fieldParams';
+import { coordsStrToNumbers, getMiddleOfFauna, numbersToCoords } from '../utils';
+import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
 
 export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
+export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
 
 export const $fauna = createStore<Fauna>(new Map());
 export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
@@ -27,22 +23,7 @@ $selectedColor.on(colorSelected, (_, color) => color);
 export const saveClicked = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
-export const $hoveredCell = createStore<ColRow | null>(null, {
-  updateFilter: (newState, state) => {
-    if (
-      newState && state
-      && newState.row === state.row && newState.col === state.col
-    ) {
-      return false;
-    }
-    return true;
-  },
-});
-
-export const dragTool = createDragTool($hoveredCell, $focus);
-
-export const fieldMouseMove = createEvent<any>();
-export const fieldMouseLeave = createEvent<any>();
+export const dragTool = createDragTool(hoveredCell.$cell, $focus);
 
 export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
   return isElsa ? 'elsa' as const : cellSize;
@@ -100,7 +81,7 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
   });
 });
 
-export const $viewHoveredCell = combine($hoveredCell, fieldSize.$cellSize, (hovered, size) => {
+export const $viewHoveredCell = combine(hoveredCell.$cell, fieldSize.$cellSize, (hovered, size) => {
   if (hovered) {
     return { y: hovered.row * size + 'px', x: hovered.col * size + 'px' };
   }
@@ -120,17 +101,6 @@ $focus
   .on(dragTool.focusMoved, (state, newFocus) => {
     return newFocus;
   }).reset(resetFocus);
-
-$hoveredCell.on(fieldMouseLeave, () => null);
-
-sample({
-  source: fieldSize.$cellSize,
-  clock: fieldMouseMove,
-  fn: (size, evData) => {
-    return getRowColFromEvent(evData, size);
-  },
-  target: $hoveredCell,
-});
 
 sample({
   source: { fauna: $fauna, fieldSize: fieldSize.$fieldSize },

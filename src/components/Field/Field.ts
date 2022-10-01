@@ -5,9 +5,8 @@ import {
   $viewHoveredCell,
   $viewLabels,
   elsaMode,
-  fieldMouseLeave,
-  fieldMouseMove,
   fieldSize,
+  hoveredCell,
 } from '../../model/field';
 import { Color1, Color2 } from '../../types';
 import heartLine from './heart-line-icon.svg';
@@ -38,8 +37,8 @@ export function field() {
       backgroundSize: fieldSize.$cellSize.map((it) => `${it}px ${it}px`),
     },
     handler: {
-      mousemove: fieldMouseMove,
-      mouseleave: fieldMouseLeave,
+      mousemove: hoveredCell.fieldMouseMoved,
+      mouseleave: hoveredCell.fieldMouseLeaved,
     },
     fn() {
       list($viewField, ({ store: $fieldStore }) => {

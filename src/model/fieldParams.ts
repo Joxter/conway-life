@@ -1,6 +1,6 @@
 import { createEvent, createStore, sample, split, Store } from 'effector';
 import { cellSizes, ColRow, initCellSize } from '../types';
-import { getWindowParams } from '../utils';
+import { getRowColFromEvent, getWindowParams } from '../utils';
 
 const vp = getWindowParams();
 
@@ -30,6 +30,39 @@ export function createELsaMode() {
   return elsaMode;
 }
 
+export function createHoveredCell($cellSize: Store<number>) {
+  const fieldMouseMoved = createEvent<any>();
+  const fieldMouseLeaved = createEvent<any>();
+
+  // todo add abs and relative ColRow here
+  const $cell = createStore<ColRow | null>(null, {
+    updateFilter: (newState, state) => {
+      if (
+        newState && state
+        && newState.row === state.row && newState.col === state.col
+      ) {
+        return false;
+      }
+      return true;
+    },
+  });
+
+  $cell.on(fieldMouseLeaved, () => null);
+
+  sample({
+    source: $cellSize,
+    clock: fieldMouseMoved,
+    fn: (size, evData) => {
+      return getRowColFromEvent(evData, size);
+    },
+    target: $cell,
+  });
+
+  const hoveredCell = { $cell, fieldMouseLeaved, fieldMouseMoved };
+
+  return hoveredCell;
+}
+
 export function createDragTool(
   $hoveredCell: Store<ColRow | null>,
   $focus: Store<ColRow>,
@@ -41,7 +74,6 @@ export function createDragTool(
   const $startTime = createStore<number | null>(null);
 
   const onMDown = createEvent<any>();
-  const onMMove = createEvent<any>();
   const onMUp = createEvent<any>();
 
   const mouseEnd = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
@@ -52,7 +84,6 @@ export function createDragTool(
 
   function initEvents() {
     document.addEventListener('mousedown', onMDown);
-    document.addEventListener('mousemove', onMMove);
     document.addEventListener('mouseup', onMUp);
   }
 
@@ -88,7 +119,7 @@ export function createDragTool(
       initFocus: $initFocus,
       initHovered: $initHovered,
     },
-    clock: onMMove,
+    clock: $hoveredCell,
     filter: (stores) => !!stores.initHovered && !!stores.initFocus && !!stores.currentHovered,
     fn: ({ currentHovered, initHovered, initFocus }) => {
       return {
