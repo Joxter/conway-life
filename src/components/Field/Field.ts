@@ -38,6 +38,7 @@ export function field() {
     },
     handler: {
       mousemove: hoveredCell.fieldMouseMoved,
+      touchmove: hoveredCell.fieldMouseMoved.prepend(ev => ev.changedTouches[0]),
       mouseleave: hoveredCell.fieldMouseLeaved,
     },
     fn() {

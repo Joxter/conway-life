@@ -84,7 +84,9 @@ export function createDragTool(
 
   function initEvents() {
     document.addEventListener('mousedown', onMDown);
+    document.addEventListener('touchstart', onMDown);
     document.addEventListener('mouseup', onMUp);
+    document.addEventListener('touchend', onMUp);
   }
 
   const $isHovered = $hoveredCell.map((it) => it !== null);
