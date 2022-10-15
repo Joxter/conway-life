@@ -1,31 +1,64 @@
-import { createEvent, createStore, sample } from 'effector';
+import { createEvent, createStore, merge, sample, Store } from 'effector';
 import { interval } from 'patronum';
+import { Fauna } from '../types';
 
-export const $stepCount = createStore(0);
-export const $startFauna = createStore(0);
-export const gameTick = createEvent<any>();
-export const makeNSteps = createEvent<number>();
+export function createProgress($fauna: Store<Fauna>) {
+  const gameTick = createEvent<any>();
 
-const startTimer = createEvent<any>();
-const stopTimer = createEvent<any>();
+  const start = createEvent<any>();
+  const stop = createEvent<any>();
+  const pause = createEvent<any>();
+  const oneStep = createEvent<any>();
+  const oneStepBack = createEvent<any>();
 
-const timer = interval({
-  timeout: 50,
-  start: startTimer,
-  stop: stopTimer,
-});
+  const reset = createEvent<any>();
 
-export const gameTimer = {
-  start: startTimer,
-  stop: stopTimer,
-  isRunning: timer.isRunning,
-};
+  const $currentStep = createStore(0);
+  const $currentSpeed = createStore(50);
+  const changeSpeed = createEvent<number>();
 
-sample({
-  clock: [timer.tick, startTimer],
-  target: gameTick,
-});
+  const $startFauna = createStore<Fauna | null>(null);
 
-$stepCount
-  .on(gameTick, (cnt) => cnt + 1)
-  .on(makeNSteps, (cnt, n) => cnt + n);
+  const timer = interval({
+    timeout: $currentSpeed,
+    start: start,
+    stop: merge([pause, stop]),
+  });
+
+  sample({
+    clock: [timer.tick, start, oneStep],
+    target: gameTick,
+  });
+
+  sample({
+    source: $fauna,
+    clock: start,
+    fn: (f) => new Map(f),
+    target: $startFauna,
+  });
+
+  $currentSpeed
+    .on(changeSpeed, (_, speed) => speed)
+    .reset(reset);
+
+  $startFauna
+    .on(reset, () => null);
+
+  $currentStep
+    .on(gameTick, (cnt) => cnt + 1)
+    .on(stop, () => 0)
+    .reset(reset);
+
+  return {
+    $currentStep,
+    $isRunning: timer.isRunning,
+    $startFauna,
+    start,
+    stop,
+    pause,
+    changeSpeed,
+    gameTick,
+    reset,
+    oneStep,
+  };
+}

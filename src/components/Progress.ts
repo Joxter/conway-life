@@ -1,7 +1,7 @@
 import { h, spec, text, variant } from 'forest';
-import { $stepCount, gameTick, gameTimer, makeNSteps } from '../model/progress';
+import { progress } from '../model/field';
 
-export function progress() {
+export function Progress() {
   h('p', () => {
     spec({
       style: {
@@ -14,34 +14,35 @@ export function progress() {
         gap: '8px',
       },
     });
-    h('button', { text: 'Step', handler: { click: gameTick } });
+    h('button', { text: 'Step', handler: { click: progress.oneStep } });
     // h('button', { text: '100 steps', handler: { click: makeNSteps.prepend(() => 100) } });
 
     text` timer: `;
 
     variant({
-      source: gameTimer.isRunning.map((isOn) => {
+      source: progress.$isRunning.map((isOn) => {
         return { show: isOn ? '1' : '0' };
       }),
       key: 'show',
       cases: {
         '1': () => {
+          // h('button', { text: 'Pause', handler: { click: progress.pause } });
           h('button', {
             text: 'Stop',
             style: { color: '#f8f8f8', backgroundColor: '#de4040', border: '0' },
-            handler: { click: gameTimer.stop },
+            handler: { click: progress.pause }, // todo fix to Stop
           });
         },
         '0': () => {
           h('button', {
             text: 'Start',
             style: { color: '#f8f8f8', backgroundColor: '#50c40e', border: '0' },
-            handler: { click: gameTimer.start },
+            handler: { click: progress.start },
           });
         },
       },
     });
 
-    text`steps: ${$stepCount}`;
+    text`steps: ${progress.$currentStep}`;
   });
 }

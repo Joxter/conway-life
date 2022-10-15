@@ -4,7 +4,7 @@ import { colorSelector } from './components/ColorSelector';
 import { field } from './components/Field/Field';
 import { history } from './components/History';
 import { navigation } from './components/Navigation';
-import { progress } from './components/Progress';
+import { Progress } from './components/Progress';
 import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
 import { resetFieldPressed } from './model/field';
 import './model/app';
@@ -21,7 +21,7 @@ function App() {
         history();
         colorSelector();
 
-        progress();
+        Progress();
       },
     });
 

@@ -149,8 +149,9 @@ export function createDragTool(
 }
 
 export function createCursor() {
-  // todo
+  // todo Every events for mouse/touch should be here (not in the dragTool or hoverCell)
   //   move without pressed
   //   move with pressed
-  //   move clicked
+  //   clicked
+  //   left cursor
 }

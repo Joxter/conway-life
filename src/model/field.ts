@@ -1,7 +1,8 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { ColRow, Fauna, Field, FieldCell } from '../types';
-import { coordsStrToNumbers, getMiddleOfFauna, numbersToCoords } from '../utils';
+import { coordsStrToNumbers, getMiddleOfFauna, newMakeGo, numbersToCoords } from '../utils';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
+import { createProgress } from './progress';
 
 export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
@@ -21,6 +22,8 @@ export const $labels = createStore<{ col: number; row: number; label: string; }[
     { col: 0, row: -10, label: '0,-10' },
   ],
 );
+
+export const progress = createProgress($fauna);
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
 export const resetFocus = createEvent<any>();
@@ -105,7 +108,10 @@ export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, siz
 });
 
 $fauna
-  .on(resetFieldPressed, () => new Map());
+  .on(resetFieldPressed, () => new Map())
+  .on(progress.gameTick, (fauna) => {
+    return newMakeGo(fauna);
+  });
 
 $focus
   .on(dragTool.focusMoved, (state, newFocus) => {
