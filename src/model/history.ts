@@ -7,6 +7,7 @@ export const $history = createStore<{ fauna: Fauna; name: string; }[]>(getSavedF
 export const addToHistory = createEvent<Fauna>();
 export const removeFromHistory = createEvent<string>();
 export const historySelected = createEvent<string>();
+export const saveClicked = createEvent<any>();
 
 $history
   .on(addToHistory, (state, fauna) => {

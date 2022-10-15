@@ -2,8 +2,8 @@ import { sample } from 'effector';
 import { Fauna } from '../types';
 import { exportToSting, makeFaunaFromLexicon } from '../utils';
 import { $exported, exportClicked, importClicked } from './export';
-import { $fauna, $field, progress, resetFieldPressed, saveClicked } from './field';
-import { $history, addToHistory, historySelected } from './history';
+import { $fauna, $field, progress, resetFieldPressed } from './field';
+import { $history, addToHistory, historySelected, saveClicked } from './history';
 
 sample({
   source: $fauna,

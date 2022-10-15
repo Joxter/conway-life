@@ -25,6 +25,10 @@
   background-color: var(--color2);
 }
 
+.hoveredCell {
+  box-shadow: inset 3px 3px 0px 0px #ec4dc7;
+}
+
 .heartMode.on1,
 .heartMode.on2 {
   background-repeat: no-repeat;

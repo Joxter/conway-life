@@ -2,7 +2,7 @@ import { h, list } from 'forest';
 import {
   $fieldTilesStyle,
   $viewField,
-  $viewHoveredCell,
+  $viewHoveredCells,
   $viewLabels,
   elsaMode,
   fieldSize,
@@ -56,13 +56,14 @@ export function field() {
         });
       });
 
-      h('div', {
-        style: {
-          boxShadow: 'inset 0px 0px 0px 3px #ec4dc7',
-          left: $viewHoveredCell.map((it) => it ? it.x : '-100px'),
-          top: $viewHoveredCell.map((it) => it ? it.y : '-100px'),
-        },
-        classList: [css.cell],
+      list($viewHoveredCells, ({ store: $cell }) => {
+        h('div', {
+          style: {
+            left: $cell.map((it) => it ? it.x : '-100px'),
+            top: $cell.map((it) => it ? it.y : '-100px'),
+          },
+          classList: [css.cell, css.hoveredCell],
+        });
       });
 
       list($viewLabels, ({ store: $labelStore }) => {

@@ -53,8 +53,8 @@ function App() {
 using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
+//  +- add presets by with 1 click
 //  - safe delete (timer before real removing)
-//  - add presets by with 1 click
 //  - better "reset focus" focus to the center of paint
 //  - better scale: "+" and "-" and with center in the middle of the screen (maybe more with step = 3)
 //  - progress improvements:

@@ -1,12 +1,20 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { ColRow, Fauna, Field, FieldCell } from '../types';
-import { coordsStrToNumbers, getMiddleOfFauna, newMakeGo, numbersToCoords } from '../utils';
+import {
+  coordsStrToNumbers,
+  getMiddleOfFauna,
+  makeFaunaFromLexicon,
+  newMakeGo,
+  numbersToCoords,
+} from '../utils';
+import { createBlueprints } from './blueprints';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
 import { createProgress } from './progress';
 
 export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
 export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
+const blueprints = createBlueprints();
 
 export const $fauna = createStore<Fauna>(new Map());
 export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
@@ -33,7 +41,6 @@ export const $selectedColor = createStore<FieldCell>(1);
 export const colorSelected = createEvent<FieldCell>();
 $selectedColor.on(colorSelected, (_, color) => color);
 
-export const saveClicked = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
 export const dragTool = createDragTool(hoveredCell.$cell, $focus);
@@ -94,12 +101,28 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
   });
 });
 
-export const $viewHoveredCell = combine(hoveredCell.$cell, fieldSize.$cellSize, (hovered, size) => {
-  if (hovered) {
-    return { y: hovered.row * size + 'px', x: hovered.col * size + 'px' };
-  }
-  return null;
-});
+export const $viewHoveredCells = combine(
+  hoveredCell.$cell,
+  fieldSize.$cellSize,
+  blueprints.currentBp,
+  (hovered, size, bp) => {
+    if (hovered && bp) {
+      return [...bp].map(([coordsStr]) => {
+        const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
+        return {
+          y: (hovered.row + bpRow) * size + 'px',
+          x: (hovered.col + bpCol) * size + 'px',
+          // x: bpRow * size + 'px'
+        };
+      });
+    }
+
+    if (hovered) {
+      return [{ y: hovered.row * size + 'px', x: hovered.col * size + 'px' }];
+    }
+    return [];
+  },
+);
 
 export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, size) => {
   return ls.map(({ row, col, label }) => {
@@ -136,22 +159,33 @@ sample({
     fauna: $fauna,
     color: $selectedColor,
     focus: $focus,
+    currentBp: blueprints.currentBp,
   },
   clock: dragTool.clicked,
-  fn: ({ color, fauna, focus }, { start: { col, row } }) => {
+  fn: ({ color, fauna, focus, currentBp }, { start: { col, row } }) => {
     const newFauna = new Map(fauna);
 
-    const faunaX = col - focus.col;
-    const faunaY = row - focus.row;
+    if (currentBp) {
+      currentBp.forEach((color, coordsStr) => {
+        const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
+        const faunaX = col + bpCol;
+        const faunaY = row + bpRow;
 
-    const coords = numbersToCoords([faunaX, faunaY]);
-    if (false) { // used to be "shift" to force color instead of toggle
-      newFauna.set(coords, color);
+        newFauna.set(numbersToCoords([faunaX, faunaY]), color);
+      });
     } else {
-      if (newFauna.get(coords) === color) {
-        newFauna.delete(coords);
-      } else {
+      const faunaX = col - focus.col;
+      const faunaY = row - focus.row;
+      const coords = numbersToCoords([faunaX, faunaY]);
+
+      if (false) { // used to be "shift" to force color instead of toggle
         newFauna.set(coords, color);
+      } else {
+        if (newFauna.get(coords) === color) {
+          newFauna.delete(coords);
+        } else {
+          newFauna.set(coords, color);
+        }
       }
     }
 
