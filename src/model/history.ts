@@ -2,7 +2,7 @@ import { combine, createEffect, createEvent, createStore, sample } from 'effecto
 import { Fauna } from '../types';
 import { getSavedFromLS, saveToLS } from '../utils';
 
- const $history = createStore<{ fauna: Fauna; name: string; }[]>(getSavedFromLS() || []);
+export const $history = createStore<{ fauna: Fauna; name: string; }[]>(getSavedFromLS() || []);
 
 export const $itemsToRemove = createStore<Set<string>>(new Set());
 
