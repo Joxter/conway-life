@@ -172,3 +172,40 @@ export function makeFaunaFromLexicon(input: string): Fauna {
 
   return result;
 }
+
+export function rleToFauna(rle: string): Fauna {
+  let res: Fauna = new Map();
+
+  const dead = 'b';
+  const live = 'o';
+  const lineEnd = '$';
+
+  let parsedNum = '';
+  let y = 0;
+  let x = 0;
+  const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  for (let i = 0; i < rle.length; i++) {
+    let char = rle[i];
+    if (numbers.includes(char)) {
+      parsedNum += char;
+    } else {
+      let parsedNum2 = +parsedNum || 1;
+
+      if (char === dead) {
+        x += parsedNum2;
+      } else if (char === live) {
+        for (let j = 0; j < parsedNum2; j++) {
+          res.set(numbersToCoords([x, y]), 1);
+          x++;
+        }
+      } else if (char === lineEnd) {
+        y += parsedNum2;
+        x = 0;
+      }
+      parsedNum = '';
+    }
+  }
+
+  return res;
+}

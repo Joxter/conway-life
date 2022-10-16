@@ -1,6 +1,7 @@
 import { createStore } from 'effector';
+import { patterns } from '../blueprints/lexicon';
 import { Fauna } from '../types';
-import { makeFaunaFromLexicon } from '../utils';
+import { makeFaunaFromLexicon, rleToFauna } from '../utils';
 
 export function createBlueprints() {
   const lexions = [
@@ -47,6 +48,7 @@ O......O.O.......
   ];
   // const currentBp = createStore<Fauna | null>(makeFaunaFromLexicon(lexions[3]));
   const currentBp = createStore<Fauna | null>(null);
+  // const currentBp = createStore<Fauna | null>(rleToFauna(patterns.Edge_shooter.rle));
 
   return { currentBp };
 }
