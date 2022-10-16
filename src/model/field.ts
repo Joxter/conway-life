@@ -19,15 +19,15 @@ const blueprints = createBlueprints();
 export const $fauna = createStore<Fauna>(new Map());
 export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
   [
-    { col: 0, row: 0, label: '0,0' },
-    { col: 10, row: 10, label: '10,10' },
-    { col: 10, row: -10, label: '10,-10' },
-    { col: -10, row: 10, label: '-10,10' },
-    { col: -10, row: -10, label: '-10,-10' },
-    { col: 10, row: 0, label: '10,0' },
-    { col: 0, row: 10, label: '0,10' },
-    { col: -10, row: 0, label: '-10,0' },
-    { col: 0, row: -10, label: '0,-10' },
+    // { col: 0, row: 0, label: '0,0' },
+    // { col: 10, row: 10, label: '10,10' },
+    // { col: 10, row: -10, label: '10,-10' },
+    // { col: -10, row: 10, label: '-10,10' },
+    // { col: -10, row: -10, label: '-10,-10' },
+    // { col: 10, row: 0, label: '10,0' },
+    // { col: 0, row: 10, label: '0,10' },
+    // { col: -10, row: 0, label: '-10,0' },
+    // { col: 0, row: -10, label: '0,-10' },
   ],
 );
 
@@ -72,6 +72,10 @@ export const $field = combine(
     return field;
   },
 );
+
+export const $stats = combine($field, $fauna, (field, fauna) => {
+  return { fieldCellsAmount: field.length, faunaCellsAmount: fauna.size };
+});
 
 export const $labelsOnField = combine(
   fieldSize.$fieldSize,
@@ -168,8 +172,8 @@ sample({
     if (currentBp) {
       currentBp.forEach((color, coordsStr) => {
         const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
-        const faunaX = col + bpCol;
-        const faunaY = row + bpRow;
+        const faunaX = col - focus.col + bpCol;
+        const faunaY = row - focus.row + bpRow;
 
         newFauna.set(numbersToCoords([faunaX, faunaY]), color);
       });

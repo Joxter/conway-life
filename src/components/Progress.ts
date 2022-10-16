@@ -1,5 +1,5 @@
 import { h, spec, text, variant } from 'forest';
-import { progress } from '../model/field';
+import { $stats, progress } from '../model/field';
 
 export function Progress() {
   h('p', () => {
@@ -44,5 +44,8 @@ export function Progress() {
     });
 
     text`steps: ${progress.$currentStep}`;
+    text` || population: ${$stats.map(({ fieldCellsAmount }) => fieldCellsAmount)} / ${
+      $stats.map(({ faunaCellsAmount }) => faunaCellsAmount)
+    }`;
   });
 }

@@ -14,8 +14,11 @@ export function createFieldSize() {
   const plus = createEvent();
   const minus = createEvent();
   $cellSize
-    .on(minus, (size) => size - 3)
-    .on(plus, (size) => size + 3);
+    .on(minus, (size) => {
+      let newSize = size - 1;
+      return Math.max(cellSizes[0], newSize);
+    })
+    .on(plus, (size) => size + 1);
 
   const fieldSize = { options, $cellSize, $fieldSize, plus, minus };
   return fieldSize;
