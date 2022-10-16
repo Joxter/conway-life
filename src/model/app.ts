@@ -2,7 +2,7 @@ import { sample } from 'effector';
 import { Fauna } from '../types';
 import { exportToSting, makeFaunaFromLexicon } from '../utils';
 import { $exported, exportClicked, importClicked } from './export';
-import { $fauna, $field, progress, resetFieldPressed } from './field';
+import { $fauna, $field, focusToTheMiddle, progress, resetFieldPressed } from './field';
 import { $history, addToHistory, historySelected, saveClicked } from './history';
 
 sample({
@@ -25,6 +25,11 @@ sample({
 sample({ source: $exported, clock: importClicked, fn: makeFaunaFromLexicon, target: $fauna });
 
 sample({ clock: [historySelected, resetFieldPressed], target: progress.reset });
+
+sample({ // todo temp hack
+  clock: historySelected,
+  target: focusToTheMiddle,
+});
 
 sample({
   source: $field,

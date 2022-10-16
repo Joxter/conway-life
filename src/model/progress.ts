@@ -22,7 +22,7 @@ export function createProgress($fauna: Store<Fauna>) {
   const timer = interval({
     timeout: $currentSpeed,
     start: start,
-    stop: merge([pause, stop]),
+    stop: merge([pause, stop, reset]),
   });
 
   sample({
