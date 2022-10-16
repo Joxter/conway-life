@@ -1,6 +1,13 @@
 import { createEvent, sample } from 'effector';
 import { h, list, spec, text } from 'forest';
-import { $history, historySelected, removeFromHistory, saveClicked } from '../model/history';
+import {
+  $historyView,
+  $itemsToRemove,
+  historySelected,
+  removeClicked,
+  restoreClicked,
+  saveClicked,
+} from '../model/history';
 import css from './styles.module.css';
 
 export function history() {
@@ -9,25 +16,41 @@ export function history() {
     fn() {
       h('p', { text: 'History: ', style: { margin: '0' } });
 
-      list($history, ({ store: $historyEl }) => {
+      list($historyView, ({ store: $historyEl }) => {
         const rawClick = createEvent<any>();
         const rawRemoveClick = createEvent<any>();
 
         sample({
+          // todo make different normal buttons
+          source: { historyEl: $historyEl, itemsToRemove: $itemsToRemove },
           clock: rawClick,
-          source: $historyEl.map((it) => it.name),
+          filter: ({ historyEl, itemsToRemove }) => {
+            return itemsToRemove.has(historyEl.name);
+          },
+          fn: ({ historyEl }) => historyEl.name,
+          target: restoreClicked,
+        });
+
+        sample({
+          source: { historyEl: $historyEl, itemsToRemove: $itemsToRemove },
+          clock: rawClick,
+          filter: ({ historyEl, itemsToRemove }) => {
+            return !itemsToRemove.has(historyEl.name);
+          },
+          fn: ({ historyEl }) => historyEl.name,
           target: historySelected,
         });
+
         sample({
           clock: rawRemoveClick,
           source: $historyEl.map((it) => it.name),
-          target: removeFromHistory,
+          target: removeClicked,
         });
 
         h('div', () => {
           h('button', () => {
             spec({ handler: { click: rawClick } });
-            text`${$historyEl.map((it) => it.name)}`;
+            text`${$historyEl.map((it) => it.toRemove ? `restore (${it.name})` : it.name)}`;
           });
           h('button', () => {
             spec({ handler: { click: rawRemoveClick } });
