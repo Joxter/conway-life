@@ -24,7 +24,10 @@ sample({
 
 sample({ source: $exported, clock: importClicked, fn: makeFaunaFromLexicon, target: $fauna });
 
-sample({ clock: [historySelected, resetFieldPressed, exportClicked, importClicked], target: progress.reset });
+sample({
+  clock: [historySelected, resetFieldPressed, exportClicked, importClicked],
+  target: progress.reset,
+});
 
 sample({ // todo temp hack
   clock: historySelected,

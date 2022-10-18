@@ -1,12 +1,6 @@
 import { combine, createEvent, createStore, sample } from 'effector';
-import { ColRow, Fauna, Field, FieldCell } from '../types';
-import {
-  coordsStrToNumbers,
-  getMiddleOfFauna,
-  makeFaunaFromLexicon,
-  newMakeGo,
-  numbersToCoords,
-} from '../utils';
+import { ColRow, Fauna, Field, FieldCell, RENDER_MODE } from '../types';
+import { coordsStrToNumbers, getMiddleOfFauna, newMakeGo, numbersToCoords } from '../utils';
 import { createBlueprints } from './blueprints';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
 import { createProgress } from './progress';
@@ -101,6 +95,9 @@ export const $labelsOnField = combine(
 
 export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => {
   return field.map(({ val, col, row }) => {
+    if (RENDER_MODE === 'svg') {
+      return { val, y: row * size, x: col * size };
+    }
     return { val, y: row * size + 'px', x: col * size + 'px' };
   });
 });

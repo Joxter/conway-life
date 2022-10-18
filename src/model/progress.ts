@@ -51,6 +51,7 @@ export function createProgress($fauna: Store<Fauna>) {
 
   return {
     $currentStep,
+    $currentSpeed,
     $isRunning: timer.isRunning,
     $startFauna,
     start,
