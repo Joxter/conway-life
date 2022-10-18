@@ -72,6 +72,7 @@ export function field() {
         list($viewField, ({ store: $fieldStore }) => {
           h('div', {
             style: {
+              // todo test transition
               left: $fieldStore.map((it) => it.x),
               top: $fieldStore.map((it) => it.y),
             },

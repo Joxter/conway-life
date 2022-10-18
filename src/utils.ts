@@ -14,14 +14,12 @@ export function newMakeGo(input: Fauna): Fauna {
 
   faunaInc.forEach(([oneCnt, twoCnt], coords) => {
     let cellVal = input.get(coords) || 0 as const;
-    if (cellVal && (oneCnt + twoCnt) < 2) { // If live and <2 live neighbors
-    } else if (cellVal && (oneCnt + twoCnt) > 3) { // If live and >3 live neighbors
-    } else if (!cellVal && (oneCnt + twoCnt) == 3) { // If dead and 3 live neighbors
+    let total = oneCnt + twoCnt;
+
+    if (!cellVal && total == 3) {
       result.set(coords, oneCnt > twoCnt ? 1 : 2);
-    } else {
-      if (cellVal) {
-        result.set(coords, cellVal);
-      }
+    } else if (cellVal && !(total < 2 || total > 3)) {
+      result.set(coords, cellVal);
     }
   });
 
