@@ -5,12 +5,14 @@ function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
 }
 
 export function newMakeGo(input: Fauna): Fauna {
+  // let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
 
   input.forEach((color, coords) => {
     incNeighbors(faunaInc, coords, color);
   });
+  // let aaaa = Date.now();
 
   faunaInc.forEach(([oneCnt, twoCnt], coords) => {
     let cellVal = input.get(coords) || 0 as const;
@@ -22,6 +24,7 @@ export function newMakeGo(input: Fauna): Fauna {
       result.set(coords, cellVal);
     }
   });
+  // console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
 
   return result;
 }
