@@ -1,4 +1,3 @@
-
 // rules B3/S23
 
 export const patterns = {
