@@ -172,12 +172,12 @@ sample({
         const faunaX = col - focus.col + bpCol;
         const faunaY = row - focus.row + bpRow;
 
-        newFauna.set(numbersToCoords([faunaX, faunaY]), color);
+        newFauna.set(numbersToCoords(faunaX, faunaY), color);
       });
     } else {
       const faunaX = col - focus.col;
       const faunaY = row - focus.row;
-      const coords = numbersToCoords([faunaX, faunaY]);
+      const coords = numbersToCoords(faunaX, faunaY);
 
       if (false) { // used to be "shift" to force color instead of toggle
         newFauna.set(coords, color);

@@ -14,15 +14,18 @@ export function newMakeGo(input: Fauna): Fauna {
   });
   // let aaaa = Date.now();
 
-  faunaInc.forEach(([oneCnt, twoCnt], coords) => {
-    let cellVal = input.get(coords) || 0 as const;
-    let total = oneCnt + twoCnt;
+  faunaInc.forEach((colMap, col) => {
+    colMap.forEach(([oneCnt, twoCnt], row) => {
+      const coords = numbersToCoords(col, row);
+      let cellVal = input.get(coords) || 0 as const;
+      let total = oneCnt + twoCnt;
 
-    if (!cellVal && total == 3) {
-      result.set(coords, oneCnt > twoCnt ? 1 : 2);
-    } else if (cellVal && !(total < 2 || total > 3)) {
-      result.set(coords, cellVal);
-    }
+      if (cellVal === 0 && total == 3) {
+        result.set(coords, oneCnt > twoCnt ? 1 : 2);
+      } else if (cellVal !== 0 && (total === 2 || total === 3)) {
+        result.set(coords, cellVal);
+      }
+    });
   });
   // console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
 
@@ -32,29 +35,32 @@ export function newMakeGo(input: Fauna): Fauna {
 function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): FaunaInc {
   const [col, row] = coordsStrToNumbers(coords);
 
-  let neighborCoords: CoordsStr[] = [
-    `${col - 1}|${row - 1}`,
-    `${col - 1}|${row}`,
-    `${col - 1}|${row + 1}`,
+  let neighborCoords = [
+    [col - 1, row - 1],
+    [col - 1, row],
+    [col - 1, row + 1],
 
-    `${col}|${row - 1}`,
-    `${col}|${row + 1}`,
+    [col, row - 1],
+    [col, row + 1],
 
-    `${col + 1}|${row - 1}`,
-    `${col + 1}|${row}`,
-    `${col + 1}|${row + 1}`,
+    [col + 1, row - 1],
+    [col + 1, row],
+    [col + 1, row + 1],
   ];
 
-  neighborCoords.forEach((neibs) => {
-    if (!faunaInc.has(neibs)) {
-      faunaInc.set(neibs, [0, 0]);
+  neighborCoords.forEach(([dCol, dRow]) => {
+    if (!faunaInc.has(dCol)) {
+      faunaInc.set(dCol, new Map().set(dRow, [0, 0]));
     }
-    let [cnt1, cnt2] = faunaInc.get(neibs)!;
+    if (!faunaInc.get(dCol)!.has(dRow)) {
+      faunaInc.get(dCol)!.set(dRow, [0, 0]);
+    }
+    let [cnt1, cnt2] = faunaInc.get(dCol)!.get(dRow)!;
 
     if (value === 1) {
-      faunaInc.set(neibs, [cnt1 + 1, cnt2]);
+      faunaInc.get(dCol)!.set(dRow, [cnt1 + 1, cnt2]);
     } else {
-      faunaInc.set(neibs, [cnt1, cnt2 + 1]);
+      faunaInc.get(dCol)!.set(dRow, [cnt1, cnt2 + 1]);
     }
   });
 
@@ -66,7 +72,7 @@ export function coordsStrToNumbers(coords: CoordsStr): [number, number] {
   return [+col, +row];
 }
 
-export function numbersToCoords([col, row]: [number, number]): CoordsStr {
+export function numbersToCoords(col: number, row: number): CoordsStr {
   return `${col}|${row}`;
 }
 
@@ -166,7 +172,7 @@ export function makeFaunaFromLexicon(input: string): Fauna {
 
     for (let colI = 0; colI < line.length; colI++) {
       if (line[colI] === 'O') {
-        result.set(numbersToCoords([colI, rowI]), 1);
+        result.set(numbersToCoords(colI, rowI), 1);
       }
     }
   });
@@ -197,7 +203,7 @@ export function rleToFauna(rle: string): Fauna {
         x += parsedNum2;
       } else if (char === live) {
         for (let j = 0; j < parsedNum2; j++) {
-          res.set(numbersToCoords([x, y]), 1);
+          res.set(numbersToCoords(x, y), 1);
           x++;
         }
       } else if (char === lineEnd) {

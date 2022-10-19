@@ -12,7 +12,7 @@ export type Field = { val: FieldCell; col: number; row: number; }[];
 
 export type CoordsStr = `${number}|${number}`; // COL, ROW
 export type Fauna = Map<CoordsStr, FieldCell>; // x y value
-export type FaunaInc = Map<CoordsStr, [number, number]>; // [color1 count,color2 count]
+export type FaunaInc = Map<number, Map<number, [number, number]>>; // [color1 count,color2 count]
 export type SavedFauna = Array<[CoordsStr, FieldCell]>;
 
 export type Pattern = {
