@@ -5,7 +5,7 @@ function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
 }
 
 export function newMakeGo(input: Fauna): Fauna {
-  let start = Date.now();
+  // let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
 
@@ -14,7 +14,7 @@ export function newMakeGo(input: Fauna): Fauna {
       incNeighbors(faunaInc, [col, row], color);
     });
   });
-  let aaaa = Date.now();
+  // let aaaa = Date.now();
 
   faunaInc.forEach((colMap, col) => {
     result.set(col, new Map())
@@ -29,7 +29,7 @@ export function newMakeGo(input: Fauna): Fauna {
       }
     });
   });
-  console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
+  // console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
 
   return result;
 }
