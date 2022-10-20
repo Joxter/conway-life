@@ -1,4 +1,4 @@
-import {Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna} from './types';
+import { Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna } from './types';
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -17,7 +17,7 @@ export function newMakeGo(input: Fauna): Fauna {
   // let aaaa = Date.now();
 
   faunaInc.forEach((colMap, col) => {
-    result.set(col, new Map())
+    result.set(col, new Map());
     colMap.forEach(([oneCnt, twoCnt], row) => {
       let cellVal = input.get(col) && input.get(col)!.get(row)! || 0 as const;
       let total = oneCnt + twoCnt;
@@ -58,9 +58,9 @@ function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell):
     }
 
     if (value === 1) {
-      row.get(coordsArr[1])![0]++
+      row.get(coordsArr[1])![0]++;
     } else {
-      row.get(coordsArr[1])![1]++
+      row.get(coordsArr[1])![1]++;
     }
   });
 
@@ -126,10 +126,10 @@ export function getSavedFromLS(): { fauna: Fauna; name: string; }[] {
       savedF.forEach(([coords, val]) => {
         const [col, row] = coordsStrToNumbers(coords);
         if (!fauna.has(col)) {
-          fauna.set(col, new Map())
+          fauna.set(col, new Map());
         }
-        fauna.get(col)!.set(row, val)
-      })
+        fauna.get(col)!.set(row, val);
+      });
       return { fauna, name };
     });
 
@@ -214,9 +214,9 @@ export function rleToFauna(rle: string): Fauna {
       } else if (char === live) {
         for (let j = 0; j < parsedNum2; j++) {
           if (!res.has(x)) {
-            res.set(x, new Map())
+            res.set(x, new Map());
           }
-          res.get(x)!.set(y, 1)
+          res.get(x)!.set(y, 1);
           x++;
         }
       } else if (char === lineEnd) {

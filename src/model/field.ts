@@ -52,7 +52,6 @@ export const $field = combine(
 
     fauna.forEach((colMap, absCols) => {
       colMap.forEach((val, absRow) => {
-
         const col = absCols + focus.col;
         const row = absRow + focus.row;
 
@@ -184,7 +183,7 @@ sample({
         // newFauna.set(coords, color); // todo FIX
       } else {
         if (!newFauna.has(faunaX)) {
-          newFauna.set(faunaX, new Map())
+          newFauna.set(faunaX, new Map());
         }
         if (newFauna.get(faunaX)!.get(faunaY)! === color) {
           newFauna.get(faunaX)!.delete(faunaY);
