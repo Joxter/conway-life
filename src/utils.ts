@@ -1,40 +1,40 @@
-import { CoordsStr, Fauna, FaunaInc, Field, FieldCell, initCellSize, SavedFauna } from './types';
+import {Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna} from './types';
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
 }
 
 export function newMakeGo(input: Fauna): Fauna {
-  // let start = Date.now();
+  let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
 
-  input.forEach((color, coords) => {
-    incNeighbors(faunaInc, coords, color);
+  input.forEach((colMap, col) => {
+    colMap.forEach((color, row) => {
+      incNeighbors(faunaInc, [col, row], color);
+    });
   });
-  // let aaaa = Date.now();
+  let aaaa = Date.now();
 
   faunaInc.forEach((colMap, col) => {
+    result.set(col, new Map())
     colMap.forEach(([oneCnt, twoCnt], row) => {
-      const coords = numbersToCoords(col, row);
-      let cellVal = input.get(coords) || 0 as const;
+      let cellVal = input.get(col) && input.get(col)!.get(row)! || 0 as const;
       let total = oneCnt + twoCnt;
 
       if (cellVal === 0 && total == 3) {
-        result.set(coords, oneCnt > twoCnt ? 1 : 2);
+        result.get(col)!.set(row, oneCnt > twoCnt ? 1 : 2);
       } else if (cellVal !== 0 && (total === 2 || total === 3)) {
-        result.set(coords, cellVal);
+        result.get(col)!.set(row, cellVal);
       }
     });
   });
-  // console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
+  console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
 
   return result;
 }
 
-function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): FaunaInc {
-  const [col, row] = coordsStrToNumbers(coords);
-
+function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell): FaunaInc {
   let neighborCoords = [
     [col - 1, row - 1],
     [col - 1, row],
@@ -65,15 +65,6 @@ function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): 
   });
 
   return faunaInc;
-}
-
-export function coordsStrToNumbers(coords: CoordsStr): [number, number] {
-  const [col, row] = coords.split('|');
-  return [+col, +row];
-}
-
-export function numbersToCoords(col: number, row: number): CoordsStr {
-  return `${col}|${row}`;
 }
 
 export function getRowColFromEvent(
@@ -109,11 +100,19 @@ export function exportToSting(field: Field): string {
 }
 
 export function saveToLS(history: { fauna: Fauna; name: string; }[]) {
-  let res: { fauna: SavedFauna; name: string; }[] = history.map(({ name, fauna }) => {
-    let savedF: SavedFauna = [...fauna.entries()];
-    return { fauna: savedF, name };
-  });
-  localStorage.setItem('history', JSON.stringify(res));
+  console.warn('TODO saveToLS');
+  return;
+
+  // let res: { fauna: SavedFauna; name: string; }[] = history.map(({ name, fauna }) => {
+  //   let savedF: SavedFauna = [...fauna.entries()];
+  //   return { fauna: savedF, name };
+  // });
+  // localStorage.setItem('history', JSON.stringify(res));
+}
+
+function coordsStrToNumbers(coords: CoordsStr): [number, number] {
+  const [col, row] = coords.split('|');
+  return [+col, +row];
 }
 
 export function getSavedFromLS(): { fauna: Fauna; name: string; }[] {
@@ -123,7 +122,14 @@ export function getSavedFromLS(): { fauna: Fauna; name: string; }[] {
       JSON.parse(localStorage.getItem('history') || 'null') || [];
 
     let result: { fauna: Fauna; name: string; }[] = saved.map(({ fauna: savedF, name }) => {
-      let fauna: Fauna = new Map(savedF);
+      let fauna: Fauna = new Map();
+      savedF.forEach(([coords, val]) => {
+        const [col, row] = coordsStrToNumbers(coords);
+        if (!fauna.has(col)) {
+          fauna.set(col, new Map())
+        }
+        fauna.get(col)!.set(row, val)
+      })
       return { fauna, name };
     });
 
@@ -144,17 +150,20 @@ export function getWindowParams() {
 export function getMiddleOfFauna(fauna: Fauna) {
   let col = 0;
   let row = 0;
+  let totalSize = 0;
   if (fauna.size === 0) return { col, row };
 
-  fauna.forEach((_, coords) => {
-    const [_col, _row] = coordsStrToNumbers(coords);
-    col += _col;
-    row += _row;
+  fauna.forEach((colMap, _col) => {
+    totalSize += colMap.size;
+    colMap.forEach((color, _row) => {
+      col += _col;
+      row += _row;
+    });
   });
 
   return {
-    col: Math.round(col / fauna.size),
-    row: Math.round(row / fauna.size),
+    col: Math.round(col / totalSize),
+    row: Math.round(row / totalSize),
   };
 }
 
@@ -165,19 +174,21 @@ export function getMiddleOfFauna(fauna: Fauna) {
  *    ..OO.
  */
 export function makeFaunaFromLexicon(input: string): Fauna {
-  let result: Fauna = new Map();
-
-  input.split('\n').forEach((line, rowI) => {
-    line = line.trim();
-
-    for (let colI = 0; colI < line.length; colI++) {
-      if (line[colI] === 'O') {
-        result.set(numbersToCoords(colI, rowI), 1);
-      }
-    }
-  });
-
-  return result;
+  console.warn('TODO makeFaunaFromLexicon');
+  return new Map();
+  // let result: Fauna = new Map();
+  //
+  // input.split('\n').forEach((line, rowI) => {
+  //   line = line.trim();
+  //
+  //   for (let colI = 0; colI < line.length; colI++) {
+  //     if (line[colI] === 'O') {
+  //       result.set(numbersToCoords(colI, rowI), 1);
+  //     }
+  //   }
+  // });
+  //
+  // return result;
 }
 
 export function rleToFauna(rle: string): Fauna {
@@ -190,11 +201,10 @@ export function rleToFauna(rle: string): Fauna {
   let parsedNum = '';
   let y = 0;
   let x = 0;
-  const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   for (let i = 0; i < rle.length; i++) {
     let char = rle[i];
-    if (numbers.includes(char)) {
+    if (char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57) {
       parsedNum += char;
     } else {
       let parsedNum2 = +parsedNum || 1;
@@ -203,7 +213,10 @@ export function rleToFauna(rle: string): Fauna {
         x += parsedNum2;
       } else if (char === live) {
         for (let j = 0; j < parsedNum2; j++) {
-          res.set(numbersToCoords(x, y), 1);
+          if (!res.has(x)) {
+            res.set(x, new Map())
+          }
+          res.get(x)!.set(y, 1)
           x++;
         }
       } else if (char === lineEnd) {

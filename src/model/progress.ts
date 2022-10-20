@@ -9,7 +9,6 @@ export function createProgress($fauna: Store<Fauna>) {
   const stop = createEvent<any>();
   const pause = createEvent<any>();
   const oneStep = createEvent<any>();
-  const oneStepBack = createEvent<any>();
 
   const reset = createEvent<any>();
 

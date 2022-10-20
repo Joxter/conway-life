@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import { ColRow, Fauna, Field, FieldCell, RENDER_MODE } from '../types';
-import { coordsStrToNumbers, getMiddleOfFauna, newMakeGo, numbersToCoords } from '../utils';
+import { getMiddleOfFauna, newMakeGo } from '../utils';
 import { createBlueprints } from './blueprints';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
 import { createProgress } from './progress';
@@ -50,17 +50,18 @@ export const $field = combine(
   ({ width, height }, fauna, focus): Field => {
     const field: Field = [];
 
-    fauna.forEach((val, coords) => {
-      const [absCols, absRow] = coordsStrToNumbers(coords);
+    fauna.forEach((colMap, absCols) => {
+      colMap.forEach((val, absRow) => {
 
-      const col = absCols + focus.col;
-      const row = absRow + focus.row;
+        const col = absCols + focus.col;
+        const row = absRow + focus.row;
 
-      if (col >= 0 && col < width) {
-        if (row >= 0 && row < height) {
-          field.push({ col, row, val });
+        if (col >= 0 && col < width) {
+          if (row >= 0 && row < height) {
+            field.push({ col, row, val });
+          }
         }
-      }
+      });
     });
 
     return field;
@@ -105,18 +106,18 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
 export const $viewHoveredCells = combine(
   hoveredCell.$cell,
   fieldSize.$cellSize,
-  blueprints.currentBp,
+  blueprints.currentBp, // todo FIX
   (hovered, size, bp) => {
-    if (hovered && bp) {
-      return [...bp].map(([coordsStr]) => {
-        const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
-        return {
-          y: (hovered.row + bpRow) * size + 'px',
-          x: (hovered.col + bpCol) * size + 'px',
-          // x: bpRow * size + 'px'
-        };
-      });
-    }
+    // if (hovered && bp) {
+    //   return [...bp].map(([coordsStr]) => {
+    //     const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
+    //     return {
+    //       y: (hovered.row + bpRow) * size + 'px',
+    //       x: (hovered.col + bpCol) * size + 'px',
+    //       // x: bpRow * size + 'px'
+    //     };
+    //   });
+    // }
 
     if (hovered) {
       return [{ y: hovered.row * size + 'px', x: hovered.col * size + 'px' }];
@@ -167,25 +168,28 @@ sample({
     const newFauna = new Map(fauna);
 
     if (currentBp) {
-      currentBp.forEach((color, coordsStr) => {
-        const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
-        const faunaX = col - focus.col + bpCol;
-        const faunaY = row - focus.row + bpRow;
-
-        newFauna.set(numbersToCoords(faunaX, faunaY), color);
-      });
+      // todo fix
+      // currentBp.forEach((color, coordsStr) => {
+      //   const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
+      //   const faunaX = col - focus.col + bpCol;
+      //   const faunaY = row - focus.row + bpRow;
+      //
+      //   newFauna.set(numbersToCoords(faunaX, faunaY), color);
+      // });
     } else {
       const faunaX = col - focus.col;
       const faunaY = row - focus.row;
-      const coords = numbersToCoords(faunaX, faunaY);
 
       if (false) { // used to be "shift" to force color instead of toggle
-        newFauna.set(coords, color);
+        // newFauna.set(coords, color); // todo FIX
       } else {
-        if (newFauna.get(coords) === color) {
-          newFauna.delete(coords);
+        if (!newFauna.has(faunaX)) {
+          newFauna.set(faunaX, new Map())
+        }
+        if (newFauna.get(faunaX)!.get(faunaY)! === color) {
+          newFauna.get(faunaX)!.delete(faunaY);
         } else {
-          newFauna.set(coords, color);
+          newFauna.get(faunaX)!.set(faunaY, color);
         }
       }
     }
