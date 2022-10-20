@@ -47,20 +47,20 @@ function incNeighbors(faunaInc: FaunaInc, coords: CoordsStr, value: FieldCell): 
     [col + 1, row],
     [col + 1, row + 1],
   ];
+  if (!faunaInc.has(col - 1)) faunaInc.set(col - 1, new Map());
+  if (!faunaInc.has(col)) faunaInc.set(col, new Map());
+  if (!faunaInc.has(col + 1)) faunaInc.set(col + 1, new Map());
 
-  neighborCoords.forEach(([dCol, dRow]) => {
-    if (!faunaInc.has(dCol)) {
-      faunaInc.set(dCol, new Map().set(dRow, [0, 0]));
+  neighborCoords.forEach((coordsArr) => {
+    const row = faunaInc.get(coordsArr[0])!;
+    if (!row.has(coordsArr[1])) {
+      row.set(coordsArr[1], [0, 0]);
     }
-    if (!faunaInc.get(dCol)!.has(dRow)) {
-      faunaInc.get(dCol)!.set(dRow, [0, 0]);
-    }
-    let [cnt1, cnt2] = faunaInc.get(dCol)!.get(dRow)!;
 
     if (value === 1) {
-      faunaInc.get(dCol)!.set(dRow, [cnt1 + 1, cnt2]);
+      row.get(coordsArr[1])![0]++
     } else {
-      faunaInc.get(dCol)!.set(dRow, [cnt1, cnt2 + 1]);
+      row.get(coordsArr[1])![1]++
     }
   });
 
