@@ -11,7 +11,11 @@ export const elsaMode = createELsaMode();
 export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
 const blueprints = createBlueprints();
 
-export const $fauna = createStore<Fauna>(new Map());
+export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number; }>({
+  fauna: new Map(),
+  time: 0,
+  size: 0,
+});
 export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
   [
     // { col: 0, row: 0, label: '0,0' },
@@ -29,8 +33,13 @@ export const $labels = createStore<{ col: number; row: number; label: string; }[
 export const calculateStepFx = createEffect((fauna: Fauna) => {
   return newMakeGo(fauna);
 });
-export const progress = createProgress($fauna, calculateStepFx.doneData);
-export const perf = createPerf(progress.$currentStep, progress.reset, calculateStepFx.doneData);
+
+export const progress = createProgress($faunaData.map((it) => it.fauna), calculateStepFx.doneData);
+export const perf = createPerf(
+  progress.$currentStep,
+  progress.reset,
+  calculateStepFx.doneData.map((it) => it.time),
+);
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
 export const resetFocus = createEvent<any>();
@@ -50,9 +59,9 @@ export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (is
 
 export const $field = combine(
   fieldSize.$fieldSize,
-  $fauna,
+  $faunaData,
   $focus,
-  ({ width, height }, fauna, focus): Field => {
+  ({ width, height }, { fauna }, focus): Field => {
     const field: Field = [];
 
     fauna.forEach((colMap, absCols) => {
@@ -72,7 +81,7 @@ export const $field = combine(
   },
 );
 
-export const $stats = combine($field, $fauna, (field, fauna) => {
+export const $stats = combine($field, $faunaData, (field, fauna) => {
   // todo fauna.length is wrong
   return { fieldCellsAmount: field.length, faunaCellsAmount: fauna.size };
 });
@@ -138,14 +147,15 @@ export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, siz
 });
 
 sample({
-  source: $fauna,
+  source: $faunaData,
   clock: progress.gameTick,
+  fn: (it) => it.fauna,
   target: calculateStepFx,
 });
 
-$fauna
-  .on(resetFieldPressed, () => new Map())
-  .on(calculateStepFx.doneData, (_, it) => it.fauna);
+$faunaData
+  .on(calculateStepFx.doneData, (_, it) => it)
+  .reset(resetFieldPressed);
 
 $focus
   .on(dragTool.focusMoved, (state, newFocus) => {
@@ -153,10 +163,10 @@ $focus
   }).reset(resetFocus);
 
 sample({
-  source: { fauna: $fauna, fieldSize: fieldSize.$fieldSize },
+  source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize },
   clock: focusToTheMiddle,
-  fn: ({ fauna, fieldSize }) => {
-    const middle = getMiddleOfFauna(fauna);
+  fn: ({ faunaData, fieldSize }) => {
+    const middle = getMiddleOfFauna(faunaData.fauna);
     return {
       col: Math.round(fieldSize.width / 2 - middle.col),
       row: Math.round(fieldSize.height / 2 - middle.row),
@@ -167,14 +177,14 @@ sample({
 
 sample({
   source: {
-    fauna: $fauna,
+    faunaData: $faunaData,
     color: $selectedColor,
     focus: $focus,
     currentBp: blueprints.currentBp,
   },
   clock: dragTool.clicked,
-  fn: ({ color, fauna, focus, currentBp }, { start: { col, row } }) => {
-    const newFauna = new Map(fauna);
+  fn: ({ color, faunaData, focus, currentBp }, { start: { col, row } }) => {
+    const newFauna = new Map(faunaData.fauna);
 
     if (currentBp) {
       // todo fix
@@ -203,7 +213,7 @@ sample({
       }
     }
 
-    return newFauna;
+    return { ...faunaData, fauna: newFauna };
   },
-  target: $fauna,
+  target: $faunaData,
 });

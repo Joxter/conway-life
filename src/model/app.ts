@@ -2,12 +2,13 @@ import { sample } from 'effector';
 import { Fauna } from '../types';
 import { exportToSting, makeFaunaFromLexicon, rleToFauna } from '../utils';
 import { $exported, exportClicked, importClicked } from './export';
-import { $fauna, $field, focusToTheMiddle, progress, resetFieldPressed } from './field';
+import { $faunaData, $field, focusToTheMiddle, progress, resetFieldPressed } from './field';
 import { $history, addToHistory, historySelected, saveClicked } from './history';
 
 sample({
-  source: $fauna,
+  source: $faunaData,
   clock: saveClicked,
+  fn: (it) => it.fauna,
   target: addToHistory,
 });
 
@@ -17,12 +18,10 @@ sample({
   fn: (history, selected) => {
     const saved = history.find((it) => it.name === selected)!.fauna;
     const fauna: Fauna = new Map(saved);
-    return fauna;
+    return { fauna, time: 0, size: 0 };
   },
-  target: $fauna,
+  target: $faunaData,
 });
-
-sample({ source: $exported, clock: importClicked, fn: makeFaunaFromLexicon, target: $fauna });
 
 sample({
   clock: [historySelected, resetFieldPressed, exportClicked, importClicked],
@@ -44,6 +43,8 @@ sample({
 sample({
   source: $exported,
   clock: importClicked,
-  fn: rleToFauna,
-  target: $fauna,
+  fn: (str) => {
+    return { fauna: rleToFauna(str), time: 0, size: 0 };
+  },
+  target: $faunaData,
 });

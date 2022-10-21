@@ -5,7 +5,7 @@ import { Fauna } from '../types';
 
 export function createProgress(
   $fauna: Store<Fauna>,
-  calculationResult: Event<{ time: number; fauna: any; }>,
+  calculationResult: Event<any>,
 ) {
   const gameTick = createEvent<any>();
 

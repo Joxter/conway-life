@@ -42,8 +42,5 @@ export function Progress() {
     });
 
     text`steps: ${progress.$currentStep}`;
-    text` (population: ${$stats.map(({ fieldCellsAmount }) => fieldCellsAmount)} / ${
-      $stats.map(({ faunaCellsAmount }) => faunaCellsAmount)
-    }) `;
   });
 }

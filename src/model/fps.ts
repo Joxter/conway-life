@@ -1,10 +1,10 @@
-import { createEvent, createStore, Event, restore, sample, Store, Unit } from 'effector';
+import { createEvent, createStore, restore, sample, Store, Unit } from 'effector';
 import { interval, throttle } from 'patronum';
 
 export function createPerf(
   $steps: Store<number>,
   reset: Unit<any>,
-  calculationResult: Event<{ time: number; fauna: any; }>,
+  calculationTime: Unit<number>,
 ) {
   const $fps = createStore(0);
   const $_stepsPerSec = createStore({ prev: 0, delta: 0 }).reset(reset);
@@ -12,7 +12,7 @@ export function createPerf(
   const run = createEvent();
 
   const setFps = throttle({ source: setRawFps, timeout: 100 });
-  const throttledCalculation = throttle({ source: calculationResult, timeout: 1000 });
+  const throttledCalculation = throttle({ source: calculationTime, timeout: 300 });
   const timer = interval({ timeout: 1000, start: run });
 
   $fps.on(setFps, (_, fps) => fps);
@@ -51,6 +51,6 @@ export function createPerf(
   return {
     $fps,
     $stepsPerSec: $_stepsPerSec.map((it) => it.delta),
-    $time: restore(throttledCalculation.map((it) => it.time), 0),
+    $time: restore(throttledCalculation, 0),
   };
 }

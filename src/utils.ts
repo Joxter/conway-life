@@ -4,34 +4,38 @@ function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
 }
 
-export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; } {
+export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; size: number; } {
+  // todo переписать чтоб ответ высчитывался асинхронно (по 5-10 тыщ клеток)
   let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
+  let size = 0;
 
   input.forEach((colMap, col) => {
     colMap.forEach((color, row) => {
       incNeighbors(faunaInc, [col, row], color);
     });
   });
-  // let aaaa = Date.now();
 
   faunaInc.forEach((colMap, col) => {
-    result.set(col, new Map());
+    let rowMap = new Map();
     colMap.forEach(([oneCnt, twoCnt], row) => {
       let cellVal = input.get(col) && input.get(col)!.get(row)! || 0 as const;
       let total = oneCnt + twoCnt;
 
       if (cellVal === 0 && total == 3) {
-        result.get(col)!.set(row, oneCnt > twoCnt ? 1 : 2);
+        rowMap.set(row, oneCnt > twoCnt ? 1 : 2);
       } else if (cellVal !== 0 && (total === 2 || total === 3)) {
-        result.get(col)!.set(row, cellVal);
+        rowMap.set(row, cellVal);
       }
     });
-  });
-  // console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
 
-  return { fauna: result, time: Date.now() - start };
+    size += rowMap.size;
+    result.set(col, rowMap);
+  });
+  const time = Date.now() - start;
+
+  return { fauna: result, time, size };
 }
 
 function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell): FaunaInc {

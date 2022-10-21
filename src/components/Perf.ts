@@ -1,5 +1,5 @@
 import { h, spec, text } from 'forest';
-import { perf } from '../model/field';
+import { $stats, perf } from '../model/field';
 import css from './styles.module.css';
 
 export function Perf() {
@@ -22,6 +22,13 @@ export function Perf() {
     });
     h('span', () => {
       text`CALC TIME: ${perf.$time} msec`;
+    });
+
+    h('span', () => {
+      text`CELLS: ${$stats.map((it) => it.faunaCellsAmount)}`;
+    });
+    h('span', () => {
+      text`CELLS ON SCREEN: ${$stats.map((it) => it.fieldCellsAmount)}`;
     });
   });
 }
