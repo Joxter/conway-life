@@ -29,7 +29,7 @@ export const $labels = createStore<{ col: number; row: number; label: string; }[
 export const calculateStepFx = createEffect((fauna: Fauna) => {
   return newMakeGo(fauna);
 });
-export const progress = createProgress($fauna);
+export const progress = createProgress($fauna, calculateStepFx.doneData);
 export const perf = createPerf(progress.$currentStep, progress.reset, calculateStepFx.doneData);
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
@@ -73,6 +73,7 @@ export const $field = combine(
 );
 
 export const $stats = combine($field, $fauna, (field, fauna) => {
+  // todo fauna.length is wrong
   return { fieldCellsAmount: field.length, faunaCellsAmount: fauna.size };
 });
 

@@ -57,9 +57,9 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 
 // todo
 //  +- add presets by with 1 click
-//  - safe delete (timer before real removing)
-//  - better "reset focus" focus to the center of paint
-//  - better scale: "+" and "-" and with center in the middle of the screen (maybe more with step = 3)
+//  - better scale:
+//      - "+" and "-" and with center in the middle of the screen
+//      - scale on scroll
 //  - progress improvements:
 //      + play/pause
 //      - different speed
@@ -71,12 +71,13 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 //      - add undo/redo
 //      - area to focus
 //      ? a line, selections to move/remove
+//  - canvas render
 //  - add keyboard support
 //  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  + refactoring navigation (move by mouse)
 //  ? add more colors
-//  ? canvas render
-//  ? add color picker
+//  + safe delete
+//  + better "reset focus" focus to the center of paint
 //  + move camera with mouse or touch
 //  + add Elsa for Alisa mode, add "heart" cell design
 //  + add mobile layout
@@ -92,3 +93,5 @@ using(document.querySelector<HTMLDivElement>('#app')!, App);
 //  + two colors mode
 //  + move "camera"
 //  + toggle color on click, instead of painting
+//  NONE:
+//      - add color picker

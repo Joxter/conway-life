@@ -1,8 +1,12 @@
 import { createEvent, createStore, merge, sample, Store } from 'effector';
+import { Event } from 'effector/effector.cjs';
 import { interval } from 'patronum';
 import { Fauna } from '../types';
 
-export function createProgress($fauna: Store<Fauna>) {
+export function createProgress(
+  $fauna: Store<Fauna>,
+  calculationResult: Event<{ time: number; fauna: any; }>,
+) {
   const gameTick = createEvent<any>();
 
   const start = createEvent<any>();
@@ -18,6 +22,7 @@ export function createProgress($fauna: Store<Fauna>) {
 
   const $startFauna = createStore<Fauna | null>(null);
 
+  // todo refactor to "delay before next tick"
   const timer = interval({
     timeout: $currentSpeed,
     start: start,

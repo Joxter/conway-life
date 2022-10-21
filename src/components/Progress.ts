@@ -45,6 +45,5 @@ export function Progress() {
     text` (population: ${$stats.map(({ fieldCellsAmount }) => fieldCellsAmount)} / ${
       $stats.map(({ faunaCellsAmount }) => faunaCellsAmount)
     }) `;
-    text`${progress.$currentSpeed.map((ms) => 1000 / ms)} steps/sec`;
   });
 }
