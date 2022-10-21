@@ -1,15 +1,13 @@
 import { h, spec, text, variant } from 'forest';
 import { $stats, progress } from '../model/field';
+import css from './styles.module.css';
 
 export function Progress() {
   h('p', () => {
     spec({
+      classList: [css.whiteBox],
       style: {
         position: 'absolute',
-        backgroundColor: 'rgba(255,255,255, 0.9)',
-        padding: '8px',
-        borderRadius: '4px',
-        border: '1px solid #aaa',
         display: 'flex',
         gap: '8px',
       },

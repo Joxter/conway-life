@@ -4,10 +4,10 @@ import { colorSelector } from './components/ColorSelector';
 import { field } from './components/Field/Field';
 import { history } from './components/History';
 import { navigation } from './components/Navigation';
+import { Perf } from './components/Perf';
 import { Progress } from './components/Progress';
 import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
 import { resetFieldPressed } from './model/field';
-import { $fps } from './model/fps';
 import './model/app';
 
 function App() {
@@ -26,15 +26,12 @@ function App() {
       },
     });
 
+    Perf();
+
     h('button', {
       text: 'Reset',
       style: { position: 'absolute', bottom: '20px', left: '20px' },
       handler: { click: resetFieldPressed },
-    });
-
-    h('p', () => {
-      text`FPS ${$fps}`;
-      spec({ style: { position: 'absolute', bottom: '16px', left: '120px' } });
     });
 
     h('div', () => {

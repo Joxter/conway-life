@@ -4,8 +4,8 @@ function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
 }
 
-export function newMakeGo(input: Fauna): Fauna {
-  // let start = Date.now();
+export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; } {
+  let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
 
@@ -31,7 +31,7 @@ export function newMakeGo(input: Fauna): Fauna {
   });
   // console.log(Date.now() - start, [aaaa - start, Date.now() - aaaa]);
 
-  return result;
+  return { fauna: result, time: Date.now() - start };
 }
 
 function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell): FaunaInc {

@@ -1,8 +1,9 @@
-import { combine, createEvent, createStore, sample } from 'effector';
+import { combine, createEffect, createEvent, createStore, sample } from 'effector';
 import { ColRow, Fauna, Field, FieldCell, RENDER_MODE } from '../types';
 import { getMiddleOfFauna, newMakeGo } from '../utils';
 import { createBlueprints } from './blueprints';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
+import { createPerf } from './fps';
 import { createProgress } from './progress';
 
 export const fieldSize = createFieldSize();
@@ -25,7 +26,11 @@ export const $labels = createStore<{ col: number; row: number; label: string; }[
   ],
 );
 
+export const calculateStepFx = createEffect((fauna: Fauna) => {
+  return newMakeGo(fauna);
+});
 export const progress = createProgress($fauna);
+export const perf = createPerf(progress.$currentStep, progress.reset, calculateStepFx.doneData);
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
 export const resetFocus = createEvent<any>();
@@ -131,11 +136,15 @@ export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, siz
   });
 });
 
+sample({
+  source: $fauna,
+  clock: progress.gameTick,
+  target: calculateStepFx,
+});
+
 $fauna
   .on(resetFieldPressed, () => new Map())
-  .on(progress.gameTick, (fauna) => {
-    return newMakeGo(fauna);
-  });
+  .on(calculateStepFx.doneData, (_, it) => it.fauna);
 
 $focus
   .on(dragTool.focusMoved, (state, newFocus) => {
