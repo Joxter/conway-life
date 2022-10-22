@@ -62,7 +62,7 @@ function initWW() {
 
   worker.addEventListener('message', (ev) => {
     // console.log(ev.data);
-    calculated(ev.data)
+    calculated(ev.data);
   });
   worker.addEventListener('error', (err) => {
     console.log('main.error err', err);
@@ -70,7 +70,7 @@ function initWW() {
 
   startCalc.watch((fauna) => {
     worker.postMessage(fauna);
-  })
+  });
 }
 
 // todo
