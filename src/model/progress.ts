@@ -1,11 +1,10 @@
-import { createEvent, createStore, merge, sample, Store } from 'effector';
-import { Event } from 'effector/effector.cjs';
-import { interval } from 'patronum';
+import { createEvent, createStore, Event, sample, Store } from 'effector';
+import { delay } from 'patronum';
 import { Fauna } from '../types';
 
 export function createProgress(
   $fauna: Store<Fauna>,
-  calculationResult: Event<any>,
+  calculationResult: Event<{ fauna: Fauna; time: number; size: number; }>,
 ) {
   const gameTick = createEvent<any>();
 
@@ -16,23 +15,22 @@ export function createProgress(
 
   const reset = createEvent<any>();
 
+  const $isRunning = createStore(false);
   const $currentStep = createStore(0);
-  const $currentSpeed = createStore(50);
+  const $stepDelay = createStore(10);
   const changeSpeed = createEvent<number>();
 
   const $startFauna = createStore<Fauna | null>(null);
 
-  // todo refactor to "delay before next tick"
-  const timer = interval({
-    timeout: $currentSpeed,
-    start: start,
-    stop: merge([pause, stop, reset]),
-  });
+  const delayAfterCalc = delay({ source: calculationResult, timeout: $stepDelay });
 
   sample({
-    clock: [timer.tick, start, oneStep],
+    clock: [delayAfterCalc, start, oneStep],
+    filter: $isRunning,
     target: gameTick,
   });
+
+  sample({ clock: oneStep, target: gameTick });
 
   sample({
     source: $fauna,
@@ -41,7 +39,12 @@ export function createProgress(
     target: $startFauna,
   });
 
-  $currentSpeed
+  $isRunning
+    .on(start, () => true)
+    .on([stop, pause], () => false)
+    .reset(reset);
+
+  $stepDelay
     .on(changeSpeed, (_, speed) => speed)
     .reset(reset);
 
@@ -55,8 +58,8 @@ export function createProgress(
 
   return {
     $currentStep,
-    $currentSpeed,
-    $isRunning: timer.isRunning,
+    $currentSpeed: $stepDelay,
+    $isRunning,
     $startFauna,
     start,
     stop,

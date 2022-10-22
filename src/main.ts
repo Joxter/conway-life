@@ -7,7 +7,7 @@ import { navigation } from './components/Navigation';
 import { Perf } from './components/Perf';
 import { Progress } from './components/Progress';
 import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
-import { resetFieldPressed } from './model/field';
+import { calculated, resetFieldPressed, startCalc } from './model/field';
 import './model/app';
 
 function App() {
@@ -54,6 +54,24 @@ function App() {
 }
 
 using(document.querySelector<HTMLDivElement>('#app')!, App);
+
+initWW();
+
+function initWW() {
+  const worker = new Worker('./webworkerGo.js');
+
+  worker.addEventListener('message', (ev) => {
+    // console.log(ev.data);
+    calculated(ev.data);
+  });
+  worker.addEventListener('error', (err) => {
+    console.log('main.error err', err);
+  });
+
+  startCalc.watch((fauna) => {
+    worker.postMessage(fauna);
+  });
+}
 
 // todo
 //  +- add presets by with 1 click

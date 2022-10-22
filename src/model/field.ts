@@ -30,15 +30,17 @@ export const $labels = createStore<{ col: number; row: number; label: string; }[
   ],
 );
 
-export const calculateStepFx = createEffect((fauna: Fauna) => {
+const calculateStepFx = createEffect((fauna: Fauna) => {
   return newMakeGo(fauna);
 });
+export const startCalc = createEvent<Fauna>();
+export const calculated = createEvent<{ fauna: Fauna; time: number; size: number; }>();
 
-export const progress = createProgress($faunaData.map((it) => it.fauna), calculateStepFx.doneData);
+export const progress = createProgress($faunaData.map((it) => it.fauna), calculated);
 export const perf = createPerf(
   progress.$currentStep,
   progress.reset,
-  calculateStepFx.doneData.map((it) => it.time),
+  calculated.map((it) => it.time),
 );
 
 export const $focus = createStore<ColRow>({ col: 0, row: 0 });
@@ -150,11 +152,11 @@ sample({
   source: $faunaData,
   clock: progress.gameTick,
   fn: (it) => it.fauna,
-  target: calculateStepFx,
+  target: startCalc,
 });
 
 $faunaData
-  .on(calculateStepFx.doneData, (_, it) => it)
+  .on(calculated, (_, it) => it)
   .reset(resetFieldPressed);
 
 $focus
