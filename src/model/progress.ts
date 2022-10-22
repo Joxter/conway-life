@@ -17,7 +17,7 @@ export function createProgress(
   const reset = createEvent<any>();
 
   const $currentStep = createStore(0);
-  const $currentSpeed = createStore(50);
+  const $currentSpeed = createStore(200);
   const changeSpeed = createEvent<number>();
 
   const $startFauna = createStore<Fauna | null>(null);

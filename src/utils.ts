@@ -5,7 +5,6 @@ function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
 }
 
 export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; size: number; } {
-  // todo переписать чтоб ответ высчитывался асинхронно (по 5-10 тыщ клеток)
   let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
