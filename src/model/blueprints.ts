@@ -1,7 +1,5 @@
 import { createStore } from 'effector';
-import { patterns } from '../blueprints/lexicon';
 import { Fauna } from '../types';
-import { makeFaunaFromLexicon, rleToFauna } from '../utils';
 
 export function createBlueprints() {
   const lexions = [

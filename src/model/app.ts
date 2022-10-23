@@ -1,6 +1,7 @@
 import { sample } from 'effector';
+import { rleToFauna } from '../parse/rle';
 import { Fauna } from '../types';
-import { exportToSting, makeFaunaFromLexicon, rleToFauna } from '../utils';
+import { exportToSting } from '../utils';
 import { $exported, exportClicked, importClicked } from './export';
 import { $faunaData, $field, focusToTheMiddle, progress, resetFieldPressed } from './field';
 import { $history, addToHistory, historySelected, saveClicked } from './history';
