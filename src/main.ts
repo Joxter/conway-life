@@ -17,6 +17,7 @@ function App() {
     h('div', {
       style: { position: 'absolute', width: '100%', backgroundColor: 'rgba(255,255,255, 0.9)' },
       fn() {
+        h('a', { text: 'to tests', attr: { href: './tests.html' } });
         h('h1', { text: 'Game of Life' });
 
         history();

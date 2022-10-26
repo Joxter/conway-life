@@ -6,6 +6,7 @@ import { Fauna } from '../types';
 *
 * */
 function parseRle(str:string): {fauna: Fauna, name: string; rule: string; x: number; y: number } {
+  return {} as any;
   let state = 'init';
 
   let i = 0;
@@ -52,4 +53,29 @@ export function rleToFauna(rle: string): Fauna {
   }
 
   return res;
+}
+
+/*
+ *    .OO..
+ *    O..O.
+ *    .O..O
+ *    ..OO.
+ */
+export function cellsToFauna(input: string): Fauna {
+  let result: Fauna = new Map();
+
+  input.split('\n').forEach((line, rowI) => {
+    line = line.trim();
+
+    for (let colI = 0; colI < line.length; colI++) {
+      if (line[colI] === 'O') {
+        if (!result.has(colI)) {
+          result.set(colI, new Map());
+        }
+        result.get(colI)!.set(rowI, 1);
+      }
+    }
+  });
+
+  return result;
 }

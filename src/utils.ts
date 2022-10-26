@@ -169,27 +169,3 @@ export function getMiddleOfFauna(fauna: Fauna) {
     row: Math.round(row / totalSize),
   };
 }
-
-/*
- *    .OO..
- *    O..O.
- *    .O..O
- *    ..OO.
- */
-export function makeFaunaFromLexicon(input: string): Fauna {
-  console.warn('TODO makeFaunaFromLexicon');
-  return new Map();
-  // let result: Fauna = new Map();
-  //
-  // input.split('\n').forEach((line, rowI) => {
-  //   line = line.trim();
-  //
-  //   for (let colI = 0; colI < line.length; colI++) {
-  //     if (line[colI] === 'O') {
-  //       result.set(numbersToCoords(colI, rowI), 1);
-  //     }
-  //   }
-  // });
-  //
-  // return result;
-}
