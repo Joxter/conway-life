@@ -1,6 +1,6 @@
-import { combine, createEffect, createEvent, createStore, sample } from 'effector';
+import { combine, createEvent, createStore, sample } from 'effector';
 import { ColRow, Fauna, Field, FieldCell, RENDER_MODE } from '../types';
-import { getMiddleOfFauna, newMakeGo } from '../utils';
+import { getMiddleOfFauna } from '../utils';
 import { createBlueprints } from './blueprints';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
 import { createPerf } from './fps';
@@ -30,13 +30,14 @@ export const $labels = createStore<{ col: number; row: number; label: string; }[
   ],
 );
 
-const calculateStepFx = createEffect((fauna: Fauna) => {
-  return newMakeGo(fauna);
-});
+export const $isCalculating = createStore(false);
 export const startCalc = createEvent<Fauna>();
 export const calculated = createEvent<{ fauna: Fauna; time: number; size: number; }>();
+$isCalculating
+  .on(startCalc, () => true)
+  .on(calculated, () => false);
 
-export const progress = createProgress($faunaData.map((it) => it.fauna), calculated);
+export const progress = createProgress($faunaData.map((it) => it.fauna), $isCalculating);
 export const perf = createPerf(
   progress.$currentStep,
   progress.reset,

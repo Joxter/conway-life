@@ -1,5 +1,5 @@
 import { h, spec, text, variant } from 'forest';
-import { $stats, progress } from '../model/field';
+import { progress } from '../model/field';
 import css from './styles.module.css';
 
 export function Progress() {

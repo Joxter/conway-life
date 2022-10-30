@@ -1,10 +1,10 @@
-import { createEvent, createStore, Event, sample, Store } from 'effector';
-import { delay } from 'patronum';
+import { combine, createEvent, createStore, merge, sample, Store } from 'effector';
+import { interval } from 'patronum';
 import { Fauna } from '../types';
 
 export function createProgress(
   $fauna: Store<Fauna>,
-  calculationResult: Event<{ fauna: Fauna; time: number; size: number; }>,
+  $isCalculating: Store<boolean>,
 ) {
   const gameTick = createEvent<any>();
 
@@ -17,16 +17,24 @@ export function createProgress(
 
   const $isRunning = createStore(false);
   const $currentStep = createStore(0);
-  const $stepDelay = createStore(10);
-  const changeSpeed = createEvent<number>();
+
+  const speedRange = [1, 60] as const;
+  const $expectedStepsPerSec = createStore(30);
+  const $stepTimeout = $expectedStepsPerSec.map((it) => 1000 / it);
+  const incExpectedStepsPerSec = createEvent();
+  const decExpectedStepsPerSec = createEvent();
 
   const $startFauna = createStore<Fauna | null>(null);
 
-  const delayAfterCalc = delay({ source: calculationResult, timeout: $stepDelay });
+  const timer = interval({
+    timeout: $stepTimeout,
+    start: start,
+    stop: merge([pause, stop, reset]),
+  });
 
   sample({
-    clock: [delayAfterCalc, start, oneStep],
-    filter: $isRunning,
+    clock: [timer.tick, start, oneStep],
+    filter: combine($isRunning, $isCalculating, (running, calculating) => running && !calculating),
     target: gameTick,
   });
 
@@ -44,8 +52,13 @@ export function createProgress(
     .on([stop, pause], () => false)
     .reset(reset);
 
-  $stepDelay
-    .on(changeSpeed, (_, speed) => speed)
+  $expectedStepsPerSec
+    .on(incExpectedStepsPerSec, (speed) => {
+      return Math.min(speed + 5, speedRange[1]);
+    })
+    .on(decExpectedStepsPerSec, (speed) => {
+      return Math.max(speed - 5, speedRange[0]);
+    })
     .reset(reset);
 
   $startFauna
@@ -58,13 +71,15 @@ export function createProgress(
 
   return {
     $currentStep,
-    $currentSpeed: $stepDelay,
+    $expectedStepsPerSec,
     $isRunning,
     $startFauna,
     start,
     stop,
     pause,
-    changeSpeed,
+    incExpectedStepsPerSec,
+    decExpectedStepsPerSec,
+    speedRange,
     gameTick,
     reset,
     oneStep,

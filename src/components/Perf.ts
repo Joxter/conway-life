@@ -1,5 +1,6 @@
 import { h, spec, text } from 'forest';
-import { $stats, perf } from '../model/field';
+import { $stats, perf, progress } from '../model/field';
+import { PlusMinus } from './stateless/plusMinus';
 import css from './styles.module.css';
 
 export function Perf() {
@@ -19,6 +20,15 @@ export function Perf() {
     });
     h('span', () => {
       text`STEPS PER SEC: ${perf.$stepsPerSec}`;
+    });
+    h('span', () => {
+      text`EXPECTED STEPS:`;
+    });
+    PlusMinus({
+      value: progress.$expectedStepsPerSec,
+      onPlusClicked: progress.incExpectedStepsPerSec,
+      onMinusClicked: progress.decExpectedStepsPerSec,
+      range: progress.speedRange,
     });
     h('span', () => {
       text`CALC TIME: ${perf.$time} msec`;
