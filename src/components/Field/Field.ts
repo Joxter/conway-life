@@ -31,11 +31,11 @@ export function field() {
       color2: Color2,
     },
     style: {
-      backgroundImage: $fieldTilesStyle.map((mode) => {
-        let picUrl = mode === 'elsa' ? heartLine : getSvgSquareUrl(mode);
-        return `url("${picUrl}")`;
-      }),
-      backgroundSize: fieldSize.$cellSize.map((it) => `${it}px ${it}px`),
+      // backgroundImage: $fieldTilesStyle.map((mode) => {
+      //   let picUrl = mode === 'elsa' ? heartLine : getSvgSquareUrl(mode);
+      //   return `url("${picUrl}")`;
+      // }),
+      // backgroundSize: fieldSize.$cellSize.map((it) => `${it}px ${it}px`),
     },
     handler: {
       mousemove: hoveredCell.fieldMouseMoved,

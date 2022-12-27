@@ -18,7 +18,7 @@ export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number
 });
 export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
   [
-    // { col: 0, row: 0, label: '0,0' },
+    { col: 0, row: 0, label: '0,0' },
     // { col: 10, row: 10, label: '10,10' },
     // { col: 10, row: -10, label: '10,-10' },
     // { col: -10, row: 10, label: '-10,10' },
@@ -58,6 +58,15 @@ export const dragTool = createDragTool(hoveredCell.$cell, $focus);
 
 export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
   return isElsa ? 'elsa' as const : cellSize;
+});
+
+$focus.on(fieldSize.$fieldSize, (current, field) => {
+  if (field.prevHeight && field.prevWidth) {
+    return {
+      col: current.col + Math.round((field.width - field.prevWidth) / 2),
+      row: current.row + Math.round((field.height - field.prevHeight) / 2),
+    };
+  }
 });
 
 export const $field = combine(

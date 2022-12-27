@@ -7,8 +7,13 @@ const vp = getWindowParams();
 export function createFieldSize() {
   const options = cellSizes;
   const $cellSize = createStore(initCellSize);
-  const $fieldSize = $cellSize.map((size) => {
-    return { height: Math.ceil(vp.height / size), width: Math.ceil(vp.width / size) };
+  const $fieldSize = $cellSize.map((size, _prev: any) => {
+    return {
+      height: Math.ceil(vp.height / size),
+      width: Math.ceil(vp.width / size),
+      prevHeight: _prev && _prev.height as number,
+      prevWidth: _prev && _prev.width as number,
+    };
   });
 
   const plus = createEvent();
