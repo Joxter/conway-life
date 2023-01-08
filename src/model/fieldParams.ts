@@ -16,8 +16,12 @@ export function createFieldSize() {
     };
   });
 
+  const scroll = createEvent<any>();
   const plus = createEvent();
   const minus = createEvent();
+
+  scroll.watch(console.log)
+  document.addEventListener('scroll', scroll);
   $cellSize
     .on(minus, (size) => {
       let newSize = size - 1;

@@ -12,6 +12,15 @@ import './model/app';
 
 function App() {
   h('div', () => {
+    spec({
+      style: {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+      }
+    })
     navigation();
     field();
     h('div', {
