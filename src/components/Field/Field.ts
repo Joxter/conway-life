@@ -1,16 +1,13 @@
-import { h, list } from 'forest';
+import { h, list, spec, node } from 'forest';
 import {
-  $fieldTilesStyle,
   $viewField,
   $viewHoveredCells,
   $viewLabels,
-  elsaMode,
   fieldSize,
   hoveredCell,
 } from '../../model/field';
-import { Color1, Color2, RENDER_MODE } from '../../types';
+import { Color1, Color2 } from '../../types';
 import { getWindowParams } from '../../utils';
-import heartLine from './heart-line-icon.svg';
 import css from './styles.module.css';
 
 function getSvgSquareUrl(size: number) {
@@ -44,47 +41,37 @@ export function field() {
     fn() {
       const vp = getWindowParams();
 
-      if (RENDER_MODE === 'svg') {
-        h('svg', {
+      h('canvas', () => {
+        spec({
           attr: {
             width: vp.width,
-            height: vp.height,
-            viewBox: `0 0 ${vp.width} ${vp.height}`,
-            xmlns: 'http://www.w3.org/2000/svg',
-          },
-          fn: () => {
-            list($viewField, ({ store: $fieldStore }) => {
-              h('rect', {
-                attr: {
-                  x: $fieldStore.map((it) => it.x),
-                  y: $fieldStore.map((it) => it.y),
-                  width: fieldSize.$cellSize,
-                  height: fieldSize.$cellSize,
-                  fill: Color1,
-                },
-              });
-            });
-          },
+            height: vp.height
+          }
         });
-      }
+        node((can) => {
+          requestAnimationFrame(render);
 
-      if (RENDER_MODE === 'html') {
-        list($viewField, ({ store: $fieldStore }) => {
-          h('div', {
-            style: {
-              // todo test transition
-              left: $fieldStore.map((it) => it.x),
-              top: $fieldStore.map((it) => it.y),
-            },
-            classList: {
-              [css.heartMode]: elsaMode.$isOn,
-              [css.cell]: true,
-              [css.on1]: $fieldStore.map((it) => it.val === 1),
-              [css.on2]: $fieldStore.map((it) => it.val === 2),
-            },
-          });
+          function render() {
+            let { size, field } = $viewField.getState();
+            // @ts-ignore
+            let ctx = can.getContext("2d");
+
+            let { width: w, height: h } = can.getBoundingClientRect();
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = Color1;
+
+            ctx.beginPath();
+
+            field.forEach((c) => {
+              ctx.rect(c.col * size, c.row * size, size, size);
+            });
+
+            ctx.fill();
+
+            requestAnimationFrame(render);
+          }
         });
-      }
+      });
 
       list($viewHoveredCells, ({ store: $cell }) => {
         h('div', {

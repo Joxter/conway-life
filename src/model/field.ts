@@ -1,5 +1,5 @@
 import { combine, createEvent, createStore, sample } from 'effector';
-import { ColRow, Fauna, Field, FieldCell, RENDER_MODE } from '../types';
+import { ColRow, Fauna, Field, FieldCell } from '../types';
 import { getMiddleOfFauna } from '../utils';
 import { createBlueprints } from './blueprints';
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
@@ -121,12 +121,7 @@ export const $labelsOnField = combine(
 );
 
 export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => {
-  return field.map(({ val, col, row }) => {
-    if (RENDER_MODE === 'svg') {
-      return { val, y: row * size, x: col * size };
-    }
-    return { val, y: row * size + 'px', x: col * size + 'px' };
-  });
+  return { size, field };
 });
 
 export const $viewHoveredCells = combine(
