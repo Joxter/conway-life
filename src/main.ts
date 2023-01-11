@@ -12,15 +12,6 @@ import './model/app';
 
 function App() {
   h('div', () => {
-    spec({
-      style: {
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-      }
-    })
     navigation();
     field();
     h('div', {
@@ -84,9 +75,9 @@ function initWW() {
 
 // todo
 //  +- add presets by with 1 click
-//  - better scale:
-//      - "+" and "-" and with center in the middle of the screen
-//      - scale on scroll
+//  +- better scale:
+//      +- "+" and "-" and with center in the middle of the screen
+//      +- scale on scroll
 //  - progress improvements:
 //      + play/pause
 //      - different speed
@@ -98,7 +89,7 @@ function initWW() {
 //      - add undo/redo
 //      - area to focus
 //      ? a line, selections to move/remove
-//  - canvas render
+//  + canvas render
 //  - add keyboard support
 //  +- import/export blueprints from https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm
 //  + refactoring navigation (move by mouse)

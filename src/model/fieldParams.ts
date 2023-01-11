@@ -1,5 +1,4 @@
 import { createEvent, createStore, sample, split, Store } from 'effector';
-import { throttle } from 'patronum';
 import { cellSizes, ColRow, initCellSize } from '../types';
 import { getRowColFromEvent, getWindowParams } from '../utils';
 
@@ -17,28 +16,29 @@ export function createFieldSize() {
     };
   });
 
-  const scrolled = createEvent<number>();
   const plus = createEvent();
   const minus = createEvent();
 
-  let throttledScroll = throttle({ source: scrolled, timeout: 100 });
-
-  let [min, max] = cellSizes;
-  document.addEventListener('scroll', () => {
-    let ratio = window.scrollY / (4000 - window.innerHeight);
-    let newScale = Math.floor(min + (max - min) * ratio);
-    scrolled(newScale);
+  let threshold = 0;
+  document.addEventListener('wheel', (ev) => {
+    threshold += ev.deltaY;
+    if (threshold > 20) {
+      plus();
+      threshold = 0;
+    }
+    if (threshold < -20) {
+      minus();
+      threshold = 0;
+    }
   });
 
   $cellSize
-    .on(throttledScroll, (size, newSize) => {
-      return newSize;
-    })
     .on(minus, (size) => {
-      let newSize = size - 1;
-      return Math.max(cellSizes[0], newSize);
+      return Math.max(cellSizes[0], size - 1);
     })
-    .on(plus, (size) => size + 1);
+    .on(plus, (size) => {
+      return Math.min(cellSizes[1], size + 1);
+    });
 
   const fieldSize = { options, $cellSize, $fieldSize, plus, minus };
   return fieldSize;
