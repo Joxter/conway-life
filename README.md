@@ -1,11 +1,39 @@
-# Vite Forest TypeScript
+# Game of Life
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/vite-typescript-forest)
-
-In the box:
-
-- effector
-- patronum
-- typescript 4.6.4
-- vitejs 3
-- forest
+## TODO
+- [x] (WIP) add presets by with 1 click
+- [ ] (WIP) better scale:
+    - [x] (WIP) "+" and "-" and with center in the middle of the screen
+    - [x] (WIP) scale on scroll
+- [ ] progress improvements:
+    - [x] play/pause
+    - [ ] different speed
+    - [ ] restart (restore to 0)
+    - [ ] back to N steps
+- [ ] tools:
+    - [x] toggle one cell
+    - [ ] draw pen
+    - [ ] add undo/redo
+    - [ ] area to focus
+    - [ ] ??? a line, selections to move/remove
+- [x] canvas render
+- [ ] add keyboard support
+- [ ] (WIP) import/export blueprints from [conwaylife.com](https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm)
+- [x] ??? refactoring
+    - [ ] store only live cells
+    - [ ] recalculate only live cells
+    - [x] boundaryless mode
+    - [ ] fix history (save only live cells, update types)
+- [x] refactoring navigation (move by mouse)
+- [x] safe delete
+- [x] better "reset focus" focus to the center of paint
+- [x] move camera with mouse or touch
+- [x] add Elsa for Alisa mode, add "heart" cell design
+- [x] add mobile layout
+- [x] dynamic cell size
+- [x] add paint/erase mode
+- [x] remove from history
+- [x] add dynamic field size
+- [x] two colors mode
+- [x] move "camera"
+- [x] toggle color on click, instead of painting
