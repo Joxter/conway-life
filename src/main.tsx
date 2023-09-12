@@ -6,24 +6,41 @@ import { render } from "solid-js/web";
 // import { Perf } from './components/Perf';
 // import { Progress } from './components/Progress';
 // import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
-import { calculated, resetFieldPressed, startCalc } from "./model/field";
+import { calculated, progress, startCalc } from "./model/field";
 import "./model/app";
 import "./style.css";
+import { Field } from "./components/Field/Field";
+import { rleToFauna } from "./utils";
+
+setTimeout(() => {
+  calculated({
+    fauna: rleToFauna(`2o12b2o2bo4b2o2b2o$2o12bob2o6b2ob2o$15bo6bobo$15b3o4b2o2$15b3o4b2o$15b
+o6bobo$2o12bob2o6b2o$2o12b2o2bo4b2o7$31b3o3b3o$30bo3bobo3bo$29bo3b2ob
+2o3bo$29bob2o5b2obo$31bo7bo11$31b2o5b2o$31b2o5b2o!`),
+    time: 123,
+    size: 1234,
+  });
+  // @ts-ignore
+  progress.start();
+}, 2000);
 
 function App() {
   return (
     <div>
-      <h2>TODO</h2>
-      <ul>
-        <li>navigation</li>
-        <li>field</li>
-        <li>history</li>
-        <li>colorSelector</li>
-        <li>Progress</li>
-        <li>perf</li>
-        <li>reset button</li>
-        <li>import stuff</li>
-      </ul>
+      <div style={{ position: "absolute" }}>
+        <h2>TODO</h2>
+        <ul>
+          <li>navigation</li>
+          <li>field</li>
+          <li>history</li>
+          <li>colorSelector</li>
+          <li>Progress</li>
+          <li>perf</li>
+          <li>reset button</li>
+          <li>import stuff</li>
+        </ul>
+      </div>
+      <Field />
     </div>
   );
 
@@ -31,7 +48,6 @@ function App() {
 
   h('div', () => {
     navigation();
-    field();
     h('div', {
       style: { position: 'absolute', width: '100%', backgroundColor: 'rgba(255,255,255, 0.9)' },
       fn() {

@@ -1,10 +1,10 @@
-import { Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna } from './types';
+import { Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna } from "./types";
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
 }
 
-export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; size: number; } {
+export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; size: number } {
   let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
@@ -19,7 +19,7 @@ export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; size: num
   faunaInc.forEach((colMap, col) => {
     let rowMap = new Map();
     colMap.forEach(([oneCnt, twoCnt], row) => {
-      let cellVal = input.get(col) && input.get(col)!.get(row)! || 0 as const;
+      let cellVal = (input.get(col) && input.get(col)!.get(row)!) || (0 as const);
       let total = oneCnt + twoCnt;
 
       if (cellVal === 0 && total == 3) {
@@ -71,9 +71,9 @@ function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell):
 }
 
 export function getRowColFromEvent(
-  ev: { clientY: number; clientX: number; shiftKey: boolean; },
+  ev: { clientY: number; clientX: number; shiftKey: boolean },
   cellSize: number,
-): { col: number; shift: boolean; row: number; } {
+): { col: number; shift: boolean; row: number } {
   let row = Math.floor(ev.clientY / cellSize);
   let col = Math.floor(ev.clientX / cellSize);
 
@@ -81,7 +81,7 @@ export function getRowColFromEvent(
 }
 
 export function exportToSting(field: Field): string {
-  return '';
+  return "";
   /*
   let firstLive: number | null = null;
   let lastLive: number | null = null;
@@ -102,8 +102,8 @@ export function exportToSting(field: Field): string {
   */
 }
 
-export function saveToLS(history: { fauna: Fauna; name: string; }[]) {
-  console.warn('TODO saveToLS');
+export function saveToLS(history: { fauna: Fauna; name: string }[]) {
+  console.warn("TODO saveToLS");
   return;
 
   // let res: { fauna: SavedFauna; name: string; }[] = history.map(({ name, fauna }) => {
@@ -114,17 +114,17 @@ export function saveToLS(history: { fauna: Fauna; name: string; }[]) {
 }
 
 function coordsStrToNumbers(coords: CoordsStr): [number, number] {
-  const [col, row] = coords.split('|');
+  const [col, row] = coords.split("|");
   return [+col, +row];
 }
 
-export function getSavedFromLS(): { fauna: Fauna; name: string; }[] {
+export function getSavedFromLS(): { fauna: Fauna; name: string }[] {
   try {
     // @ts-ignore
-    let saved: { fauna: SavedFauna; name: string; }[] =
-      JSON.parse(localStorage.getItem('history') || 'null') || [];
+    let saved: { fauna: SavedFauna; name: string }[] =
+      JSON.parse(localStorage.getItem("history") || "null") || [];
 
-    let result: { fauna: Fauna; name: string; }[] = saved.map(({ fauna: savedF, name }) => {
+    let result: { fauna: Fauna; name: string }[] = saved.map(({ fauna: savedF, name }) => {
       let fauna: Fauna = new Map();
       savedF.forEach(([coords, val]) => {
         const [col, row] = coordsStrToNumbers(coords);
@@ -145,8 +145,8 @@ export function getSavedFromLS(): { fauna: Fauna; name: string; }[] {
 
 export function getWindowParams() {
   return {
-    width: window.visualViewport.width,
-    height: window.visualViewport.height,
+    width: window.visualViewport?.width || 600,
+    height: window.visualViewport?.height || 400,
   };
 }
 
@@ -177,7 +177,7 @@ export function getMiddleOfFauna(fauna: Fauna) {
  *    ..OO.
  */
 export function makeFaunaFromLexicon(input: string): Fauna {
-  console.warn('TODO makeFaunaFromLexicon');
+  console.warn("TODO makeFaunaFromLexicon");
   return new Map();
   // let result: Fauna = new Map();
   //
@@ -197,11 +197,11 @@ export function makeFaunaFromLexicon(input: string): Fauna {
 export function rleToFauna(rle: string): Fauna {
   let res: Fauna = new Map();
 
-  const dead = 'b';
-  const live = 'o';
-  const lineEnd = '$';
+  const dead = "b";
+  const live = "o";
+  const lineEnd = "$";
 
-  let parsedNum = '';
+  let parsedNum = "";
   let y = 0;
   let x = 0;
 
@@ -226,7 +226,7 @@ export function rleToFauna(rle: string): Fauna {
         y += parsedNum2;
         x = 0;
       }
-      parsedNum = '';
+      parsedNum = "";
     }
   }
 

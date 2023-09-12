@@ -1,43 +1,42 @@
-import { combine, createEvent, createStore, sample } from 'effector';
-import { ColRow, Fauna, Field, FieldCell } from '../types';
-import { getMiddleOfFauna } from '../utils';
-import { createBlueprints } from './blueprints';
-import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from './fieldParams';
-import { createPerf } from './fps';
-import { createProgress } from './progress';
+import { combine, createEvent, createStore, sample } from "effector";
+import { ColRow, Fauna, Field, FieldCell } from "../types";
+import { getMiddleOfFauna } from "../utils";
+import { createBlueprints } from "./blueprints";
+import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from "./fieldParams";
+import { createPerf } from "./fps";
+import { createProgress } from "./progress";
 
 export const fieldSize = createFieldSize();
 export const elsaMode = createELsaMode();
 export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
 const blueprints = createBlueprints();
 
-export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number; }>({
+export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
   fauna: new Map(),
   time: 0,
   size: 0,
 });
-export const $labels = createStore<{ col: number; row: number; label: string; }[]>(
-  [
-    { col: 0, row: 0, label: '0,0' },
-    // { col: 10, row: 10, label: '10,10' },
-    // { col: 10, row: -10, label: '10,-10' },
-    // { col: -10, row: 10, label: '-10,10' },
-    // { col: -10, row: -10, label: '-10,-10' },
-    // { col: 10, row: 0, label: '10,0' },
-    // { col: 0, row: 10, label: '0,10' },
-    // { col: -10, row: 0, label: '-10,0' },
-    // { col: 0, row: -10, label: '0,-10' },
-  ],
-);
+export const $labels = createStore<{ col: number; row: number; label: string }[]>([
+  { col: 0, row: 0, label: "0,0" },
+  // { col: 10, row: 10, label: '10,10' },
+  // { col: 10, row: -10, label: '10,-10' },
+  // { col: -10, row: 10, label: '-10,10' },
+  // { col: -10, row: -10, label: '-10,-10' },
+  // { col: 10, row: 0, label: '10,0' },
+  // { col: 0, row: 10, label: '0,10' },
+  // { col: -10, row: 0, label: '-10,0' },
+  // { col: 0, row: -10, label: '0,-10' },
+]);
 
 export const $isCalculating = createStore(false);
 export const startCalc = createEvent<Fauna>();
-export const calculated = createEvent<{ fauna: Fauna; time: number; size: number; }>();
-$isCalculating
-  .on(startCalc, () => true)
-  .on(calculated, () => false);
+export const calculated = createEvent<{ fauna: Fauna; time: number; size: number }>();
+$isCalculating.on(startCalc, () => true).on(calculated, () => false);
 
-export const progress = createProgress($faunaData.map((it) => it.fauna), $isCalculating);
+export const progress = createProgress(
+  $faunaData.map((it) => it.fauna),
+  $isCalculating,
+);
 export const perf = createPerf(
   progress.$currentStep,
   progress.reset,
@@ -57,7 +56,7 @@ export const resetFieldPressed = createEvent<any>();
 export const dragTool = createDragTool(hoveredCell.$cell, $focus);
 
 export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
-  return isElsa ? 'elsa' as const : cellSize;
+  return isElsa ? ("elsa" as const) : cellSize;
 });
 
 $focus.on(fieldSize.$fieldSize, (current, field) => {
@@ -102,8 +101,8 @@ export const $labelsOnField = combine(
   fieldSize.$fieldSize,
   $labels,
   $focus,
-  ({ width, height }, labels, focus): { col: number; row: number; label: string; }[] => {
-    const labelsOnField: { col: number; row: number; label: string; }[] = [];
+  ({ width, height }, labels, focus): { col: number; row: number; label: string }[] => {
+    const labelsOnField: { col: number; row: number; label: string }[] = [];
 
     labels.forEach(({ col, row, label }) => {
       const _col = col + focus.col;
@@ -141,7 +140,7 @@ export const $viewHoveredCells = combine(
     // }
 
     if (hovered) {
-      return [{ y: hovered.row * size + 'px', x: hovered.col * size + 'px' }];
+      return [{ y: hovered.row * size + "px", x: hovered.col * size + "px" }];
     }
     return [];
   },
@@ -149,7 +148,7 @@ export const $viewHoveredCells = combine(
 
 export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, size) => {
   return ls.map(({ row, col, label }) => {
-    return { y: row * size + 'px', x: col * size + 'px', label };
+    return { y: row * size + "px", x: col * size + "px", label };
   });
 });
 
@@ -160,14 +159,13 @@ sample({
   target: startCalc,
 });
 
-$faunaData
-  .on(calculated, (_, it) => it)
-  .reset(resetFieldPressed);
+$faunaData.on(calculated, (_, it) => it).reset(resetFieldPressed);
 
 $focus
   .on(dragTool.focusMoved, (state, newFocus) => {
     return newFocus;
-  }).reset(resetFocus);
+  })
+  .reset(resetFocus);
 
 sample({
   source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize },
@@ -206,7 +204,8 @@ sample({
       const faunaX = col - focus.col;
       const faunaY = row - focus.row;
 
-      if (false) { // used to be "shift" to force color instead of toggle
+      if (false) {
+        // used to be "shift" to force color instead of toggle
         // newFauna.set(coords, color); // todo FIX
       } else {
         if (!newFauna.has(faunaX)) {
