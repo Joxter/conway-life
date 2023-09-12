@@ -11,6 +11,7 @@ import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
 import { rleToFauna } from "./utils";
+import { Navigation } from "./components/Navigation";
 
 setTimeout(() => {
   calculated({
@@ -30,8 +31,8 @@ function App() {
       <div style={{ position: "absolute" }}>
         <h2>TODO</h2>
         <ul>
-          <li>navigation</li>
-          <li>field</li>
+          <li> +- navigation (add PlusMinus)</li>
+          <li> ++ field</li>
           <li>history</li>
           <li>colorSelector</li>
           <li>Progress</li>
@@ -40,6 +41,7 @@ function App() {
           <li>import stuff</li>
         </ul>
       </div>
+      <Navigation />
       <Field />
     </div>
   );
