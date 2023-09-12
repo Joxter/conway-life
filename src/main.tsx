@@ -13,6 +13,7 @@ import { Field } from "./components/Field/Field";
 import { rleToFauna } from "./utils";
 import { Navigation } from "./components/Navigation";
 import { Progress } from "./components/Progress";
+import { Perf } from "./components/Perf";
 
 setTimeout(() => {
   calculated({
@@ -36,8 +37,8 @@ function App() {
           <li> ++ navigation</li>
           <li> ++ field</li>
           <li> ++ Progress</li>
+          <li> ++ perf</li>
           <li>history</li>
-          <li>perf</li>
           <li>reset button</li>
           <li>import stuff</li>
         </ul>
@@ -54,6 +55,7 @@ function App() {
         <h1>Game of Life</h1>
         <Progress />
       </div>
+      <Perf />
     </div>
   );
 
