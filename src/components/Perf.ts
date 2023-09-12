@@ -1,6 +1,6 @@
 import { h, spec, text } from 'forest';
 import { $stats, perf, progress } from '../model/field';
-import { PlusMinus } from './stateless/plusMinus';
+import { PlusMinus } from './stateless/PlusMinus';
 import css from './styles.module.css';
 
 export function Perf() {

@@ -19,7 +19,7 @@ export function createProgress(
   const $currentStep = createStore(0);
 
   const speedRange = [1, 60] as const;
-  const $expectedStepsPerSec = createStore(30);
+  const $expectedStepsPerSec = createStore(10);
   const $stepTimeout = $expectedStepsPerSec.map((it) => 1000 / it);
   const incExpectedStepsPerSec = createEvent();
   const decExpectedStepsPerSec = createEvent();

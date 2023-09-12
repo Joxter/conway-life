@@ -6,12 +6,13 @@ import { render } from "solid-js/web";
 // import { Perf } from './components/Perf';
 // import { Progress } from './components/Progress';
 // import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
-import { calculated, progress, startCalc } from "./model/field";
+import { calculated, focusToTheMiddle, progress, startCalc } from "./model/field";
 import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
 import { rleToFauna } from "./utils";
 import { Navigation } from "./components/Navigation";
+import { Progress } from "./components/Progress";
 
 setTimeout(() => {
   calculated({
@@ -23,19 +24,19 @@ o6bobo$2o12bob2o6b2o$2o12b2o2bo4b2o7$31b3o3b3o$30bo3bobo3bo$29bo3b2ob
   });
   // @ts-ignore
   progress.start();
-}, 2000);
+  focusToTheMiddle();
+}, 200);
 
 function App() {
   return (
     <div>
-      <div style={{ position: "absolute" }}>
+      <div style={{ position: "absolute", "pointer-events": "none" }}>
         <h2>TODO</h2>
         <ul>
-          <li> +- navigation (add PlusMinus)</li>
+          <li> ++ navigation</li>
           <li> ++ field</li>
+          <li> ++ Progress</li>
           <li>history</li>
-          <li>colorSelector</li>
-          <li>Progress</li>
           <li>perf</li>
           <li>reset button</li>
           <li>import stuff</li>
@@ -43,6 +44,16 @@ function App() {
       </div>
       <Navigation />
       <Field />
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          "background-color": "rgba(255,255,255, 0.9)",
+        }}
+      >
+        <h1>Game of Life</h1>
+        <Progress />
+      </div>
     </div>
   );
 
