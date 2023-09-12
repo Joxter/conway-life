@@ -1,3 +1,4 @@
+/*
 import { createEvent, sample } from 'effector';
 import { h, list, spec, text } from 'forest';
 import {
@@ -62,3 +63,4 @@ export function history() {
     },
   });
 }
+*/
