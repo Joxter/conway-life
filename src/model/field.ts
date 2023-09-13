@@ -7,8 +7,7 @@ import { createPerf } from "./fps";
 import { createProgress } from "./progress";
 
 export const fieldSize = createFieldSize();
-export const elsaMode = createELsaMode();
-export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
+export const hoveredCell = createHoveredCell();
 const blueprints = createBlueprints();
 
 let initFauna: Fauna = new Map();
@@ -54,16 +53,12 @@ export const resetFieldPressed = createEvent<any>();
 
 export const dragTool = createDragTool(hoveredCell.$hoveredXY, $focus);
 
-export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
-  return isElsa ? ("elsa" as const) : cellSize;
-});
-
 /*
 $focus.on(fieldSize.$fieldSize, (current, field) => {
   if (field.prevHeight && field.prevWidth) {
     return {
-      col: current.x + Math.round((field.width - field.prevWidth) / 2),
-      row: current.y + Math.round((field.height - field.prevHeight) / 2),
+      x: current.x + Math.round((field.width - field.prevWidth) / 2),
+      y: current.y + Math.round((field.height - field.prevHeight) / 2),
     };
   }
 });
@@ -79,10 +74,10 @@ export const $field = combine(
     // console.log(focus, cellSize, viewPortSize);
     const field: Field = [];
 
-    fauna.forEach((colMap, absCols) => {
-      colMap.forEach((val, absRow) => {
-        const col = absCols + focus.x / cellSize;
-        const row = absRow + focus.y / cellSize;
+    fauna.forEach((colMap, cellCol) => {
+      colMap.forEach((val, cellRow) => {
+        const col = cellCol * cellSize + focus.x;
+        const row = cellRow * cellSize + focus.y;
         // console.log("cell", [absCols, absRow], [col, row]);
 
         // if (col >= 0 && col < fieldSize.width) {

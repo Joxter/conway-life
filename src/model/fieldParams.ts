@@ -66,7 +66,7 @@ export function createELsaMode() {
   return elsaMode;
 }
 
-export function createHoveredCell($cellSize: Store<number>) {
+export function createHoveredCell() {
   const fieldMouseMoved = createEvent<XY>();
   const fieldMouseLeaved = createEvent<any>();
 

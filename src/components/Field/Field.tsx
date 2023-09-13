@@ -46,7 +46,7 @@ export function Field() {
 
       field.forEach((c) => {
         if (ctx) {
-          ctx.rect(c.col * size, c.row * size, size, size);
+          ctx.rect(c.col, c.row, size, size);
         }
       });
 
