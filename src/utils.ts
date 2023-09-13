@@ -1,4 +1,4 @@
-import { Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna } from "./types";
+import { Coords, CoordsStr, Fauna, FaunaInc, Field, FieldCell, SavedFauna, XY } from "./types";
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -137,6 +137,13 @@ export function getWindowParams() {
   return {
     width: window.visualViewport?.width || 600,
     height: window.visualViewport?.height || 400,
+  };
+}
+
+export function adjustOffset(currentOffset: XY, pivot: XY, scale: number) {
+  return {
+    x: currentOffset.x - pivot.x * (scale - 1),
+    y: currentOffset.y - pivot.y * (scale - 1),
   };
 }
 

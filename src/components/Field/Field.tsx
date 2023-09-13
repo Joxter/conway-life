@@ -46,10 +46,13 @@ export function Field() {
 
       field.forEach((c) => {
         if (ctx) {
-          ctx.rect(c.col, c.row, size, size);
+          ctx.rect(c.col, c.row, size.size, size.size);
         }
       });
 
+      let { width, height } = getWindowParams();
+
+      ctx.roundRect(width / 2 - 6, height / 2 - 6, 12, 12, 10);
       ctx.fill();
 
       requestAnimationFrame(render);

@@ -6,7 +6,7 @@ const vp = getWindowParams();
 
 export function createFieldSize() {
   const options = cellSizes;
-  const $cellSize = createStore(initCellSize);
+  const $cellSize = createStore({ size: initCellSize, scale: 1 });
 
   type FS = {
     height: number;
@@ -19,7 +19,7 @@ export function createFieldSize() {
 
   // @ts-ignore
   const $fieldSize: Store<FS> = $cellSize.map(
-    (size, _prev: { width: number; height: number } | undefined): FS => {
+    ({ size }, _prev: { width: number; height: number } | undefined): FS => {
       return {
         height: Math.ceil(vp.height / size),
         width: Math.ceil(vp.width / size),
@@ -36,21 +36,27 @@ export function createFieldSize() {
   document.addEventListener("wheel", (ev) => {
     threshold += ev.deltaY;
     if (threshold > 20) {
-      plus();
+      minus();
       threshold = 0;
     }
     if (threshold < -20) {
-      minus();
+      plus();
       threshold = 0;
     }
   });
 
   $cellSize
-    .on(minus, (size) => {
-      return Math.max(cellSizes[0], size - 1);
+    .on(minus, ({ size }) => {
+      return {
+        size: Math.max(cellSizes[0], size - 1),
+        scale: (size - 1) / size,
+      };
     })
-    .on(plus, (size) => {
-      return Math.min(cellSizes[1], size + 1);
+    .on(plus, ({ size }) => {
+      return {
+        size: Math.max(cellSizes[0], size + 1),
+        scale: (size + 1) / size,
+      };
     });
 
   const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
@@ -80,7 +86,7 @@ export function createHoveredCell() {
   return hoveredCell;
 }
 
-export function createDragTool($hoveredCell: Store<XY | null>, $focus: Store<XY>) {
+export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: Store<XY>) {
   const $initFocus = createStore<XY | null>(null);
   const $initHovered = createStore<XY | null>(null);
   const $startTime = createStore<number | null>(null);
@@ -104,7 +110,7 @@ export function createDragTool($hoveredCell: Store<XY | null>, $focus: Store<XY>
 
   $startTime.on(onMDown, () => Date.now());
 
-  sample({ source: $focus, clock: onMDown, filter: $isHovered, target: $initFocus });
+  sample({ source: $screenOffsetXY, clock: onMDown, filter: $isHovered, target: $initFocus });
   sample({ source: $hoveredCell, clock: onMDown, filter: $isHovered, target: $initHovered });
 
   sample({
@@ -117,7 +123,7 @@ export function createDragTool($hoveredCell: Store<XY | null>, $focus: Store<XY>
     filter: (stores) => !!stores.initHovered && !!stores.currentHovered && !!stores.startTime,
     fn: ({ currentHovered, initHovered, startTime }) => {
       return {
-        start: { x: currentHovered!.x, y: currentHovered!.y },
+        start: currentHovered!,
         finish: initHovered!,
         duration: Date.now() - startTime!,
       };
@@ -158,12 +164,4 @@ export function createDragTool($hoveredCell: Store<XY | null>, $focus: Store<XY>
   $startTime.reset(mouseEnd, $isNotHovered);
 
   return { focusMoved, initEvents, clicked };
-}
-
-export function createCursor() {
-  // todo Every events for mouse/touch should be here (not in the dragTool or hoverCell)
-  //   move without pressed
-  //   move with pressed
-  //   clicked
-  //   left cursor
 }

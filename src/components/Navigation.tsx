@@ -15,7 +15,7 @@ export function Navigation() {
       </button>
       <div style={{ position: "absolute", right: "150px", bottom: "20px", "z-index": 1 }}>
         <PlusMinus
-          value={cellSize()}
+          value={cellSize().size}
           onPlusClicked={fieldSize.plus}
           onMinusClicked={fieldSize.minus}
           range={fieldSize.options}
