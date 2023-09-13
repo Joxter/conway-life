@@ -13,7 +13,11 @@ import { onMount } from "solid-js";
 
 export function Field() {
   let vp = getWindowParams();
-  let [viewHoveredCells, viewLabels] = useUnit([$viewHoveredCells, $viewLabels]);
+  let [viewHoveredCells, viewLabels, cellSize] = useUnit([
+    $viewHoveredCells,
+    $viewLabels,
+    fieldSize.$cellSize,
+  ]);
 
   let can: HTMLCanvasElement;
 
@@ -57,7 +61,7 @@ export function Field() {
       class={css.field}
       style={{
         // @ts-ignore
-        "--cellSize": fieldSize.$cellSize.map((it) => it + "px"),
+        "--cellSize": cellSize() + "px",
         "--color1": Color1,
         "--color2": Color2,
       }}

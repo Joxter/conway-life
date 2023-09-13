@@ -131,21 +131,14 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
 export const $viewHoveredCells = combine(
   hoveredCell.$hoveredXY,
   fieldSize.$cellSize,
-  blueprints.currentBp, // todo FIX
-  (hovered, size, bp) => {
-    // if (hovered && bp) {
-    //   return [...bp].map(([coordsStr]) => {
-    //     const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
-    //     return {
-    //       y: (hovered.row + bpRow) * size + 'px',
-    //       x: (hovered.col + bpCol) * size + 'px',
-    //       // x: bpRow * size + 'px'
-    //     };
-    //   });
-    // }
-
+  (hovered, size) => {
     if (hovered) {
-      return [{ y: hovered.y * size + "px", x: hovered.x * size + "px" }];
+      return [
+        {
+          y: Math.floor(hovered.y / size) * size + "px", // todo fix
+          x: Math.floor(hovered.x / size) * size + "px",
+        },
+      ];
     }
     return [];
   },
