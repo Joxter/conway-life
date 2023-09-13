@@ -1,16 +1,16 @@
-export const Color1 = '#5583e5';
-export const Color2 = '#79e555';
+export const Color1 = "#5583e5";
+export const Color2 = "#79e555";
 
 export const cellSizes = [1, 40] as const;
 export const initCellSize = 5;
 
-export type ColRow = { col: number; row: number; };
+export type ColRow = { col: number; row: number };
 
 //                X → to left (col)
 //                Y ↓ to bottom (row)
-export type XY = { x: number; y: number; };
-export type FieldCell = 0 | 1 | 2;
-export type Field = { val: FieldCell; col: number; row: number; }[];
+export type XY = { x: number; y: number };
+export type FieldCell = 0 | 1;
+export type Field = { val: FieldCell; col: number; row: number }[];
 
 export type CoordsStr = `${number}|${number}`; // COL, ROW
 export type Coords = [number, number]; // COL, ROW

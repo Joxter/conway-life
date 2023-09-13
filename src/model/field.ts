@@ -50,10 +50,6 @@ export const $focus = createStore<XY>({ x: 0, y: 0 });
 export const resetFocus = createEvent<any>();
 export const focusToTheMiddle = createEvent<any>();
 
-export const $selectedColor = createStore<FieldCell>(1);
-export const colorSelected = createEvent<FieldCell>();
-$selectedColor.on(colorSelected, (_, color) => color);
-
 export const resetFieldPressed = createEvent<any>();
 
 export const dragTool = createDragTool(hoveredCell.$hoveredXY, $focus);
@@ -194,40 +190,23 @@ sample({
 sample({
   source: {
     faunaData: $faunaData,
-    color: $selectedColor,
     focus: $focus,
-    currentBp: blueprints.currentBp,
+    cellSize: fieldSize.$cellSize,
   },
   clock: dragTool.clicked,
-  fn: ({ color, faunaData, focus, currentBp }, { start }) => {
+  fn: ({ faunaData, focus, cellSize }, { start }) => {
     const newFauna = new Map(faunaData.fauna);
 
-    if (currentBp) {
-      // todo fix
-      // currentBp.forEach((color, coordsStr) => {
-      //   const [bpCol, bpRow] = coordsStrToNumbers(coordsStr);
-      //   const faunaX = col - focus.col + bpCol;
-      //   const faunaY = row - focus.row + bpRow;
-      //
-      //   newFauna.set(numbersToCoords(faunaX, faunaY), color);
-      // });
-    } else {
-      const faunaX = start.x - focus.x;
-      const faunaY = start.y - focus.y;
+    const faunaX = Math.floor((start.x - focus.x) / cellSize);
+    const faunaY = Math.floor((start.y - focus.y) / cellSize);
 
-      if (false) {
-        // used to be "shift" to force color instead of toggle
-        // newFauna.set(coords, color); // todo FIX
-      } else {
-        if (!newFauna.has(faunaX)) {
-          newFauna.set(faunaX, new Map());
-        }
-        if (newFauna.get(faunaX)!.get(faunaY)! === color) {
-          newFauna.get(faunaX)!.delete(faunaY);
-        } else {
-          newFauna.get(faunaX)!.set(faunaY, color);
-        }
-      }
+    if (!newFauna.has(faunaX)) {
+      newFauna.set(faunaX, new Map());
+    }
+    if (newFauna.get(faunaX)!.has(faunaY)) {
+      newFauna.get(faunaX)!.delete(faunaY);
+    } else {
+      newFauna.get(faunaX)!.set(faunaY, 1);
     }
 
     return { ...faunaData, fauna: newFauna };
