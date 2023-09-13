@@ -1,26 +1,39 @@
-import { createEvent, createStore, sample, split, Store } from 'effector';
-import { cellSizes, ColRow, initCellSize } from '../types';
-import { getRowColFromEvent, getWindowParams } from '../utils';
+import { createEvent, createStore, sample, split, Store } from "effector";
+import { cellSizes, initCellSize, XY } from "../types";
+import { getWindowParams } from "../utils";
 
 const vp = getWindowParams();
 
 export function createFieldSize() {
   const options = cellSizes;
   const $cellSize = createStore(initCellSize);
-  const $fieldSize = $cellSize.map((size, _prev: any) => {
-    return {
-      height: Math.ceil(vp.height / size),
-      width: Math.ceil(vp.width / size),
-      prevHeight: _prev && _prev.height as number,
-      prevWidth: _prev && _prev.width as number,
-    };
-  });
+
+  type FS = {
+    height: number;
+    width: number;
+    prevHeight: number;
+    prevWidth: number;
+  };
+
+  const $viewPortSize = createStore({ width: vp.width, height: vp.height });
+
+  // @ts-ignore
+  const $fieldSize: Store<FS> = $cellSize.map(
+    (size, _prev: { width: number; height: number } | undefined): FS => {
+      return {
+        height: Math.ceil(vp.height / size),
+        width: Math.ceil(vp.width / size),
+        prevHeight: (_prev && _prev.height) || Math.ceil(vp.height / size),
+        prevWidth: (_prev && _prev.width) || Math.ceil(vp.width / size),
+      };
+    },
+  );
 
   const plus = createEvent();
   const minus = createEvent();
 
   let threshold = 0;
-  document.addEventListener('wheel', (ev) => {
+  document.addEventListener("wheel", (ev) => {
     threshold += ev.deltaY;
     if (threshold > 20) {
       plus();
@@ -40,7 +53,7 @@ export function createFieldSize() {
       return Math.min(cellSizes[1], size + 1);
     });
 
-  const fieldSize = { options, $cellSize, $fieldSize, plus, minus };
+  const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
   return fieldSize;
 }
 
@@ -54,60 +67,36 @@ export function createELsaMode() {
 }
 
 export function createHoveredCell($cellSize: Store<number>) {
-  const fieldMouseMoved = createEvent<any>();
+  const fieldMouseMoved = createEvent<XY>();
   const fieldMouseLeaved = createEvent<any>();
 
   // todo add abs and relative ColRow here
-  const $cell = createStore<ColRow | null>(null, {
-    updateFilter: (newState, state) => {
-      if (
-        newState && state
-        && newState.row === state.row && newState.col === state.col
-      ) {
-        return false;
-      }
-      return true;
-    },
-  });
+  const $hoveredXY = createStore<XY | null>(null);
 
-  $cell.on(fieldMouseLeaved, () => null);
+  $hoveredXY.on(fieldMouseLeaved, () => null).on(fieldMouseMoved, (_, evData) => evData);
 
-  sample({
-    source: $cellSize,
-    clock: fieldMouseMoved,
-    fn: (size, evData) => {
-      return getRowColFromEvent(evData, size);
-    },
-    target: $cell,
-  });
-
-  const hoveredCell = { $cell, fieldMouseLeaved, fieldMouseMoved };
+  const hoveredCell = { $hoveredXY, fieldMouseLeaved, fieldMouseMoved };
 
   return hoveredCell;
 }
 
-export function createDragTool(
-  $hoveredCell: Store<ColRow | null>,
-  $focus: Store<ColRow>,
-) {
-  type ColRow = { col: number; row: number; };
-
-  const $initFocus = createStore<ColRow | null>(null);
-  const $initHovered = createStore<ColRow | null>(null);
+export function createDragTool($hoveredCell: Store<XY | null>, $focus: Store<XY>) {
+  const $initFocus = createStore<XY | null>(null);
+  const $initHovered = createStore<XY | null>(null);
   const $startTime = createStore<number | null>(null);
 
   const onMDown = createEvent<any>();
   const onMUp = createEvent<any>();
 
-  const mouseEnd = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
-  const clicked = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
-  const dragEnd = createEvent<{ start: ColRow; finish: ColRow; duration: number; }>();
+  const mouseEnd = createEvent<{ start: XY; finish: XY; duration: number }>();
+  const clicked = createEvent<{ start: XY; finish: XY; duration: number }>();
+  const dragEnd = createEvent<{ start: XY; finish: XY; duration: number }>();
 
-  const focusMoved = createEvent<{ col: number; row: number; }>();
+  const focusMoved = createEvent<XY>();
 
   function initEvents() {
-    document.addEventListener('mousedown', onMDown);
-    document.addEventListener('mouseup', onMUp);
+    document.addEventListener("mousedown", onMDown);
+    document.addEventListener("mouseup", onMUp);
   }
 
   const $isHovered = $hoveredCell.map((it) => it !== null);
@@ -128,7 +117,7 @@ export function createDragTool(
     filter: (stores) => !!stores.initHovered && !!stores.currentHovered && !!stores.startTime,
     fn: ({ currentHovered, initHovered, startTime }) => {
       return {
-        start: { col: currentHovered!.col, row: currentHovered!.row },
+        start: { x: currentHovered!.x, y: currentHovered!.y },
         finish: initHovered!,
         duration: Date.now() - startTime!,
       };
@@ -146,8 +135,8 @@ export function createDragTool(
     filter: (stores) => !!stores.initHovered && !!stores.initFocus && !!stores.currentHovered,
     fn: ({ currentHovered, initHovered, initFocus }) => {
       return {
-        col: initFocus!.col + (currentHovered!.col - initHovered!.col),
-        row: initFocus!.row + (currentHovered!.row - initHovered!.row),
+        x: initFocus!.x + (currentHovered!.x - initHovered!.x),
+        y: initFocus!.y + (currentHovered!.y - initHovered!.y),
       };
     },
     target: focusMoved,
@@ -156,7 +145,7 @@ export function createDragTool(
   split({
     source: mouseEnd,
     match: (ev) => {
-      return ev.start.col === ev.finish.col && ev.start.row === ev.finish.row ? 'click' : 'dragEnd';
+      return ev.start.x === ev.finish.x && ev.start.y === ev.finish.y ? "click" : "dragEnd";
     },
     cases: {
       click: clicked,

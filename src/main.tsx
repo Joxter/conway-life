@@ -1,32 +1,11 @@
 import { render } from "solid-js/web";
-// import { colorSelector } from './components/ColorSelector';
-// import { field } from './components/Field/Field';
-// import { history } from './components/History';
-// import { navigation } from './components/Navigation';
-// import { Perf } from './components/Perf';
-// import { Progress } from './components/Progress';
-// import { $exported, exportClicked, exportFieldChanged, importClicked } from './model/export';
 import { calculated, focusToTheMiddle, progress, startCalc } from "./model/field";
 import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
-import { rleToFauna } from "./utils";
 import { Navigation } from "./components/Navigation";
 import { Progress } from "./components/Progress";
 import { Perf } from "./components/Perf";
-
-setTimeout(() => {
-  calculated({
-    fauna: rleToFauna(`2o12b2o2bo4b2o2b2o$2o12bob2o6b2ob2o$15bo6bobo$15b3o4b2o2$15b3o4b2o$15b
-o6bobo$2o12bob2o6b2o$2o12b2o2bo4b2o7$31b3o3b3o$30bo3bobo3bo$29bo3b2ob
-2o3bo$29bob2o5b2obo$31bo7bo11$31b2o5b2o$31b2o5b2o!`),
-    time: 123,
-    size: 1234,
-  });
-  // @ts-ignore
-  progress.start();
-  focusToTheMiddle();
-}, 200);
 
 function App() {
   return (

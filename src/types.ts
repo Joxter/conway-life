@@ -5,6 +5,10 @@ export const cellSizes = [1, 40] as const;
 export const initCellSize = 5;
 
 export type ColRow = { col: number; row: number; };
+
+//                X → to left (col)
+//                Y ↓ to bottom (row)
+export type XY = { x: number; y: number; };
 export type FieldCell = 0 | 1 | 2;
 export type Field = { val: FieldCell; col: number; row: number; }[];
 

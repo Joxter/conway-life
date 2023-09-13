@@ -1,5 +1,5 @@
 import { combine, createEvent, createStore, sample } from "effector";
-import { ColRow, Fauna, Field, FieldCell } from "../types";
+import { ColRow, Fauna, Field, FieldCell, XY } from "../types";
 import { getMiddleOfFauna } from "../utils";
 import { createBlueprints } from "./blueprints";
 import { createDragTool, createELsaMode, createFieldSize, createHoveredCell } from "./fieldParams";
@@ -11,21 +11,24 @@ export const elsaMode = createELsaMode();
 export const hoveredCell = createHoveredCell(fieldSize.$cellSize);
 const blueprints = createBlueprints();
 
+let initFauna: Fauna = new Map();
+initFauna.set(0, new Map([[0, 1]]));
+
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
-  fauna: new Map(),
+  fauna: initFauna,
   time: 0,
   size: 0,
 });
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
   { col: 0, row: 0, label: "0,0" },
-  // { col: 10, row: 10, label: '10,10' },
-  // { col: 10, row: -10, label: '10,-10' },
-  // { col: -10, row: 10, label: '-10,10' },
-  // { col: -10, row: -10, label: '-10,-10' },
-  // { col: 10, row: 0, label: '10,0' },
-  // { col: 0, row: 10, label: '0,10' },
-  // { col: -10, row: 0, label: '-10,0' },
-  // { col: 0, row: -10, label: '0,-10' },
+  // { col: 10, row: 10, label: "10,10" },
+  // { col: 10, row: -10, label: "10,-10" },
+  // { col: -10, row: 10, label: "-10,10" },
+  // { col: -10, row: -10, label: "-10,-10" },
+  // { col: 10, row: 0, label: "10,0" },
+  // { col: 0, row: 10, label: "0,10" },
+  // { col: -10, row: 0, label: "-10,0" },
+  // { col: 0, row: -10, label: "0,-10" },
 ]);
 
 export const $isCalculating = createStore(false);
@@ -43,7 +46,7 @@ export const perf = createPerf(
   calculated.map((it) => it.time),
 );
 
-export const $focus = createStore<ColRow>({ col: 0, row: 0 });
+export const $focus = createStore<XY>({ x: 0, y: 0 });
 export const resetFocus = createEvent<any>();
 export const focusToTheMiddle = createEvent<any>();
 
@@ -53,38 +56,44 @@ $selectedColor.on(colorSelected, (_, color) => color);
 
 export const resetFieldPressed = createEvent<any>();
 
-export const dragTool = createDragTool(hoveredCell.$cell, $focus);
+export const dragTool = createDragTool(hoveredCell.$hoveredXY, $focus);
 
 export const $fieldTilesStyle = combine(elsaMode.$isOn, fieldSize.$cellSize, (isElsa, cellSize) => {
   return isElsa ? ("elsa" as const) : cellSize;
 });
 
+/*
 $focus.on(fieldSize.$fieldSize, (current, field) => {
   if (field.prevHeight && field.prevWidth) {
     return {
-      col: current.col + Math.round((field.width - field.prevWidth) / 2),
-      row: current.row + Math.round((field.height - field.prevHeight) / 2),
+      col: current.x + Math.round((field.width - field.prevWidth) / 2),
+      row: current.y + Math.round((field.height - field.prevHeight) / 2),
     };
   }
 });
+*/
 
 export const $field = combine(
   fieldSize.$fieldSize,
   $faunaData,
   $focus,
-  ({ width, height }, { fauna }, focus): Field => {
+  fieldSize.$cellSize,
+  fieldSize.$viewPortSize,
+  (fieldSize, { fauna }, focus, cellSize, viewPortSize): Field => {
+    // console.log(focus, cellSize, viewPortSize);
     const field: Field = [];
 
     fauna.forEach((colMap, absCols) => {
       colMap.forEach((val, absRow) => {
-        const col = absCols + focus.col;
-        const row = absRow + focus.row;
+        const col = absCols + focus.x / cellSize;
+        const row = absRow + focus.y / cellSize;
+        // console.log("cell", [absCols, absRow], [col, row]);
 
-        if (col >= 0 && col < width) {
-          if (row >= 0 && row < height) {
-            field.push({ col, row, val });
-          }
-        }
+        // if (col >= 0 && col < fieldSize.width) {
+        //   if (row >= 0 && row < fieldSize.height) {
+        field.push({ col, row, val });
+        //   }
+        // }
       });
     });
 
@@ -105,8 +114,8 @@ export const $labelsOnField = combine(
     const labelsOnField: { col: number; row: number; label: string }[] = [];
 
     labels.forEach(({ col, row, label }) => {
-      const _col = col + focus.col;
-      const _row = row + focus.row;
+      const _col = col + focus.x;
+      const _row = row + focus.y;
 
       if (_col >= 0 && _col < width) {
         if (_row >= 0 && _row < height) {
@@ -124,7 +133,7 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
 });
 
 export const $viewHoveredCells = combine(
-  hoveredCell.$cell,
+  hoveredCell.$hoveredXY,
   fieldSize.$cellSize,
   blueprints.currentBp, // todo FIX
   (hovered, size, bp) => {
@@ -140,7 +149,7 @@ export const $viewHoveredCells = combine(
     // }
 
     if (hovered) {
-      return [{ y: hovered.row * size + "px", x: hovered.col * size + "px" }];
+      return [{ y: hovered.y * size + "px", x: hovered.x * size + "px" }];
     }
     return [];
   },
@@ -167,18 +176,20 @@ $focus
   })
   .reset(resetFocus);
 
+/*
 sample({
   source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize },
   clock: focusToTheMiddle,
   fn: ({ faunaData, fieldSize }) => {
     const middle = getMiddleOfFauna(faunaData.fauna);
     return {
-      col: Math.round(fieldSize.width / 2 - middle.col),
-      row: Math.round(fieldSize.height / 2 - middle.row),
+      x: Math.round(fieldSize.width / 2 - middle.col),
+      y: Math.round(fieldSize.height / 2 - middle.row),
     };
   },
   target: $focus,
 });
+*/
 
 sample({
   source: {
@@ -188,7 +199,7 @@ sample({
     currentBp: blueprints.currentBp,
   },
   clock: dragTool.clicked,
-  fn: ({ color, faunaData, focus, currentBp }, { start: { col, row } }) => {
+  fn: ({ color, faunaData, focus, currentBp }, { start }) => {
     const newFauna = new Map(faunaData.fauna);
 
     if (currentBp) {
@@ -201,8 +212,8 @@ sample({
       //   newFauna.set(numbersToCoords(faunaX, faunaY), color);
       // });
     } else {
-      const faunaX = col - focus.col;
-      const faunaY = row - focus.row;
+      const faunaX = start.x - focus.x;
+      const faunaY = start.y - focus.y;
 
       if (false) {
         // used to be "shift" to force color instead of toggle

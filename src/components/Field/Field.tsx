@@ -61,7 +61,9 @@ export function Field() {
         "--color1": Color1,
         "--color2": Color2,
       }}
-      onMouseMove={hoveredCell.fieldMouseMoved}
+      onMouseMove={({ clientX, clientY }) =>
+        hoveredCell.fieldMouseMoved({ x: clientX, y: clientY })
+      }
       onMouseLeave={hoveredCell.fieldMouseLeaved}
     >
       <canvas width={vp.width} height={vp.height} ref={(el) => (can = el)}></canvas>

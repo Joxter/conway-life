@@ -70,16 +70,6 @@ function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell):
   return faunaInc;
 }
 
-export function getRowColFromEvent(
-  ev: { clientY: number; clientX: number; shiftKey: boolean },
-  cellSize: number,
-): { col: number; shift: boolean; row: number } {
-  let row = Math.floor(ev.clientY / cellSize);
-  let col = Math.floor(ev.clientX / cellSize);
-
-  return { row, col, shift: ev.shiftKey };
-}
-
 export function exportToSting(field: Field): string {
   return "";
   /*
