@@ -6,7 +6,7 @@ const vp = getWindowParams();
 
 export function createFieldSize() {
   const options = cellSizes;
-  const $cellSize = createStore({ size: initCellSize, scale: 1 });
+  const $cellSize = createStore({ size: initCellSize, prevSize: initCellSize });
 
   type FS = {
     height: number;
@@ -31,6 +31,7 @@ export function createFieldSize() {
 
   const plus = createEvent();
   const minus = createEvent();
+  // const setSizeDBG = createEvent<number>();
 
   let threshold = 0;
   document.addEventListener("wheel", (ev) => {
@@ -46,20 +47,25 @@ export function createFieldSize() {
   });
 
   $cellSize
+    // .on(setSizeDBG, ({ size }, newSize) => {
+    //   return { prevSize: size, size: newSize };
+    // })
     .on(minus, ({ size }) => {
+      let newSize = Math.max(cellSizes[0], size - 1);
       return {
-        size: Math.max(cellSizes[0], size - 1),
-        scale: (size - 1) / size,
+        size: newSize,
+        prevSize: size,
       };
     })
     .on(plus, ({ size }) => {
+      let newSize = Math.max(cellSizes[0], size + 1);
       return {
-        size: Math.max(cellSizes[0], size + 1),
-        scale: (size + 1) / size,
+        size: newSize,
+        prevSize: size,
       };
     });
 
-  const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
+  const fieldSize = { /*setSizeDBG,*/ options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
   return fieldSize;
 }
 
@@ -94,9 +100,10 @@ export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: 
   const onMDown = createEvent<any>();
   const onMUp = createEvent<any>();
 
-  const mouseEnd = createEvent<{ start: XY; finish: XY; duration: number }>();
-  const clicked = createEvent<{ start: XY; finish: XY; duration: number }>();
-  const dragEnd = createEvent<{ start: XY; finish: XY; duration: number }>();
+  const mouseEnd = createEvent<{ start: XY; finish: XY }>();
+  const clicked = createEvent<{ coords: XY }>();
+  const clickedRaw = createEvent<{ start: XY; finish: XY }>(); // todo remove and simplify
+  const dragEnd = createEvent<{ start: XY; finish: XY }>();
 
   const focusMoved = createEvent<XY>();
 
@@ -125,7 +132,6 @@ export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: 
       return {
         start: currentHovered!,
         finish: initHovered!,
-        duration: Date.now() - startTime!,
       };
     },
     target: mouseEnd,
@@ -154,9 +160,17 @@ export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: 
       return ev.start.x === ev.finish.x && ev.start.y === ev.finish.y ? "click" : "dragEnd";
     },
     cases: {
-      click: clicked,
+      click: clickedRaw,
       dragEnd: dragEnd,
     },
+  });
+
+  sample({
+    clock: clickedRaw,
+    fn: (ev) => {
+      return { coords: ev.start };
+    },
+    target: clicked,
   });
 
   $initFocus.reset(mouseEnd, $isNotHovered);

@@ -12,12 +12,22 @@ const blueprints = createBlueprints();
 
 let initFauna: Fauna = new Map();
 initFauna.set(0, new Map([[0, 1]]));
+// initFauna.set(58, new Map([[38, 1]]));
+
+// prettier-ignore
+initFauna.set(65, new Map([[29, 1], [18, 1],]));
+initFauna.set(61, new Map([[29, 1]]));
+// prettier-ignore
+initFauna.set(71, new Map([[29, 1], [18, 1],]));
+initFauna.set(76, new Map([[29, 1]]));
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
   fauna: initFauna,
   time: 0,
   size: 0,
 });
+
+// $faunaData.watch(console.log);
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
   { col: 0, row: 0, label: "0,0" },
   // { col: 10, row: 10, label: "10,10" },
@@ -47,27 +57,42 @@ export const perf = createPerf(
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 export const resetFocus = createEvent<any>();
+// export const setOffsetDBG = createEvent<XY>();
 export const focusToTheMiddle = createEvent<any>();
+
+// $screenOffsetXY.on(setOffsetDBG, (_, newOffset) => newOffset);
 
 export const resetFieldPressed = createEvent<any>();
 
 export const dragTool = createDragTool(hoveredCell.$hoveredXY, $screenOffsetXY);
 
+// $screenOffsetXY.watch((a) => console.log("screenOffsetXY", a));
+// fieldSize.$cellSize.watch((a) => console.log("cellSize", a));
+// hoveredCell.$hoveredXY.watch(console.log);
+
 sample({
   source: [$screenOffsetXY, hoveredCell.$hoveredXY] as const,
   clock: fieldSize.$cellSize,
-  fn: ([currentOffset, hovered], { scale }) => {
-    return currentOffset;
+  fn: ([currentOffset, hovered], { size, prevSize }) => {
+    // return currentOffset;
     // todo fix :(
     if (hovered) {
-      // @ts-ignore
-      return adjustOffset(currentOffset, hovered, scale);
+      let pivotCell = {
+        col: Math.floor((hovered.x - currentOffset.x) / prevSize),
+        row: Math.floor((hovered.y - currentOffset.y) / prevSize),
+      };
+
+      return adjustOffset(pivotCell, hovered, size);
     } else {
       let _center = getWindowParams();
       let center = { x: _center.width / 2, y: _center.height / 2 };
+      // let center = { x: 200, y: 150 };
 
-      console.log(scale);
-      return adjustOffset(currentOffset, center, scale);
+      let pivotCell = {
+        col: Math.floor((center.x - currentOffset.x) / prevSize),
+        row: Math.floor((center.y - currentOffset.y) / prevSize),
+      };
+      return adjustOffset(pivotCell, center, size);
     }
   },
   target: $screenOffsetXY,
@@ -187,15 +212,15 @@ sample({
 sample({
   source: {
     faunaData: $faunaData,
-    focus: $screenOffsetXY,
+    screenOffsetXY: $screenOffsetXY,
     cellSize: fieldSize.$cellSize,
   },
   clock: dragTool.clicked,
-  fn: ({ faunaData, focus, cellSize: { size } }, { start }) => {
+  fn: ({ faunaData, screenOffsetXY, cellSize: { size } }, { coords }) => {
     const newFauna = new Map(faunaData.fauna);
 
-    const faunaX = Math.floor((start.x - focus.x) / size);
-    const faunaY = Math.floor((start.y - focus.y) / size);
+    const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
+    const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size);
 
     if (!newFauna.has(faunaX)) {
       newFauna.set(faunaX, new Map());
