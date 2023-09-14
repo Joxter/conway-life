@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, sample } from "effector";
 import { Fauna, Field, XY } from "../types";
-import { adjustOffset, getWindowParams } from "../utils";
+import { adjustOffset, getMiddleOfFauna, getWindowParams, newFauna } from "../utils";
 import { createBlueprints } from "./blueprints";
 import { createDragTool, createFieldSize, createHoveredCell } from "./fieldParams";
 import { createPerf } from "./fps";
@@ -10,34 +10,23 @@ export const fieldSize = createFieldSize();
 export const hoveredCell = createHoveredCell();
 const blueprints = createBlueprints();
 
-let initFauna: Fauna = new Map();
-initFauna.set(0, new Map([[0, 1]]));
-// initFauna.set(58, new Map([[38, 1]]));
-
-// prettier-ignore
-initFauna.set(65, new Map([[29, 1], [18, 1],]));
-initFauna.set(61, new Map([[29, 1]]));
-// prettier-ignore
-initFauna.set(71, new Map([[29, 1], [18, 1],]));
-initFauna.set(76, new Map([[29, 1]]));
-
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
-  fauna: initFauna,
+  fauna: newFauna([]),
   time: 0,
   size: 0,
 });
-
 // $faunaData.watch(console.log);
+
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
   { col: 0, row: 0, label: "0,0" },
-  // { col: 10, row: 10, label: "10,10" },
-  // { col: 10, row: -10, label: "10,-10" },
-  // { col: -10, row: 10, label: "-10,10" },
-  // { col: -10, row: -10, label: "-10,-10" },
-  // { col: 10, row: 0, label: "10,0" },
-  // { col: 0, row: 10, label: "0,10" },
-  // { col: -10, row: 0, label: "-10,0" },
-  // { col: 0, row: -10, label: "0,-10" },
+  { col: 10, row: 10, label: "10,10" },
+  { col: 10, row: -10, label: "10,-10" },
+  { col: -10, row: 10, label: "-10,10" },
+  { col: -10, row: -10, label: "-10,-10" },
+  { col: 10, row: 0, label: "10,0" },
+  { col: 0, row: 10, label: "0,10" },
+  { col: -10, row: 0, label: "-10,0" },
+  { col: 0, row: -10, label: "0,-10" },
 ]);
 
 export const $isCalculating = createStore(false);
@@ -57,40 +46,30 @@ export const perf = createPerf(
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 export const resetFocus = createEvent<any>();
-// export const setOffsetDBG = createEvent<XY>();
 export const focusToTheMiddle = createEvent<any>();
-
-// $screenOffsetXY.on(setOffsetDBG, (_, newOffset) => newOffset);
 
 export const resetFieldPressed = createEvent<any>();
 
 export const dragTool = createDragTool(hoveredCell.$hoveredXY, $screenOffsetXY);
 
-// $screenOffsetXY.watch((a) => console.log("screenOffsetXY", a));
-// fieldSize.$cellSize.watch((a) => console.log("cellSize", a));
-// hoveredCell.$hoveredXY.watch(console.log);
-
 sample({
   source: [$screenOffsetXY, hoveredCell.$hoveredXY] as const,
   clock: fieldSize.$cellSize,
   fn: ([currentOffset, hovered], { size, prevSize }) => {
-    // return currentOffset;
-    // todo fix :(
     if (hovered) {
       let pivotCell = {
-        col: Math.floor((hovered.x - currentOffset.x) / prevSize),
-        row: Math.floor((hovered.y - currentOffset.y) / prevSize),
+        col: (hovered.x - currentOffset.x) / prevSize,
+        row: (hovered.y - currentOffset.y) / prevSize,
       };
 
       return adjustOffset(pivotCell, hovered, size);
     } else {
-      let _center = getWindowParams();
-      let center = { x: _center.width / 2, y: _center.height / 2 };
-      // let center = { x: 200, y: 150 };
+      let windowParams = getWindowParams();
+      let center = { x: windowParams.width / 2, y: windowParams.height / 2 };
 
       let pivotCell = {
-        col: Math.floor((center.x - currentOffset.x) / prevSize),
-        row: Math.floor((center.y - currentOffset.y) / prevSize),
+        col: (center.x - currentOffset.x) / prevSize,
+        row: (center.y - currentOffset.y) / prevSize,
       };
       return adjustOffset(pivotCell, center, size);
     }
@@ -105,14 +84,12 @@ export const $field = combine(
   fieldSize.$cellSize,
   fieldSize.$viewPortSize,
   (fieldSize, { fauna }, screenOffsetXY, { size: cellSize }, viewPortSize): Field => {
-    // console.log(focus, cellSize, viewPortSize);
     const field: Field = [];
 
     fauna.forEach((colMap, cellCol) => {
       colMap.forEach((val, cellRow) => {
         const col = cellCol * cellSize + screenOffsetXY.x;
         const row = cellRow * cellSize + screenOffsetXY.y;
-        // console.log("cell", [absCols, absRow], [col, row]);
 
         // if (col >= 0 && col < fieldSize.width) {
         //   if (row >= 0 && row < fieldSize.height) {
@@ -132,19 +109,20 @@ export const $stats = combine($field, $faunaData, (field, fauna) => {
 });
 
 export const $labelsOnField = combine(
-  fieldSize.$fieldSize,
   $labels,
+  fieldSize.$fieldSize,
+  fieldSize.$cellSize,
   $screenOffsetXY,
-  ({ width, height }, labels, focus): { col: number; row: number; label: string }[] => {
-    const labelsOnField: { col: number; row: number; label: string }[] = [];
+  (labels, { width, height }, { size }, focus): { col: number; row: number; label: string }[] => {
+    const labelsOnField: { x: number; y: number; label: string }[] = [];
 
     labels.forEach(({ col, row, label }) => {
-      const _col = col + focus.x;
-      const _row = row + focus.y;
+      const _col = col + focus.x / size;
+      const _row = row + focus.y / size;
 
       if (_col >= 0 && _col < width) {
         if (_row >= 0 && _row < height) {
-          labelsOnField.push({ col: _col, row: _row, label });
+          labelsOnField.push({ x: _col, y: _row, label });
         }
       }
     });
@@ -194,20 +172,18 @@ $screenOffsetXY
   })
   .reset(resetFocus);
 
-/*
 sample({
-  source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize },
+  source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize, cellSize: fieldSize.$cellSize },
   clock: focusToTheMiddle,
-  fn: ({ faunaData, fieldSize }) => {
+  fn: ({ faunaData, fieldSize, cellSize }) => {
     const middle = getMiddleOfFauna(faunaData.fauna);
     return {
-      x: Math.round(fieldSize.width / 2 - middle.col),
-      y: Math.round(fieldSize.height / 2 - middle.row),
+      x: (fieldSize.width / 2 - middle.col) * cellSize.size,
+      y: (fieldSize.height / 2 - middle.row) * cellSize.size,
     };
   },
   target: $screenOffsetXY,
 });
-*/
 
 sample({
   source: {

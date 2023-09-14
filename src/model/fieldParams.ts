@@ -31,7 +31,6 @@ export function createFieldSize() {
 
   const plus = createEvent();
   const minus = createEvent();
-  // const setSizeDBG = createEvent<number>();
 
   let threshold = 0;
   document.addEventListener("wheel", (ev) => {
@@ -47,9 +46,6 @@ export function createFieldSize() {
   });
 
   $cellSize
-    // .on(setSizeDBG, ({ size }, newSize) => {
-    //   return { prevSize: size, size: newSize };
-    // })
     .on(minus, ({ size }) => {
       let newSize = Math.max(cellSizes[0], size - 1);
       return {
@@ -65,7 +61,7 @@ export function createFieldSize() {
       };
     });
 
-  const fieldSize = { /*setSizeDBG,*/ options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
+  const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
   return fieldSize;
 }
 

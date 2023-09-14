@@ -4,29 +4,12 @@ import {
   $viewLabels,
   fieldSize,
   hoveredCell,
-  // setOffsetDBG,
 } from "../../model/field";
 import { Color1, Color2 } from "../../types";
 import { getWindowParams } from "../../utils";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { onMount } from "solid-js";
-
-/*
-let on = false;
-setInterval(() => {
-  on = !on;
-  return;
-
-  if (on) {
-    // fieldSize.setSizeDBG(4);
-    // setOffsetDBG({ x: -32, y: -2 });
-  } else {
-    // fieldSize.setSizeDBG(5);
-    // setOffsetDBG({ x: -90, y: -40 });
-  }
-}, 3000);
-*/
 
 export function Field() {
   let vp = getWindowParams();
@@ -81,7 +64,7 @@ export function Field() {
       class={css.field}
       style={{
         // @ts-ignore
-        "--cellSize": cellSize() + "px",
+        "--cellSize": cellSize().size + "px",
         "--color1": Color1,
         "--color2": Color2,
       }}

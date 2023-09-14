@@ -152,9 +152,22 @@ export function getWindowParams() {
 
 export function adjustOffset(pivotCell: ColRow, pivotXY: XY, sizeNew: number) {
   return {
-    x: -(pivotCell.col * sizeNew - pivotXY.x),
-    y: -(pivotCell.row * sizeNew - pivotXY.y),
+    x: pivotXY.x - pivotCell.col * sizeNew,
+    y: pivotXY.y - pivotCell.row * sizeNew,
   };
+}
+
+export function newFauna(colRows: ColRow[]): Fauna {
+  let fauna: Fauna = new Map();
+
+  colRows.forEach(({ col, row }) => {
+    if (!fauna.has(col)) {
+      fauna.set(col, new Map());
+    }
+    fauna.get(col)!.set(row, 1);
+  });
+
+  return fauna;
 }
 
 export function getMiddleOfFauna(fauna: Fauna) {
