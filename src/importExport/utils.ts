@@ -86,15 +86,40 @@ export function makeFaunaFromLexicon(input: string): Fauna {
   //
   // return result;
 }
+const DEAD = 'b';
+const LIVE = 'o';
+
+export function faunaToGrid(fauna: Fauna): string {
+  let res = '';
+
+  let maxX = 0;
+  let maxY = 0;
+
+  fauna.forEach((row, x) => {
+    if (x > maxX) maxX = x;
+    row.forEach((val, y) => {
+      if (y > maxY) maxY = y;
+    });
+  });
+
+  for (let y = 0; y <= maxY; y++) {
+    for (let x = 0; x <= maxX; x++) {
+      res += fauna.get(x)?.get(y) ? '0' : '.';
+    }
+    res += '\n';
+  }
+
+  return res.trim();
+}
 
 export function rleToFauna(rle: string): Fauna {
   let res: Fauna = new Map();
 
-  const dead = "b";
-  const live = "o";
-  const lineEnd = "$";
+  const dead = 'b';
+  const live = 'o';
+  const lineEnd = '$';
 
-  let parsedNum = "";
+  let parsedNum = '';
   let y = 0;
   let x = 0;
 
@@ -119,50 +144,116 @@ export function rleToFauna(rle: string): Fauna {
         y += parsedNum2;
         x = 0;
       }
-      parsedNum = "";
+      parsedNum = '';
     }
   }
 
   return res;
 }
 
-export function faunaToRle(fauna: Fauna): string {
-  // todo FIX
-  let res = "";
-  let lastY = 0;
-  let lastX = 0;
-  let lastVal = 0;
-
-  fauna.forEach((row, y) => {
-    if (y !== lastY) {
-      res += `${y - lastY}$`;
-      lastY = y;
-      lastX = 0;
-    }
-
-    row.forEach((val, x) => {
-      if (x !== lastX) {
-        if (lastVal > 1) {
-          res += lastVal;
-        }
-        lastVal = 0;
-        res += `b${x - lastX}`;
-        lastX = x;
-      }
-
-      if (val !== lastVal) {
-        if (lastVal > 1) {
-          res += lastVal;
-        }
-        lastVal = val;
-        res += val === 1 ? "o" : "b";
-      }
+function sortedEntries<T>(m: Map<number, T>): Array<[T, number]> {
+  return Array.from(m.keys())
+    .sort((a, b) => {
+      return a - b;
+    })
+    .map((y) => {
+      let row = m.get(y)!;
+      return [row, y];
     });
-  });
+}
 
-  if (lastVal > 1) {
-    res += lastVal;
+export function getReactOfFauna(fauna: Fauna): {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+} {
+  let top = 0;
+  let bottom = 0;
+  let left = 0;
+  let right = 0;
+
+  for (let [row, x] of sortedEntries(fauna)) {
+    for (let [val, y] of sortedEntries(row)) {
+      if (val) {
+        if (x < left) left = x;
+        if (x > right) right = x;
+        if (y < top) top = y;
+        if (y > bottom) bottom = y;
+      }
+    }
   }
 
+  return { top, bottom, left, right };
+}
+
+export function faunaToRle(fauna: Fauna): string {
+  let rect = getReactOfFauna(fauna);
+
+  let rectWidth = rect.right - rect.left + 1;
+  let rectHeight = rect.bottom - rect.top + 1;
+
+  let grid = Array(rectHeight)
+    .fill(0)
+    .map(() => {
+      return Array(rectWidth).fill(0);
+    });
+
+  for (let [row, y] of sortedEntries(fauna)) {
+    for (let [val, x] of sortedEntries(row)) {
+      grid[x - rect.left][y - rect.top] = 1;
+    }
+  }
+
+  return squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join('$')) + '!';
+
+  function squashRowToRle(row: (0 | 1)[]): string {
+    let res = '';
+    let lastVal = row[0];
+    let lastValCount = 1;
+
+    for (let i = 1; i < row.length; i++) {
+      let currVal = row[i];
+
+      if (lastVal === currVal) {
+        lastValCount++;
+        continue;
+      }
+      if (lastValCount > 1) {
+        res += lastValCount;
+      }
+      res += lastVal === 0 ? DEAD : LIVE;
+
+      lastVal = currVal;
+      lastValCount = 1;
+    }
+
+    if (lastVal === 1) {
+      if (lastValCount > 1) {
+        res += lastValCount;
+      }
+      res += LIVE;
+    }
+
+    return res;
+  }
+}
+
+function squashMultiplyDollarsInString(str: string): string {
+  let res = '';
+  let cnt = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    let currChar = str[i];
+
+    if (currChar != '$') {
+      if (cnt === 1) res += '$';
+      if (cnt > 1) res += cnt + '$';
+      res += currChar;
+      cnt = 0;
+    } else {
+      cnt++;
+    }
+  }
   return res;
 }
