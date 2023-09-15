@@ -114,7 +114,7 @@ export const $labelsOnField = combine(
   fieldSize.$cellSize,
   $screenOffsetXY,
   (labels, { width, height }, { size }, focus): { col: number; row: number; label: string }[] => {
-    const labelsOnField: { x: number; y: number; label: string }[] = [];
+    const labelsOnField: { col: number; row: number; label: string }[] = [];
 
     labels.forEach(({ col, row, label }) => {
       const _col = col + focus.x / size;
@@ -122,7 +122,7 @@ export const $labelsOnField = combine(
 
       if (_col >= 0 && _col < width) {
         if (_row >= 0 && _row < height) {
-          labelsOnField.push({ x: _col, y: _row, label });
+          labelsOnField.push({ col: _col, row: _row, label });
         }
       }
     });
@@ -142,7 +142,7 @@ export const $viewHoveredCells = combine(
     if (hovered) {
       return [
         {
-          y: Math.floor(hovered.y / size) * size + "px", // todo fix
+          y: Math.floor(hovered.y / size) * size + "px",
           x: Math.floor(hovered.x / size) * size + "px",
         },
       ];
