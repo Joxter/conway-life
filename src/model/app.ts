@@ -1,9 +1,9 @@
-import { sample } from 'effector';
-import { Fauna } from '../types';
-import { exportToSting, makeFaunaFromLexicon, rleToFauna } from '../utils';
-import { $exported, exportClicked, importClicked } from './export';
-import { $faunaData, $field, focusToTheMiddle, progress, resetFieldPressed } from './field';
-import { $history, addToHistory, historySelected, saveClicked } from './history';
+import { sample } from "effector";
+import { Fauna } from "../types";
+import { $exported, exportClicked, importClicked } from "./export";
+import { $faunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
+import { $history, addToHistory, historySelected, saveClicked } from "./history";
+import { faunaToRle, rleToFauna } from "../importExport/utils";
 
 sample({
   source: $faunaData,
@@ -28,15 +28,15 @@ sample({
   target: progress.reset,
 });
 
-sample({ // todo temp hack
+sample({
   clock: historySelected,
   target: focusToTheMiddle,
 });
 
 sample({
-  source: $field,
+  source: $faunaData,
   clock: exportClicked,
-  fn: exportToSting,
+  fn: ({ fauna }) => faunaToRle(fauna),
   target: $exported,
 });
 

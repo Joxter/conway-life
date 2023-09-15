@@ -1,8 +1,8 @@
-import { combine, createEffect, createEvent, createStore, sample } from 'effector';
-import { Fauna } from '../types';
-import { getSavedFromLS, saveToLS } from '../utils';
+import { combine, createEffect, createEvent, createStore, sample } from "effector";
+import { Fauna } from "../types";
+import { getSavedFromLS, saveToLS } from "../importExport/utils";
 
-export const $history = createStore<{ fauna: Fauna; name: string; }[]>(getSavedFromLS() || []);
+export const $history = createStore<{ fauna: Fauna; name: string }[]>(getSavedFromLS() || []);
 
 export const $itemsToRemove = createStore<Set<string>>(new Set());
 
@@ -18,7 +18,8 @@ $itemsToRemove
     let newSet = new Set(set);
     newSet.add(itemName);
     return newSet;
-  }).on(restoreClicked, (set, itemName) => {
+  })
+  .on(restoreClicked, (set, itemName) => {
     let newSet = new Set(set);
     newSet.delete(itemName);
     return newSet;
@@ -26,9 +27,9 @@ $itemsToRemove
 
 $history
   .on(addToHistory, (state, fauna) => {
-    let lastName = state[state.length - 1]?.name || '0';
+    let lastName = state[state.length - 1]?.name || "0";
     let match = lastName.match(/(\d+)/);
-    let lastId = match && +match[1] || 0;
+    let lastId = (match && +match[1]) || 0;
 
     return [...state, { fauna, name: `save #${lastId + 1}` }];
   })
@@ -38,12 +39,12 @@ $history
 
 sample({
   source: $history,
-  target: createEffect<{ fauna: Fauna; name: string; }[], any, any>((field) => {
+  target: createEffect<{ fauna: Fauna; name: string }[], any, any>((field) => {
     saveToLS(field);
   }),
 });
 
-window.addEventListener('beforeunload', () => {
+window.addEventListener("beforeunload", () => {
   // todo rewrite
   removeFromHistory([...$itemsToRemove.getState()]);
 });
