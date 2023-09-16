@@ -1,4 +1,3 @@
-// @ts-ignore
 import { expect, test, describe } from "bun:test";
 import { adjustOffset } from "./utils";
 

@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+/// <reference lib="dom.iterable" />
 import { render } from "solid-js/web";
 import { calculated, resetFieldPressed, startCalc } from "./model/field";
 import "./model/app";
