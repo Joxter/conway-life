@@ -10,7 +10,7 @@ export function Perf() {
   return (
     <div
       class={css.whiteBox}
-      style={{ position: "absolute", display: "grid", bottom: "10px", left: "130px" }}
+      style={{ position: "absolute", display: "grid", top: "10px", right: "10px" }}
     >
       <span>FPS: {fps()}</span>
       <span>STEPS PER SEC: {stepsPerSec()}</span>

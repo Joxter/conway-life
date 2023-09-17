@@ -78,12 +78,11 @@ sample({
 });
 
 export const $field = combine(
-  fieldSize.$fieldSize,
   $faunaData,
   $screenOffsetXY,
   fieldSize.$cellSize,
   fieldSize.$viewPortSize,
-  (fieldSize, { fauna }, screenOffsetXY, { size: cellSize }, viewPortSize): Field => {
+  ({ fauna }, screenOffsetXY, { size: cellSize }, viewPortSize): Field => {
     const field: Field = [];
 
     fauna.forEach((colMap, cellCol) => {
@@ -91,11 +90,11 @@ export const $field = combine(
         const col = cellCol * cellSize + screenOffsetXY.x;
         const row = cellRow * cellSize + screenOffsetXY.y;
 
-        // if (col >= 0 && col < fieldSize.width) {
-        //   if (row >= 0 && row < fieldSize.height) {
-        field.push({ col, row, val });
-        //   }
-        // }
+        if (col >= 0 && col < viewPortSize.width) {
+          if (row >= 0 && row < viewPortSize.height) {
+            field.push([col, row]);
+          }
+        }
       });
     });
 

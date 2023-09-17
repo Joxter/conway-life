@@ -30,9 +30,12 @@ export function Field() {
         return;
       }
 
-      let { size, field } = $viewField.getState();
+      let {
+        size: { size },
+        field,
+      } = $viewField.getState();
       // @ts-ignore
-      let ctx = can.getContext("2d");
+      const ctx = can.getContext("2d");
       if (!ctx) {
         console.warn("no context");
         return;
@@ -44,11 +47,16 @@ export function Field() {
 
       ctx.beginPath();
 
-      field.forEach((c) => {
-        if (ctx) {
-          ctx.rect(c.col, c.row, size.size, size.size);
-        }
-      });
+      if (size > 10) {
+        field.forEach((c) => {
+          ctx.rect(c[0] + 1, c[1] + 1, size - 1, size - 1);
+        });
+      } else {
+        field.forEach((c) => {
+          ctx.rect(c[0], c[1], size, size);
+        });
+      }
+
       ctx.fill();
 
       requestAnimationFrame(render);
