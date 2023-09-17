@@ -86,11 +86,11 @@ export function makeFaunaFromLexicon(input: string): Fauna {
   //
   // return result;
 }
-const DEAD = 'b';
-const LIVE = 'o';
+const DEAD = "b";
+const LIVE = "o";
 
 export function faunaToGrid(fauna: Fauna): string {
-  let res = '';
+  let res = "";
 
   let maxX = 0;
   let maxY = 0;
@@ -104,9 +104,9 @@ export function faunaToGrid(fauna: Fauna): string {
 
   for (let y = 0; y <= maxY; y++) {
     for (let x = 0; x <= maxX; x++) {
-      res += fauna.get(x)?.get(y) ? '0' : '.';
+      res += fauna.get(x)?.get(y) ? "0" : ".";
     }
-    res += '\n';
+    res += "\n";
   }
 
   return res.trim();
@@ -115,11 +115,11 @@ export function faunaToGrid(fauna: Fauna): string {
 export function rleToFauna(rle: string): Fauna {
   let res: Fauna = new Map();
 
-  const dead = 'b';
-  const live = 'o';
-  const lineEnd = '$';
+  const dead = "b";
+  const live = "o";
+  const lineEnd = "$";
 
-  let parsedNum = '';
+  let parsedNum = "";
   let y = 0;
   let x = 0;
 
@@ -144,7 +144,7 @@ export function rleToFauna(rle: string): Fauna {
         y += parsedNum2;
         x = 0;
       }
-      parsedNum = '';
+      parsedNum = "";
     }
   }
 
@@ -168,10 +168,10 @@ export function getReactOfFauna(fauna: Fauna): {
   left: number;
   right: number;
 } {
-  let top = 0;
-  let bottom = 0;
-  let left = 0;
-  let right = 0;
+  let top = Infinity;
+  let bottom = -Infinity;
+  let left = Infinity;
+  let right = -Infinity;
 
   for (let [row, x] of sortedEntries(fauna)) {
     for (let [val, y] of sortedEntries(row)) {
@@ -199,16 +199,17 @@ export function faunaToRle(fauna: Fauna): string {
       return Array(rectWidth).fill(0);
     });
 
-  for (let [row, y] of sortedEntries(fauna)) {
-    for (let [val, x] of sortedEntries(row)) {
-      grid[x - rect.left][y - rect.top] = 1;
+  for (let [row, x] of sortedEntries(fauna)) {
+    for (let [val, y] of sortedEntries(row)) {
+      grid[y - rect.top][x - rect.left] = 1;
     }
   }
 
-  return squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join('$')) + '!';
+  let res = squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join("$")) + "!";
 
+  return res;
   function squashRowToRle(row: (0 | 1)[]): string {
-    let res = '';
+    let res = "";
     let lastVal = row[0];
     let lastValCount = 1;
 
@@ -240,15 +241,15 @@ export function faunaToRle(fauna: Fauna): string {
 }
 
 function squashMultiplyDollarsInString(str: string): string {
-  let res = '';
+  let res = "";
   let cnt = 0;
 
   for (let i = 0; i < str.length; i++) {
     let currChar = str[i];
 
-    if (currChar != '$') {
-      if (cnt === 1) res += '$';
-      if (cnt > 1) res += cnt + '$';
+    if (currChar != "$") {
+      if (cnt === 1) res += "$";
+      if (cnt > 1) res += cnt + "$";
       res += currChar;
       cnt = 0;
     } else {

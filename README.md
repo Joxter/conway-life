@@ -1,29 +1,31 @@
 # Game of Life
 
 ## TODO
-- [x] (WIP) add presets by with 1 click
-- [ ] (WIP) better scale:
-    - [x] (WIP) "+" and "-" and with center in the middle of the screen
-    - [x] (WIP) scale on scroll
-- [ ] progress improvements:
-    - [x] play/pause
-    - [ ] different speed
-    - [ ] restart (restore to 0)
-    - [ ] back to N steps
-- [ ] tools:
-    - [x] toggle one cell
-    - [ ] draw pen
-    - [ ] add undo/redo
-    - [ ] area to focus
-    - [ ] ??? a line, selections to move/remove
-- [x] canvas render
-- [ ] add keyboard support
+- [ ] save to local store
 - [ ] (WIP) import/export blueprints from [conwaylife.com](https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm)
+- [ ] mobile support
+  - [ ] proper scroll and toggle 
+- [ ] progress improvements:
+  - [x] play/pause
+  - [x] (WIP) different speed
+  - [ ] restart (restore to 0)
+- [ ] back to N steps
+- [ ] tools:
+  - [x] toggle one cell
+  - [ ] draw pen
+  - [ ] add undo/redo
+  - [ ] area to focus
+  - [ ] ??? a line, selections to move/remove
+- [ ] add keyboard support
+- [x] better scale:
+  - [x] "+" and "-" and with center in the middle of the screen
+  - [x] scale on scroll
+- [x] canvas render
 - [x] ??? refactoring
-    - [ ] store only live cells
-    - [ ] recalculate only live cells
-    - [x] boundaryless mode
-    - [ ] fix history (save only live cells, update types)
+  - [ ] store only live cells
+  - [ ] recalculate only live cells
+  - [x] boundaryless mode
+  - [ ] fix history (save only live cells, update types)
 - [x] refactoring navigation (move by mouse)
 - [x] safe delete
 - [x] better "reset focus" focus to the center of paint

@@ -22,6 +22,7 @@ function App() {
           position: "absolute",
           width: "100%",
           "background-color": "rgba(255,255,255, 0.9)",
+          "border-bottom": "1px solid #ccc",
         }}
       >
         <h1>Game of Life</h1>
@@ -38,15 +39,14 @@ function App() {
       </button>
 
       <div style={{ position: "absolute", bottom: "50px", left: "20px" }}>
-        <button onClick={exportClicked}>Export (WIP)</button>
+        <button onClick={exportClicked}>Export</button>
         <button onClick={importClicked}>Import</button>
         <br />
         <textarea
           onChange={(ev) => exportFieldChanged(ev.target.value)}
           style={{ "font-size": "8px", width: "100%", height: "100px", "line-height": 1 }}
-        >
-          {exported()}
-        </textarea>
+          value={exported()}
+        ></textarea>
       </div>
     </div>
   );
