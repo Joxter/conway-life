@@ -5,7 +5,7 @@ import {
   fieldSize,
   hoveredCell,
 } from "../../model/field";
-import { Color1, Color2 } from "../../types";
+import { Color1 } from "../../types";
 import { getWindowParams } from "../../utils";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
@@ -49,10 +49,6 @@ export function Field() {
           ctx.rect(c.col, c.row, size.size, size.size);
         }
       });
-
-      let { width, height } = getWindowParams();
-
-      ctx.roundRect(width / 2 - 6, height / 2 - 6, 12, 12, 10);
       ctx.fill();
 
       requestAnimationFrame(render);
@@ -66,7 +62,6 @@ export function Field() {
         // @ts-ignore
         "--cellSize": cellSize().size + "px",
         "--color1": Color1,
-        "--color2": Color2,
       }}
       onMouseMove={({ clientX, clientY }) =>
         hoveredCell.fieldMouseMoved({ x: clientX, y: clientY })

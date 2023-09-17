@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, sample } from "effector";
 import { Fauna, Field, XY } from "../types";
-import { adjustOffset, getMiddleOfFauna, getWindowParams, newFauna } from "../utils";
+import { adjustOffset, getMiddleOfFauna, getWindowParams, newFauna, newMakeGo } from "../utils";
 import { createBlueprints } from "./blueprints";
 import { createDragTool, createFieldSize, createHoveredCell } from "./fieldParams";
 import { createPerf } from "./fps";
@@ -18,15 +18,15 @@ export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number
 // $faunaData.watch(console.log);
 
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
-  { col: 0, row: 0, label: "0,0" },
-  { col: 10, row: 10, label: "10,10" },
-  { col: 10, row: -10, label: "10,-10" },
-  { col: -10, row: 10, label: "-10,10" },
-  { col: -10, row: -10, label: "-10,-10" },
-  { col: 10, row: 0, label: "10,0" },
-  { col: 0, row: 10, label: "0,10" },
-  { col: -10, row: 0, label: "-10,0" },
-  { col: 0, row: -10, label: "0,-10" },
+  // { col: 0, row: 0, label: "0,0" },
+  // { col: 10, row: 10, label: "10,10" },
+  // { col: 10, row: -10, label: "10,-10" },
+  // { col: -10, row: 10, label: "-10,10" },
+  // { col: -10, row: -10, label: "-10,-10" },
+  // { col: 10, row: 0, label: "10,0" },
+  // { col: 0, row: 10, label: "0,10" },
+  // { col: -10, row: 0, label: "-10,0" },
+  // { col: 0, row: -10, label: "0,-10" },
 ]);
 
 export const $isCalculating = createStore(false);
@@ -163,6 +163,12 @@ sample({
   fn: (it) => it.fauna,
   target: startCalc,
 });
+// sample({
+//   source: $faunaData,
+//   clock: progress.gameTick,
+//   fn: (it) => newMakeGo(it.fauna),
+//   target: calculated,
+// });
 
 $faunaData.on(calculated, (_, it) => it).reset(resetFieldPressed);
 

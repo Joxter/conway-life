@@ -1,8 +1,4 @@
 export const Color1 = "#5583e5";
-export const Color2 = "#79e555";
-
-export const cellSizes = [1, 100] as const;
-export const initCellSize = 10;
 
 export type ColRow = { col: number; row: number };
 

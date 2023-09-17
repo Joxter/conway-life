@@ -1,11 +1,14 @@
 import { createEvent, createStore, sample, split, Store } from "effector";
-import { cellSizes, initCellSize, XY } from "../types";
-import { getWindowParams } from "../utils";
+import { XY } from "../types";
+import { getStrFromLS, getWindowParams, setStrToLS } from "../utils";
 
 const vp = getWindowParams();
 
 export function createFieldSize() {
-  const options = cellSizes;
+  const lsCellSizeName = "cellSize";
+  const options = [1, 100] as const;
+
+  let initCellSize = +getStrFromLS(lsCellSizeName, "10") || 10;
   const $cellSize = createStore({ size: initCellSize, prevSize: initCellSize });
 
   type FS = {
@@ -47,19 +50,23 @@ export function createFieldSize() {
 
   $cellSize
     .on(minus, ({ size }) => {
-      let newSize = Math.max(cellSizes[0], size - 1);
+      let newSize = Math.max(options[0], size - 1);
       return {
         size: newSize,
         prevSize: size,
       };
     })
     .on(plus, ({ size }) => {
-      let newSize = Math.max(cellSizes[0], size + 1);
+      let newSize = Math.max(options[0], size + 1);
       return {
         size: newSize,
         prevSize: size,
       };
     });
+
+  $cellSize.watch((val) => {
+    setStrToLS(lsCellSizeName, String(val.size));
+  });
 
   const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
   return fieldSize;

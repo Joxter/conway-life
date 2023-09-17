@@ -29,11 +29,6 @@ sample({
 });
 
 sample({
-  clock: historySelected,
-  target: focusToTheMiddle,
-});
-
-sample({
   source: $faunaData,
   clock: exportClicked,
   fn: ({ fauna }) => faunaToRle(fauna),
@@ -47,4 +42,9 @@ sample({
     return { fauna: rleToFauna(str), time: 0, size: 0 };
   },
   target: $faunaData,
+});
+
+sample({
+  clock: [historySelected, importClicked],
+  target: focusToTheMiddle,
 });

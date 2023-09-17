@@ -1,11 +1,12 @@
-import { combine, createEvent, createStore, merge, sample, Store } from 'effector';
-import { interval } from 'patronum';
-import { Fauna } from '../types';
+import { combine, createEvent, createStore, merge, sample, Store } from "effector";
+import { interval } from "patronum";
+import { Fauna } from "../types";
+import { getStrFromLS, setStrToLS } from "../utils";
 
-export function createProgress(
-  $fauna: Store<Fauna>,
-  $isCalculating: Store<boolean>,
-) {
+export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boolean>) {
+  const lsStepsPerSecName = "expectedStepsPerSec";
+  let initSteps = +getStrFromLS(lsStepsPerSecName, "10") || 10;
+
   const gameTick = createEvent<any>();
 
   const start = createEvent<any>();
@@ -18,8 +19,10 @@ export function createProgress(
   const $isRunning = createStore(false);
   const $currentStep = createStore(0);
 
-  const speedRange = [1, 60] as const;
-  const $expectedStepsPerSec = createStore(10);
+  const speedRange = [1, 200] as const;
+
+  const $expectedStepsPerSec = createStore(initSteps);
+
   const $stepTimeout = $expectedStepsPerSec.map((it) => 1000 / it);
   const incExpectedStepsPerSec = createEvent();
   const decExpectedStepsPerSec = createEvent();
@@ -54,20 +57,33 @@ export function createProgress(
 
   $expectedStepsPerSec
     .on(incExpectedStepsPerSec, (speed) => {
-      return Math.min(speed + 5, speedRange[1]);
+      if (speed === 1) {
+        return 5;
+      }
+      let newSpeed = speed + 5;
+      if (newSpeed > speedRange[1]) {
+        return speedRange[1];
+      }
+      return newSpeed;
     })
     .on(decExpectedStepsPerSec, (speed) => {
-      return Math.max(speed - 5, speedRange[0]);
-    })
-    .reset(reset);
+      let newSpeed = speed - 5;
+      if (newSpeed < 1) {
+        return 1;
+      }
+      return newSpeed;
+    });
 
-  $startFauna
-    .on(reset, () => null);
+  $startFauna.on(reset, () => null);
 
   $currentStep
     .on(gameTick, (cnt) => cnt + 1)
     .on(stop, () => 0)
     .reset(reset);
+
+  $expectedStepsPerSec.watch((val) => {
+    setStrToLS(lsStepsPerSecName, String(val));
+  });
 
   return {
     $currentStep,

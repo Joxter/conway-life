@@ -121,3 +121,21 @@ export function getMiddleOfFauna(fauna: Fauna) {
     row: Math.round(row / totalSize),
   };
 }
+
+export function getStrFromLS(key: string, fallback: string): string {
+  try {
+    let val = localStorage.getItem(key);
+    return val === null ? fallback : val;
+  } catch (e) {
+    console.error(e);
+    return fallback;
+  }
+}
+
+export function setStrToLS(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    console.error(e);
+  }
+}
