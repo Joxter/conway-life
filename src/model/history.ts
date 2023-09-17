@@ -1,56 +1,85 @@
-import { combine, createEffect, createEvent, createStore, sample } from "effector";
+import { createEffect, createEvent, createStore, sample } from "effector";
 import { Fauna } from "../types";
-import { getSavedFromLS, saveToLS } from "../importExport/utils";
+import { faunaToRle, rleToFauna } from "../importExport/utils";
 
-export const $history = createStore<{ fauna: Fauna; name: string }[]>(getSavedFromLS() || []);
+type HistoryItem = {
+  fauna: Fauna;
+  name: string;
+  removed: boolean;
+};
 
-export const $itemsToRemove = createStore<Set<string>>(new Set());
+export const $history = createStore<HistoryItem[]>(getSavedFromLS() || []);
 
 export const addToHistory = createEvent<Fauna>();
 export const removeClicked = createEvent<string>();
 export const restoreClicked = createEvent<string>();
-const removeFromHistory = createEvent<string[]>();
 export const historySelected = createEvent<string>();
 export const saveClicked = createEvent<any>();
 
-$itemsToRemove
-  .on(removeClicked, (set, itemName) => {
-    let newSet = new Set(set);
-    newSet.add(itemName);
-    return newSet;
-  })
-  .on(restoreClicked, (set, itemName) => {
-    let newSet = new Set(set);
-    newSet.delete(itemName);
-    return newSet;
-  });
-
 $history
   .on(addToHistory, (state, fauna) => {
-    let lastName = state[state.length - 1]?.name || "0";
-    let match = lastName.match(/(\d+)/);
-    let lastId = (match && +match[1]) || 0;
+    let uniqId = 0;
 
-    return [...state, { fauna, name: `save #${lastId + 1}` }];
+    while (!!state.find((it) => it.name === `save #${uniqId}`)) {
+      uniqId++;
+    }
+
+    return [...state, { fauna, name: `save #${uniqId}`, removed: false }];
   })
-  .on(removeFromHistory, (state, names) => {
-    return state.filter((it) => !names.includes(it.name));
+  .on(removeClicked, (state, name) => {
+    return state.map((it) => {
+      if (it.name === name) {
+        return { ...it, removed: true };
+      }
+      return it;
+    });
+  })
+  .on(restoreClicked, (state, name) => {
+    return state.map((it) => {
+      if (it.name === name) {
+        return { ...it, removed: false };
+      }
+      return it;
+    });
   });
 
 sample({
   source: $history,
-  target: createEffect<{ fauna: Fauna; name: string }[], any, any>((field) => {
-    saveToLS(field);
+  target: createEffect<HistoryItem[], any, any>((field) => {
+    saveFaunasToLS("history", field);
   }),
 });
 
-window.addEventListener("beforeunload", () => {
-  // todo rewrite
-  removeFromHistory([...$itemsToRemove.getState()]);
-});
+export function saveFaunasToLS(name: string, history: HistoryItem[]) {
+  let res: { rle: string; name: string }[] = history
+    .filter((it) => it.removed)
+    .map(({ name, fauna }) => {
+      return { rle: faunaToRle(fauna), name };
+    });
+  localStorage.setItem(name, JSON.stringify(res));
+}
 
-export const $historyView = combine($history, $itemsToRemove, (history, itemsToRemove) => {
-  return history.map((it) => {
-    return { ...it, toRemove: itemsToRemove.has(it.name) };
-  });
-});
+export function getSavedFromLS(): {
+  fauna: Fauna;
+  name: string;
+  removed: boolean;
+}[] {
+  try {
+    // @ts-ignore
+    let saved: { rle: string; name: string }[] =
+      JSON.parse(localStorage.getItem("history") || "null") || [];
+
+    let result = saved.map(({ rle, name }) => {
+      return {
+        fauna: rleToFauna(rle),
+        name,
+        removed: false,
+      };
+    });
+
+    return result;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}

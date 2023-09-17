@@ -1,4 +1,4 @@
-import { ColRow, Coords, CoordsStr, Fauna, FaunaInc, FieldCell, XY } from "./types";
+import { ColRow, Coords, Fauna, FaunaInc, FieldCell, XY } from "./types";
 
 function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -68,11 +68,6 @@ function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell):
   });
 
   return faunaInc;
-}
-
-function coordsStrToNumbers(coords: CoordsStr): [number, number] {
-  const [col, row] = coords.split("|");
-  return [+col, +row];
 }
 
 export function getWindowParams() {

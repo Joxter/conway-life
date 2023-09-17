@@ -1,67 +1,4 @@
-import { CoordsStr, Fauna, Field, SavedFauna } from "../types";
-
-export function exportToSting(field: Field): string {
-  return "";
-  /*
-  let firstLive: number | null = null;
-  let lastLive: number | null = null;
-
-  const squash = field.map((row, i) => {
-    const notDead = row.includes(1) || row.includes(2);
-    if (firstLive === null && notDead) firstLive = i;
-    if (notDead) lastLive = i;
-
-    return row.map((it) => +it).join('');
-  });
-
-  if (firstLive === null || lastLive === null) {
-    return '';
-  }
-
-  return squash.slice(firstLive, lastLive + 1).join('\n');
-  */
-}
-
-export function saveToLS(history: { fauna: Fauna; name: string }[]) {
-  console.warn("TODO saveToLS");
-  return;
-
-  // let res: { fauna: SavedFauna; name: string; }[] = history.map(({ name, fauna }) => {
-  //   let savedF: SavedFauna = [...fauna.entries()];
-  //   return { fauna: savedF, name };
-  // });
-  // localStorage.setItem('history', JSON.stringify(res));
-}
-
-function coordsStrToNumbers(coords: CoordsStr): [number, number] {
-  const [col, row] = coords.split("|");
-  return [+col, +row];
-}
-
-export function getSavedFromLS(): { fauna: Fauna; name: string }[] {
-  try {
-    // @ts-ignore
-    let saved: { fauna: SavedFauna; name: string }[] =
-      JSON.parse(localStorage.getItem("history") || "null") || [];
-
-    let result: { fauna: Fauna; name: string }[] = saved.map(({ fauna: savedF, name }) => {
-      let fauna: Fauna = new Map();
-      savedF.forEach(([coords, val]) => {
-        const [col, row] = coordsStrToNumbers(coords);
-        if (!fauna.has(col)) {
-          fauna.set(col, new Map());
-        }
-        fauna.get(col)!.set(row, val);
-      });
-      return { fauna, name };
-    });
-
-    return result;
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
-}
+import { Fauna } from "../types";
 
 /*
  *    .OO..
@@ -151,14 +88,14 @@ export function rleToFauna(rle: string): Fauna {
   return res;
 }
 
-function sortedEntries<T>(m: Map<number, T>): Array<[T, number]> {
+function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
   return Array.from(m.keys())
     .sort((a, b) => {
       return a - b;
     })
     .map((y) => {
       let row = m.get(y)!;
-      return [row, y];
+      return [y, row];
     });
 }
 
@@ -173,14 +110,12 @@ export function getReactOfFauna(fauna: Fauna): {
   let left = Infinity;
   let right = -Infinity;
 
-  for (let [row, x] of sortedEntries(fauna)) {
-    for (let [val, y] of sortedEntries(row)) {
-      if (val) {
-        if (x < left) left = x;
-        if (x > right) right = x;
-        if (y < top) top = y;
-        if (y > bottom) bottom = y;
-      }
+  for (let [x, row] of fauna.entries()) {
+    for (let [y, val] of row.entries()) {
+      if (x < left) left = x;
+      if (x > right) right = x;
+      if (y < top) top = y;
+      if (y > bottom) bottom = y;
     }
   }
 
@@ -199,8 +134,8 @@ export function faunaToRle(fauna: Fauna): string {
       return Array(rectWidth).fill(0);
     });
 
-  for (let [row, x] of sortedEntries(fauna)) {
-    for (let [val, y] of sortedEntries(row)) {
+  for (let [x, row] of fauna.entries()) {
+    for (let [y, val] of row.entries()) {
       grid[y - rect.top][x - rect.left] = 1;
     }
   }

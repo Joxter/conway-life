@@ -10,6 +10,7 @@ import { Progress } from "./components/Progress";
 import { Perf } from "./components/Perf";
 import { $exported, exportClicked, exportFieldChanged, importClicked } from "./model/export";
 import { useUnit } from "effector-solid";
+import { History } from "./components/History";
 
 function App() {
   let [exported] = useUnit([$exported]);
@@ -26,7 +27,7 @@ function App() {
         }}
       >
         <h1>Game of Life</h1>
-        {/* TODO        history(); */}
+        <History />
         <Progress />
       </div>
       <Perf />
