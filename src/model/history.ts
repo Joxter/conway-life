@@ -3,7 +3,7 @@ import { Fauna } from "../types";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
 
 type HistoryItem = {
-  fauna: Fauna;
+  rle: string;
   name: string;
   removed: boolean;
 };
@@ -24,7 +24,7 @@ $history
       uniqId++;
     }
 
-    return [...state, { fauna, name: `save #${uniqId}`, removed: false }];
+    return [...state, { rle: faunaToRle(fauna), name: `save #${uniqId}`, removed: false }];
   })
   .on(removeClicked, (state, name) => {
     return state.map((it) => {
@@ -53,28 +53,20 @@ sample({
 export function saveFaunasToLS(name: string, history: HistoryItem[]) {
   let res: { rle: string; name: string }[] = history
     .filter((it) => !it.removed)
-    .map(({ name, fauna }) => {
-      return { rle: faunaToRle(fauna), name };
+    .map(({ name, rle }) => {
+      return { rle, name };
     });
   localStorage.setItem(name, JSON.stringify(res));
 }
 
-export function getSavedFromLS(): {
-  fauna: Fauna;
-  name: string;
-  removed: boolean;
-}[] {
+export function getSavedFromLS(): HistoryItem[] {
   try {
     // @ts-ignore
     let saved: { rle: string; name: string }[] =
       JSON.parse(localStorage.getItem("history") || "null") || [];
 
     let result = saved.map(({ rle, name }) => {
-      return {
-        fauna: rleToFauna(rle),
-        name,
-        removed: false,
-      };
+      return { rle, name, removed: false };
     });
 
     return result;

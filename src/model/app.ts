@@ -1,5 +1,4 @@
 import { sample } from "effector";
-import { Fauna } from "../types";
 import { $exported, exportClicked, importClicked } from "./export";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
 import { $history, addToHistory, historySelected, saveClicked } from "./history";
@@ -16,9 +15,12 @@ sample({
   source: $history,
   clock: historySelected,
   fn: (history, selected) => {
-    const saved = history.find((it) => it.name === selected)!.fauna;
-    const fauna: Fauna = new Map(saved);
-    return { fauna, time: 0, size: 0 };
+    const savedRle = history.find((it) => it.name === selected)!.rle;
+    return {
+      fauna: rleToFauna(savedRle).unwrapOr(new Map()),
+      time: 0,
+      size: 0,
+    };
   },
   target: $faunaData,
 });
@@ -39,7 +41,7 @@ sample({
   source: $exported,
   clock: importClicked,
   fn: (str) => {
-    return { fauna: rleToFauna(str), time: 0, size: 0 };
+    return { fauna: rleToFauna(str).unwrapOr(new Map()), time: 0, size: 0 };
   },
   target: $faunaData,
 });

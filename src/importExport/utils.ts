@@ -1,3 +1,4 @@
+import { None, Option, Some } from "@sniptt/monads";
 import { Fauna } from "../types";
 
 /*
@@ -7,49 +8,53 @@ import { Fauna } from "../types";
  *    ..OO.
  */
 export function makeFaunaFromLexicon(input: string): Fauna {
-  console.warn("TODO makeFaunaFromLexicon");
-  return new Map();
-  // let result: Fauna = new Map();
-  //
-  // input.split('\n').forEach((line, rowI) => {
-  //   line = line.trim();
-  //
-  //   for (let colI = 0; colI < line.length; colI++) {
-  //     if (line[colI] === 'O') {
-  //       result.set(numbersToCoords(colI, rowI), 1);
-  //     }
-  //   }
-  // });
-  //
-  // return result;
+  let result: Fauna = new Map();
+
+  input.split("\n").forEach((line, rowI) => {
+    line = line.trim();
+
+    let row = new Map();
+    for (let colI = 0; colI < line.length; colI++) {
+      if (line[colI] === "O") {
+        row.set(colI, 1);
+      }
+    }
+    result.set(rowI, row);
+  });
+
+  return result;
 }
+
 const DEAD = "b";
 const LIVE = "o";
 
-export function faunaToGrid(fauna: Fauna): string {
-  let res = "";
-
-  let maxX = 0;
-  let maxY = 0;
-
-  fauna.forEach((row, x) => {
-    if (x > maxX) maxX = x;
-    row.forEach((val, y) => {
-      if (y > maxY) maxY = y;
-    });
-  });
-
-  for (let y = 0; y <= maxY; y++) {
-    for (let x = 0; x <= maxX; x++) {
-      res += fauna.get(x)?.get(y) ? "0" : ".";
-    }
-    res += "\n";
+export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
+  let optRect = getRectOfFauna(fauna);
+  if (optRect.isNone()) {
+    return [];
   }
 
-  return res.trim();
+  let rect = optRect.unwrap();
+
+  let rectWidth = rect.right - rect.left + 1;
+  let rectHeight = rect.bottom - rect.top + 1;
+
+  let grid = Array(rectHeight)
+    .fill(0)
+    .map(() => {
+      return Array(rectWidth).fill(0);
+    });
+
+  for (let [x, row] of fauna.entries()) {
+    for (let [y, val] of row.entries()) {
+      grid[y - rect.top][x - rect.left] = 1;
+    }
+  }
+
+  return grid;
 }
 
-export function rleToFauna(rle: string): Fauna {
+export function rleToFauna(rle: string): Option<Fauna> {
   let res: Fauna = new Map();
 
   const dead = "b";
@@ -77,15 +82,17 @@ export function rleToFauna(rle: string): Fauna {
           res.get(x)!.set(y, 1);
           x++;
         }
-      } else if (char === lineEnd) {
+      } else if (char === lineEnd || char === "!" || char === "\n") {
         y += parsedNum2;
         x = 0;
+      } else {
+        return None;
       }
       parsedNum = "";
     }
   }
 
-  return res;
+  return Some(res);
 }
 
 function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
@@ -99,12 +106,9 @@ function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
     });
 }
 
-export function getReactOfFauna(fauna: Fauna): {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-} {
+export function getRectOfFauna(
+  fauna: Fauna,
+): Option<{ top: number; bottom: number; left: number; right: number }> {
   let top = Infinity;
   let bottom = -Infinity;
   let left = Infinity;
@@ -119,30 +123,22 @@ export function getReactOfFauna(fauna: Fauna): {
     }
   }
 
-  return { top, bottom, left, right };
+  if (
+    Number.isFinite(top) &&
+    Number.isFinite(bottom) &&
+    Number.isFinite(left) &&
+    Number.isFinite(right)
+  ) {
+    return Some({ top, bottom, left, right });
+  }
+  return None;
 }
 
 export function faunaToRle(fauna: Fauna): string {
-  let rect = getReactOfFauna(fauna);
+  let grid = faunaToGrid(fauna);
 
-  let rectWidth = rect.right - rect.left + 1;
-  let rectHeight = rect.bottom - rect.top + 1;
+  return squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join("$")) + "!";
 
-  let grid = Array(rectHeight)
-    .fill(0)
-    .map(() => {
-      return Array(rectWidth).fill(0);
-    });
-
-  for (let [x, row] of fauna.entries()) {
-    for (let [y, val] of row.entries()) {
-      grid[y - rect.top][x - rect.left] = 1;
-    }
-  }
-
-  let res = squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join("$")) + "!";
-
-  return res;
   function squashRowToRle(row: (0 | 1)[]): string {
     let res = "";
     let lastVal = row[0];
