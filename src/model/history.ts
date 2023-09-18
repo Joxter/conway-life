@@ -45,14 +45,14 @@ $history
 
 sample({
   source: $history,
-  target: createEffect<HistoryItem[], any, any>((field) => {
-    saveFaunasToLS("history", field);
+  target: createEffect<HistoryItem[], any, any>((items) => {
+    saveFaunasToLS("history", items);
   }),
 });
 
 export function saveFaunasToLS(name: string, history: HistoryItem[]) {
   let res: { rle: string; name: string }[] = history
-    .filter((it) => it.removed)
+    .filter((it) => !it.removed)
     .map(({ name, fauna }) => {
       return { rle: faunaToRle(fauna), name };
     });
