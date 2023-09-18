@@ -1,7 +1,7 @@
 # Game of Life
 
 ## TODO
-- [ ] save to local store
+- [x] save to local store
 - [ ] (WIP) import/export blueprints from [conwaylife.com](https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm)
 - [ ] mobile support
   - [ ] proper scroll and toggle 

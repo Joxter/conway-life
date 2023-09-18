@@ -80,7 +80,7 @@ export function Field() {
       {viewHoveredCells().map((cell) => {
         return (
           <div
-            style={{ left: cell.x, top: cell.y }}
+            style={{ left: cell.x + "px", top: cell.y + "px" }}
             classList={{ [css.cell]: true, [css.hoveredCell]: true }}
           />
         );

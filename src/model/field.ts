@@ -87,12 +87,12 @@ export const $field = combine(
 
     fauna.forEach((colMap, cellCol) => {
       colMap.forEach((val, cellRow) => {
-        const col = cellCol * cellSize + screenOffsetXY.x;
-        const row = cellRow * cellSize + screenOffsetXY.y;
+        const finX = cellCol * cellSize + screenOffsetXY.x;
+        const finY = cellRow * cellSize + screenOffsetXY.y;
 
-        if (col >= 0 && col < viewPortSize.width) {
-          if (row >= 0 && row < viewPortSize.height) {
-            field.push([col, row]);
+        if (finX >= 0 && finX < viewPortSize.width) {
+          if (finY >= 0 && finY < viewPortSize.height) {
+            field.push([finX, finY]);
           }
         }
       });
@@ -137,14 +137,15 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
 export const $viewHoveredCells = combine(
   hoveredCell.$hoveredXY,
   fieldSize.$cellSize,
-  (hovered, { size }) => {
+  $screenOffsetXY,
+  (hovered, { size }, screenOffsetXY) => {
     if (hovered) {
-      return [
-        {
-          y: Math.floor(hovered.y / size) * size + "px",
-          x: Math.floor(hovered.x / size) * size + "px",
-        },
-      ];
+      const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
+      const cellRow = Math.floor((hovered.y - screenOffsetXY.y) / size);
+      const finX = (cellCol * size + screenOffsetXY.x).toFixed(0);
+      const finY = (cellRow * size + screenOffsetXY.y).toFixed(0);
+
+      return [{ x: finX, y: finY }];
     }
     return [];
   },
