@@ -35,28 +35,15 @@ export function createFieldSize($isHovered: Store<boolean>) {
   const plus = createEvent();
   const minus = createEvent();
 
-  let threshold = 0;
-  document.addEventListener("wheel", (ev) => {
-    threshold += ev.deltaY;
-    if (threshold > 20) {
-      minus();
-      threshold = 0;
-    }
-    if (threshold < -20) {
-      plus();
-      threshold = 0;
-    }
-  });
-
   $cellSize
-    .on(sample({ clock: minus, filter: $isHovered }), ({ size }) => {
+    .on(minus, ({ size }) => {
       let newSize = Math.max(options[0], size - 1);
       return {
         size: newSize,
         prevSize: size,
       };
     })
-    .on(sample({ clock: plus, filter: $isHovered }), ({ size }) => {
+    .on(plus, ({ size }) => {
       let newSize = Math.max(options[0], size + 1);
       return {
         size: newSize,
@@ -83,7 +70,7 @@ export function createELsaMode() {
 
 export function createHoveredCell() {
   const fieldMouseMoved = createEvent<XY>();
-  const fieldMouseLeaved = createEvent<any>();
+  const fieldMouseLeaved = createEvent();
 
   // todo add abs and relative ColRow here
   const $hoveredXY = createStore<XY | null>(null);
@@ -95,13 +82,13 @@ export function createHoveredCell() {
   return hoveredCell;
 }
 
-export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: Store<XY>) {
+export function createDragTool($hoveredXY: Store<XY | null>, $screenOffsetXY: Store<XY>) {
   const $initFocus = createStore<XY | null>(null);
   const $initHovered = createStore<XY | null>(null);
   const $startTime = createStore<number | null>(null);
 
-  const onMDown = createEvent<any>();
-  const onMUp = createEvent<any>();
+  const onMDown = createEvent<XY>();
+  const onMUp = createEvent();
 
   const mouseEnd = createEvent<{ start: XY; finish: XY }>();
   const clicked = createEvent<{ coords: XY }>();
@@ -111,30 +98,37 @@ export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: 
   const focusMoved = createEvent<XY>();
 
   function initEvents() {
-    document.addEventListener("mousedown", onMDown);
-    document.addEventListener("mouseup", onMUp);
+    // todo why not field ????
+    // document.addEventListener("mousedown", onMDown);
+    // document.addEventListener("touchstart", onMDown);
+    // document.addEventListener("mouseup", onMUp);
   }
 
-  const $isHovered = $hoveredCell.map((it) => it !== null);
-  const $isNotHovered = $hoveredCell.map((it) => it == null);
+  const $isHovered = $hoveredXY.map((it) => it !== null);
+  const $isNotHovered = $hoveredXY.map((it) => it == null);
 
   $startTime.on(onMDown, () => Date.now());
 
-  sample({ source: $screenOffsetXY, clock: onMDown, filter: $isHovered, target: $initFocus });
-  sample({ source: $hoveredCell, clock: onMDown, filter: $isHovered, target: $initHovered });
+  sample({
+    source: $screenOffsetXY,
+    clock: onMDown,
+    fn: (s) => {
+      return s;
+    },
+    target: $initFocus,
+  });
+  sample({ clock: onMDown, target: $initHovered });
 
   sample({
     source: {
-      currentHovered: $hoveredCell,
+      hoveredXY: $hoveredXY,
       initHovered: $initHovered,
-      startTime: $startTime,
     },
     clock: onMUp,
-    filter: (stores) => !!stores.initHovered && !!stores.currentHovered && !!stores.startTime,
-    fn: ({ currentHovered, initHovered, startTime }) => {
+    fn: ({ hoveredXY, initHovered }) => {
       return {
-        start: currentHovered!,
-        finish: initHovered!,
+        start: initHovered!,
+        finish: hoveredXY || initHovered!,
       };
     },
     target: mouseEnd,
@@ -142,12 +136,15 @@ export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: 
 
   sample({
     source: {
-      currentHovered: $hoveredCell,
+      currentHovered: $hoveredXY,
       initFocus: $initFocus,
       initHovered: $initHovered,
     },
-    clock: $hoveredCell,
-    filter: (stores) => !!stores.initHovered && !!stores.initFocus && !!stores.currentHovered,
+    clock: $hoveredXY,
+    filter: (stores) => {
+      console.log("222", !!stores.initHovered, !!stores.initFocus, !!stores.currentHovered);
+      return !!stores.initHovered && !!stores.initFocus && !!stores.currentHovered;
+    },
     fn: ({ currentHovered, initHovered, initFocus }) => {
       return {
         x: initFocus!.x + (currentHovered!.x - initHovered!.x),
@@ -180,5 +177,5 @@ export function createDragTool($hoveredCell: Store<XY | null>, $screenOffsetXY: 
   $initHovered.reset(mouseEnd, $isNotHovered);
   $startTime.reset(mouseEnd, $isNotHovered);
 
-  return { focusMoved, initEvents, clicked };
+  return { focusMoved, initEvents, clicked, onMUp, onMDown };
 }

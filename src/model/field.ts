@@ -5,13 +5,16 @@ import { createBlueprints } from "./blueprints";
 import { createDragTool, createFieldSize, createHoveredCell } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
+import { rleToFauna } from "../importExport/utils";
 
 export const hoveredCell = createHoveredCell();
 export const fieldSize = createFieldSize(hoveredCell.$hoveredXY.map((it) => !!it));
 const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
-  fauna: newFauna([]),
+  fauna: rleToFauna(
+    `8bo$7b3o$5b3ob2o$4bo2b2ob2o$4b2o4bo$4b4o2bo$7b3o$8bobo$b2o7b2o$ob2o5b2o$o3bo$b2obo$2b2o!`,
+  ).unwrap(),
   time: 0,
   size: 0,
 });

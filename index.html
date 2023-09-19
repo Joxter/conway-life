@@ -1,8 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
     <title>Game of Life</title>
     <script type="module" src="/src/main.tsx" defer></script>
   </head>
@@ -10,3 +13,26 @@
     <div id="app"></div>
   </body>
 </html>
+
+<!--
+
+mob: (не перекрывается элементами поверх)
+  onTouchStart
+  onTouchMove ....
+  onTouchEnd
+
+
+mouse: ( перекрывается элементами поверх)
+  (no click)
+  over
+  enter
+  Move ++++??
+  out
+  leave
+
+  (click)
+  down
+  up
+
+
+-->

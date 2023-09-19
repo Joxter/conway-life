@@ -12,9 +12,19 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   margin: 0;
-  height: 100vh;
+  height: 100%;
+  overflow: hidden;
+}
+
+canvas {
+  position: absolute;
 }
 
 h1 {
