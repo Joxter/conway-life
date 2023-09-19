@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { faunaToGrid, faunaToRle, rleToFauna } from "./utils";
+import { faunaToCells, faunaToGrid, faunaToRle, rleToFauna } from "./utils";
 
 let glider = "bo$2bo$3o!";
 let gliderGun = `24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4bobo$10bo5bo7bo$11bo3bo$12b2o!`;
@@ -101,6 +101,65 @@ describe("import-export utils", () => {
     });
     test("gliderGunTest", () => {
       expect(faunaToRle(rleToFauna(gliderGunTest).unwrap())).toEqual(gliderGunTest);
+    });
+  });
+
+  describe("faunaToCells", () => {
+    test("104P177 should work", () => {
+      let rle = `16bo12bo16b$9b2o24b2o9b$8b3o3b2o14b2o3b3o8b$14b2ob2o8b2ob2o14b$16bo12b
+o16b4$2bo40bo2b$b2o40b2ob$b2o40b2ob4$2b2o38b2o2b$2b2o38b2o2b$o3bo36bo
+3bo$3bo38bo3b$3bo38bo3b9$3bo38bo3b$3bo38bo3b$o3bo36bo3bo$2b2o38b2o2b$
+2b2o38b2o2b4$b2o40b2ob$b2o40b2ob$2bo40bo2b4$16bo12bo16b$14b2ob2o8b2ob
+2o14b$8b3o3b2o14b2o3b3o8b$9b2o24b2o9b$16bo12bo!`;
+
+      let cells = `................O............O
+.........OO........................OO
+........OOO...OO..............OO...OOO
+..............OO.OO........OO.OO
+................O............O
+
+
+
+..O........................................O
+.OO........................................OO
+.OO........................................OO
+
+
+
+..OO......................................OO
+..OO......................................OO
+O...O....................................O...O
+...O......................................O
+...O......................................O
+
+
+
+
+
+
+
+
+...O......................................O
+...O......................................O
+O...O....................................O...O
+..OO......................................OO
+..OO......................................OO
+
+
+
+.OO........................................OO
+.OO........................................OO
+..O........................................O
+
+
+
+................O............O
+..............OO.OO........OO.OO
+........OOO...OO..............OO...OOO
+.........OO........................OO
+................O............O`;
+
+      expect(faunaToCells(rleToFauna(rle).unwrap())).toEqual(cells);
     });
   });
 });

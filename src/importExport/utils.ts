@@ -28,12 +28,28 @@ export function makeFaunaFromLexicon(input: string): Fauna {
 const DEAD = "b";
 const LIVE = "o";
 
+export function faunaToCells(fauna: Fauna): string {
+  let grid = faunaToGrid(fauna);
+
+  return grid
+    .map((row) => {
+      if (row.includes(1)) {
+        return row
+          .map((c) => (c === 1 ? "O" : "."))
+          .join("")
+          .replace(/\.+$/, "");
+      } else {
+        return "";
+      }
+    })
+    .join("\n");
+}
+
 export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   let optRect = getRectOfFauna(fauna);
   if (optRect.isNone()) {
     return [];
   }
-
   let rect = optRect.unwrap();
 
   let rectWidth = rect.right - rect.left + 1;
@@ -61,34 +77,38 @@ export function rleToFauna(rle: string): Option<Fauna> {
   const live = "o";
   const lineEnd = "$";
 
-  let parsedNum = "";
+  let num = "";
   let y = 0;
   let x = 0;
 
   for (let i = 0; i < rle.length; i++) {
     let char = rle[i];
+    if (char === "\n" || char === "!") {
+      continue;
+    }
+
     if (char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57) {
-      parsedNum += char;
+      num += char;
     } else {
-      let parsedNum2 = +parsedNum || 1;
+      let parsedNum = +num || 1;
 
       if (char === dead) {
-        x += parsedNum2;
+        x += parsedNum;
       } else if (char === live) {
-        for (let j = 0; j < parsedNum2; j++) {
+        for (let j = 0; j < parsedNum; j++) {
           if (!res.has(x)) {
             res.set(x, new Map());
           }
           res.get(x)!.set(y, 1);
           x++;
         }
-      } else if (char === lineEnd || char === "!" || char === "\n") {
-        y += parsedNum2;
+      } else if (char === lineEnd) {
+        y += parsedNum;
         x = 0;
       } else {
         return None;
       }
-      parsedNum = "";
+      num = "";
     }
   }
 
