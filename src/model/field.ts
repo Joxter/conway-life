@@ -6,8 +6,8 @@ import { createDragTool, createFieldSize, createHoveredCell } from "./fieldParam
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
 
-export const fieldSize = createFieldSize();
 export const hoveredCell = createHoveredCell();
+export const fieldSize = createFieldSize(hoveredCell.$hoveredXY.map((it) => !!it));
 const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({

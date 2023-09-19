@@ -4,7 +4,7 @@ import { getStrFromLS, getWindowParams, setStrToLS } from "../utils";
 
 const vp = getWindowParams();
 
-export function createFieldSize() {
+export function createFieldSize($isHovered: Store<boolean>) {
   const lsCellSizeName = "cellSize";
   const options = [1, 100] as const;
 
@@ -49,14 +49,14 @@ export function createFieldSize() {
   });
 
   $cellSize
-    .on(minus, ({ size }) => {
+    .on(sample({ clock: minus, filter: $isHovered }), ({ size }) => {
       let newSize = Math.max(options[0], size - 1);
       return {
         size: newSize,
         prevSize: size,
       };
     })
-    .on(plus, ({ size }) => {
+    .on(sample({ clock: plus, filter: $isHovered }), ({ size }) => {
       let newSize = Math.max(options[0], size + 1);
       return {
         size: newSize,

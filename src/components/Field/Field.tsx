@@ -63,6 +63,8 @@ export function Field() {
     }
   });
 
+  let threshold = 0;
+
   return (
     <div
       class={css.field}
@@ -76,7 +78,22 @@ export function Field() {
       }
       onMouseLeave={hoveredCell.fieldMouseLeaved}
     >
-      <canvas width={vp.width} height={vp.height} ref={(el) => (can = el)}></canvas>
+      <canvas
+        onWheel={(ev) => {
+          threshold += ev.deltaY;
+          if (threshold > 20) {
+            fieldSize.minus();
+            threshold = 0;
+          }
+          if (threshold < -20) {
+            fieldSize.plus();
+            threshold = 0;
+          }
+        }}
+        width={vp.width}
+        height={vp.height}
+        ref={(el) => (can = el)}
+      ></canvas>
       {viewHoveredCells().map((cell) => {
         return (
           <div
