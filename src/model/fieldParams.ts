@@ -104,11 +104,6 @@ export function createDragTool($hoveredXY: Store<XY | null>, $screenOffsetXY: St
     // document.addEventListener("mouseup", onMUp);
   }
 
-  const $isHovered = $hoveredXY.map((it) => it !== null);
-  const $isNotHovered = $hoveredXY.map((it) => it == null);
-
-  $startTime.on(onMDown, () => Date.now());
-
   sample({
     source: $screenOffsetXY,
     clock: onMDown,
@@ -173,9 +168,9 @@ export function createDragTool($hoveredXY: Store<XY | null>, $screenOffsetXY: St
     target: clicked,
   });
 
-  $initFocus.reset(mouseEnd, $isNotHovered);
-  $initHovered.reset(mouseEnd, $isNotHovered);
-  $startTime.reset(mouseEnd, $isNotHovered);
+  $initFocus.reset(mouseEnd);
+  $initHovered.reset(mouseEnd);
+  $startTime.reset(mouseEnd);
 
   return { focusMoved, initEvents, clicked, onMUp, onMDown };
 }
