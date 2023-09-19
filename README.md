@@ -1,10 +1,15 @@
 # Game of Life
 
 ## TODO
-- [x] save to local store
-- [ ] (WIP) import/export blueprints from [conwaylife.com](https://conwaylife.com/ref/lexicon/zip/nbeluchenko/lexr_m.htm)
 - [ ] mobile support
-  - [ ] proper scroll and toggle 
+  - [ ] proper scroll and toggle
+- [ ] search patterns by name
+  - [ ] preview images
+  - [ ] parse files
+- [ ] add HashLife algorithm
+  - [ ] make webworker optional
+- [ ] simply analytics
+  - [ ] is die?
 - [ ] progress improvements:
   - [x] play/pause
   - [x] (WIP) different speed
@@ -20,6 +25,7 @@
 - [x] better scale:
   - [x] "+" and "-" and with center in the middle of the screen
   - [x] scale on scroll
+- [x] save to local store
 - [x] canvas render
 - [x] ??? refactoring
   - [ ] store only live cells
