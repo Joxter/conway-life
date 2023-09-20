@@ -194,8 +194,6 @@ sample({
 
 $screenOffsetXY.reset(resetFocus);
 
-$screenOffsetXY.watch(console.log);
-
 sample({
   source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize, cellSize: fieldSize.$cellSize },
   clock: focusToTheMiddle,
