@@ -1,13 +1,5 @@
-import {
-  $viewField,
-  $viewHoveredCells,
-  $viewLabels,
-  dragTool,
-  fieldSize,
-  hoveredCell,
-} from "../../model/field";
-import { Color1 } from "../../types";
-import { getWindowParams } from "../../utils";
+import { $viewField, $viewHoveredCells, $viewLabels, fieldSize, screen } from "../../model/field";
+import { Color1, XY } from "../../types";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { onMount, createSignal } from "solid-js";
@@ -15,7 +7,6 @@ import { onMount, createSignal } from "solid-js";
 let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
 export function Field() {
-  let vp = getWindowParams();
   let [viewHoveredCells, viewLabels, cellSize] = useUnit([
     $viewHoveredCells,
     $viewLabels,
@@ -23,6 +14,9 @@ export function Field() {
   ]);
 
   let can: HTMLCanvasElement;
+
+  let touchStartRef: XY | null = null;
+  let touchCurrentRef: XY | null = null;
 
   onMount(() => {
     requestAnimationFrame(render);
@@ -96,10 +90,6 @@ export function Field() {
         "--cellSize": cellSize().size + "px",
         "--color1": Color1,
       }}
-      // onMouseMove={({ clientX, clientY }) =>
-      //   hoveredCell.fieldMouseMoved({ x: clientX, y: clientY })
-      // }
-      // onMouseLeave={hoveredCell.fieldMouseLeaved}
     >
       <div
         style={{
@@ -128,51 +118,70 @@ export function Field() {
       <canvas
         onTouchStart={(ev) => {
           if (isTouchDevice) {
-            setEvents([...events(), "onTouchStart-" + ev.touches.length]);
             if (ev.touches.length === 1) {
-              dragTool.onMDown({ x: ev.touches[0].clientX, y: ev.touches[0].clientY });
+              screen.onPointerDown({ x: ev.touches[0].clientX, y: ev.touches[0].clientY });
+              touchStartRef = { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
+              touchCurrentRef = null;
+            }
+          }
+        }}
+        onTouchMove={(ev) => {
+          if (isTouchDevice) {
+            if (ev.touches.length !== 1) {
+              console.warn("onTouchMove ERROR");
+              touchStartRef = null;
+              touchCurrentRef = null;
+            }
+
+            if (touchStartRef) {
+              touchCurrentRef = { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
+              screen.onDrag({ from: touchStartRef, to: touchCurrentRef });
             }
           }
         }}
         onTouchEnd={(ev) => {
           if (isTouchDevice) {
-            setEvents([...events(), "onTouchEnd"]);
-            dragTool.onMUp();
-          }
-        }}
-        onTouchMove={(ev) => {
-          setEvents([...events(), "onTouchMove-" + ev.touches.length]);
-          if (ev.touches.length === 1) {
-            hoveredCell.fieldMouseMoved({ x: ev.touches[0].clientX, y: ev.touches[0].clientY });
-          }
-        }}
-        onMouseLeave={() => {
-          /*
-  onTouchStart
-  onTouchMove ....
-  onTouchEnd
-*/
-          if (!isTouchDevice) {
-            setEvents([...events(), "onMouseLeave"]);
-            hoveredCell.fieldMouseLeaved();
-          }
-        }}
-        onMouseMove={(ev) => {
-          if (!isTouchDevice) {
-            setEvents([...events(), "onMouseMove"]);
-            hoveredCell.fieldMouseMoved({ x: ev.clientX, y: ev.clientY });
+            if (touchStartRef && !touchCurrentRef) {
+              screen.onPointerClick(touchStartRef);
+            }
+            touchStartRef = null;
+            touchCurrentRef = null;
           }
         }}
         onMouseDown={(ev) => {
           if (!isTouchDevice) {
-            setEvents([...events(), "onMouseDown"]);
-            dragTool.onMDown({ x: ev.clientX, y: ev.clientY });
+            screen.onPointerDown({ x: ev.clientX, y: ev.clientY });
+            touchStartRef = { x: ev.clientX, y: ev.clientY };
+            touchCurrentRef = null;
+          }
+        }}
+        onMouseMove={(ev) => {
+          if (!isTouchDevice) {
+            if (touchStartRef) {
+              touchCurrentRef = { x: ev.clientX, y: ev.clientY };
+              screen.onDrag({ from: touchStartRef, to: touchCurrentRef });
+            } else {
+              screen.onHover({ x: ev.clientX, y: ev.clientY });
+            }
+          }
+        }}
+        onMouseLeave={() => {
+          if (!isTouchDevice) {
+            screen.onPointerLeave();
+            if (touchStartRef && !touchCurrentRef) {
+              screen.onPointerClick(touchStartRef);
+            }
+            touchStartRef = null;
+            touchCurrentRef = null;
           }
         }}
         onMouseUp={(ev) => {
           if (!isTouchDevice) {
-            setEvents([...events(), "onMouseUp"]);
-            dragTool.onMUp();
+            if (touchStartRef && !touchCurrentRef) {
+              screen.onPointerClick(touchStartRef);
+            }
+            touchStartRef = null;
+            touchCurrentRef = null;
           }
         }}
         onWheel={(ev) => {

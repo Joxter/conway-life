@@ -82,95 +82,33 @@ export function createHoveredCell() {
   return hoveredCell;
 }
 
-export function createDragTool($hoveredXY: Store<XY | null>, $screenOffsetXY: Store<XY>) {
-  const $initFocus = createStore<XY | null>(null);
-  const $initHovered = createStore<XY | null>(null);
-  const $startTime = createStore<number | null>(null);
+export function createScreen() {
+  const onHover = createEvent<XY>(); // on MOUSE moved without button pressed
+  const onPointerDown = createEvent<XY>(); // on MOUSE or FINGER down
+  const onPointerUp = createEvent(); // on MOUSE or FINGER up
+  const onPointerLeave = createEvent(); // on MOUSE leaves the field
+  const onPointerClick = createEvent<XY>(); // on MOUSE or FINGER makes a click without move
+  const onDrag = createEvent<{ from: XY; to: XY }>(); // on MOUSE moves with PRESSED button or FINGER moves with TOUCH
+  //                           from: where mouse/finger was pressed, to: where mouse/finger is now
 
-  const onMDown = createEvent<XY>();
-  const onMUp = createEvent();
+  const $hovered = createStore<XY | null>(null);
+  $hovered.on(onHover, (_, xy) => xy).on(onPointerLeave, () => null);
 
-  const mouseEnd = createEvent<{ start: XY; finish: XY }>();
-  const clicked = createEvent<{ coords: XY }>();
-  const clickedRaw = createEvent<{ start: XY; finish: XY }>(); // todo remove and simplify
-  const dragEnd = createEvent<{ start: XY; finish: XY }>();
+  const $dragDelta = createStore<{ from: XY; to: XY } | null>(null);
 
-  const focusMoved = createEvent<XY>();
+  $dragDelta
+    //
+    .on(onDrag, (_, val) => val)
+    .on([onPointerLeave /*, onPointerUp*/], () => null);
 
-  function initEvents() {
-    // todo why not field ????
-    // document.addEventListener("mousedown", onMDown);
-    // document.addEventListener("touchstart", onMDown);
-    // document.addEventListener("mouseup", onMUp);
-  }
-
-  sample({
-    source: $screenOffsetXY,
-    clock: onMDown,
-    fn: (s) => {
-      return s;
-    },
-    target: $initFocus,
-  });
-  sample({ clock: onMDown, target: $initHovered });
-
-  sample({
-    source: {
-      hoveredXY: $hoveredXY,
-      initHovered: $initHovered,
-    },
-    clock: onMUp,
-    fn: ({ hoveredXY, initHovered }) => {
-      return {
-        start: initHovered!,
-        finish: hoveredXY || initHovered!,
-      };
-    },
-    target: mouseEnd,
-  });
-
-  sample({
-    source: {
-      currentHovered: $hoveredXY,
-      initFocus: $initFocus,
-      initHovered: $initHovered,
-    },
-    clock: $hoveredXY,
-    filter: (stores) => {
-      console.log("222", !!stores.initHovered, !!stores.initFocus, !!stores.currentHovered);
-      return !!stores.initHovered && !!stores.initFocus && !!stores.currentHovered;
-    },
-    fn: ({ currentHovered, initHovered, initFocus }) => {
-      return {
-        x: initFocus!.x + (currentHovered!.x - initHovered!.x),
-        y: initFocus!.y + (currentHovered!.y - initHovered!.y),
-      };
-    },
-    target: focusMoved,
-  });
-
-  split({
-    source: mouseEnd,
-    match: (ev) => {
-      return ev.start.x === ev.finish.x && ev.start.y === ev.finish.y ? "click" : "dragEnd";
-    },
-    cases: {
-      click: clickedRaw,
-      dragEnd: dragEnd,
-    },
-  });
-
-  sample({
-    clock: clickedRaw,
-    fn: (ev) => {
-      return { coords: ev.start };
-    },
-    target: clicked,
-  });
-
-  $initFocus.reset(mouseEnd);
-  $initHovered.reset(mouseEnd);
-  $startTime.reset(mouseEnd);
-
-  return { focusMoved, initEvents, clicked, onMUp, onMDown };
+  return {
+    $hovered,
+    $dragDelta,
+    onHover,
+    onPointerDown,
+    // onPointerUp,
+    onPointerLeave,
+    onDrag,
+    onPointerClick,
+  };
 }

@@ -1,12 +1,10 @@
-import { dragTool, fieldSize, focusToTheMiddle } from "../model/field";
+import { fieldSize, focusToTheMiddle } from "../model/field";
 import css from "./styles.module.css";
 import { PlusMinus } from "./stateless/PlusMinus";
 import { useUnit } from "effector-solid";
 
 export function Navigation() {
   const [cellSize] = useUnit([fieldSize.$cellSize]);
-
-  dragTool.initEvents();
 
   return (
     <div>

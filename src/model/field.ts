@@ -2,13 +2,13 @@ import { combine, createEvent, createStore, sample } from "effector";
 import { Fauna, Field, XY } from "../types";
 import { adjustOffset, getMiddleOfFauna, getWindowParams, newFauna, newMakeGo } from "../utils";
 import { createBlueprints } from "./blueprints";
-import { createDragTool, createFieldSize, createHoveredCell } from "./fieldParams";
+import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
 import { rleToFauna } from "../importExport/utils";
 
-export const hoveredCell = createHoveredCell();
-export const fieldSize = createFieldSize(hoveredCell.$hoveredXY.map((it) => !!it));
+export const screen = createScreen();
+export const fieldSize = createFieldSize(screen.$hovered.map((it) => !!it));
 const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
@@ -53,10 +53,8 @@ export const focusToTheMiddle = createEvent<any>();
 
 export const resetFieldPressed = createEvent<any>();
 
-export const dragTool = createDragTool(hoveredCell.$hoveredXY, $screenOffsetXY);
-
 sample({
-  source: [$screenOffsetXY, hoveredCell.$hoveredXY] as const,
+  source: [$screenOffsetXY, screen.$hovered] as const,
   clock: fieldSize.$cellSize,
   fn: ([currentOffset, hovered], { size, prevSize }) => {
     if (hovered) {
@@ -138,7 +136,7 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
 });
 
 export const $viewHoveredCells = combine(
-  hoveredCell.$hoveredXY,
+  screen.$hovered,
   fieldSize.$cellSize,
   $screenOffsetXY,
   (hovered, { size }, screenOffsetXY) => {
@@ -175,11 +173,29 @@ sample({
 
 $faunaData.on(calculated, (_, it) => it).reset(resetFieldPressed);
 
-$screenOffsetXY
-  .on(dragTool.focusMoved, (state, newFocus) => {
-    return newFocus;
-  })
-  .reset(resetFocus);
+const $initScreenOffsetXY = createStore<XY>({ x: 0, y: 0 });
+
+sample({
+  source: $screenOffsetXY,
+  clock: screen.onPointerDown,
+  target: $initScreenOffsetXY,
+});
+
+sample({
+  source: $initScreenOffsetXY,
+  clock: screen.onDrag,
+  fn: (initFocus, { from, to }) => {
+    return {
+      x: initFocus.x + to.x - from.x,
+      y: initFocus.y + to.y - from.y,
+    };
+  },
+  target: $screenOffsetXY,
+});
+
+$screenOffsetXY.reset(resetFocus);
+
+$screenOffsetXY.watch(console.log);
 
 sample({
   source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize, cellSize: fieldSize.$cellSize },
@@ -200,8 +216,8 @@ sample({
     screenOffsetXY: $screenOffsetXY,
     cellSize: fieldSize.$cellSize,
   },
-  clock: dragTool.clicked,
-  fn: ({ faunaData, screenOffsetXY, cellSize: { size } }, { coords }) => {
+  clock: screen.onPointerClick,
+  fn: ({ faunaData, screenOffsetXY, cellSize: { size } }, coords) => {
     const newFauna = new Map(faunaData.fauna);
 
     const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
