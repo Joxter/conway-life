@@ -1,4 +1,4 @@
-import { None, Option, Some } from "@sniptt/monads";
+import { None, Option, Result, Some, Err, Ok } from "@sniptt/monads";
 import { Fauna } from "../types";
 
 /*
@@ -70,7 +70,13 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   return grid;
 }
 
-export function rleToFauna(rle: string): Option<Fauna> {
+export function rleToGrid(rle: string): Result<boolean[][], string> {
+  return rleToFauna(rle).map((fauna) => {
+    return faunaToGrid(fauna).map((row) => row.map((c) => c === 1));
+  });
+}
+
+export function rleToFauna(rle: string): Result<Fauna, string> {
   let res: Fauna = new Map();
 
   const dead = "b";
@@ -83,7 +89,7 @@ export function rleToFauna(rle: string): Option<Fauna> {
 
   for (let i = 0; i < rle.length; i++) {
     let char = rle[i];
-    if (char === "\n" || char === "!") {
+    if (char === "\n" || char === "\r" || char === "!") {
       continue;
     }
 
@@ -106,13 +112,13 @@ export function rleToFauna(rle: string): Option<Fauna> {
         y += parsedNum;
         x = 0;
       } else {
-        return None;
+        return Err(`Unknown character: ${char}`);
       }
       num = "";
     }
   }
 
-  return Some(res);
+  return Ok(res);
 }
 
 function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
@@ -208,4 +214,30 @@ function squashMultiplyDollarsInString(str: string): string {
     }
   }
   return res;
+}
+
+/*
+..OO
+.O.O
+O..O.OO
+OO.O..O
+.O.O
+.O..O
+..OO
+*/
+export function cellsToGrid(cells: string): boolean[][] {
+  let height = cells.split("\n").length;
+  let width = Math.max(...cells.split("\n").map((row) => row.length));
+
+  let grid: boolean[][] = new Array(height).fill(0).map(() => new Array(width).fill(false));
+
+  cells.split("\n").forEach((row, rowI) => {
+    row.split("").forEach((c, colI) => {
+      if (c === "O") {
+        grid[rowI][colI] = true;
+      }
+    });
+  });
+
+  return grid;
 }

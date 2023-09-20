@@ -5,16 +5,13 @@ import { createBlueprints } from "./blueprints";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
-import { rleToFauna } from "../importExport/utils";
 
 export const screen = createScreen();
 export const fieldSize = createFieldSize();
 const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
-  fauna: rleToFauna(
-    `8bo$7b3o$5b3ob2o$4bo2b2ob2o$4b2o4bo$4b4o2bo$7b3o$8bobo$b2o7b2o$ob2o5b2o$o3bo$b2obo$2b2o!`,
-  ).unwrap(),
+  fauna: newFauna([]),
   time: 0,
   size: 0,
 });
