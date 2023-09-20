@@ -1,20 +1,25 @@
 # Game of Life
 
 ## TODO
-- [ ] mobile support
-  - [ ] proper scroll and toggle
+
 - [ ] search patterns by name
   - [ ] preview images
   - [ ] parse files
-- [ ] add HashLife algorithm
+- [ ] (WIP) mobile support
+  - [x] proper scroll and toggle
+  - [ ] 2-finger zoom
+- [ ] (WIP) add HashLife algorithm
   - [ ] make webworker optional
+  - [x] copy implementation from copy (lol), rewrite to TS
 - [ ] simply analytics
   - [ ] is die?
+  - [ ] is ship?
 - [ ] progress improvements:
-  - [x] play/pause
+  - [x] play/stop
   - [x] (WIP) different speed
+  - [ ] pause
   - [ ] restart (restore to 0)
-- [ ] back to N steps
+  - [ ] back to N steps
 - [ ] tools:
   - [x] toggle one cell
   - [ ] draw pen
@@ -28,10 +33,10 @@
 - [x] save to local store
 - [x] canvas render
 - [x] ??? refactoring
-  - [ ] store only live cells
-  - [ ] recalculate only live cells
+  - [x] store only live cells
+  - [x] recalculate only live cells
   - [x] boundaryless mode
-  - [ ] fix history (save only live cells, update types)
+  - [x] fix history (save only live cells, update types)
 - [x] refactoring navigation (move by mouse)
 - [x] safe delete
 - [x] better "reset focus" focus to the center of paint

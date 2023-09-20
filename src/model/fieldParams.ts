@@ -4,7 +4,7 @@ import { getStrFromLS, getWindowParams, setStrToLS } from "../utils";
 
 const vp = getWindowParams();
 
-export function createFieldSize($isHovered: Store<boolean>) {
+export function createFieldSize() {
   const lsCellSizeName = "cellSize";
   const options = [1, 100] as const;
 
@@ -66,20 +66,6 @@ export function createELsaMode() {
   $isOn.on(changed, (_, val) => val);
   const elsaMode = { $isOn, changed };
   return elsaMode;
-}
-
-export function createHoveredCell() {
-  const fieldMouseMoved = createEvent<XY>();
-  const fieldMouseLeaved = createEvent();
-
-  // todo add abs and relative ColRow here
-  const $hoveredXY = createStore<XY | null>(null);
-
-  $hoveredXY.on(fieldMouseLeaved, () => null).on(fieldMouseMoved, (_, evData) => evData);
-
-  const hoveredCell = { $hoveredXY, fieldMouseLeaved, fieldMouseMoved };
-
-  return hoveredCell;
 }
 
 export function createScreen() {

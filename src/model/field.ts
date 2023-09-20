@@ -8,7 +8,7 @@ import { createProgress } from "./progress";
 import { rleToFauna } from "../importExport/utils";
 
 export const screen = createScreen();
-export const fieldSize = createFieldSize(screen.$hovered.map((it) => !!it));
+export const fieldSize = createFieldSize();
 const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
@@ -104,7 +104,6 @@ export const $field = combine(
 );
 
 export const $stats = combine($field, $faunaData, (field, fauna) => {
-  // todo fauna.length is wrong
   return { fieldCellsAmount: field.length, faunaCellsAmount: fauna.size };
 });
 

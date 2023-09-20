@@ -2,7 +2,7 @@ import { $viewField, $viewHoveredCells, $viewLabels, fieldSize, screen } from ".
 import { Color1, XY } from "../../types";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
-import { onMount, createSignal } from "solid-js";
+import { onMount } from "solid-js";
 
 let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
@@ -62,26 +62,6 @@ export function Field() {
 
   let threshold = 0;
 
-  let [events, setEvents] = createSignal<string[]>([]);
-
-  let compactEvents = () => {
-    let allEvents = events();
-
-    let lastEvent: any = null;
-    let result: Array<[string, number]> = [];
-
-    allEvents.forEach((event) => {
-      if (lastEvent === event) {
-        result[result.length - 1][1]++;
-      } else {
-        result.push([event, 1]);
-        lastEvent = event;
-      }
-    });
-
-    return result;
-  };
-
   return (
     <div
       class={css.field}
@@ -91,30 +71,6 @@ export function Field() {
         "--color1": Color1,
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          "z-index": "2",
-          bottom: "90px",
-          right: "50px",
-          height: "80vh",
-          display: "grid",
-          width: "150px",
-          "font-size": "12px",
-          "line-height": "1",
-          "align-content": "end",
-          "pointer-events": "none",
-          overflow: "hidden",
-        }}
-      >
-        {compactEvents().map(([name, cnt], i) => (
-          <div>
-            {i}) {cnt} {name}
-          </div>
-        ))}
-        <div>isTouchDevice: {String(isTouchDevice)}</div>
-        <div>d</div>
-      </div>
       <canvas
         onTouchStart={(ev) => {
           if (isTouchDevice) {
