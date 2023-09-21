@@ -49,7 +49,7 @@ sample({
 });
 
 const fetchPatternFx = createEffect((name: string) => {
-  return fetch("/patterns/" + name + ".rle")
+  return fetch("patterns/" + name + ".rle")
     .then((res) => {
       return res.text();
     })
