@@ -3,8 +3,10 @@
 ## TODO
 
 - [ ] search patterns by name
-  - [ ] preview images
-  - [ ] parse files
+  - [x] generate images and upload to cdn
+  - [x] preview images
+  - [ ] better UI
+- [ ] better parser rle/cells filres (need links, name, size, ..)
 - [ ] (WIP) mobile support
   - [x] proper scroll and toggle
   - [ ] 2-finger zoom

@@ -11,6 +11,7 @@ import { Perf } from "./components/Perf";
 import { $exported, exportClicked, exportFieldChanged, importClicked } from "./model/export";
 import { useUnit } from "effector-solid";
 import { History } from "./components/History";
+import { Catalogue } from "./components/Catalogue/Catalogue";
 
 function App() {
   let [exported] = useUnit([$exported]);
@@ -31,6 +32,7 @@ function App() {
         <Progress />
       </div>
       <Perf />
+      <Catalogue />
 
       <button
         onClick={resetFieldPressed}

@@ -3,7 +3,16 @@
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #aaa;
-  background-color: rgba(255,255,255, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.modal {
+  max-width: 100%;
+  max-height: 100%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .history {
@@ -30,15 +39,15 @@
   padding: 4px;
   bottom: 20px;
   right: 20px;
-  background-color: rgba(255,255,255, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid #aaa;
   border-radius: 4px;
   z-index: 1;
 }
 
 .arrowBtn:before {
-  content: '';
-  background-image: url('./redo-arrow-icon.svg');
+  content: "";
+  background-image: url("./redo-arrow-icon.svg");
   width: 20px;
   height: 20px;
   background-repeat: no-repeat;
@@ -52,7 +61,7 @@
 }
 
 .whiteBox {
-  background-color: rgba(255,255,255, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #aaa;

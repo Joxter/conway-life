@@ -134,3 +134,17 @@ export function setStrToLS(key: string, value: string): void {
     console.error(e);
   }
 }
+
+export function fuzzy(str: string, query: string): number {
+  if (str === query) return 100;
+  if (str.includes(query)) return 1;
+
+  for (let i = 0; i < query.length; i++) {
+    const index = str.indexOf(query[i], i);
+    if (index === -1) {
+      return 0;
+    }
+  }
+
+  return 0.5;
+}
