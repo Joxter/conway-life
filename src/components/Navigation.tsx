@@ -11,7 +11,7 @@ export function Navigation() {
       <button class={css.arrowBtn} onClick={focusToTheMiddle}>
         to center
       </button>
-      <div style={{ position: "absolute", right: "150px", bottom: "20px", "z-index": 1 }}>
+      <div style={{ position: "absolute", right: "10px", bottom: "70px", "z-index": 1 }}>
         <PlusMinus
           value={cellSize().size}
           onPlusClicked={fieldSize.plus}

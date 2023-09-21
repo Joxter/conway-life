@@ -2,26 +2,28 @@
 
 ## TODO
 
-- [ ] search patterns by name
-  - [x] generate images and upload to cdn
-  - [x] preview images
-  - [ ] better UI
-- [ ] better parser rle/cells filres (need links, name, size, ..)
+- [ ] better parser rle/cells files (need links, name, size, ..)
+- [ ] better UI
+  - [ ] auto-focus and auto-zoom
+  - [ ] rearrange items
+  - [ ] something for Perf
 - [ ] (WIP) mobile support
   - [x] proper scroll and toggle
   - [ ] 2-finger zoom
-- [ ] (WIP) add HashLife algorithm
-  - [ ] make webworker optional
-  - [x] copy implementation from copy (lol), rewrite to TS
 - [ ] simply analytics
-  - [ ] is die?
-  - [ ] is ship?
+  - [ ] is die
+  - [ ] is ship
+  - [ ] num of islands
+  - [ ] time to die
 - [ ] progress improvements:
   - [x] play/stop
   - [x] (WIP) different speed
   - [ ] pause
   - [ ] restart (restore to 0)
   - [ ] back to N steps
+- [ ] (WIP) add HashLife algorithm
+  - [ ] make webworker optional
+  - [x] copy implementation from copy (lol), rewrite to TS
 - [ ] tools:
   - [x] toggle one cell
   - [ ] draw pen
@@ -29,12 +31,15 @@
   - [ ] area to focus
   - [ ] ??? a line, selections to move/remove
 - [ ] add keyboard support
+- [x] search patterns by name
+  - [x] generate images and upload to cdn
+  - [x] preview images
 - [x] better scale:
   - [x] "+" and "-" and with center in the middle of the screen
   - [x] scale on scroll
 - [x] save to local store
 - [x] canvas render
-- [x] ??? refactoring
+- [x] refactoring
   - [x] store only live cells
   - [x] recalculate only live cells
   - [x] boundaryless mode

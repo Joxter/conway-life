@@ -14,39 +14,41 @@ export function History() {
 
   return (
     <div class={css.history}>
-      <p style={{ margin: "0" }}>History: </p>
-      <button style={{ "margin-right": "20px" }} onClick={saveClicked}>
-        Save
-      </button>
+      <button onClick={saveClicked}>Save</button>
 
-      <For each={history()}>
-        {(historyEl) => {
-          return (
-            <div>
-              <button
-                onClick={() => {
-                  if (historyEl.removed) {
-                    restoreClicked(historyEl.name);
-                  } else {
-                    historySelected(historyEl.name);
-                  }
-                }}
-              >
-                {historyEl.removed ? `restore ${historyEl.name}` : historyEl.name}
-              </button>
-              {historyEl.removed ? null : (
-                <button
-                  onClick={() => {
-                    removeClicked(historyEl.name);
-                  }}
-                >
-                  x
-                </button>
-              )}
-            </div>
-          );
+      <select
+        name=""
+        id=""
+        onChange={(ev) => {
+          // if (historyEl.removed) {
+          //   restoreClicked(historyEl.name);
+          // } else {
+          //   historySelected(ev.target);
+          // }
+          historySelected(ev.target.value);
         }}
-      </For>
+      >
+        <For each={history()}>
+          {(historyEl) => {
+            return (
+              <option value={historyEl.name}>
+                {historyEl.name}
+                {/*
+                {historyEl.removed ? null : (
+                  <button
+                    onClick={() => {
+                      removeClicked(historyEl.name);
+                    }}
+                  >
+                    x
+                  </button>
+                )}
+*/}
+              </option>
+            );
+          }}
+        </For>
+      </select>
     </div>
   );
 }

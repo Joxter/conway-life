@@ -37,7 +37,6 @@ function run(folder: string, output: string) {
           .join("\n");
 
         // todo proper parse functions
-        console.log(fileName);
         rleToGrid(content.trim()).match({
           ok: (grid) => {
             generateImage(grid, `${output}/${noExtName}.png`);

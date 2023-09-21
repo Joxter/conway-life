@@ -6,7 +6,7 @@ export function PlusMinus(props: {
   class?: string;
 }) {
   return (
-    <div class={props.class}>
+    <span class={props.class}>
       <button onClick={props.onMinusClicked} disabled={props.value <= props.range[0]}>
         -
       </button>
@@ -14,6 +14,6 @@ export function PlusMinus(props: {
       <button onClick={props.onPlusClicked} disabled={props.value >= props.range[1]}>
         +
       </button>
-    </div>
+    </span>
   );
 }

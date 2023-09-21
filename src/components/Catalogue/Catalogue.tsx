@@ -1,13 +1,21 @@
 import { combine, createEvent, createStore, sample } from "effector";
 import { fuzzy } from "../../utils";
 import { useUnit } from "effector-solid";
-import css from "../styles.module.css";
+import commonCss from "../styles.module.css";
+import css from "./styles.module.css";
 import { allTemplates } from "../../blueprints/all-templates";
 
 const $search = createStore("");
 const setSearch = createEvent<string>();
 
-$search.on(setSearch, (_, newSearch) => newSearch);
+export const selectPattern = createEvent<string>();
+
+$search.on(setSearch, (_, newSearch) => newSearch).reset(selectPattern);
+
+const $isOpen = createStore(false);
+const open = createEvent();
+const close = createEvent();
+$isOpen.on(open, () => true).on([close, selectPattern], () => false);
 
 type CatItem = {
   image: string;
@@ -28,7 +36,8 @@ const $items = createStore<CatItem[]>(
 const $filteredItems = combine($search, $items, (search, items) => {
   search = search.toLowerCase().trim();
   if (!search) {
-    return items;
+    const offset = Math.floor(Math.random() * (items.length - 20));
+    return items.slice(offset, offset + 20);
   }
 
   return items
@@ -52,66 +61,74 @@ const $filteredItems = combine($search, $items, (search, items) => {
 const $pageItems = $filteredItems.map((items) => items.slice(0, 20));
 
 export const Catalogue = () => {
-  const [search, filteredItems, pageItems] = useUnit([$search, $filteredItems, $pageItems]);
+  const [search, filteredItems, pageItems, isOpen] = useUnit([
+    $search,
+    $filteredItems,
+    $pageItems,
+    $isOpen,
+  ]);
 
   return (
-    <div class={css.modal}>
+    <>
       <div
-        class={css.roundBox}
-        style={{
-          width: "600px",
-          "background-color": "#eee",
-        }}
+        class={commonCss.whiteBox}
+        style={{ position: "absolute", bottom: "90px", left: "10px" }}
       >
-        <input
-          type="text"
-          style={{ width: "100%" }}
-          onInput={(ev) => {
-            setSearch(ev.target.value);
-          }}
-          value={search()}
-        />
-        <p>found: {filteredItems().length}</p>
+        <button onClick={() => open()}>search</button>
+      </div>
+      <div class={commonCss.modal} style={{ display: isOpen() ? "initial" : "none" }}>
         <div
+          class={commonCss.roundBox}
           style={{
             display: "grid",
-            "flex-wrap": "wrap",
-            gap: "4px",
-            "margin-top": "12px",
-            "max-height": "400px",
-            overflow: "scroll",
+            "grid-auto-rows": "auto 1fr",
+            width: "min(800px, calc(100vw - 50px))",
+            height: "min(600px, calc(100vh - 100px))",
+            "background-color": "#eee",
           }}
         >
-          {pageItems().map((it) => {
-            return (
-              <div
-                style={{
-                  display: "grid",
-                  "grid-template-columns": "120px 1fr",
-                  gap: "4px",
-                }}
-              >
-                <div
-                  style={{
-                    "background-color": "#fff",
-                    "border-radius": "4px",
-                    width: "120px",
-                    height: "120px",
-                    "background-image": `url("${it.image}")`,
-                    "background-position": "center",
-                    "background-repeat": "no-repeat",
-                    "background-size": "contain",
-                    "image-rendering": "pixelated",
-                  }}
-                ></div>
-                <div>
-                  <p>{it.name}</p>
+          <div style={{ display: "flex" }}>
+            <input
+              type="text"
+              style={{ width: "100%" }}
+              onInput={(ev) => {
+                setSearch(ev.target.value);
+              }}
+              value={search()}
+            />
+            <p>found: {filteredItems().length}</p>
+            <button onClick={() => close()}>close</button>
+          </div>
+          <div class={css.list}>
+            {pageItems().map((it) => {
+              return (
+                <div class={css.listItem}>
+                  <div
+                    style={{
+                      "background-image": `url("${it.image}")`,
+                    }}
+                    class={css.patternPreview}
+                  />
+                  <div>
+                    <div style={{ display: "grid" }}>
+                      <p
+                        style={{
+                          "text-overflow": "ellipsis",
+                          overflow: "hidden",
+                          "white-space": "nowrap",
+                        }}
+                      >
+                        {it.name}
+                      </p>
+                    </div>
+                    <button onClick={() => selectPattern(it.name)}>select</button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

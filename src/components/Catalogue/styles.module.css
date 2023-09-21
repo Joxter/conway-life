@@ -1,0 +1,32 @@
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 12px;
+  overflow: scroll;
+}
+
+@media (max-width: 700px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.listItem {
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: 120px 1fr;
+  gap: 4px;
+}
+
+.patternPreview {
+  background-color: #fff;
+  border-radius: 4px;
+  width: 120px;
+  height: 120px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  image-rendering: pixelated;
+}

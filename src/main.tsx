@@ -17,7 +17,6 @@ function App() {
   let [exported] = useUnit([$exported]);
   return (
     <div>
-      <Navigation />
       <Field />
       <div
         style={{
@@ -27,27 +26,28 @@ function App() {
           "border-bottom": "1px solid #ccc",
         }}
       >
-        <h1>Game of Life</h1>
-        <History />
-        <Progress />
+        <h1 style={{"font-size": '18px'}}>Game of Life</h1>
       </div>
+      <History />
       <Perf />
       <Catalogue />
+      <Progress />
+      <Navigation />
 
       <button
         onClick={resetFieldPressed}
-        style={{ position: "absolute", bottom: "20px", left: "20px" }}
+        style={{ position: "absolute", top: "200px", left: "10px" }}
       >
         Reset
       </button>
 
-      <div style={{ position: "absolute", bottom: "50px", left: "20px" }}>
+      <div style={{ position: "absolute", top: "100px", left: "10px" }}>
         <button onClick={exportClicked}>Export</button>
         <button onClick={importClicked}>Import</button>
         <br />
         <textarea
           onChange={(ev) => exportFieldChanged(ev.target.value)}
-          style={{ "font-size": "8px", width: "100%", height: "100px", "line-height": 1 }}
+          style={{ "font-size": "8px", width: "100%", height: "50px", "line-height": 1 }}
           value={exported()}
         ></textarea>
       </div>
