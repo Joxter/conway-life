@@ -32,11 +32,15 @@ const $items = createStore<CatItem[]>(
     };
   }),
 );
+const $offset = createStore(0);
 
-const $filteredItems = combine($search, $items, (search, items) => {
+$offset.on(open, () => {
+  return Math.floor(Math.random() * (allTemplates.length - 20));
+});
+
+const $filteredItems = combine($search, $items, $offset, (search, items, offset) => {
   search = search.toLowerCase().trim();
   if (!search) {
-    const offset = Math.floor(Math.random() * (items.length - 20));
     return items.slice(offset, offset + 20);
   }
 

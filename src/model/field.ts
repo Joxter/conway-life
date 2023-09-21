@@ -11,7 +11,7 @@ export const fieldSize = createFieldSize();
 const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
-  fauna: newFauna([]),
+  fauna: newFauna([]), // todo load random template
   time: 0,
   size: 0,
 });
