@@ -3,7 +3,7 @@ import { $exported, exportClicked, importClicked } from "./export";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
 import { $history, addToHistory, historySelected, saveClicked } from "./history";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
-import { selectPattern } from "../feature/Catalogue/Catalogue.model";
+import { catalogue } from "../feature/Catalogue/Catalogue.model";
 import { Fauna } from "../types";
 import { allTemplates } from "../blueprints/all-templates";
 
@@ -55,12 +55,7 @@ const fetchPatternFx = createEffect((name: string) => {
       return res.text();
     })
     .then((rleFile): Fauna => {
-      let rle = rleFile
-        .split("\n")
-        .filter((line) => !line.startsWith("#") && !line.startsWith("x ="))
-        .join("\n");
-
-      let fauna = rleToFauna(rle);
+      let fauna = rleToFauna(rleFile);
       if (fauna.isOk()) {
         return fauna.unwrap();
       }
@@ -86,15 +81,15 @@ fetchPatternFx.fail.watch(({ params, error }) => {
 setTimeout(() => {
   let patternName = window.location.hash.slice(1);
   if (allTemplates.includes(patternName)) {
-    selectPattern(patternName);
+    catalogue.selectPattern(patternName);
     // todo add auto scale
   }
   if (!patternName) {
-    selectPattern(allTemplates[Math.floor(Math.random() * allTemplates.length)]);
+    catalogue.selectPattern(allTemplates[Math.floor(Math.random() * allTemplates.length)]);
   }
 }, 10);
 
-sample({ clock: selectPattern, target: fetchPatternFx });
+sample({ clock: catalogue.selectPattern, target: fetchPatternFx });
 
 sample({
   clock: fetchPatternFx.doneData,

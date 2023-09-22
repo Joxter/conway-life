@@ -11,7 +11,7 @@ import { Perf } from "./components/Perf";
 import { $exported, exportClicked, exportFieldChanged, importClicked } from "./model/export";
 import { useUnit } from "effector-solid";
 import { History } from "./components/History";
-import { Catalogue } from "./components/Catalogue/Catalogue";
+import { Catalogue } from "./feature/Catalogue/Catalogue";
 
 function App() {
   let [exported] = useUnit([$exported]);
@@ -26,7 +26,7 @@ function App() {
           "border-bottom": "1px solid #ccc",
         }}
       >
-        <h1 style={{"font-size": '18px'}}>Game of Life</h1>
+        <h1 style={{ "font-size": "18px" }}>Game of Life</h1>
       </div>
       <History />
       <Perf />

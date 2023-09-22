@@ -1,5 +1,5 @@
 import { None, Option, Result, Some, Err, Ok } from "@sniptt/monads";
-import { Fauna } from "../types";
+import { Fauna, Pattern } from "../types";
 
 /*
  *    .OO..
@@ -70,55 +70,34 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   return grid;
 }
 
-export function rleToGrid(rle: string): Result<boolean[][], string> {
-  return rleToFauna(rle).map((fauna) => {
-    return faunaToGrid(fauna).map((row) => row.map((c) => c === 1));
+export function rleToGrid(rleFile: string): Result<boolean[][], string> {
+  let { rle, size } = parseRleFile(rleFile);
+
+  let grid: boolean[][] = []; // todo add "size"
+
+  let res = parseRle(rle, (x, y) => {
+    if (!grid[y]) {
+      grid[y] = [];
+    }
+    grid[y][x] = true;
   });
+
+  return res.map(() => grid);
 }
 
-export function rleToFauna(rle: string): Result<Fauna, string> {
-  let res: Fauna = new Map();
+export function rleToFauna(rleFile: string): Result<Fauna, string> {
+  let fauna: Fauna = new Map();
 
-  const dead = "b";
-  const live = "o";
-  const lineEnd = "$";
+  let { rle } = parseRleFile(rleFile);
 
-  let num = "";
-  let y = 0;
-  let x = 0;
-
-  for (let i = 0; i < rle.length; i++) {
-    let char = rle[i];
-    if (char === "\n" || char === "\r" || char === "!") {
-      continue;
+  let res = parseRle(rle, (x, y) => {
+    if (!fauna.has(x)) {
+      fauna.set(x, new Map());
     }
+    fauna.get(x)!.set(y, 1);
+  });
 
-    if (char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57) {
-      num += char;
-    } else {
-      let parsedNum = +num || 1;
-
-      if (char === dead) {
-        x += parsedNum;
-      } else if (char === live) {
-        for (let j = 0; j < parsedNum; j++) {
-          if (!res.has(x)) {
-            res.set(x, new Map());
-          }
-          res.get(x)!.set(y, 1);
-          x++;
-        }
-      } else if (char === lineEnd) {
-        y += parsedNum;
-        x = 0;
-      } else {
-        return Err(`Unknown character: ${char}`);
-      }
-      num = "";
-    }
-  }
-
-  return Ok(res);
+  return res.map(() => fauna);
 }
 
 function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
@@ -195,25 +174,25 @@ export function faunaToRle(fauna: Fauna): string {
 
     return res;
   }
-}
 
-function squashMultiplyDollarsInString(str: string): string {
-  let res = "";
-  let cnt = 0;
+  function squashMultiplyDollarsInString(str: string): string {
+    let res = "";
+    let cnt = 0;
 
-  for (let i = 0; i < str.length; i++) {
-    let currChar = str[i];
+    for (let i = 0; i < str.length; i++) {
+      let currChar = str[i];
 
-    if (currChar != "$") {
-      if (cnt === 1) res += "$";
-      if (cnt > 1) res += cnt + "$";
-      res += currChar;
-      cnt = 0;
-    } else {
-      cnt++;
+      if (currChar != "$") {
+        if (cnt === 1) res += "$";
+        if (cnt > 1) res += cnt + "$";
+        res += currChar;
+        cnt = 0;
+      } else {
+        cnt++;
+      }
     }
+    return res;
   }
-  return res;
 }
 
 /*
@@ -240,4 +219,73 @@ export function cellsToGrid(cells: string): boolean[][] {
   });
 
   return grid;
+}
+
+function parseRleFile(rleFile: string): Pattern {
+  let rle = rleFile
+    .split("\n")
+    .filter((line) => !line.startsWith("#") && !line.startsWith("x ="))
+    .join("\n")
+    .trim();
+
+  // TODO continue
+
+  return {
+    name: "string;",
+    comment: "string;",
+    author: "string;",
+    wikiLink: "string;",
+    patternLink: "string;",
+    size: [0, 0],
+    rule: "B3/S23", // B3/S23
+    rle,
+  };
+}
+
+// https://conwaylife.com/wiki/Run_Length_Encoded
+function parseRle(
+  content: string,
+  setXY: (x: number, y: number) => any, // make optional
+): Result<true, string> {
+  const dead = "b";
+  const live = "o";
+  const lineEnd = "$";
+
+  let num = "";
+  let y = 0;
+  let x = 0;
+
+  for (let i = 0; i < content.length; i++) {
+    let char = content[i];
+    if (char === "\n" || char === "\r" || char === "!") {
+      continue;
+    }
+
+    if (char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57) {
+      num += char;
+    } else {
+      let parsedNum = +num || 1;
+
+      if (char === dead) {
+        x += parsedNum;
+      } else if (char === live) {
+        for (let j = 0; j < parsedNum; j++) {
+          setXY(x, y);
+          // if (!res.has(x)) {
+          //   res.set(x, new Map());
+          // }
+          // res.get(x)!.set(y, 1);
+          x++;
+        }
+      } else if (char === lineEnd) {
+        y += parsedNum;
+        x = 0;
+      } else {
+        return Err(`Unknown character: "${char}"`);
+      }
+      num = "";
+    }
+  }
+
+  return Ok(true as const);
 }

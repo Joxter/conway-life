@@ -31,13 +31,8 @@ function run(folder: string, output: string) {
       } else if (fileName.endsWith(".rle")) {
         let noExtName = fileName.slice(0, -4);
         let content = fs.readFileSync(`${folder}/${fileName}`, "utf8").toString();
-        content = content
-          .split("\n")
-          .filter((line) => !line.startsWith("#") && !line.startsWith("x ="))
-          .join("\n");
 
-        // todo proper parse functions
-        rleToGrid(content.trim()).match({
+        rleToGrid(content).match({
           ok: (grid) => {
             generateImage(grid, `${output}/${noExtName}.png`);
           },
