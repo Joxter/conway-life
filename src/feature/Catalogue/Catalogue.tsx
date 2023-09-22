@@ -1,76 +1,17 @@
-import { combine, createEvent, createStore, sample } from "effector";
-import { fuzzy } from "../../utils";
 import { useUnit } from "effector-solid";
-import commonCss from "../styles.module.css";
+import commonCss from "../../components/styles.module.css";
 import css from "./styles.module.css";
-import { allTemplates } from "../../blueprints/all-templates";
-
-const $search = createStore("");
-const setSearch = createEvent<string>();
-
-export const selectPattern = createEvent<string>();
-
-$search.on(setSearch, (_, newSearch) => newSearch).reset(selectPattern);
-
-const $isOpen = createStore(false);
-const open = createEvent();
-const close = createEvent();
-$isOpen.on(open, () => true).on([close, selectPattern], () => false);
-
-type CatItem = {
-  image: string;
-  name: string;
-  id: string;
-};
-
-const $items = createStore<CatItem[]>(
-  allTemplates.map((name, i) => {
-    return {
-      image: `https://cerestle.sirv.com/Images/${name}.png`,
-      name: name,
-      id: String(i),
-    };
-  }),
-);
-const $offset = createStore(0);
-
-$offset.on(open, () => {
-  return Math.floor(Math.random() * (allTemplates.length - 20));
-});
-
-const $filteredItems = combine($search, $items, $offset, (search, items, offset) => {
-  search = search.toLowerCase().trim();
-  if (!search) {
-    return items.slice(offset, offset + 20);
-  }
-
-  return items
-    .map((item) => {
-      return { score: fuzzy(item.name.toLowerCase(), search), ...item };
-    })
-    .sort((a, b) => {
-      if (a.score < b.score) {
-        return 1;
-      }
-      if (a.score > b.score) {
-        return -1;
-      }
-      return 0;
-    })
-    .filter(({ score }) => {
-      return score > 0;
-    });
-});
-
-const $pageItems = $filteredItems.map((items) => items.slice(0, 20));
+import {
+  $foundCnt,
+  $isOpen,
+  $pageItems,
+  $search,
+  selectPattern,
+  setSearch,
+} from "./Catalogue.model";
 
 export const Catalogue = () => {
-  const [search, filteredItems, pageItems, isOpen] = useUnit([
-    $search,
-    $filteredItems,
-    $pageItems,
-    $isOpen,
-  ]);
+  const [search, pageItems, cnt, isOpen] = useUnit([$search, $pageItems, $foundCnt, $isOpen]);
 
   return (
     <>
@@ -78,7 +19,7 @@ export const Catalogue = () => {
         class={commonCss.whiteBox}
         style={{ position: "absolute", bottom: "90px", left: "10px" }}
       >
-        <button onClick={() => open()}>search</button>
+        <button onClick={() => open()}>Catalogue</button>
       </div>
       <div class={commonCss.modal} style={{ display: isOpen() ? "initial" : "none" }}>
         <div
@@ -100,7 +41,7 @@ export const Catalogue = () => {
               }}
               value={search()}
             />
-            <p>found: {filteredItems().length}</p>
+            <p>found: {cnt()}</p>
             <button onClick={() => close()}>close</button>
           </div>
           <div class={css.list}>

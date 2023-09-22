@@ -3,7 +3,7 @@ import { $exported, exportClicked, importClicked } from "./export";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
 import { $history, addToHistory, historySelected, saveClicked } from "./history";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
-import { selectPattern } from "../components/Catalogue/Catalogue";
+import { selectPattern } from "../feature/Catalogue/Catalogue.model";
 import { Fauna } from "../types";
 import { allTemplates } from "../blueprints/all-templates";
 
