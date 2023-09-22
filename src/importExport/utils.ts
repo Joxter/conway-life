@@ -221,25 +221,79 @@ export function cellsToGrid(cells: string): boolean[][] {
   return grid;
 }
 
-function parseRleFile(rleFile: string): Pattern {
-  let rle = rleFile
-    .split("\n")
-    .filter((line) => !line.startsWith("#") && !line.startsWith("x ="))
-    .join("\n")
-    .trim();
+export function parseRleFile(rleFile: string): Pattern {
+  let lines = rleFile.split(/\n/);
+
+  let name = "";
+  let author = "";
+  let wikiLink = "";
+  let patternLink = "";
+  let comment = "";
+  let rle = "";
+  let rule = "";
+  let size: [number, number] = [0, 0];
+
+  let rleLineFound = false;
+
+  lines.forEach((line) => {
+    if (rleLineFound) {
+      rle += line;
+      return;
+    }
+
+    if (line.startsWith("#N")) {
+      name += line.slice(2).trim() + " ";
+    } else if (line.startsWith("#O")) {
+      author += line.slice(2).trim() + "\n";
+    } else if (line.startsWith("#C")) {
+      if (line.includes("conwaylife.com/wiki/")) {
+        wikiLink = line.slice(2).trim();
+      } else if (line.includes("conwaylife.com/patterns/")) {
+        patternLink = line.slice(2).trim();
+      } else {
+        comment += line.slice(2).trim() + "\n";
+      }
+    } else if (line.startsWith("x =")) {
+      let regexp = /x = (\d+), y = (\d+), rule = (.+)/;
+      let match = line.match(regexp);
+      if (match) {
+        let [, x, y, _rule] = match;
+
+        size = [+x, +y];
+        rule = _rule.toLowerCase();
+      }
+    } else if (line.match(/^[bo\d!$]+$/)) {
+      rle += line;
+      rleLineFound = true;
+    }
+  });
 
   // TODO continue
-
   return {
-    name: "string;",
-    comment: "string;",
-    author: "string;",
-    wikiLink: "string;",
-    patternLink: "string;",
-    size: [0, 0],
-    rule: "B3/S23", // B3/S23
+    name: name.trim(),
+    derivedName: getFromWikiLink(wikiLink) || name.trim(),
+    author: author.trim(),
+    comment: comment.trim(),
+    wikiLink,
+    patternLink,
+    size,
+    rule,
     rle,
   };
+
+  function getFromWikiLink(wikiLink: string) {
+    // #C www.conwaylife.com/wiki/index.php?title=20P2
+    // #C https://conwaylife.com/wiki/Period_3_oscillators
+    if (!wikiLink) {
+      return "";
+    }
+    if (wikiLink.includes("title=")) {
+      let [_, name] = wikiLink.split("title=");
+      return name.replace(/_/g, " ");
+    }
+    let [_, name] = wikiLink.split("/wiki/");
+    return name.replace(/_/g, " ");
+  }
 }
 
 // https://conwaylife.com/wiki/Run_Length_Encoded
