@@ -5,6 +5,7 @@ import { $history, addToHistory, historySelected, saveClicked } from "./history"
 import { faunaToRle, rleToFauna } from "../importExport/utils";
 import { selectPattern } from "../components/Catalogue/Catalogue";
 import { Fauna } from "../types";
+import { allTemplates } from "../blueprints/all-templates";
 
 sample({
   source: $faunaData,
@@ -59,13 +60,39 @@ const fetchPatternFx = createEffect((name: string) => {
         .filter((line) => !line.startsWith("#") && !line.startsWith("x ="))
         .join("\n");
 
-      return rleToFauna(rle).unwrap();
+      let fauna = rleToFauna(rle);
+      if (fauna.isOk()) {
+        return fauna.unwrap();
+      }
+
+      throw `Failed to parse ${name}\n${fauna.unwrapErr()}`;
     });
 });
 
-fetchPatternFx.fail.watch(({ params }) => {
-  alert("Failed to fetch pattern: " + params);
+fetchPatternFx.done.watch(({ params }) => {
+  // add hash to URL
+  window.location.hash = params;
 });
+
+fetchPatternFx.fail.watch(({ params, error }) => {
+  if (typeof error === "string") {
+    alert(error);
+  } else {
+    console.error(error);
+    alert("Failed to fetch pattern: " + params);
+  }
+});
+
+setTimeout(() => {
+  let patternName = window.location.hash.slice(1);
+  if (allTemplates.includes(patternName)) {
+    selectPattern(patternName);
+    // todo add auto scale
+  }
+  if (!patternName) {
+    selectPattern(allTemplates[Math.floor(Math.random() * allTemplates.length)]);
+  }
+}, 10);
 
 sample({ clock: selectPattern, target: fetchPatternFx });
 

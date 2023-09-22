@@ -1,14 +1,12 @@
 import { combine, createEvent, createStore, sample } from "effector";
 import { Fauna, Field, XY } from "../types";
 import { adjustOffset, getMiddleOfFauna, getWindowParams, newFauna, newMakeGo } from "../utils";
-import { createBlueprints } from "./blueprints";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
 
 export const screen = createScreen();
 export const fieldSize = createFieldSize();
-const blueprints = createBlueprints();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
   fauna: newFauna([]), // todo load random template
