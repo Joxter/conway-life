@@ -12,39 +12,27 @@ import { $exported, exportClicked, exportFieldChanged, importClicked } from "./m
 import { useUnit } from "effector-solid";
 import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton } from "./feature/Catalogue/Catalogue";
-import css from "./components/styles.module.css";
+import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 
 function App() {
   let [exported] = useUnit([$exported]);
   return (
     <div>
       <Field />
-      <div
-        style={{
-          position: "absolute",
-          width: "100%",
-          "background-color": "rgba(255,255,255, 0.9)",
-          "border-bottom": "1px solid #ccc",
-        }}
-      >
-        <h1 style={{ "font-size": "18px" }}>Game of Life</h1>
-      </div>
       <History />
       <Perf />
-      <div class={css.whiteBox} style={{ position: "absolute", bottom: "90px", left: "10px" }}>
+      <WhiteBox style={{ bottom: "100px", right: "10px" }}>
         <CatalogueButton />
-      </div>
-      <Progress />
-      <Navigation />
+      </WhiteBox>
 
-      <button
-        onClick={resetFieldPressed}
-        style={{ position: "absolute", top: "200px", left: "10px" }}
-      >
-        Reset
-      </button>
+      <WhiteBox style={{ bottom: "30px", left: "10px" }}>
+        <Progress />
+      </WhiteBox>
+      <WhiteBox style={{ bottom: "160px", left: "10px" }}>
+        <Navigation />
+      </WhiteBox>
 
-      <div style={{ position: "absolute", top: "100px", left: "10px" }}>
+      <WhiteBox style={{ top: "100px", left: "10px" }}>
         <button onClick={exportClicked}>Export</button>
         <button onClick={importClicked}>Import</button>
         <br />
@@ -53,7 +41,25 @@ function App() {
           style={{ "font-size": "8px", width: "100%", height: "50px", "line-height": 1 }}
           value={exported()}
         ></textarea>
+      </WhiteBox>
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          bottom: "0px",
+          "background-color": "rgba(255,255,255, 0.9)",
+          "border-top": "1px solid #ccc",
+          display: "flex",
+          gap: "8px",
+          "justify-content": "center",
+        }}
+      >
+        <h1 style={{ "font-size": "12px", margin: "0" }}>Game of Life</h1>{" "}
+        <a style={{ "font-size": "12px" }} href="https://github.com/Joxter">
+          joxter
+        </a>
       </div>
+
       <CatalogueModal />
     </div>
   );

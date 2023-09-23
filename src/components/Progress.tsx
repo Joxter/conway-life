@@ -1,4 +1,4 @@
-import { progress } from "../model/field";
+import { progress, resetFieldPressed } from "../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { Show } from "solid-js";
@@ -13,8 +13,7 @@ export function Progress() {
 
   return (
     <div
-      class={css.whiteBox}
-      style={{ position: "absolute", width: "300px", bottom: "10px", left: "10px" }}
+      style={{ width: "300px",  }}
     >
       <p style={{ display: "flex", gap: "4px" }}>
         <button onClick={progress.oneStep}>Step</button>
@@ -37,7 +36,7 @@ export function Progress() {
         </Show>
         {`genaration: ${currentStep()} `}
       </p>
-      <p style={{ display: "flex", gap: "4px", "margin-top": '4px' }}>
+      <p style={{ display: "flex", gap: "4px", "margin-top": "4px" }}>
         {`gen per sec`}
         <PlusMinus
           value={expectedStepsPerSec()}
@@ -46,6 +45,8 @@ export function Progress() {
           range={progress.speedRange}
         />
       </p>
+      <br />
+      <button onClick={resetFieldPressed}>Reset</button>
     </div>
   );
 }
