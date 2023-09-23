@@ -3,7 +3,11 @@ import commonCss from "../../components/styles.module.css";
 import css from "./styles.module.css";
 import { catalogue } from "./Catalogue.model";
 
-export const Catalogue = () => {
+export function CatalogueButton() {
+  return <button onClick={() => catalogue.open()}>Catalogue</button>;
+}
+
+export const CatalogueModal = () => {
   const [search, pageItems, cnt, isOpen] = useUnit([
     catalogue.$search,
     catalogue.$pageItems,
@@ -11,15 +15,23 @@ export const Catalogue = () => {
     catalogue.$isOpen,
   ]);
 
+  document.onkeydown = function (ev) {
+    if (isOpen() && ev.code == "Escape") {
+      catalogue.close();
+    }
+  };
+
   return (
-    <>
-      <div
-        class={commonCss.whiteBox}
-        style={{ position: "absolute", bottom: "90px", left: "10px" }}
-      >
-        <button onClick={() => catalogue.open()}>Catalogue</button>
-      </div>
-      <div class={commonCss.modal} style={{ display: isOpen() ? "initial" : "none" }}>
+    <div
+      class={commonCss.overlay}
+      style={{ display: isOpen() ? "initial" : "none" }}
+      onClick={(ev) => {
+        if (ev.target.classList.contains(commonCss.overlay)) {
+          catalogue.close();
+        }
+      }}
+    >
+      <div class={commonCss.modal}>
         <div
           class={commonCss.roundBox}
           style={{
@@ -72,6 +84,6 @@ export const Catalogue = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

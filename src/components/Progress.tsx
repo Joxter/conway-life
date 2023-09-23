@@ -2,7 +2,7 @@ import { progress } from "../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { Show } from "solid-js";
-import { PlusMinus } from "./stateless/PlusMinus";
+import { PlusMinus } from "./PlusMinus";
 
 export function Progress() {
   let [isRunning, currentStep, expectedStepsPerSec] = useUnit([

@@ -11,7 +11,8 @@ import { Perf } from "./components/Perf";
 import { $exported, exportClicked, exportFieldChanged, importClicked } from "./model/export";
 import { useUnit } from "effector-solid";
 import { History } from "./components/History";
-import { Catalogue } from "./feature/Catalogue/Catalogue";
+import { CatalogueModal, CatalogueButton } from "./feature/Catalogue/Catalogue";
+import css from "./components/styles.module.css";
 
 function App() {
   let [exported] = useUnit([$exported]);
@@ -30,7 +31,9 @@ function App() {
       </div>
       <History />
       <Perf />
-      <Catalogue />
+      <div class={css.whiteBox} style={{ position: "absolute", bottom: "90px", left: "10px" }}>
+        <CatalogueButton />
+      </div>
       <Progress />
       <Navigation />
 
@@ -51,6 +54,7 @@ function App() {
           value={exported()}
         ></textarea>
       </div>
+      <CatalogueModal />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { fieldSize, focusToTheMiddle } from "../model/field";
 import css from "./styles.module.css";
-import { PlusMinus } from "./stateless/PlusMinus";
+import { PlusMinus } from "./PlusMinus";
 import { useUnit } from "effector-solid";
 
 export function Navigation() {
