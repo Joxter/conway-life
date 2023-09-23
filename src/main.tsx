@@ -9,7 +9,7 @@ import { Navigation } from "./components/Navigation";
 import { Progress } from "./components/Progress";
 import { Perf } from "./components/Perf";
 import { History } from "./components/History";
-import { CatalogueModal, CatalogueButton } from "./feature/Catalogue/Catalogue";
+import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catalogue/Catalogue";
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
 
@@ -35,6 +35,9 @@ function App() {
           <Perf />
         </WhiteBox>
 
+        <CurrentPattern
+          style={{ position: "absolute", bottom: "150px", right: "10px", "font-size": "14px" }}
+        />
         <WhiteBox style={{ bottom: "110px", right: "10px" }}>
           <CatalogueButton />
         </WhiteBox>

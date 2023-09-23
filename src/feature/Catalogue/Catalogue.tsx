@@ -3,7 +3,21 @@ import commonCss from "../../components/styles.module.css";
 import css from "./styles.module.css";
 import { catalogue } from "./Catalogue.model";
 import { Modal } from "../../components/Modal/Modal";
+import { JSX } from "solid-js/types/jsx";
 
+export function CurrentPattern(props: { style: JSX.CSSProperties }) {
+  const [currentPattern] = useUnit([catalogue.$currentPattern]);
+
+  return (
+    <a
+      style={{ "font-style": "italic", ...props.style }}
+      href={"#" + currentPattern()}
+      onClick={catalogue.currentPatternClicked}
+    >
+      {currentPattern()}
+    </a>
+  );
+}
 export function CatalogueButton() {
   return <button onClick={() => catalogue.open()}>Catalogue</button>;
 }

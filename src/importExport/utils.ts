@@ -85,10 +85,8 @@ export function rleToGrid(rleFile: string, fileName: string): Result<boolean[][]
   return res.map(() => grid);
 }
 
-export function rleToFauna(rleFile: string, fileName: string): Result<Fauna, string> {
+export function rleToFauna(rle: string): Result<Fauna, string> {
   let fauna: Fauna = new Map();
-
-  let { rle } = parseRleFile(rleFile, fileName);
 
   let res = parseRle(rle, (x, y) => {
     if (!fauna.has(x)) {

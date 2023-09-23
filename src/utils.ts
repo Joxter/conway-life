@@ -136,7 +136,6 @@ export function setStrToLS(key: string, value: string): void {
 }
 
 export function fuzzy(str: string, query: string): number {
-  if (str === query) return 100;
   if (str.includes(query)) return 1;
 
   for (let i = 0; i < query.length; i++) {

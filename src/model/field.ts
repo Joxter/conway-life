@@ -9,7 +9,7 @@ export const screen = createScreen();
 export const fieldSize = createFieldSize();
 
 export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
-  fauna: newFauna([]), // todo load random template
+  fauna: newFauna([]),
   time: 0,
   size: 0,
 });
@@ -43,7 +43,7 @@ export const perf = createPerf(
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 export const resetFocus = createEvent<any>();
-export const focusToTheMiddle = createEvent<any>();
+export const focusToTheMiddle = createEvent<any>(); // TODO resize
 
 export const resetFieldPressed = createEvent<any>();
 
