@@ -37,7 +37,7 @@ export const CatalogueModal = () => {
           style={{
             display: "grid",
             "grid-auto-rows": "auto 1fr",
-            width: "min(800px, calc(100vw - 50px))",
+            width: "min(900px, calc(100vw - 50px))",
             height: "min(600px, calc(100vh - 100px))",
             "background-color": "#eee",
           }}
@@ -66,17 +66,23 @@ export const CatalogueModal = () => {
                   />
                   <div>
                     <div style={{ display: "grid" }}>
-                      <p
-                        style={{
-                          "text-overflow": "ellipsis",
-                          overflow: "hidden",
-                          "white-space": "nowrap",
-                        }}
-                      >
-                        {it.name}
+                      <p>
+                        <b>{it.derivedName}</b>
                       </p>
                     </div>
-                    <button onClick={() => catalogue.selectPattern(it.fileName)}>select</button>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <p>
+                        size: {it.size[0]}*{it.size[1]}
+                      </p>
+                      <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>
+                    </div>
+                    {it.comment && <p>{it.comment}</p>}
+                    {it.wikiLink && (
+                      <a href={it.wikiLink} target={"_blank"}>
+                        wiki
+                      </a>
+                    )}
+                    {it.author && <p style={{ display: "grid" }}>{it.author}</p>}
                   </div>
                 </div>
               );
