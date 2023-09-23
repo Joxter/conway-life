@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
-import { render } from "solid-js/web";
-import { calculated, resetFieldPressed, startCalc } from "./model/field";
+import { render, ErrorBoundary } from "solid-js/web";
+import { calculated, startCalc } from "./model/field";
 import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
@@ -15,48 +15,64 @@ import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/Im
 
 function App() {
   return (
-    <div>
-      <Field />
-      <History />
-      <Perf />
+    <ErrorBoundary
+      fallback={<h2 style={{ color: "red", "text-align": "center" }}>JSX ERROR :(</h2>}
+    >
+      <div>
+        <Field />
+        <History />
+        <WhiteBox
+          style={{
+            top: "0",
+            left: "0",
+            right: "0",
+            "border-radius": "0",
+            border: "0",
+            padding: "5px",
+            "border-bottom": "1px solid #aaa",
+          }}
+        >
+          <Perf />
+        </WhiteBox>
 
-      <WhiteBox style={{ bottom: "110px", right: "10px" }}>
-        <CatalogueButton />
-      </WhiteBox>
+        <WhiteBox style={{ bottom: "110px", right: "10px" }}>
+          <CatalogueButton />
+        </WhiteBox>
 
-      <WhiteBox style={{ top: "100px", left: "10px" }}>
-        <ImportExportButton />
-      </WhiteBox>
+        <WhiteBox style={{ top: "100px", left: "10px" }}>
+          <ImportExportButton />
+        </WhiteBox>
 
-      <WhiteBox style={{ bottom: "30px", left: "10px", right: "10px" }}>
-        <Progress />
-      </WhiteBox>
+        <WhiteBox style={{ bottom: "30px", left: "10px", right: "10px" }}>
+          <Progress />
+        </WhiteBox>
 
-      <WhiteBox style={{ bottom: "110px", left: "10px" }}>
-        <Navigation />
-      </WhiteBox>
+        <WhiteBox style={{ bottom: "110px", left: "10px" }}>
+          <Navigation />
+        </WhiteBox>
 
-      <div
-        style={{
-          position: "absolute",
-          width: "100%",
-          bottom: "0px",
-          "background-color": "rgba(255,255,255, 0.9)",
-          "border-top": "1px solid #ccc",
-          display: "flex",
-          gap: "8px",
-          "justify-content": "center",
-        }}
-      >
-        <h1 style={{ "font-size": "12px", margin: "0" }}>Game of Life</h1>{" "}
-        <a style={{ "font-size": "12px" }} href="https://github.com/Joxter">
-          joxter
-        </a>
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            bottom: "0px",
+            "background-color": "rgba(255,255,255, 0.9)",
+            "border-top": "1px solid #ccc",
+            display: "flex",
+            gap: "8px",
+            "justify-content": "center",
+          }}
+        >
+          <h1 style={{ "font-size": "12px", margin: "0" }}>Game of Life</h1>{" "}
+          <a style={{ "font-size": "12px" }} href="https://github.com/Joxter">
+            joxter
+          </a>
+        </div>
+
+        <ImportExportModal />
+        <CatalogueModal />
       </div>
-
-      <ImportExportModal />
-      <CatalogueModal />
-    </div>
+    </ErrorBoundary>
   );
 }
 

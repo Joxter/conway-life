@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, sample } from "effector";
 import { Fauna, Field, XY } from "../types";
-import { adjustOffset, getMiddleOfFauna, getWindowParams, newFauna, newMakeGo } from "../utils";
+import { adjustOffset, getMiddleOfFauna, getViewPortParams, newFauna } from "../utils";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
@@ -13,7 +13,6 @@ export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number
   time: 0,
   size: 0,
 });
-// $faunaData.watch(console.log);
 
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
   // { col: 0, row: 0, label: "0,0" },
@@ -60,7 +59,7 @@ sample({
 
       return adjustOffset(pivotCell, hovered, size);
     } else {
-      let windowParams = getWindowParams();
+      let windowParams = getViewPortParams();
       let center = { x: windowParams.width / 2, y: windowParams.height / 2 };
 
       let pivotCell = {
@@ -143,6 +142,33 @@ export const $viewHoveredCells = combine(
       return [{ x: finX, y: finY }];
     }
     return [];
+  },
+);
+
+export const $hoveredCellColRow = combine(
+  screen.$hovered,
+  fieldSize.$cellSize,
+  $screenOffsetXY,
+  (hovered, { size }, screenOffsetXY) => {
+    if (hovered) {
+      const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
+      const cellRow = Math.floor((hovered.y - screenOffsetXY.y) / size);
+
+      return { col: cellCol, row: cellRow };
+    }
+    return null;
+  },
+);
+
+const vp = getViewPortParams();
+export const $centerScreenColRow = combine(
+  fieldSize.$cellSize,
+  $screenOffsetXY,
+  ({ size }, screenOffsetXY) => {
+    const cellCol = Math.floor((vp.width / 2 - screenOffsetXY.x) / size);
+    const cellRow = Math.floor((vp.height / 2 - screenOffsetXY.y) / size);
+
+    return { col: cellCol, row: cellRow };
   },
 );
 

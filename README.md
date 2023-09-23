@@ -2,14 +2,17 @@
 
 ## TODO
 
-- [ ] better parser rle/cells files (need links, name, size, ..)
 - [ ] better UI
   - [ ] auto-focus and auto-zoom
-  - [ ] rearrange items
-  - [ ] something for Perf
-- [ ] (WIP) mobile support
-  - [x] proper scroll and toggle
-  - [ ] 2-finger zoom
+  - [ ] update progress bar
+  - [ ] responsiveness
+  - [x] something for Perf
+- [ ] better catalogue
+  - [ ] better search, search by name/author/comment
+  - [ ] pages
+  - [ ] filter by size
+  - [ ] filter by population
+  - [ ] filter by type (ship, oscillator, ...)
 - [ ] simply analytics
   - [ ] is die
   - [ ] is ship
@@ -24,6 +27,9 @@
 - [ ] (WIP) add HashLife algorithm
   - [ ] make webworker optional
   - [x] copy implementation from copy (lol), rewrite to TS
+- [ ] (WIP) mobile support
+  - [x] proper scroll and toggle
+  - [ ] 2-finger zoom
 - [ ] tools:
   - [x] toggle one cell
   - [ ] draw pen
@@ -31,6 +37,7 @@
   - [ ] area to focus
   - [ ] ??? a line, selections to move/remove
 - [ ] add keyboard support
+- [x] better parser rle/cells files (need links, name, size, ..)
 - [x] search patterns by name
   - [x] generate images and upload to cdn
   - [x] preview images

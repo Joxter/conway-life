@@ -70,7 +70,7 @@ function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell):
   return faunaInc;
 }
 
-export function getWindowParams() {
+export function getViewPortParams() {
   return {
     width: window.visualViewport?.width || 600,
     height: window.visualViewport?.height || 400,
@@ -147,4 +147,30 @@ export function fuzzy(str: string, query: string): number {
   }
 
   return 0.5;
+}
+
+function minDistance(str: string, query: string): number {
+  let dp = Array(str.length + 1)
+    .fill(null)
+    .map(() => Array(query.length + 1).fill(0));
+
+  for (let i = 0; i < dp.length; i++) {
+    dp[i][0] = i;
+  }
+
+  for (let i = 0; i < dp[0].length; i++) {
+    dp[0][i] = i;
+  }
+
+  for (let i = 1; i < dp.length; i++) {
+    for (let j = 1; j < dp[0].length; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1, // left
+        dp[i][j - 1] + 1, // right
+        dp[i - 1][j - 1] + (str[i - 1] != query[j - 1] ? 1 : 0), // diagonal
+      );
+    }
+  }
+
+  return dp[dp.length - 1][dp[0].length - 1];
 }

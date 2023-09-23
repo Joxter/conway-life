@@ -1,8 +1,8 @@
 import { createEvent, createStore, sample, split, Store } from "effector";
 import { XY } from "../types";
-import { getStrFromLS, getWindowParams, setStrToLS } from "../utils";
+import { getStrFromLS, getViewPortParams, setStrToLS } from "../utils";
 
-const vp = getWindowParams();
+const vp = getViewPortParams();
 
 export function createFieldSize() {
   const lsCellSizeName = "cellSize";

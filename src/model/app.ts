@@ -110,3 +110,7 @@ sample({
   clock: [historySelected, importExport.importClicked, fetchPatternFx.doneData],
   target: focusToTheMiddle,
 });
+
+progress.reset.watch(() => {
+  window.location.hash = "";
+});
