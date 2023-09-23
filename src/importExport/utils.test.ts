@@ -176,10 +176,10 @@ x = 62, y = 39, rule = B3/S23
 
       expect(parseRleFile(pattern, "foo.rle")).toEqual({
         fileName: "foo.rle",
-        derivedName: "Pentoad 2",
+        name: "Pentoad 2",
         author: "Jeremy Tan and Goldtiger997, 1 April 2019",
         comment: "https://conwaylife.com/forums/viewtopic.php?p=74280#p74280",
-        name: "pentoad2_synth.rle",
+        rawName: "pentoad2_synth.rle",
         patternLink: "https://conwaylife.com/patterns/pentoad2_synth.rle",
         rle: "61bo$40bo18b2o$41b2o17b2o$40b2o2$54bo$44bo8bo$45b2o6b3o$44b2o5$15bo$39b2o18bo$38bo!",
         rule: "b3/s23",
@@ -198,10 +198,10 @@ x = 15, y = 12, rule = b3/s23
 
       expect(parseRleFile(pattern, "foo.rle")).toEqual({
         fileName: "foo.rle",
-        derivedName: "Pentoad 1H2",
+        name: "Pentoad 1H2",
         author: "",
         comment: "A period 5 oscillator.",
-        name: "Pentoad 1H2",
+        rawName: "Pentoad 1H2",
         patternLink: "",
         rle: "8b2o5b$8bobo2b2o$9b3ob2o2$5b2o8b$6bo8b$6bo8b$6b2o7b$2b2o11b$bobo11b$bo13b$2o!",
         rule: "b3/s23",
@@ -219,10 +219,10 @@ x = 385, y = 337, rule = B3/S23
 
       expect(parseRleFile(pattern, "foo.rle")).toEqual({
         fileName: "foo.rle",
-        derivedName: "",
+        name: "foo",
         author: "",
         comment: "pseudo p14 gun\nKarel Suhajda,Feb 2004",
-        name: "",
+        rawName: "",
         patternLink: "",
         rle: "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
         rule: "b3/s23",
@@ -249,6 +249,15 @@ x = 385, y = 337, rule = B3/S23
 
       let parsed = parseRleFile(pattern, "foo");
       expect(parsed.name).toEqual("Foo, 2022 Bar, 1234"); // don't want 2+ line names
+    });
+
+    test("should prettify name", () => {
+      let pattern = `#N Achim%27s other_p%5E16
+x = 385, y = 337, rule = B3/S23
+133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
+
+      let parsed = parseRleFile(pattern, "foo");
+      expect(parsed.name).toEqual("Achim's other p^16");
     });
 
     test("crazy \\n and \\r should be fine", () => {
@@ -290,8 +299,8 @@ x = 385, y = 337, rule = B3/S23
         fileName: "foo",
         author: "",
         comment: "",
-        derivedName: "",
-        name: "",
+        name: "foo",
+        rawName: "",
         patternLink: "",
         rle: "",
         rule: "",

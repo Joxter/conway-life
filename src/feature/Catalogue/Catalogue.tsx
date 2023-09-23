@@ -52,7 +52,7 @@ export const CatalogueModal = () => {
                 <div>
                   <div style={{ display: "grid" }}>
                     <p>
-                      <b>{it.derivedName}</b>
+                      <b>{it.name}</b>
                     </p>
                   </div>
                   <div style={{ display: "flex", gap: "8px" }}>

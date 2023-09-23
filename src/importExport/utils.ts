@@ -224,7 +224,7 @@ export function cellsToGrid(cells: string): boolean[][] {
 export function parseRleFile(rleFile: string, fileName: string): Pattern {
   let lines = rleFile.split("\n");
 
-  let name = "";
+  let rawName = "";
   let author = "";
   let wikiLink = "";
   let patternLink = "";
@@ -243,7 +243,7 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
     }
 
     if (line.startsWith("#N")) {
-      name += line.slice(2).trim() + " ";
+      rawName += line.slice(2).trim() + " ";
     } else if (line.startsWith("#O")) {
       author += line.slice(2).trim() + "\n";
     } else if (line.startsWith("#C")) {
@@ -268,12 +268,13 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
       rleLineFound = true;
     }
   });
+  rawName = rawName.trim();
 
-  // TODO continue
   return {
     fileName,
-    name: name.trim(),
-    derivedName: getFromWikiLink(wikiLink) || name.trim(),
+    rawName: rawName.trim(),
+    name:
+      prettifyName(getFromWikiLink(wikiLink)) || prettifyName(rawName) || prettifyName(fileName),
     author: author.trim(),
     comment: comment.trim(),
     wikiLink,
@@ -291,10 +292,14 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
     }
     if (wikiLink.includes("title=")) {
       let [_, name] = wikiLink.split("title=");
-      return name.replace(/_/g, " ");
+      return name;
     }
     let [_, name] = wikiLink.split("/wiki/");
-    return name.replace(/_/g, " ");
+    return name;
+  }
+
+  function prettifyName(name: string): string {
+    return decodeURIComponent(name.replace(/_/g, " ")).replace(".rle", "").trim();
   }
 }
 

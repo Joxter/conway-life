@@ -16,8 +16,8 @@ export type FaunaInc = Map<number, Map<number, [number, number]>>; // [color1 co
 
 export type Pattern = {
   fileName: string;
+  rawName: string;
   name: string;
-  derivedName: string;
   comment: string;
   author: string;
   wikiLink: string;
