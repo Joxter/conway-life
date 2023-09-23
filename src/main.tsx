@@ -8,40 +8,34 @@ import { Field } from "./components/Field/Field";
 import { Navigation } from "./components/Navigation";
 import { Progress } from "./components/Progress";
 import { Perf } from "./components/Perf";
-import { $exported, exportClicked, exportFieldChanged, importClicked } from "./model/export";
-import { useUnit } from "effector-solid";
 import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton } from "./feature/Catalogue/Catalogue";
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
+import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
 
 function App() {
-  let [exported] = useUnit([$exported]);
   return (
     <div>
       <Field />
       <History />
       <Perf />
-      <WhiteBox style={{ bottom: "100px", right: "10px" }}>
+
+      <WhiteBox style={{ bottom: "110px", right: "10px" }}>
         <CatalogueButton />
       </WhiteBox>
 
-      <WhiteBox style={{ bottom: "30px", left: "10px" }}>
+      <WhiteBox style={{ top: "100px", left: "10px" }}>
+        <ImportExportButton />
+      </WhiteBox>
+
+      <WhiteBox style={{ bottom: "30px", left: "10px", right: "10px" }}>
         <Progress />
       </WhiteBox>
-      <WhiteBox style={{ bottom: "160px", left: "10px" }}>
+
+      <WhiteBox style={{ bottom: "110px", left: "10px" }}>
         <Navigation />
       </WhiteBox>
 
-      <WhiteBox style={{ top: "100px", left: "10px" }}>
-        <button onClick={exportClicked}>Export</button>
-        <button onClick={importClicked}>Import</button>
-        <br />
-        <textarea
-          onChange={(ev) => exportFieldChanged(ev.target.value)}
-          style={{ "font-size": "8px", width: "100%", height: "50px", "line-height": 1 }}
-          value={exported()}
-        ></textarea>
-      </WhiteBox>
       <div
         style={{
           position: "absolute",
@@ -60,6 +54,7 @@ function App() {
         </a>
       </div>
 
+      <ImportExportModal />
       <CatalogueModal />
     </div>
   );

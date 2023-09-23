@@ -1,5 +1,5 @@
 import { createEffect, sample } from "effector";
-import { $exported, exportClicked, importClicked } from "./export";
+import { importExport } from "../feature/ImportExport/importExport.model";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
 import { $history, addToHistory, historySelected, saveClicked } from "./history";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
@@ -29,20 +29,25 @@ sample({
 });
 
 sample({
-  clock: [historySelected, resetFieldPressed, exportClicked, importClicked],
+  clock: [
+    historySelected,
+    resetFieldPressed,
+    importExport.exportClicked,
+    importExport.importClicked,
+  ],
   target: progress.reset,
 });
 
 sample({
   source: $faunaData,
-  clock: exportClicked,
+  clock: importExport.exportClicked,
   fn: ({ fauna }) => faunaToRle(fauna),
-  target: $exported,
+  target: importExport.$textField,
 });
 
 sample({
-  source: $exported,
-  clock: importClicked,
+  source: importExport.$textField,
+  clock: importExport.importClicked,
   fn: (str) => {
     return { fauna: rleToFauna(str, "no-name").unwrapOr(new Map()), time: 0, size: 0 };
   },
@@ -102,6 +107,6 @@ sample({
 });
 
 sample({
-  clock: [historySelected, importClicked, fetchPatternFx.doneData],
+  clock: [historySelected, importExport.importClicked, fetchPatternFx.doneData],
   target: focusToTheMiddle,
 });

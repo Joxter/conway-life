@@ -12,40 +12,39 @@ export function Progress() {
   ]);
 
   return (
-    <div
-      style={{ width: "300px",  }}
-    >
-      <p style={{ display: "flex", gap: "4px" }}>
-        <button onClick={progress.oneStep}>Step</button>
-        {`timer: `}
-        <Show when={isRunning()}>
-          <button
-            style={{ color: "#f8f8f8", "background-color": "#de4040", border: "0" }}
-            onClick={progress.stop}
-          >
-            STOP
-          </button>
-        </Show>
-        <Show when={!isRunning()}>
-          <button
-            style={{ color: "#f8f8f8", "background-color": "#50c40e", border: "0" }}
-            onClick={progress.start}
-          >
-            START
-          </button>
-        </Show>
-        {`genaration: ${currentStep()} `}
-      </p>
-      <p style={{ display: "flex", gap: "4px", "margin-top": "4px" }}>
-        {`gen per sec`}
-        <PlusMinus
-          value={expectedStepsPerSec()}
-          onPlusClicked={progress.incExpectedStepsPerSec}
-          onMinusClicked={progress.decExpectedStepsPerSec}
-          range={progress.speedRange}
-        />
-      </p>
-      <br />
+    <div style={{ width: "100%", display: "flex", "justify-content": "space-between" }}>
+      <div>
+        <p style={{ display: "flex", gap: "4px" }}>
+          <button onClick={progress.oneStep}>Step</button>
+          {`timer: `}
+          <Show when={isRunning()}>
+            <button
+              style={{ color: "#f8f8f8", "background-color": "#de4040", border: "0" }}
+              onClick={progress.stop}
+            >
+              STOP
+            </button>
+          </Show>
+          <Show when={!isRunning()}>
+            <button
+              style={{ color: "#f8f8f8", "background-color": "#50c40e", border: "0" }}
+              onClick={progress.start}
+            >
+              START
+            </button>
+          </Show>
+          {`genaration: ${currentStep()} `}
+        </p>
+        <p style={{ display: "flex", gap: "4px", "margin-top": "4px" }}>
+          {`gen per sec`}
+          <PlusMinus
+            value={expectedStepsPerSec()}
+            onPlusClicked={progress.incExpectedStepsPerSec}
+            onMinusClicked={progress.decExpectedStepsPerSec}
+            range={progress.speedRange}
+          />
+        </p>
+      </div>
       <button onClick={resetFieldPressed}>Reset</button>
     </div>
   );
