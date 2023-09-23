@@ -1,12 +1,9 @@
 import { combine, createEvent, createStore } from "effector";
 import { allTemplates } from "../../blueprints/all-templates";
-import { fuzzy } from "../../utils";
+import { fuzzy, objEntries } from "../../utils";
+import { Pattern } from "../../types";
 
-type CatItem = {
-  image: string;
-  name: string;
-  id: string;
-};
+type CatItem = Omit<Pattern, "rle"> & { image: string };
 
 export const catalogue = createCatalogue();
 
@@ -24,19 +21,14 @@ export function createCatalogue() {
   $isOpen.on(open, () => true).on([close, selectPattern], () => false);
 
   const $items = createStore<CatItem[]>(
-    allTemplates.map((name, i) => {
+    objEntries(allTemplates).map(([key, patt]) => {
       return {
-        image: `https://cerestle.sirv.com/Images/${name}.png`,
-        name: name,
-        id: String(i),
+        image: `https://cerestle.sirv.com/Images/${patt.fileName.replace(".rle", "")}.png`,
+        ...patt,
       };
     }),
   );
   const $offset = createStore(0);
-
-  $offset.on(open, () => {
-    return Math.floor(Math.random() * (allTemplates.length - 20));
-  });
 
   const $filteredItems = combine($search, $items, (search, items) => {
     search = search.toLowerCase().trim();

@@ -70,8 +70,8 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   return grid;
 }
 
-export function rleToGrid(rleFile: string): Result<boolean[][], string> {
-  let { rle, size } = parseRleFile(rleFile);
+export function rleToGrid(rleFile: string, fileName: string): Result<boolean[][], string> {
+  let { rle, size } = parseRleFile(rleFile, fileName);
 
   let grid: boolean[][] = []; // todo add "size"
 
@@ -85,10 +85,10 @@ export function rleToGrid(rleFile: string): Result<boolean[][], string> {
   return res.map(() => grid);
 }
 
-export function rleToFauna(rleFile: string): Result<Fauna, string> {
+export function rleToFauna(rleFile: string, fileName: string): Result<Fauna, string> {
   let fauna: Fauna = new Map();
 
-  let { rle } = parseRleFile(rleFile);
+  let { rle } = parseRleFile(rleFile, fileName);
 
   let res = parseRle(rle, (x, y) => {
     if (!fauna.has(x)) {
@@ -221,8 +221,8 @@ export function cellsToGrid(cells: string): boolean[][] {
   return grid;
 }
 
-export function parseRleFile(rleFile: string): Pattern {
-  let lines = rleFile.split(/\n/);
+export function parseRleFile(rleFile: string, fileName: string): Pattern {
+  let lines = rleFile.split("\n");
 
   let name = "";
   let author = "";
@@ -236,6 +236,7 @@ export function parseRleFile(rleFile: string): Pattern {
   let rleLineFound = false;
 
   lines.forEach((line) => {
+    line = line.trim();
     if (rleLineFound) {
       rle += line;
       return;
@@ -270,6 +271,7 @@ export function parseRleFile(rleFile: string): Pattern {
 
   // TODO continue
   return {
+    fileName,
     name: name.trim(),
     derivedName: getFromWikiLink(wikiLink) || name.trim(),
     author: author.trim(),

@@ -20,7 +20,7 @@ sample({
   fn: (history, selected) => {
     const savedRle = history.find((it) => it.name === selected)!.rle;
     return {
-      fauna: rleToFauna(savedRle).unwrapOr(new Map()),
+      fauna: rleToFauna(savedRle, "no-name").unwrapOr(new Map()),
       time: 0,
       size: 0,
     };
@@ -44,23 +44,23 @@ sample({
   source: $exported,
   clock: importClicked,
   fn: (str) => {
-    return { fauna: rleToFauna(str).unwrapOr(new Map()), time: 0, size: 0 };
+    return { fauna: rleToFauna(str, "no-name").unwrapOr(new Map()), time: 0, size: 0 };
   },
   target: $faunaData,
 });
 
-const fetchPatternFx = createEffect((name: string) => {
-  return fetch("patterns/" + name + ".rle")
+const fetchPatternFx = createEffect((fileName: string) => {
+  return fetch("patterns/" + fileName)
     .then((res) => {
       return res.text();
     })
     .then((rleFile): Fauna => {
-      let fauna = rleToFauna(rleFile);
+      let fauna = rleToFauna(rleFile, fileName);
       if (fauna.isOk()) {
         return fauna.unwrap();
       }
 
-      throw `Failed to parse ${name}\n${fauna.unwrapErr()}`;
+      throw `Failed to parse ${fileName}\n${fauna.unwrapErr()}`;
     });
 });
 
@@ -79,13 +79,15 @@ fetchPatternFx.fail.watch(({ params, error }) => {
 });
 
 setTimeout(() => {
-  let patternName = window.location.hash.slice(1);
-  if (allTemplates.includes(patternName)) {
-    catalogue.selectPattern(patternName);
+  let patternFileName = window.location.hash.slice(1);
+  if (allTemplates[patternFileName]) {
+    catalogue.selectPattern(patternFileName);
     // todo add auto scale
   }
-  if (!patternName) {
-    catalogue.selectPattern(allTemplates[Math.floor(Math.random() * allTemplates.length)]);
+  if (!patternFileName) {
+    let keys = Object.keys(allTemplates);
+    let randomPatternName = keys[Math.floor(Math.random() * keys.length)];
+    catalogue.selectPattern(allTemplates[randomPatternName].fileName);
   }
 }, 10);
 

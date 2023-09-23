@@ -32,7 +32,7 @@ function run(folder: string, output: string) {
         let noExtName = fileName.slice(0, -4);
         let content = fs.readFileSync(`${folder}/${fileName}`, "utf8").toString();
 
-        rleToGrid(content).match({
+        rleToGrid(content, fileName).match({
           ok: (grid) => {
             generateImage(grid, `${output}/${noExtName}.png`);
           },

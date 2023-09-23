@@ -76,7 +76,7 @@ export const CatalogueModal = () => {
                         {it.name}
                       </p>
                     </div>
-                    <button onClick={() => catalogue.selectPattern(it.name)}>select</button>
+                    <button onClick={() => catalogue.selectPattern(it.fileName)}>select</button>
                   </div>
                 </div>
               );

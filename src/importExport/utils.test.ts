@@ -86,10 +86,10 @@ describe("import-export utils", () => {
 
   describe("rleToFauna", () => {
     test("glider", () => {
-      expect(faunaToRle(rleToFauna(glider).unwrap())).toEqual(glider);
+      expect(faunaToRle(rleToFauna(glider, "").unwrap())).toEqual(glider);
 
       // prettier-ignore
-      expect(rleToFauna(glider).unwrap()).toEqual(new Map([
+      expect(rleToFauna(glider, '').unwrap()).toEqual(new Map([
         [1, new Map([[0, 1], [2, 1]])],
         [2, new Map([[1, 1], [2, 1]])],
         [0, new Map([[2, 1]])],
@@ -97,10 +97,10 @@ describe("import-export utils", () => {
       ));
     });
     test("gliderGun", () => {
-      expect(faunaToRle(rleToFauna(gliderGun).unwrap())).toEqual(gliderGun);
+      expect(faunaToRle(rleToFauna(gliderGun, "").unwrap())).toEqual(gliderGun);
     });
     test("gliderGunTest", () => {
-      expect(faunaToRle(rleToFauna(gliderGunTest).unwrap())).toEqual(gliderGunTest);
+      expect(faunaToRle(rleToFauna(gliderGunTest, "").unwrap())).toEqual(gliderGunTest);
     });
   });
 
@@ -159,7 +159,7 @@ O...O....................................O...O
 .........OO........................OO
 ................O............O`;
 
-      expect(faunaToCells(rleToFauna(rle).unwrap())).toEqual(cells);
+      expect(faunaToCells(rleToFauna(rle, "").unwrap())).toEqual(cells);
     });
   });
 
@@ -174,7 +174,8 @@ x = 62, y = 39, rule = B3/S23
 61bo$40bo18b2o$41b2o17b2o$40b2o2$54bo$44bo8bo$45b2o6b3o$44b2o5$15bo$
 39b2o18bo$38bo!`;
 
-      expect(parseRleFile(pattern)).toEqual({
+      expect(parseRleFile(pattern, "foo.rle")).toEqual({
+        fileName: "foo.rle",
         derivedName: "Pentoad 2",
         author: "Jeremy Tan and Goldtiger997, 1 April 2019",
         comment: "https://conwaylife.com/forums/viewtopic.php?p=74280#p74280",
@@ -195,7 +196,8 @@ x = 15, y = 12, rule = b3/s23
 8b2o5b$8bobo2b2o$9b3ob2o2$5b2o8b$6bo8b$6bo8b$6b2o7b$2b2o11b$bobo11b$bo
 13b$2o!`;
 
-      expect(parseRleFile(pattern)).toEqual({
+      expect(parseRleFile(pattern, "foo.rle")).toEqual({
+        fileName: "foo.rle",
         derivedName: "Pentoad 1H2",
         author: "",
         comment: "A period 5 oscillator.",
@@ -215,7 +217,8 @@ x = 15, y = 12, rule = b3/s23
 x = 385, y = 337, rule = B3/S23
 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
-      expect(parseRleFile(pattern)).toEqual({
+      expect(parseRleFile(pattern, "foo.rle")).toEqual({
+        fileName: "foo.rle",
         derivedName: "",
         author: "",
         comment: "pseudo p14 gun\nKarel Suhajda,Feb 2004",
@@ -234,7 +237,7 @@ x = 385, y = 337, rule = B3/S23
 x = 385, y = 337, rule = B3/S23
 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
-      let parsed = parseRleFile(pattern);
+      let parsed = parseRleFile(pattern, "foo");
       expect(parsed.author).toEqual("Foo, 2022\nBar, 1234");
     });
 
@@ -244,15 +247,27 @@ x = 385, y = 337, rule = B3/S23
 x = 385, y = 337, rule = B3/S23
 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
-      let parsed = parseRleFile(pattern);
+      let parsed = parseRleFile(pattern, "foo");
       expect(parsed.name).toEqual("Foo, 2022 Bar, 1234"); // don't want 2+ line names
+    });
+
+    test("crazy \\n and \\r should be fine", () => {
+      let pattern = `#N Foo, 2022
+#N Bar, 1234
+x = 385, y = 337, rule = B3/S23
+133boo76booboo3boo101boo3booboo$130bo3\n\rbo75bobobo3bobo14bo71bo14bobo!`;
+
+      let parsed = parseRleFile(pattern, "foo");
+      expect(parsed.rle).toEqual(
+        "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
+      );
     });
 
     test("nothing case", () => {
       let pattern = `x = 385, y = 337, rule = B3/S23
 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
-      let parsed = parseRleFile(pattern);
+      let parsed = parseRleFile(pattern, "foo");
       expect(parsed.size).toEqual([385, 337]);
       expect(parsed.rle).toEqual(
         "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
@@ -262,7 +277,7 @@ x = 385, y = 337, rule = B3/S23
     test("very nothing case", () => {
       let pattern = `133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
-      let parsed = parseRleFile(pattern);
+      let parsed = parseRleFile(pattern, "foo");
       expect(parsed.rle).toEqual(
         "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
       );
@@ -271,8 +286,8 @@ x = 385, y = 337, rule = B3/S23
     test("super very nothing case", () => {
       let pattern = ``;
 
-      parseRleFile(pattern);
-      expect(parseRleFile(pattern)).toEqual({
+      expect(parseRleFile(pattern, "foo")).toEqual({
+        fileName: "foo",
         author: "",
         comment: "",
         derivedName: "",

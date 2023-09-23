@@ -1,6 +1,6 @@
 import { ColRow, Coords, Fauna, FaunaInc, FieldCell, XY } from "./types";
 
-function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
+export function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
 }
 

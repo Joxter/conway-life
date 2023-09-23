@@ -15,6 +15,7 @@ export type Fauna = Map<number, Map<number, FieldCell>>; // x y value TODO: refa
 export type FaunaInc = Map<number, Map<number, [number, number]>>; // [color1 count,color2 count]
 
 export type Pattern = {
+  fileName: string;
   name: string;
   derivedName: string;
   comment: string;
