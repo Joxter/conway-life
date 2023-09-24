@@ -1,6 +1,7 @@
 import { ColRow, Coords, Fauna, FaunaInc, FieldCell, XY } from "./types";
 import { getRectOfFauna, rleToFauna } from "./importExport/utils";
 import { FaunaData } from "./model/field";
+import { None } from "@sniptt/monads";
 
 export function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -181,14 +182,7 @@ export function newFaunaDataFromRle(rle: string): FaunaData {
 
   return rleToFauna(rle)
     .map(({ fauna, population }) => {
-      let size = getRectOfFauna(fauna).unwrapOr({ left: 0, top: 0, right: 0, bottom: 0 });
-
-      return { fauna, time: 0, population, size };
+      return { fauna, time: 0, population, size: getRectOfFauna(fauna) };
     })
-    .unwrapOr({
-      fauna: emptyFauna,
-      time: 0,
-      population: 0,
-      size: { left: 0, top: 0, right: 0, bottom: 0 },
-    });
+    .unwrapOr({ fauna: emptyFauna, time: 0, population: 0, size: None });
 }

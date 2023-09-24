@@ -1,6 +1,13 @@
 import { describe, expect, test } from "bun:test";
 
-import { faunaToCells, faunaToGrid, faunaToRle, rleToFauna, parseRleFile } from "./utils";
+import {
+  faunaToCells,
+  faunaToGrid,
+  faunaToRle,
+  rleToFauna,
+  parseRleFile,
+  getRectOfFauna,
+} from "./utils";
 
 let glider = "bo$2bo$3o!";
 let gliderGun = `24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4bobo$10bo5bo7bo$11bo3bo$12b2o!`;
@@ -307,6 +314,18 @@ x = 385, y = 337, rule = B3/S23
         size: [0, 0],
         wikiLink: "",
       });
+    });
+  });
+
+  describe("getRectOfFauna", () => {
+    test("7wss case", () => {
+      /*
+      x = 8, y = 5, rule = B3/S23
+      3b3o$bo5bo$o$o6bo$7o!
+      */
+
+      let size = getRectOfFauna(rleToFauna("3b3o$bo5bo$o$o6bo$7o!").unwrap().fauna).unwrap();
+      expect(size).toEqual({ bottom: 4, left: 0, right: 7, top: 0 }); //
     });
   });
 });

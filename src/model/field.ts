@@ -4,6 +4,9 @@ import { adjustOffset, getMiddleOfFauna, getViewPortParams, newFauna } from "../
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "./progress";
+import { None, Option } from "@sniptt/monads";
+
+const ViewPort = getViewPortParams();
 
 export const screen = createScreen();
 export const fieldSize = createFieldSize();
@@ -12,14 +15,14 @@ export type FaunaData = {
   fauna: Fauna;
   time: number;
   population: number;
-  size: { left: number; right: number; top: number; bottom: number };
+  size: Option<{ left: number; right: number; top: number; bottom: number }>;
 };
 
 export const $faunaData = createStore<FaunaData>({
   fauna: newFauna([]),
   time: 0,
   population: 0,
-  size: { left: 0, right: 0, top: 0, bottom: 0 },
+  size: None,
 });
 
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
@@ -52,7 +55,7 @@ export const perf = createPerf(
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 export const resetFocus = createEvent<any>();
-export const focusToTheMiddle = createEvent<any>(); // TODO resize
+export const focusToTheMiddle = createEvent<any>();
 
 export const resetFieldPressed = createEvent<any>();
 
@@ -70,8 +73,7 @@ sample({
 
       return adjustOffset(pivotCell, hovered, size);
     } else {
-      let windowParams = getViewPortParams();
-      let center = { x: windowParams.width / 2, y: windowParams.height / 2 };
+      let center = { x: ViewPort.width / 2, y: ViewPort.height / 2 };
 
       let pivotCell = {
         col: (center.x - currentOffset.x) / prevSize,
@@ -171,13 +173,12 @@ export const $hoveredCellColRow = combine(
   },
 );
 
-const vp = getViewPortParams();
 export const $centerScreenColRow = combine(
   fieldSize.$cellSize,
   $screenOffsetXY,
   ({ size }, screenOffsetXY) => {
-    const cellCol = Math.floor((vp.width / 2 - screenOffsetXY.x) / size);
-    const cellRow = Math.floor((vp.height / 2 - screenOffsetXY.y) / size);
+    const cellCol = Math.floor((ViewPort.width / 2 - screenOffsetXY.x) / size);
+    const cellRow = Math.floor((ViewPort.height / 2 - screenOffsetXY.y) / size);
 
     return { col: cellCol, row: cellRow };
   },
@@ -246,6 +247,7 @@ sample({
   clock: screen.onPointerClick,
   fn: ({ faunaData, screenOffsetXY, cellSize: { size } }, coords) => {
     const newFauna = new Map(faunaData.fauna);
+    let population = faunaData.population;
 
     const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
     const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size);
@@ -255,11 +257,13 @@ sample({
     }
     if (newFauna.get(faunaX)!.has(faunaY)) {
       newFauna.get(faunaX)!.delete(faunaY);
+      population--;
     } else {
       newFauna.get(faunaX)!.set(faunaY, 1);
+      population++;
     }
 
-    return { ...faunaData, fauna: newFauna };
+    return { fauna: newFauna, time: faunaData.time, population, size: None };
   },
   target: $faunaData,
 });

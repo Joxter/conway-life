@@ -12,6 +12,7 @@ import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catalogue/Catalogue";
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
+import { Some } from "@sniptt/monads";
 
 function App() {
   return (
@@ -85,11 +86,40 @@ function initWW() {
   const worker = new Worker("./webworkerGo.js");
 
   worker.addEventListener("message", (ev) => {
-    // console.log(ev.data);
-    calculated(ev.data);
+    let fauna = ev.data.fauna;
+    if (!(fauna instanceof Map)) {
+      console.error(`Fauna is not a Map. Check webworkerGo.js`);
+      return;
+    }
+
+    let time = ev.data.time;
+    if (typeof time !== "number") {
+      console.error(`Time is not a number. Check webworkerGo.js`);
+      return;
+    }
+
+    let population = ev.data.population;
+    if (typeof population !== "number") {
+      console.error(`Population is not a number. Check webworkerGo.js`);
+      return;
+    }
+
+    let size = ev.data.size; // should be { left: number; right: number; top: number; bottom: number }
+    if (
+      typeof size !== "object" ||
+      typeof size.left !== "number" ||
+      typeof size.right !== "number" ||
+      typeof size.top !== "number" ||
+      typeof size.bottom !== "number"
+    ) {
+      console.error(`Size is an object with params. Check webworkerGo.js`);
+      return;
+    }
+
+    calculated({ fauna, time, population, size: Some(size as any) });
   });
   worker.addEventListener("error", (err) => {
-    console.log("main.error err", err);
+    console.error(err);
   });
 
   startCalc.watch((fauna) => {
