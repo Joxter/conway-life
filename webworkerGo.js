@@ -1,14 +1,14 @@
-self.addEventListener('message', (ev) => {
-  const res = newMakeGo(ev.data)
-  self.postMessage(res)
+self.addEventListener("message", (ev) => {
+  const res = newMakeGo(ev.data);
+  self.postMessage(res);
 });
-
 
 function newMakeGo(input) {
   let start = Date.now();
   let result = new Map();
   let faunaInc = new Map();
-  let size = 0;
+  let population = 0;
+  let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
 
   input.forEach((colMap, col) => {
     colMap.forEach((color, row) => {
@@ -19,22 +19,27 @@ function newMakeGo(input) {
   faunaInc.forEach((colMap, col) => {
     let rowMap = new Map();
     colMap.forEach(([oneCnt, twoCnt], row) => {
-      let cellVal = input.get(col) && input.get(col).get(row) || 0;
+      let cellVal = (input.get(col) && input.get(col).get(row)) || 0;
       let total = oneCnt + twoCnt;
 
       if (cellVal === 0 && total == 3) {
         rowMap.set(row, oneCnt > twoCnt ? 1 : 2);
       } else if (cellVal !== 0 && (total === 2 || total === 3)) {
-        rowMap.set(row, cellVal);
+        if (col < size.left) size.left = col;
+        if (col > size.right) size.right = col;
+        if (row < size.top) size.top = row;
+        if (row > size.bottom) size.bottom = row;
+
+        rowMap.set(row, 1);
       }
     });
 
-    size += rowMap.size;
+    population += rowMap.size;
     result.set(col, rowMap);
   });
   const time = Date.now() - start;
 
-  return { fauna: result, time, size };
+  return { fauna: result, time, population, size };
 }
 
 function incNeighbors(faunaInc, [col, row], value) {
