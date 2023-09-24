@@ -96,7 +96,7 @@ describe("import-export utils", () => {
       expect(faunaToRle(rleToFauna(glider).unwrap().fauna)).toEqual(glider);
 
       // prettier-ignore
-      expect(rleToFauna(glider).unwrap()).toEqual(new Map([
+      expect(rleToFauna(glider).unwrap().fauna).toEqual(new Map([
         [1, new Map([[0, 1], [2, 1]])],
         [2, new Map([[1, 1], [2, 1]])],
         [0, new Map([[2, 1]])],
