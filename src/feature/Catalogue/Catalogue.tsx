@@ -4,6 +4,7 @@ import css from "./styles.module.css";
 import { catalogue } from "./Catalogue.model";
 import { Modal } from "../../components/Modal/Modal";
 import { JSX } from "solid-js/types/jsx";
+import { createEffect } from "solid-js";
 
 export function CurrentPattern(props: { style: JSX.CSSProperties }) {
   const [currentPattern] = useUnit([catalogue.$currentPattern]);
@@ -30,6 +31,12 @@ export const CatalogueModal = () => {
     catalogue.$isOpen,
   ]);
 
+  let listEl: HTMLDivElement;
+  createEffect(() => {
+    search();
+    listEl.scrollTo(0, 0);
+  });
+
   return (
     <Modal open={isOpen()} close={catalogue.close}>
       <div
@@ -53,7 +60,7 @@ export const CatalogueModal = () => {
           />
           <p>found: {cnt()}</p>
         </div>
-        <div class={css.list}>
+        <div class={css.list} ref={(el) => (listEl = el)}>
           {pageItems().map((it) => {
             return (
               <div class={css.listItem}>

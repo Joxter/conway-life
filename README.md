@@ -13,6 +13,7 @@
   - [ ] filter by size
   - [ ] filter by population
   - [ ] filter by type (ship, oscillator, ...)
+  - [ ] generate better images (small previews like ~200px max)
 - [ ] simply analytics
   - [ ] is die
   - [ ] is ship
