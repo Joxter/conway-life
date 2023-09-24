@@ -3,9 +3,8 @@
 ## TODO
 
 - [ ] better UI
-  - [ ] auto-focus and auto-zoom
+  - [x] auto-focus and auto-zoom
   - [ ] update progress bar
-  - [ ] responsiveness
   - [x] something for Perf
 - [ ] better catalogue
   - [ ] better search, search by name/author/comment
@@ -19,6 +18,7 @@
   - [ ] is ship
   - [ ] num of islands
   - [ ] time to die
+- [ ] scale less then 1px (1/2, 1/4, ...)
 - [ ] progress improvements:
   - [x] play/stop
   - [x] (WIP) different speed

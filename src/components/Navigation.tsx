@@ -16,7 +16,7 @@ export function Navigation() {
         />
       </div>
       <button style={{ padding: "4px", "margin-top": "10px" }} onClick={focusToTheMiddle}>
-        to center
+        auto-focus
       </button>
     </>
   );

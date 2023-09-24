@@ -226,6 +226,30 @@ sample({
 $screenOffsetXY.reset(resetFocus);
 
 sample({
+  source: { faunaData: $faunaData, cellSize: fieldSize.$cellSize },
+  clock: focusToTheMiddle,
+  fn: ({ faunaData, cellSize }) => {
+    return faunaData.size
+      .map(({ top, bottom, left, right }) => {
+        let width = right - left + 1;
+        let height = bottom - top + 1;
+
+        let maxVisualWidth = ViewPort.width * 0.6;
+        let maxVisualHeight = ViewPort.height * 0.6;
+
+        let pixelSize = Math.floor(Math.min(maxVisualWidth / width, maxVisualHeight / height));
+
+        if (pixelSize < 1) pixelSize = 1;
+        if (pixelSize > 30) pixelSize = 30;
+
+        return { size: pixelSize, prevSize: cellSize.size };
+      })
+      .unwrapOr(cellSize);
+  },
+  target: fieldSize.$cellSize,
+});
+
+sample({
   source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize, cellSize: fieldSize.$cellSize },
   clock: focusToTheMiddle,
   fn: ({ faunaData, fieldSize, cellSize }) => {
