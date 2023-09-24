@@ -1,8 +1,9 @@
 import { combine, createEffect, createEvent, createStore, sample } from "effector";
 import { allTemplates } from "../../blueprints/all-templates";
-import { fuzzy, objEntries } from "../../utils";
-import { Fauna, Pattern } from "../../types";
-import { parseRleFile, rleToFauna } from "../../importExport/utils";
+import { fuzzy, newFaunaDataFromRle, objEntries } from "../../utils";
+import { Pattern } from "../../types";
+import { parseRleFile } from "../../importExport/utils";
+import { FaunaData } from "../../model/field";
 
 type CatItem = Omit<Pattern, "rle"> & { image: string };
 
@@ -74,7 +75,6 @@ export function createCatalogue() {
 
   sample({ clock: [selectPattern, loadInitPattern], target: fetchPatternFx });
 
-
   selectPattern.watch((filename) => {
     window.location.hash = filename;
   });
@@ -99,20 +99,17 @@ export function createCatalogue() {
   };
 }
 
-function apiFetchPattern(fileName: string): Promise<{ pattern: Pattern; fauna: Fauna }> {
+function apiFetchPattern(fileName: string): Promise<{ pattern: Pattern; faunaData: FaunaData }> {
   return fetch("patterns/" + fileName)
     .then((res) => {
       return res.text();
     })
-    .then((rleFile): { pattern: Pattern; fauna: Fauna } => {
+    .then((rleFile): { pattern: Pattern; faunaData: FaunaData } => {
       let pattern = parseRleFile(rleFile, fileName);
 
-      let fauna = rleToFauna(pattern.rle);
-      if (fauna.isOk()) {
-        return { fauna: fauna.unwrap(), pattern };
-      }
+      let faunaData = newFaunaDataFromRle(pattern.rle);
 
-      throw `Failed to parse ${fileName}\n${fauna.unwrapErr()}`;
+      return { faunaData, pattern };
     });
 }
 

@@ -85,17 +85,21 @@ export function rleToGrid(rleFile: string, fileName: string): Result<boolean[][]
   return res.map(() => grid);
 }
 
-export function rleToFauna(rle: string): Result<Fauna, string> {
+export function rleToFauna(rle: string): Result<{ fauna: Fauna; population: number }, string> {
   let fauna: Fauna = new Map();
+  let population = 0;
 
   let res = parseRle(rle, (x, y) => {
     if (!fauna.has(x)) {
       fauna.set(x, new Map());
     }
+    population++;
     fauna.get(x)!.set(y, 1);
   });
 
-  return res.map(() => fauna);
+  return res.map(() => {
+    return { fauna, population };
+  });
 }
 
 function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {

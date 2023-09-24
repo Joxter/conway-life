@@ -1,5 +1,5 @@
 import { expect, test, describe } from "bun:test";
-import { adjustOffset } from "./utils";
+import { adjustOffset, newFaunaDataFromRle } from "./utils";
 
 describe("adjustOffset", () => {
   test("basic", () => {
@@ -19,5 +19,28 @@ describe("adjustOffset", () => {
         5,
       ),
     ).toEqual({ x: -90, y: -40 });
+  });
+});
+
+describe("newFaunaDataFromRle", () => {
+  test("should return empty state", () => {
+    let res = newFaunaDataFromRle("");
+
+    expect(res).toEqual({
+      fauna: new Map(),
+      population: 0,
+      size: { bottom: 0, left: 0, right: 0, top: 0 },
+      time: 0,
+    });
+  });
+
+  test("should work", () => {
+    let { fauna, ...res } = newFaunaDataFromRle("b2ob$o2bo$b3o!");
+
+    expect(res).toEqual({
+      population: 7,
+      size: { bottom: 2, left: 0, right: 3, top: 0 },
+      time: 0,
+    });
   });
 });

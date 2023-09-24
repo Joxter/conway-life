@@ -1,4 +1,6 @@
 import { ColRow, Coords, Fauna, FaunaInc, FieldCell, XY } from "./types";
+import { getRectOfFauna, rleToFauna } from "./importExport/utils";
+import { FaunaData } from "./model/field";
 
 export function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -172,4 +174,21 @@ function minDistance(str: string, query: string): number {
   }
 
   return dp[dp.length - 1][dp[0].length - 1];
+}
+
+export function newFaunaDataFromRle(rle: string): FaunaData {
+  let emptyFauna: Fauna = new Map();
+
+  return rleToFauna(rle)
+    .map(({ fauna, population }) => {
+      let size = getRectOfFauna(fauna).unwrapOr({ left: 0, top: 0, right: 0, bottom: 0 });
+
+      return { fauna, time: 0, population, size };
+    })
+    .unwrapOr({
+      fauna: emptyFauna,
+      time: 0,
+      population: 0,
+      size: { left: 0, top: 0, right: 0, bottom: 0 },
+    });
 }

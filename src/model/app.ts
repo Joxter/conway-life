@@ -2,9 +2,10 @@ import { sample } from "effector";
 import { importExport } from "../feature/ImportExport/importExport.model";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
 import { $history, addToHistory, historySelected, saveClicked } from "./history";
-import { faunaToRle, rleToFauna } from "../importExport/utils";
+import { faunaToRle } from "../importExport/utils";
 import { catalogue } from "../feature/Catalogue/Catalogue.model";
 import { allTemplates } from "../blueprints/all-templates";
+import { newFaunaDataFromRle } from "../utils";
 
 sample({
   source: $faunaData,
@@ -18,11 +19,7 @@ sample({
   clock: historySelected,
   fn: (history, selected) => {
     const savedRle = history.find((it) => it.name === selected)!.rle;
-    return {
-      fauna: rleToFauna(savedRle).unwrapOr(new Map()),
-      time: 0,
-      size: 0,
-    };
+    return newFaunaDataFromRle(savedRle);
   },
   target: $faunaData,
 });
@@ -48,7 +45,7 @@ sample({
   source: importExport.$textField,
   clock: importExport.importClicked,
   fn: (str) => {
-    return { fauna: rleToFauna(str).unwrapOr(new Map()), time: 0, size: 0 };
+    return newFaunaDataFromRle(str);
   },
   target: $faunaData,
 });
@@ -67,9 +64,7 @@ setTimeout(() => {
 
 sample({
   clock: catalogue.patternFetched,
-  fn: ({ fauna }) => {
-    return { fauna, time: 0, size: 0 };
-  },
+  fn: ({ faunaData }) => faunaData,
   target: $faunaData,
 });
 

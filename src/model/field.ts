@@ -8,10 +8,18 @@ import { createProgress } from "./progress";
 export const screen = createScreen();
 export const fieldSize = createFieldSize();
 
-export const $faunaData = createStore<{ fauna: Fauna; time: number; size: number }>({
+export type FaunaData = {
+  fauna: Fauna;
+  time: number;
+  population: number;
+  size: { left: number; right: number; top: number; bottom: number };
+};
+
+export const $faunaData = createStore<FaunaData>({
   fauna: newFauna([]),
   time: 0,
-  size: 0,
+  population: 0,
+  size: { left: 0, right: 0, top: 0, bottom: 0 },
 });
 
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
@@ -28,7 +36,8 @@ export const $labels = createStore<{ col: number; row: number; label: string }[]
 
 export const $isCalculating = createStore(false);
 export const startCalc = createEvent<Fauna>();
-export const calculated = createEvent<{ fauna: Fauna; time: number; size: number }>();
+export const calculated = createEvent<FaunaData>();
+export const setNewFauna = createEvent<FaunaData>();
 $isCalculating.on(startCalc, () => true).on(calculated, () => false);
 
 export const progress = createProgress(
@@ -46,6 +55,8 @@ export const resetFocus = createEvent<any>();
 export const focusToTheMiddle = createEvent<any>(); // TODO resize
 
 export const resetFieldPressed = createEvent<any>();
+
+$faunaData.on([setNewFauna, calculated], (_, data) => data).reset(resetFieldPressed);
 
 sample({
   source: [$screenOffsetXY, screen.$hovered] as const,
@@ -98,7 +109,7 @@ export const $field = combine(
 );
 
 export const $stats = combine($field, $faunaData, (field, fauna) => {
-  return { fieldCellsAmount: field.length, faunaCellsAmount: fauna.size };
+  return { fieldCellsAmount: field.length, population: fauna.population };
 });
 
 export const $labelsOnField = combine(
@@ -190,8 +201,6 @@ sample({
 //   fn: (it) => newMakeGo(it.fauna),
 //   target: calculated,
 // });
-
-$faunaData.on(calculated, (_, it) => it).reset(resetFieldPressed);
 
 const $initScreenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 

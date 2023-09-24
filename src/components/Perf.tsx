@@ -31,7 +31,7 @@ export function Perf() {
         <span>FPS: {fps()}</span>
         <span>gen/sec: {stepsPerSec()}</span>
         <span>calc time {time()} msec</span>
-        <span>cells: {stats().faunaCellsAmount}</span>
+        <span>population: {stats().population}</span>
         <span>cells on screen: {stats().fieldCellsAmount}</span>
         <span>cursor: {hoveredCoords()}</span>
         <span>screen center: {screenCenterCoords()}</span>

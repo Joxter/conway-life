@@ -86,7 +86,7 @@ describe("import-export utils", () => {
 
   describe("rleToFauna", () => {
     test("glider", () => {
-      expect(faunaToRle(rleToFauna(glider).unwrap())).toEqual(glider);
+      expect(faunaToRle(rleToFauna(glider).unwrap().fauna)).toEqual(glider);
 
       // prettier-ignore
       expect(rleToFauna(glider).unwrap()).toEqual(new Map([
@@ -97,10 +97,10 @@ describe("import-export utils", () => {
       ));
     });
     test("gliderGun", () => {
-      expect(faunaToRle(rleToFauna(gliderGun).unwrap())).toEqual(gliderGun);
+      expect(faunaToRle(rleToFauna(gliderGun).unwrap().fauna)).toEqual(gliderGun);
     });
     test("gliderGunTest", () => {
-      expect(faunaToRle(rleToFauna(gliderGunTest).unwrap())).toEqual(gliderGunTest);
+      expect(faunaToRle(rleToFauna(gliderGunTest).unwrap().fauna)).toEqual(gliderGunTest);
     });
   });
 
@@ -159,7 +159,7 @@ O...O....................................O...O
 .........OO........................OO
 ................O............O`;
 
-      expect(faunaToCells(rleToFauna(rle).unwrap())).toEqual(cells);
+      expect(faunaToCells(rleToFauna(rle).unwrap().fauna)).toEqual(cells);
     });
   });
 
