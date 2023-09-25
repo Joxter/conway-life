@@ -7,12 +7,23 @@ import { FaunaData } from "../../model/field";
 
 type CatItem = Omit<Pattern, "rle"> & { image: string };
 
+export const orderOptions = [
+  "name-asc",
+  "name-desc",
+  "size-asc",
+  "size-desc",
+  "population-asc",
+  "population-desc",
+] as const;
+export type OrderBy = (typeof orderOptions)[number];
+
 export const catalogue = createCatalogue();
 
 export function createCatalogue() {
   const PAGE_SIZE = 50;
 
   const $search = createStore("");
+  const $orderBy = createStore<OrderBy>(orderOptions[0]);
   const setSearch = createEvent<string>();
   const selectPattern = createEvent<string>(); // filename
   const loadInitPattern = createEvent<string>(); // filename
@@ -23,23 +34,26 @@ export function createCatalogue() {
 
   const $currentPattern = createStore("");
   const currentPatternClicked = createEvent<any>();
+  const orderByChanged = createEvent<OrderBy>();
 
   $isOpen.on([open, currentPatternClicked], () => true).on([close, selectPattern], () => false);
   $search.on([setSearch, currentPatternClicked], (_, newSearch) => newSearch);
+  $orderBy.on(orderByChanged, (_, newOrderBy) => newOrderBy);
 
   sample({ source: $currentPattern, clock: currentPatternClicked, target: $search });
 
   const $items = createStore<CatItem[]>(
-    objEntries(allTemplates).map(([key, patt]) => {
-      return {
-        image: `https://cerestle.sirv.com/Images/${patt.fileName.replace(".rle", "")}.png`,
-        ...patt,
-      };
-    }),
+    objEntries(allTemplates)
+      .map(([key, patt]) => {
+        return {
+          image: `https://cerestle.sirv.com/Images/${patt.fileName.replace(".rle", "")}.png`,
+          ...patt,
+        };
+      })
   );
   const $offset = createStore(0);
 
-  const $filteredItems = combine($search, $items, (search, items) => {
+  const $filteredItems = combine($search, $items, $orderBy, (search, items) => {
     search = search.toLowerCase().trim();
     if (!search) {
       return items;
@@ -49,7 +63,28 @@ export function createCatalogue() {
   });
   const $foundCnt = $filteredItems.map((items) => items.length);
 
-  const $pageItems = combine($search, $filteredItems, $offset, (search, items, offset) => {
+  const $orderedItems = combine($filteredItems, $orderBy, (items, orderBy) => {
+    return ([] as CatItem[]).concat(
+      items.sort((a, b) => {
+        switch (orderBy) {
+          case "name-asc":
+            return a.name.localeCompare(b.name);
+          case "name-desc":
+            return b.name.localeCompare(a.name);
+          case "size-asc":
+            return a.size[0] * a.size[1] - b.size[0] * b.size[1];
+          case "size-desc":
+            return b.size[0] * b.size[1] - a.size[0] * a.size[1];
+          case "population-asc":
+            return a.population - b.population;
+          case "population-desc":
+            return b.population - a.population;
+        }
+      }),
+    );
+  });
+
+  const $pageItems = combine($search, $orderedItems, $offset, (search, items, offset) => {
     if (!search) {
       return items.slice(offset, offset + PAGE_SIZE);
     }
@@ -82,6 +117,9 @@ export function createCatalogue() {
   return {
     $pageItems,
     $foundCnt,
+
+    $orderBy,
+    orderByChanged,
 
     $currentPattern,
     currentPatternClicked,

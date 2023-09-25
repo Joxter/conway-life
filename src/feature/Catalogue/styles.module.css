@@ -1,7 +1,22 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .header {
+    grid-template-columns: 1fr;
+  }
+}
+
+.header input {
+  font-size: 18px;
+}
+
 .list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  flex-wrap: wrap;
   gap: 12px 4px;
   margin-top: 12px;
   overflow-y: scroll;

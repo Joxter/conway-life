@@ -1,7 +1,7 @@
 import { useUnit } from "effector-solid";
 import commonCss from "../../components/styles.module.css";
 import css from "./styles.module.css";
-import { catalogue } from "./Catalogue.model";
+import { catalogue, orderOptions } from "./Catalogue.model";
 import { Modal } from "../../components/Modal/Modal";
 import { JSX } from "solid-js/types/jsx";
 import { createEffect } from "solid-js";
@@ -24,11 +24,12 @@ export function CatalogueButton() {
 }
 
 export const CatalogueModal = () => {
-  const [search, pageItems, cnt, isOpen] = useUnit([
+  const [search, pageItems, cnt, isOpen, orderBy] = useUnit([
     catalogue.$search,
     catalogue.$pageItems,
     catalogue.$foundCnt,
     catalogue.$isOpen,
+    catalogue.$orderBy,
   ]);
 
   let listEl: HTMLDivElement;
@@ -43,22 +44,34 @@ export const CatalogueModal = () => {
         class={commonCss.roundBox}
         style={{
           display: "grid",
-          "grid-auto-rows": "auto 1fr",
+          "grid-auto-rows": "auto 1fr auto",
           width: "min(900px, calc(100vw - 50px))",
           height: "min(600px, calc(100vh - 100px))",
           "background-color": "#eee",
         }}
       >
-        <div style={{ display: "flex" }}>
+        <div class={css.header}>
           <input
             type="text"
-            style={{ width: "100%" }}
             onInput={(ev) => {
               catalogue.setSearch(ev.target.value);
             }}
+            placeholder={"search"}
             value={search()}
           />
-          <p>found: {cnt()}</p>
+          <div>
+            <span>
+              sort by:{" "}
+              <select
+                value={orderBy()}
+                onChange={(ev) => catalogue.orderByChanged(ev.target.value as any)}
+              >
+                {orderOptions.map((val) => {
+                  return <option value={val}>{val}</option>;
+                })}
+              </select>
+            </span>
+          </div>
         </div>
         <div class={css.list} ref={(el) => (listEl = el)}>
           {pageItems().map((it) => {
@@ -97,6 +110,9 @@ export const CatalogueModal = () => {
               </div>
             );
           })}
+        </div>
+        <div>
+          <p>found: {cnt()}</p>
         </div>
       </div>
     </Modal>

@@ -8,11 +8,11 @@
   - [x] something for Perf
 - [ ] better catalogue
   - [ ] better search, search by name/author/comment
-  - [ ] pages
-  - [ ] filter by size
-  - [ ] filter by population
+  - [ ] pagination ?
+  - [x] order by size
+  - [x] order by population
   - [ ] filter by type (ship, oscillator, ...)
-  - [ ] generate better images (small previews like ~200px max)
+  - [ ] generate better previews (small images like ~200px max)
 - [ ] add borders of current fauna to the field
 - [ ] simply analytics
   - [ ] is die
