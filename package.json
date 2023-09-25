@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "types": "tsc",
+    "gen-all-templates": "bun ./scripts/generate-templates.ts",
     "serve": "vite preview"
   },
   "license": "MIT",

@@ -1,6 +1,6 @@
 import { expect, test, describe } from "bun:test";
 import { adjustOffset, newFaunaDataFromRle } from "./utils";
-import { None, Some } from "@sniptt/monads";
+import { None } from "@sniptt/monads";
 
 describe("adjustOffset", () => {
   test("basic", () => {

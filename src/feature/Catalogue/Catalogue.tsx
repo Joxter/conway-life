@@ -78,7 +78,11 @@ export const CatalogueModal = () => {
                   </div>
                   <div style={{ display: "flex", gap: "8px" }}>
                     <p>
-                      size: {it.size[0]}*{it.size[1]}
+                      size:{" "}
+                      <b>
+                        {it.size[0]}x{it.size[1]}
+                      </b>
+                      ; population: <b>{it.population}</b>
                     </p>
                     <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>
                   </div>

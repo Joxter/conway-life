@@ -22,7 +22,8 @@ export type Pattern = {
   author: string;
   wikiLink: string;
   patternLink: string;
+  population: number;
   size: [x: number, y: number];
-  rule: string; // B3/S23
+  rule: string;
   rle: string;
 };

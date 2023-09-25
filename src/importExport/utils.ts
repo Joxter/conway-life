@@ -102,6 +102,12 @@ export function rleToFauna(rle: string): Result<{ fauna: Fauna; population: numb
   });
 }
 
+export function rleToPopulation(rle: string): Result<number, string> {
+  let population = 0;
+
+  return parseRle(rle, () => population++).map(() => population);
+}
+
 function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
   return Array.from(m.keys())
     .sort((a, b) => {
@@ -279,6 +285,7 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
       prettifyName(getFromWikiLink(wikiLink)) || prettifyName(rawName) || prettifyName(fileName),
     author: author.trim(),
     comment: comment.trim(),
+    population: rleToPopulation(rle).unwrapOr(0), // todo do I really need ot here?
     wikiLink,
     patternLink,
     size,
@@ -334,10 +341,6 @@ function parseRle(
       } else if (char === live) {
         for (let j = 0; j < parsedNum; j++) {
           setXY(x, y);
-          // if (!res.has(x)) {
-          //   res.set(x, new Map());
-          // }
-          // res.get(x)!.set(y, 1);
           x++;
         }
       } else if (char === lineEnd) {
