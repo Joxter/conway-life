@@ -2,9 +2,14 @@ import fs from "fs";
 
 // @ts-ignore
 import { PNG } from "pngjs";
-import { cellsToGrid, rleToGrid } from "../src/importExport/utils";
+import { parseRle, parseRleFile } from "../src/importExport/utils";
+import path from "node:path";
+import { Result } from "@sniptt/monads";
 
-run("../patterns", "../public/previews");
+let patternsFolderPath = path.join(import.meta.dir, "../public/patterns");
+let outputFolderPath = path.join(import.meta.dir, "../public/png");
+
+run(patternsFolderPath, outputFolderPath);
 
 function run(folder: string, output: string) {
   fs.readdirSync(folder)
@@ -15,24 +20,14 @@ function run(folder: string, output: string) {
         return;
       }
 
-      if (fileName.endsWith(".cells")) {
-        let noExtName = fileName.slice(0, -6);
-        let content = fs.readFileSync(`${folder}/${fileName}`, "utf8").toString();
-
-        content = content
-          .split("\n")
-          .filter((line) => !line.startsWith("!"))
-          .join("\n");
-
-        // todo proper parse functions
-        let grid = cellsToGrid(content.trim());
-
-        // generateImage(grid, `${output}/${noExtName}.png`);
-      } else if (fileName.endsWith(".rle")) {
+      if (fileName.endsWith(".rle")) {
         let noExtName = fileName.slice(0, -4);
         let content = fs.readFileSync(`${folder}/${fileName}`, "utf8").toString();
 
-        rleToGrid(content, fileName).match({
+        let { rle, size } = parseRleFile(content, fileName);
+
+        // console.log(fileName);
+        rleToGrid(rle, size).match({
           ok: (grid) => {
             generateImage(grid, `${output}/${noExtName}.png`);
           },
@@ -78,3 +73,31 @@ function generateImage(grid: boolean[][], fileName: string) {
   png.data = buffer;
   png.pack().pipe(fs.createWriteStream(fileName));
 }
+
+function rleToGrid(
+  rle: string,
+  [width, height]: [number, number],
+): Result<boolean[][], string> {
+  let maxSize = 500;
+
+  let scale = Math.max(width, height) / maxSize;
+  scale = scale < 1 ? 1 : scale;
+
+  let grid: boolean[][] = Array(Math.floor(height / scale))
+    .fill(0)
+    .map(() => {
+      return Array(Math.floor(width / scale)).fill(false);
+    }); // todo actually I don't need a grid here
+
+  let res = parseRle(rle, (x, y) => {
+    x = Math.floor(x / scale);
+    y = Math.floor(y / scale);
+    if (!grid[y]) {
+      grid[y] = [];
+    }
+    grid[y][x] = true;
+  });
+
+  return res.map(() => grid);
+}
+

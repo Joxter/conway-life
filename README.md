@@ -12,7 +12,7 @@
   - [x] order by size
   - [x] order by population
   - [ ] filter by type (ship, oscillator, ...)
-  - [ ] generate better previews (small images like ~200px max)
+  - [x] generate better previews (small images like ~200px max)
 - [ ] add borders of current fauna to the field
 - [ ] simply analytics
   - [ ] is die

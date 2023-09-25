@@ -9,6 +9,7 @@
     "build": "tsc && vite build",
     "types": "tsc",
     "gen-all-templates": "bun ./scripts/generate-templates.ts",
+    "gen-previews": "bun ./scripts/generate-png-previews.ts",
     "serve": "vite preview"
   },
   "license": "MIT",

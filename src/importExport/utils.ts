@@ -70,21 +70,6 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   return grid;
 }
 
-export function rleToGrid(rleFile: string, fileName: string): Result<boolean[][], string> {
-  let { rle, size } = parseRleFile(rleFile, fileName);
-
-  let grid: boolean[][] = []; // todo add "size"
-
-  let res = parseRle(rle, (x, y) => {
-    if (!grid[y]) {
-      grid[y] = [];
-    }
-    grid[y][x] = true;
-  });
-
-  return res.map(() => grid);
-}
-
 export function rleToFauna(rle: string): Result<{ fauna: Fauna; population: number }, string> {
   let fauna: Fauna = new Map();
   let population = 0;
@@ -262,8 +247,8 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
       } else {
         comment += line.slice(2).trim() + "\n";
       }
-    } else if (line.startsWith("x =")) {
-      let regexp = /x = (\d+), y = (\d+), rule = (.+)/;
+    } else if (line.startsWith("x ")) {
+      let regexp = /x\s*=\s*(\d+),\s*y\s*=\s*(\d+),\s*rule\s*=\s*(.+)/;
       let match = line.match(regexp);
       if (match) {
         let [, x, y, _rule] = match;
@@ -313,12 +298,12 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
 }
 
 // https://conwaylife.com/wiki/Run_Length_Encoded
-function parseRle(
+export function parseRle(
   content: string,
   setXY: (x: number, y: number) => any, // make optional
 ): Result<true, string> {
   const dead = "b";
-  const live = "o";
+  const live = "o"; // or any other ???
   const lineEnd = "$";
 
   let num = "";
@@ -327,8 +312,11 @@ function parseRle(
 
   for (let i = 0; i < content.length; i++) {
     let char = content[i];
-    if (char === "\n" || char === "\r" || char === "!") {
+    if (char === "\n" || char === "\r") {
       continue;
+    }
+    if (char === "!") {
+      break;
     }
 
     if (char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57) {

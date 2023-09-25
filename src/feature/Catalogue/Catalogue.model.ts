@@ -46,7 +46,7 @@ export function createCatalogue() {
     objEntries(allTemplates)
       .map(([key, patt]) => {
         return {
-          image: `https://cerestle.sirv.com/Images/${patt.fileName.replace(".rle", "")}.png`,
+          image: `https://cerestle.sirv.com/Images/png/${patt.fileName.replace(".rle", "")}.png`,
           ...patt,
         };
       })

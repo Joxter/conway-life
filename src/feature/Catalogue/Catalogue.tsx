@@ -99,7 +99,7 @@ export const CatalogueModal = () => {
                     </p>
                     <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>
                   </div>
-                  {it.comment && <p>{it.comment}</p>}
+                  {it.comment && <p style={{"max-height": '300px', overflow: "auto"}}>{it.comment}</p>}
                   {it.wikiLink && (
                     <a href={it.wikiLink} target={"_blank"}>
                       wiki
