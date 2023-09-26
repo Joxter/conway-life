@@ -11,27 +11,25 @@ function newMakeGo(input) {
   let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
 
   input.forEach((colMap, col) => {
-    colMap.forEach((color, row) => {
-      incNeighbors(faunaInc, [col, row], color);
+    colMap.forEach((val, row) => {
+      incNeighbors(faunaInc, col, row);
     });
   });
 
   faunaInc.forEach((colMap, col) => {
     let rowMap = new Map();
-    colMap.forEach(([oneCnt, twoCnt], row) => {
-      let cellVal = (input.get(col) && input.get(col).get(row)) || 0;
-      let total = oneCnt + twoCnt;
+    colMap.forEach((total, row) => {
+      let isLive = input.get(col) && input.get(col).get(row) === 1;
 
-      if (cellVal === 0 && total == 3) {
-        rowMap.set(row, oneCnt > twoCnt ? 1 : 2);
-      } else if (cellVal !== 0 && (total === 2 || total === 3)) {
-        if (col < size.left) size.left = col;
-        if (col > size.right) size.right = col;
-        if (row < size.top) size.top = row;
-        if (row > size.bottom) size.bottom = row;
-
+      if (!isLive && total === 3) {
+        rowMap.set(row, 1);
+      } else if (isLive && (total === 2 || total === 3)) {
         rowMap.set(row, 1);
       }
+      if (col < size.left) size.left = col;
+      if (col > size.right) size.right = col;
+      if (row < size.top) size.top = row;
+      if (row > size.bottom) size.bottom = row;
     });
 
     population += rowMap.size;
@@ -42,7 +40,7 @@ function newMakeGo(input) {
   return { fauna: result, time, population, size };
 }
 
-function incNeighbors(faunaInc, [col, row], value) {
+function incNeighbors(faunaInc, col, row) {
   let neighborCoords = [
     [col - 1, row - 1],
     [col - 1, row],
@@ -61,14 +59,11 @@ function incNeighbors(faunaInc, [col, row], value) {
 
   neighborCoords.forEach((coordsArr) => {
     const row = faunaInc.get(coordsArr[0]);
-    if (!row.has(coordsArr[1])) {
-      row.set(coordsArr[1], [0, 0]);
-    }
-
-    if (value === 1) {
-      row.get(coordsArr[1])[0]++;
+    let val = row.get(coordsArr[1]);
+    if (val === undefined) {
+      row.set(coordsArr[1], 1);
     } else {
-      row.get(coordsArr[1])[1]++;
+      row.set(coordsArr[1], val + 1);
     }
   });
 

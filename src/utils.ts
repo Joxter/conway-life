@@ -1,4 +1,4 @@
-import { ColRow, Coords, Fauna, FaunaInc, FieldCell, XY } from "./types";
+import { ColRow, Fauna, FaunaInc, Size, XY } from "./types";
 import { getRectOfFauna, rleToFauna } from "./importExport/utils";
 import { FaunaData } from "./model/field";
 import { None } from "@sniptt/monads";
@@ -7,40 +7,49 @@ export function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]
   return Object.entries(obj) as Array<[T, R]>;
 }
 
-export function newMakeGo(input: Fauna): { fauna: Fauna; time: number; size: number } {
+export function newMakeGo(input: Fauna): {
+  fauna: Fauna;
+  time: number;
+  size: Size;
+  population: number;
+} {
   let start = Date.now();
   let result: Fauna = new Map();
   let faunaInc: FaunaInc = new Map();
-  let size = 0;
+  let population = 0;
+  let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
 
   input.forEach((colMap, col) => {
-    colMap.forEach((color, row) => {
-      incNeighbors(faunaInc, [col, row], color);
+    colMap.forEach((val, row) => {
+      incNeighbors(faunaInc, col, row);
     });
   });
 
   faunaInc.forEach((colMap, col) => {
     let rowMap = new Map();
-    colMap.forEach(([oneCnt, twoCnt], row) => {
-      let cellVal = (input.get(col) && input.get(col)!.get(row)!) || (0 as const);
-      let total = oneCnt + twoCnt;
+    colMap.forEach((total, row) => {
+      let isLive = (input.get(col) && input.get(col)!.get(row)!) === 1;
 
-      if (cellVal === 0 && total == 3) {
-        rowMap.set(row, oneCnt > twoCnt ? 1 : 2);
-      } else if (cellVal !== 0 && (total === 2 || total === 3)) {
-        rowMap.set(row, cellVal);
+      if (!isLive && total === 3) {
+        rowMap.set(row, 1);
+      } else if (isLive && (total === 2 || total === 3)) {
+        rowMap.set(row, 1);
       }
+      if (col < size.left) size.left = col;
+      if (col > size.right) size.right = col;
+      if (row < size.top) size.top = row;
+      if (row > size.bottom) size.bottom = row;
     });
 
-    size += rowMap.size;
+    population += rowMap.size;
     result.set(col, rowMap);
   });
   const time = Date.now() - start;
 
-  return { fauna: result, time, size };
+  return { fauna: result, time, population, size };
 }
 
-function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell): FaunaInc {
+function incNeighbors(faunaInc: FaunaInc, col: number, row: number): FaunaInc {
   let neighborCoords = [
     [col - 1, row - 1],
     [col - 1, row],
@@ -59,14 +68,11 @@ function incNeighbors(faunaInc: FaunaInc, [col, row]: Coords, value: FieldCell):
 
   neighborCoords.forEach((coordsArr) => {
     const row = faunaInc.get(coordsArr[0])!;
-    if (!row.has(coordsArr[1])) {
-      row.set(coordsArr[1], [0, 0]);
-    }
-
-    if (value === 1) {
-      row.get(coordsArr[1])![0]++;
+    let val = row.get(coordsArr[1]);
+    if (val === undefined) {
+      row.set(coordsArr[1], 1);
     } else {
-      row.get(coordsArr[1])![1]++;
+      row.set(coordsArr[1], val + 1);
     }
   });
 

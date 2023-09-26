@@ -37,6 +37,7 @@
 }
 
 .perf {
+  font-size: 13px;
   display: flex;
   flex-wrap: wrap;
 }
