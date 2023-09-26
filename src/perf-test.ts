@@ -1,4 +1,4 @@
-import { newMakeGo } from "./utils";
+import { newMakeGo } from "./makeGo";
 import path from "node:path";
 import fs from "fs";
 import { parseRleFile, rleToFauna } from "./importExport/utils";

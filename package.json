@@ -6,8 +6,9 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && bun make-ww && vite build",
     "types": "tsc",
+    "make-ww": "bun build ./src/webworkerGo.ts --outdir ./public",
     "gen-all-templates": "bun ./scripts/generate-templates.ts",
     "gen-previews": "bun ./scripts/generate-png-previews.ts",
     "serve": "vite preview"

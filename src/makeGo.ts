@@ -1,12 +1,14 @@
-self.addEventListener("message", (ev) => {
-  const res = newMakeGo(ev.data);
-  self.postMessage(res);
-});
+import { Fauna, FaunaInc, Size } from "./types";
 
-function newMakeGo(input) {
+export function newMakeGo(input: Fauna): {
+  fauna: Fauna;
+  time: number;
+  size: Size;
+  population: number;
+} {
   let start = Date.now();
-  let result = new Map();
-  let faunaInc = new Map();
+  let result: Fauna = new Map();
+  let faunaInc: FaunaInc = new Map();
   let population = 0;
   let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
 
@@ -19,7 +21,7 @@ function newMakeGo(input) {
   faunaInc.forEach((colMap, col) => {
     let rowMap = new Map();
     colMap.forEach((total, row) => {
-      let isLive = input.get(col) && input.get(col).get(row) === 1;
+      let isLive = (input.get(col) && input.get(col)!.get(row)!) === 1;
 
       if (!isLive && total === 3) {
         rowMap.set(row, 1);
@@ -40,7 +42,7 @@ function newMakeGo(input) {
   return { fauna: result, time, population, size };
 }
 
-function incNeighbors(faunaInc, col, row) {
+function incNeighbors(faunaInc: FaunaInc, col: number, row: number): FaunaInc {
   let neighborCoords = [
     [col - 1, row - 1],
     [col - 1, row],
@@ -58,7 +60,7 @@ function incNeighbors(faunaInc, col, row) {
   if (!faunaInc.has(col + 1)) faunaInc.set(col + 1, new Map());
 
   neighborCoords.forEach((coordsArr) => {
-    const row = faunaInc.get(coordsArr[0]);
+    const row = faunaInc.get(coordsArr[0])!;
     let val = row.get(coordsArr[1]);
     if (val === undefined) {
       row.set(coordsArr[1], 1);
