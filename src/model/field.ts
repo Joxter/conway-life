@@ -38,19 +38,21 @@ export const $labels = createStore<{ col: number; row: number; label: string }[]
 ]);
 
 export const $isCalculating = createStore(false);
-export const startCalc = createEvent<Fauna>();
-export const calculated = createEvent<FaunaData>();
+export const getGeneration = createEvent<number>();
+export const calculated = createEvent<{ data: FaunaData; gen: number }>();
 export const setNewFauna = createEvent<FaunaData>();
-$isCalculating.on(startCalc, () => true).on(calculated, () => false);
 
 export const progress = createProgress(
   $faunaData.map((it) => it.fauna),
   $isCalculating,
 );
+
+$isCalculating.on([progress.start, getGeneration], () => true).on(calculated, () => false);
+
 export const perf = createPerf(
   progress.$currentStep,
   progress.reset,
-  calculated.map((it) => it.time),
+  calculated.map((it) => it.data.time),
 );
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
@@ -59,7 +61,19 @@ export const focusToTheMiddle = createEvent<any>();
 
 export const resetFieldPressed = createEvent<any>();
 
-$faunaData.on([setNewFauna, calculated], (_, data) => data).reset(resetFieldPressed);
+$faunaData
+  .on(setNewFauna, (_, data) => data)
+  .on(calculated, (_, res) => res.data)
+  .reset(resetFieldPressed);
+
+progress.$currentStep.on(calculated, (_, res) => res.gen);
+
+sample({
+  source: progress.$currentStep,
+  clock: progress.gameTick,
+  fn: (step) => step + 1,
+  target: getGeneration,
+});
 
 sample({
   source: [$screenOffsetXY, screen.$hovered] as const,
@@ -190,12 +204,6 @@ export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, { s
   });
 });
 
-sample({
-  source: $faunaData,
-  clock: progress.gameTick,
-  fn: (it) => it.fauna,
-  target: startCalc,
-});
 // sample({
 //   source: $faunaData,
 //   clock: progress.gameTick,

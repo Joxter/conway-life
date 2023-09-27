@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 import { render, ErrorBoundary } from "solid-js/web";
-import { calculated, startCalc } from "./model/field";
+import { $faunaData, calculated, FaunaData, getGeneration, progress } from "./model/field";
 import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
@@ -13,6 +13,8 @@ import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catal
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
 import { Some } from "@sniptt/monads";
+import { Fauna } from "./types";
+import { sample } from "effector";
 
 function App() {
   return (
@@ -86,45 +88,63 @@ function initWW() {
   const worker = new Worker("./webworkerGo.js");
 
   worker.addEventListener("message", (ev) => {
-    let fauna = ev.data.fauna;
-    if (!(fauna instanceof Map)) {
-      console.error(`Fauna is not a Map. Check webworkerGo.js`);
-      return;
+    try {
+      let data = validateWWRes(ev.data.res);
+      if (data) {
+        calculated({ data, gen: ev.data.gen as any as number });
+      }
+    } catch (err) {
+      console.error(err);
     }
-
-    let time = ev.data.time;
-    if (typeof time !== "number") {
-      console.error(`Time is not a number. Check webworkerGo.js`);
-      return;
-    }
-
-    let population = ev.data.population;
-    if (typeof population !== "number") {
-      console.error(`Population is not a number. Check webworkerGo.js`);
-      return;
-    }
-
-    let size = ev.data.size; // should be { left: number; right: number; top: number; bottom: number }
-    if (
-      typeof size !== "object" ||
-      typeof size.left !== "number" ||
-      typeof size.right !== "number" ||
-      typeof size.top !== "number" ||
-      typeof size.bottom !== "number"
-    ) {
-      console.error(`Size is an object with params. Check webworkerGo.js`);
-      return;
-    }
-
-    calculated({ fauna, time, population, size: Some(size as any) });
   });
   worker.addEventListener("error", (err) => {
     console.error(err);
   });
 
-  startCalc.watch((fauna) => {
-    worker.postMessage(fauna);
+  sample({
+    source: $faunaData,
+    clock: progress.start,
+  }).watch(({ fauna }) => {
+    worker.postMessage({ fauna });
+  });
+  getGeneration.watch((n) => {
+    worker.postMessage({ gen: n });
   });
 }
 
 render(() => <App />, document.querySelector<HTMLDivElement>("#app")!);
+
+function validateWWRes(data: any): FaunaData | undefined {
+  let fauna: Fauna = data.fauna;
+  if (!(fauna instanceof Map)) {
+    console.log(fauna);
+    console.error(`Fauna is not a Map. Check webworkerGo.js`);
+    return;
+  }
+
+  let time = data.time;
+  if (typeof time !== "number") {
+    console.error(`Time is not a number. Check webworkerGo.js`);
+    return;
+  }
+
+  let population = data.population;
+  if (typeof population !== "number") {
+    console.error(`Population is not a number. Check webworkerGo.js`);
+    return;
+  }
+
+  let size = data.size; // should be { left: number; right: number; top: number; bottom: number }
+  if (
+    typeof size !== "object" ||
+    typeof size.left !== "number" ||
+    typeof size.right !== "number" ||
+    typeof size.top !== "number" ||
+    typeof size.bottom !== "number"
+  ) {
+    console.error(`Size is an object with params. Check webworkerGo.js`);
+    return;
+  }
+
+  return { fauna, time, population, size: Some(size as any) };
+}

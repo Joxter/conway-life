@@ -77,7 +77,6 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
   $startFauna.on(reset, () => null);
 
   $currentStep
-    .on(gameTick, (cnt) => cnt + 1)
     .on(stop, () => 0)
     .reset(reset);
 

@@ -73,6 +73,11 @@ sample({
   target: focusToTheMiddle,
 });
 
+sample({
+  clock: catalogue.selectPattern,
+  target: progress.stop,
+});
+
 progress.reset.watch(() => {
   window.location.hash = "";
 });
