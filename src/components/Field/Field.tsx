@@ -5,6 +5,7 @@ import { useUnit } from "effector-solid";
 import { onMount } from "solid-js";
 
 let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+const scale = window.devicePixelRatio;
 
 export function Field() {
   let [viewHoveredCells, viewLabels, cellSize] = useUnit([
@@ -13,7 +14,7 @@ export function Field() {
     fieldSize.$cellSize,
   ]);
 
-  let can: HTMLCanvasElement;
+  let canvas: HTMLCanvasElement;
 
   let touchStartRef: XY | null = null;
   let touchCurrentRef: XY | null = null;
@@ -22,8 +23,15 @@ export function Field() {
     requestAnimationFrame(render);
 
     function render() {
-      if (!can) {
+      if (!canvas) {
         console.warn("no canvas");
+        return;
+      }
+
+      // @ts-ignore
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        console.warn("no context");
         return;
       }
 
@@ -31,15 +39,15 @@ export function Field() {
         size: { size },
         field,
       } = $viewField.getState();
-      // @ts-ignore
-      const ctx = can.getContext("2d");
-      if (!ctx) {
-        console.warn("no context");
-        return;
-      }
 
-      let { width: w, height: h } = can.getBoundingClientRect();
-      ctx.clearRect(0, 0, w, h);
+      canvas.width = Math.floor(window.innerWidth * scale);
+      canvas.height = Math.floor(document.body.offsetHeight * scale);
+
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = document.body.offsetHeight + "px";
+
+      ctx.scale(scale, scale);
+
       ctx.fillStyle = Color1;
 
       ctx.beginPath();
@@ -153,7 +161,7 @@ export function Field() {
         }}
         width={window.innerWidth}
         height={document.body.offsetHeight}
-        ref={(el) => (can = el)}
+        ref={(el) => (canvas = el)}
       ></canvas>
       {viewHoveredCells().map((cell) => {
         return (
