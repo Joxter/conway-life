@@ -1,5 +1,5 @@
-import { None, Option, Result, Some, Err, Ok } from "@sniptt/monads";
-import { Fauna, Pattern } from "../types";
+import { Result, Err, Ok } from "@sniptt/monads";
+import { Fauna, Pattern, Size } from "../types";
 
 /*
  *    .OO..
@@ -47,10 +47,10 @@ export function faunaToCells(fauna: Fauna): string {
 
 export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   let optRect = getRectOfFauna(fauna);
-  if (optRect.isNone()) {
+  if (!optRect) {
     return [];
   }
-  let rect = optRect.unwrap();
+  let rect = optRect;
 
   let rectWidth = rect.right - rect.left + 1;
   let rectHeight = rect.bottom - rect.top + 1;
@@ -61,8 +61,8 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
       return Array(rectWidth).fill(0);
     });
 
-  for (let [x, row] of fauna.entries()) {
-    for (let [y, val] of row.entries()) {
+  for (let [x, row] of fauna) {
+    for (let [y, val] of row) {
       grid[y - rect.top][x - rect.left] = 1;
     }
   }
@@ -104,16 +104,14 @@ function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
     });
 }
 
-export function getRectOfFauna(
-  fauna: Fauna,
-): Option<{ top: number; bottom: number; left: number; right: number }> {
+export function getRectOfFauna(fauna: Fauna): Size | null {
   let top = Infinity;
   let bottom = -Infinity;
   let left = Infinity;
   let right = -Infinity;
 
-  for (let [x, row] of fauna.entries()) {
-    for (let [y, val] of row.entries()) {
+  for (let [x, row] of fauna) {
+    for (let [y, val] of row) {
       if (x < left) left = x;
       if (x > right) right = x;
       if (y < top) top = y;
@@ -127,9 +125,10 @@ export function getRectOfFauna(
     Number.isFinite(left) &&
     Number.isFinite(right)
   ) {
-    return Some({ top, bottom, left, right });
+    return { top, bottom, left, right };
   }
-  return None;
+
+  return null;
 }
 
 export function faunaToRle(fauna: Fauna): string {
@@ -273,7 +272,7 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
     population: rleToPopulation(rle).unwrapOr(0), // todo do I really need ot here?
     wikiLink,
     patternLink,
-    size,
+    size, // todo not reliable, nned to fix :(
     rule,
     rle,
   };

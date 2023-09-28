@@ -12,7 +12,6 @@ import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catalogue/Catalogue";
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
-import { Some } from "@sniptt/monads";
 import { Fauna } from "./types";
 import { sample } from "effector";
 
@@ -146,5 +145,5 @@ function validateWWRes(data: any): FaunaData | undefined {
     return;
   }
 
-  return { fauna, time, population, size: Some(size as any) };
+  return { fauna, time, population, size };
 }

@@ -30,7 +30,7 @@ describe("newFaunaDataFromRle", () => {
     expect(res).toEqual({
       fauna: new Map(),
       population: 0,
-      size: None,
+      size: null,
       time: 0,
     });
   });
@@ -40,6 +40,6 @@ describe("newFaunaDataFromRle", () => {
 
     expect(res.population).toEqual(7);
     expect(res.time).toEqual(0);
-    expect(res.size.unwrap()).toEqual({ bottom: 2, left: 0, right: 3, top: 0 });
+    expect(res.size).toEqual({ bottom: 2, left: 0, right: 3, top: 0 });
   });
 });

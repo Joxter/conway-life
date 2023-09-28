@@ -3,7 +3,7 @@ import { Fauna, FaunaInc, Size } from "./types";
 export function newMakeGo(input: Fauna): {
   fauna: Fauna;
   time: number;
-  size: Size;
+  size: Size | null;
   population: number;
 } {
   let start = Date.now();
@@ -38,6 +38,10 @@ export function newMakeGo(input: Fauna): {
     result.set(col, rowMap);
   });
   const time = Date.now() - start;
+
+  if (population === 0) {
+    return { fauna: result, time, population, size: null };
+  }
 
   return { fauna: result, time, population, size };
 }

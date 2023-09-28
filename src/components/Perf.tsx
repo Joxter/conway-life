@@ -1,9 +1,10 @@
 import { $centerScreenColRow, $faunaData, $hoveredCellColRow, $stats, perf } from "../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
+import { getParamsFromSize } from "../utils";
 
 export function Perf() {
-  const [time, fps] = useUnit([perf.$stepsPerSec, perf.$time, perf.$fps]);
+  const [time, fps] = useUnit([perf.$time, perf.$fps]);
   const [stats, hovered, centerScreenColRow, faunaData] = useUnit([
     $stats,
     $hoveredCellColRow,
@@ -28,14 +29,10 @@ export function Perf() {
 
   function getSize() {
     let { size } = faunaData();
+    if (!size) return "unknown";
 
-    return size
-      .map(({ right, top, left, bottom }) => {
-        let width = right - left + 1;
-        let height = bottom - top + 1;
-        return `w${width} h${height}`;
-      })
-      .unwrapOr("unknown");
+    let [width, height] = getParamsFromSize(size);
+    return `w${width} h${height}`;
   }
 
   return (

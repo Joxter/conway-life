@@ -1,10 +1,9 @@
 import { combine, createEvent, createStore, sample } from "effector";
-import { Fauna, Field, XY } from "../types";
+import { Fauna, Field, Size, XY } from "../types";
 import { adjustOffset, getMiddleOfFauna, getViewPortParams, newFauna } from "../utils";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "../feature/Progress/progress.model";
-import { None, Option } from "@sniptt/monads";
 
 const ViewPort = getViewPortParams();
 
@@ -15,14 +14,14 @@ export type FaunaData = {
   fauna: Fauna;
   time: number;
   population: number;
-  size: Option<{ left: number; right: number; top: number; bottom: number }>;
+  size: Size | null;
 };
 
 export const $faunaData = createStore<FaunaData>({
   fauna: newFauna([]),
   time: 0,
   population: 0,
-  size: None,
+  size: null,
 });
 
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
@@ -222,22 +221,23 @@ sample({
   source: { faunaData: $faunaData, cellSize: fieldSize.$cellSize },
   clock: focusToTheMiddle,
   fn: ({ faunaData, cellSize }) => {
-    return faunaData.size
-      .map(({ top, bottom, left, right }) => {
-        let width = right - left + 1;
-        let height = bottom - top + 1;
+    if (!faunaData.size) {
+      return cellSize;
+    }
 
-        let maxVisualWidth = ViewPort.width * 0.6;
-        let maxVisualHeight = ViewPort.height * 0.6;
+    let { right, top, bottom, left } = faunaData.size;
+    let width = right - left + 1;
+    let height = bottom - top + 1;
 
-        let pixelSize = Math.floor(Math.min(maxVisualWidth / width, maxVisualHeight / height));
+    let maxVisualWidth = ViewPort.width * 0.6;
+    let maxVisualHeight = ViewPort.height * 0.6;
 
-        if (pixelSize < 1) pixelSize = 1;
-        if (pixelSize > 30) pixelSize = 30;
+    let pixelSize = Math.floor(Math.min(maxVisualWidth / width, maxVisualHeight / height));
 
-        return { size: pixelSize, prevSize: cellSize.size };
-      })
-      .unwrapOr(cellSize);
+    if (pixelSize < 1) pixelSize = 1;
+    if (pixelSize > 30) pixelSize = 30;
+
+    return { size: pixelSize, prevSize: cellSize.size };
   },
   target: fieldSize.$cellSize,
 });
@@ -280,7 +280,7 @@ sample({
       population++;
     }
 
-    return { fauna: newFauna, time: faunaData.time, population, size: None };
+    return { fauna: newFauna, time: faunaData.time, population, size: null };
   },
   target: $faunaData,
 });

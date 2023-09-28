@@ -118,5 +118,11 @@ export function newFaunaDataFromRle(rle: string): FaunaData {
     .map(({ fauna, population }) => {
       return { fauna, time: 0, population, size: getRectOfFauna(fauna) };
     })
-    .unwrapOr({ fauna: emptyFauna, time: 0, population: 0, size: None });
+    .unwrapOr({ fauna: emptyFauna, time: 0, population: 0, size: null });
+}
+
+export function getParamsFromSize({ right, top, left, bottom }: Size): [number, number] {
+  let width = right - left + 1;
+  let height = bottom - top + 1;
+  return [width, height];
 }
