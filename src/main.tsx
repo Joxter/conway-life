@@ -49,9 +49,9 @@ function App() {
           <ImportExportButton />
         </WhiteBox>
 
-        <WhiteBox style={{ bottom: "30px", left: "10px", right: "10px" }}>
+        <div style={{ position: "absolute", bottom: "30px", left: "10px", right: "10px" }}>
           <Progress />
-        </WhiteBox>
+        </div>
 
         <WhiteBox style={{ bottom: "110px", left: "10px" }}>
           <Navigation />

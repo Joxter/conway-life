@@ -3,7 +3,7 @@ import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 
 export function Perf() {
-  const [stepsPerSec, time, fps] = useUnit([perf.$stepsPerSec, perf.$time, perf.$fps]);
+  const [time, fps] = useUnit([perf.$stepsPerSec, perf.$time, perf.$fps]);
   const [stats, hovered, centerScreenColRow, faunaData] = useUnit([
     $stats,
     $hoveredCellColRow,
@@ -42,7 +42,6 @@ export function Perf() {
     <>
       <p class={css.perf}>
         <span>FPS: {fps()}</span>
-        <span>gen/sec: {stepsPerSec()}</span>
         <span>calc time {time()} msec</span>
         {/* --- */}
         <span>population: {stats().population}</span>

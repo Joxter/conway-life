@@ -1,5 +1,33 @@
 .root {
-  width: 100%;
+}
+
+.row {
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.actionBtn {
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 100%;
+  border: 5px solid #e57b55;
+  padding: 0;
+}
+
+.actionBtn:hover,
+.actionBtn:focus {
+  border: 5px solid #efb49e;
+}
+
+.sep {
+  margin: 0 auto;
+}
+
+.plusMinus button {
+  align-items: baseline;
+  font-size: 24px;
+  line-height: 1;
+  padding: 0 6px;
 }

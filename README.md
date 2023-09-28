@@ -4,7 +4,8 @@
 
 - [ ] better UI
   - [x] auto-focus and auto-zoom
-  - [ ] update progress bar
+  - [x] update progress bar
+  - [ ] better progress bar
   - [x] something for Perf
 - [ ] better catalogue
   - [ ] better search, search by name/author/comment
