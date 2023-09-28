@@ -32,6 +32,9 @@ function newMakeGo(input) {
     result.set(col, rowMap);
   });
   const time = Date.now() - start;
+  if (population === 0) {
+    return { fauna: result, time, population, size: null };
+  }
   return { fauna: result, time, population, size };
 }
 var incNeighbors = function(faunaInc, col, row) {
