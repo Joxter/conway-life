@@ -71,7 +71,6 @@ self.addEventListener("message", (ev) => {
     lastRes = null;
     lastRes = newMakeGo(ev.data.fauna);
     gen = 1;
-    console.log("111", { gen });
     self.postMessage({ res: lastRes, gen });
   } else if (ev.data.gen) {
     if (!lastRes) {
@@ -82,7 +81,6 @@ self.addEventListener("message", (ev) => {
       gen++;
       lastRes = newMakeGo(lastRes.fauna);
     }
-    console.log("222", { gen });
     self.postMessage({ res: lastRes, gen });
   }
 });

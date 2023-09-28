@@ -1,12 +1,12 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 import { render, ErrorBoundary } from "solid-js/web";
-import { $faunaData, calculated, FaunaData, getGeneration, progress } from "./model/field";
+import { $faunaData, FaunaData, progress } from "./model/field";
 import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
 import { Navigation } from "./components/Navigation";
-import { Progress } from "./components/Progress";
+import { Progress } from "./feature/Progress/Progress";
 import { Perf } from "./components/Perf";
 import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catalogue/Catalogue";
@@ -91,7 +91,7 @@ function initWW() {
     try {
       let data = validateWWRes(ev.data.res);
       if (data) {
-        calculated({ data, gen: ev.data.gen as any as number });
+        progress.calculated({ data, gen: ev.data.gen as any as number });
       }
     } catch (err) {
       console.error(err);
@@ -107,7 +107,7 @@ function initWW() {
   }).watch(({ fauna }) => {
     worker.postMessage({ fauna });
   });
-  getGeneration.watch((n) => {
+  progress.getGeneration.watch((n) => {
     worker.postMessage({ gen: n });
   });
 }

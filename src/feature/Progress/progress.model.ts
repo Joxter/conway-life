@@ -1,9 +1,9 @@
-import { combine, createEvent, createStore, merge, sample, Store } from "effector";
+import { combine, createEvent, createStore, Event, merge, sample, Store } from "effector";
 import { interval } from "patronum";
-import { Fauna } from "../types";
-import { getStrFromLS, setStrToLS } from "../utils";
+import { FaunaData } from "../../model/field";
+import { getStrFromLS, setStrToLS } from "../../utils";
 
-export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boolean>) {
+export function createProgress() {
   const lsStepsPerSecName = "expectedStepsPerSec";
   let initSteps = +getStrFromLS(lsStepsPerSecName, "10") || 10;
 
@@ -13,10 +13,13 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
   const stop = createEvent<any>();
   const pause = createEvent<any>();
   const oneStep = createEvent<any>();
+  const calculated = createEvent<{ data: FaunaData; gen: number }>();
+  const getGeneration = createEvent<number>();
 
   const reset = createEvent<any>();
 
-  const $isRunning = createStore(false);
+  const $isRunning = createStore(false); // start pressed
+  const $isCalculating = createStore(false); // new generation is calculation
   const $currentStep = createStore(0);
 
   const speedRange = [1, 200] as const;
@@ -27,7 +30,7 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
   const incExpectedStepsPerSec = createEvent();
   const decExpectedStepsPerSec = createEvent();
 
-  const $startFauna = createStore<Fauna | null>(null);
+  $isCalculating.on([start, getGeneration], () => true).on(calculated, () => false);
 
   const timer = interval({
     timeout: $stepTimeout,
@@ -44,10 +47,10 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
   sample({ clock: oneStep, target: gameTick });
 
   sample({
-    source: $fauna,
-    clock: start,
-    fn: (f) => new Map(f),
-    target: $startFauna,
+    source: $currentStep,
+    clock: gameTick,
+    fn: (step) => step + 1,
+    target: getGeneration,
   });
 
   $isRunning
@@ -74,9 +77,8 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
       return newSpeed;
     });
 
-  $startFauna.on(reset, () => null);
-
   $currentStep
+    .on(calculated, (_, res) => res.gen)
     .on(stop, () => 0)
     .reset(reset);
 
@@ -88,7 +90,7 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
     $currentStep,
     $expectedStepsPerSec,
     $isRunning,
-    $startFauna,
+    $isCalculating,
     start,
     stop,
     pause,
@@ -98,5 +100,7 @@ export function createProgress($fauna: Store<Fauna>, $isCalculating: Store<boole
     gameTick,
     reset,
     oneStep,
+    calculated,
+    getGeneration,
   };
 }

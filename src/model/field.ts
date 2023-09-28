@@ -3,7 +3,7 @@ import { Fauna, Field, XY } from "../types";
 import { adjustOffset, getMiddleOfFauna, getViewPortParams, newFauna } from "../utils";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
-import { createProgress } from "./progress";
+import { createProgress } from "../feature/Progress/progress.model";
 import { None, Option } from "@sniptt/monads";
 
 const ViewPort = getViewPortParams();
@@ -37,22 +37,14 @@ export const $labels = createStore<{ col: number; row: number; label: string }[]
   // { col: 0, row: -10, label: "0,-10" },
 ]);
 
-export const $isCalculating = createStore(false);
-export const getGeneration = createEvent<number>();
-export const calculated = createEvent<{ data: FaunaData; gen: number }>();
 export const setNewFauna = createEvent<FaunaData>();
 
-export const progress = createProgress(
-  $faunaData.map((it) => it.fauna),
-  $isCalculating,
-);
-
-$isCalculating.on([progress.start, getGeneration], () => true).on(calculated, () => false);
+export const progress = createProgress();
 
 export const perf = createPerf(
   progress.$currentStep,
   progress.reset,
-  calculated.map((it) => it.data.time),
+  progress.calculated.map((it) => it.data.time),
 );
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
@@ -63,17 +55,8 @@ export const resetFieldPressed = createEvent<any>();
 
 $faunaData
   .on(setNewFauna, (_, data) => data)
-  .on(calculated, (_, res) => res.data)
+  .on(progress.calculated, (_, res) => res.data)
   .reset(resetFieldPressed);
-
-progress.$currentStep.on(calculated, (_, res) => res.gen);
-
-sample({
-  source: progress.$currentStep,
-  clock: progress.gameTick,
-  fn: (step) => step + 1,
-  target: getGeneration,
-});
 
 sample({
   source: [$screenOffsetXY, screen.$hovered] as const,
@@ -111,6 +94,8 @@ export const $field = combine(
       colMap.forEach((val, cellRow) => {
         const finX = cellCol * cellSize + screenOffsetXY.x;
         const finY = cellRow * cellSize + screenOffsetXY.y;
+        // const finX = (cellCol * cellSize + screenOffsetXY.x) >> 1;
+        // const finY = (cellRow * cellSize + screenOffsetXY.y) >> 1;
 
         if (finX >= 0 && finX < viewPortSize.width) {
           if (finY >= 0 && finY < viewPortSize.height) {

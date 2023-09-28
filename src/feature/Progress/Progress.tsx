@@ -1,8 +1,8 @@
-import { progress, resetFieldPressed } from "../model/field";
+import { progress, resetFieldPressed } from "../../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { Show } from "solid-js";
-import { PlusMinus } from "./PlusMinus";
+import { PlusMinus } from "../../components/PlusMinus";
 
 export function Progress() {
   let [isRunning, currentStep, expectedStepsPerSec] = useUnit([
@@ -12,7 +12,7 @@ export function Progress() {
   ]);
 
   return (
-    <div style={{ width: "100%", display: "flex", "justify-content": "space-between" }}>
+    <div class={css.root}>
       <div>
         <p style={{ display: "flex", gap: "4px" }}>
           <button onClick={progress.oneStep}>Step</button>
