@@ -1,4 +1,4 @@
-import { createEvent, createStore, sample, split, Store } from "effector";
+import { createEvent, createStore, Store } from "effector";
 import { XY } from "../types";
 import { getStrFromLS, getViewPortParams, setStrToLS } from "../utils";
 
@@ -6,7 +6,8 @@ const vp = getViewPortParams();
 
 export function createFieldSize() {
   const lsCellSizeName = "cellSize";
-  const options = [1, 100] as const;
+  const options = [1, 50] as const;
+  const SCALE = 1.1;
 
   let initCellSize = +getStrFromLS(lsCellSizeName, "10") || 10;
   const $cellSize = createStore({ size: initCellSize, prevSize: initCellSize });
@@ -37,18 +38,14 @@ export function createFieldSize() {
 
   $cellSize
     .on(minus, ({ size }) => {
-      let newSize = Math.max(options[0], size - 1);
-      return {
-        size: newSize,
-        prevSize: size,
-      };
+      let newSize = Math.max(options[0], Math.floor(size / SCALE));
+
+      return { size: newSize, prevSize: size };
     })
     .on(plus, ({ size }) => {
-      let newSize = Math.max(options[0], size + 1);
-      return {
-        size: newSize,
-        prevSize: size,
-      };
+      let newSize = Math.min(options[1], Math.ceil(size * SCALE));
+
+      return { size: newSize, prevSize: size };
     });
 
   $cellSize.watch((val) => {
