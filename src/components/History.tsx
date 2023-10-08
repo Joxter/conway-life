@@ -10,6 +10,7 @@ import { useUnit } from "effector-solid";
 import { For } from "solid-js";
 
 export function History() {
+  // TODO abandoned
   let [history] = useUnit([$history]);
 
   return (

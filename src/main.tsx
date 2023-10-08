@@ -7,7 +7,6 @@ import { Field } from "./components/Field/Field";
 import { Navigation } from "./components/Navigation";
 import { Progress } from "./feature/Progress/Progress";
 import { Perf } from "./components/Perf";
-import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catalogue/Catalogue";
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
@@ -41,7 +40,6 @@ function App() {
     >
       <div>
         <Field />
-        <History />
         <WhiteBox
           style={{
             top: "0",

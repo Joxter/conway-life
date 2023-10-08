@@ -1,6 +1,6 @@
 import { createEffect, createEvent, createStore, sample } from "effector";
 import { Fauna } from "../types";
-import { faunaToRle, rleToFauna } from "../importExport/utils";
+import { faunaToRle } from "../importExport/utils";
 
 type HistoryItem = {
   rle: string;
@@ -8,6 +8,7 @@ type HistoryItem = {
   removed: boolean;
 };
 
+/** @deprecated */
 export const $history = createStore<HistoryItem[]>(getSavedFromLS() || []);
 
 export const addToHistory = createEvent<Fauna>();
