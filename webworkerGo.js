@@ -1,5 +1,5 @@
-// src/makeGo.ts
-function newMakeGo(input) {
+// src/calcNextGen.ts
+function nextGen(input) {
   let start = Date.now();
   let result = new Map;
   let faunaInc = new Map;
@@ -72,7 +72,7 @@ var lastRes = null;
 self.addEventListener("message", (ev) => {
   if (ev.data.fauna) {
     lastRes = null;
-    lastRes = newMakeGo(ev.data.fauna);
+    lastRes = nextGen(ev.data.fauna);
     gen = 1;
     self.postMessage({ res: lastRes, gen });
   } else if (ev.data.gen) {
@@ -82,7 +82,7 @@ self.addEventListener("message", (ev) => {
     }
     while (gen < ev.data.gen) {
       gen++;
-      lastRes = newMakeGo(lastRes.fauna);
+      lastRes = nextGen(lastRes.fauna);
     }
     self.postMessage({ res: lastRes, gen });
   }
