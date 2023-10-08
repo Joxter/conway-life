@@ -37,6 +37,29 @@ function nextGen(input) {
   }
   return { fauna: result, time, population, size };
 }
+function currGen(input) {
+  let start = Date.now();
+  let population = 0;
+  let size = { left: Infinity, right: (-Infinity), top: Infinity, bottom: (-Infinity) };
+  for (let [row, rowData] of input) {
+    population += rowData.size;
+    for (let [col, val] of rowData) {
+      if (col < size.left)
+        size.left = col;
+      if (col > size.right)
+        size.right = col;
+      if (row < size.top)
+        size.top = row;
+      if (row > size.bottom)
+        size.bottom = row;
+    }
+  }
+  const time = Date.now() - start;
+  if (population === 0) {
+    return { fauna: input, time, population, size: null };
+  }
+  return { fauna: input, time, population, size };
+}
 var incNeighbors = function(faunaInc, col, row) {
   let neighborCoords = [
     [col - 1, row - 1],
@@ -71,8 +94,7 @@ var gen = 0;
 var lastRes = null;
 self.addEventListener("message", (ev) => {
   if (ev.data.fauna) {
-    lastRes = null;
-    lastRes = nextGen(ev.data.fauna);
+    lastRes = currGen(ev.data.fauna);
     gen = 1;
     self.postMessage({ res: lastRes, gen });
   } else if (ev.data.gen) {
@@ -80,10 +102,8 @@ self.addEventListener("message", (ev) => {
       console.log("no lastRes");
       return;
     }
-    while (gen < ev.data.gen) {
-      gen++;
-      lastRes = nextGen(lastRes.fauna);
-    }
+    gen++;
+    lastRes = nextGen(lastRes.fauna);
     self.postMessage({ res: lastRes, gen });
   }
 });

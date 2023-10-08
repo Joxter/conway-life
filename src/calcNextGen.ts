@@ -46,6 +46,31 @@ export function nextGen(input: Fauna): {
   return { fauna: result, time, population, size };
 }
 
+export function currGen(input: Fauna): ReturnType<typeof nextGen> {
+  let start = Date.now();
+  let population = 0;
+  let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+
+  for (let [row, rowData] of input) {
+    population += rowData.size;
+
+    for (let [col, val] of rowData) {
+      if (col < size.left) size.left = col;
+      if (col > size.right) size.right = col;
+      if (row < size.top) size.top = row;
+      if (row > size.bottom) size.bottom = row;
+    }
+  }
+
+  const time = Date.now() - start;
+
+  if (population === 0) {
+    return { fauna: input, time, population, size: null };
+  }
+
+  return { fauna: input, time, population, size };
+}
+
 function incNeighbors(faunaInc: FaunaInc, col: number, row: number): FaunaInc {
   let neighborCoords = [
     [col - 1, row - 1],

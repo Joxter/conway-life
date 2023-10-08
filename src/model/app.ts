@@ -1,6 +1,13 @@
 import { sample } from "effector";
 import { importExport } from "../feature/ImportExport/importExport.model";
-import { $faunaData, FaunaData, focusToTheMiddle, progress, resetFieldPressed } from "./field";
+import {
+  $faunaData,
+  FaunaData,
+  focusToTheMiddle,
+  progress,
+  resetFieldPressed,
+  screen,
+} from "./field";
 import { $history, addToHistory, historySelected, saveClicked } from "./history";
 import { faunaToRle } from "../importExport/utils";
 import { catalogue } from "../feature/Catalogue/Catalogue.model";
@@ -104,7 +111,13 @@ export function initWW() {
 
   sample({
     source: $faunaData,
-    clock: [historySelected, importExport.importClicked, catalogue.patternFetched],
+    clock: [
+      historySelected,
+      importExport.importClicked,
+      catalogue.patternFetched,
+      progress.reset,
+      screen.onPointerClick,
+    ],
   }).watch(({ fauna }) => {
     worker.postMessage({ fauna });
   });

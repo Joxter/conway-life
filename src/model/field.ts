@@ -188,13 +188,6 @@ export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, { s
   });
 });
 
-// sample({
-//   source: $faunaData,
-//   clock: progress.gameTick,
-//   fn: (it) => newMakeGo(it.fauna),
-//   target: calculated,
-// });
-
 const $initScreenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 
 sample({

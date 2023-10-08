@@ -1,7 +1,6 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 import { render, ErrorBoundary } from "solid-js/web";
-import { $faunaData, FaunaData, progress } from "./model/field";
 import "./model/app";
 import "./style.css";
 import { Field } from "./components/Field/Field";
@@ -12,7 +11,6 @@ import { History } from "./components/History";
 import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catalogue/Catalogue";
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
-import { Fauna } from "./types";
 import { createSignal } from "solid-js";
 import { initWW } from "./model/app";
 
