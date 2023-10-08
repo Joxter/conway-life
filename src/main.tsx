@@ -13,7 +13,28 @@ import { CatalogueModal, CatalogueButton, CurrentPattern } from "./feature/Catal
 import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
 import { Fauna } from "./types";
-import { sample } from "effector";
+import { createSignal } from "solid-js";
+import { initWW } from "./model/app";
+
+/*
+function Counter() {
+  const [text, setCount] = createSignal("");
+
+  const lower = () => text().toLowerCase();
+
+  return (
+    <div style={{ "font-size": "24px", width: "400px" }}>
+      <textarea
+        value={text()}
+        style={{ width: "100%", height: "100px" }}
+        onInput={(ev) => setCount(ev.target.value)}
+      />
+      <br />
+      <textarea style={{ width: "100%", height: "100px" }} value={lower()} />
+    </div>
+  );
+}
+*/
 
 function App() {
   return (
@@ -40,6 +61,12 @@ function App() {
         <CurrentPattern
           style={{ position: "absolute", bottom: "150px", right: "10px", "font-size": "14px" }}
         />
+        {/*
+        <WhiteBox style={{ left: "200px", top: "100px" }}>
+          <Counter />
+        </WhiteBox>
+*/}
+
         <WhiteBox style={{ bottom: "110px", right: "10px" }}>
           <CatalogueButton />
         </WhiteBox>
@@ -83,67 +110,4 @@ function App() {
 
 initWW();
 
-function initWW() {
-  const worker = new Worker("./webworkerGo.js");
-
-  worker.addEventListener("message", (ev) => {
-    try {
-      let data = validateWWRes(ev.data.res);
-      if (data) {
-        progress.calculated({ data, gen: ev.data.gen as any as number });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  });
-  worker.addEventListener("error", (err) => {
-    console.error(err);
-  });
-
-  sample({
-    source: $faunaData,
-    clock: progress.start,
-  }).watch(({ fauna }) => {
-    worker.postMessage({ fauna });
-  });
-  progress.getGeneration.watch((n) => {
-    worker.postMessage({ gen: n });
-  });
-}
-
 render(() => <App />, document.querySelector<HTMLDivElement>("#app")!);
-
-function validateWWRes(data: any): FaunaData | undefined {
-  let fauna: Fauna = data.fauna;
-  if (!(fauna instanceof Map)) {
-    console.log(fauna);
-    console.error(`Fauna is not a Map. Check webworkerGo.js`);
-    return;
-  }
-
-  let time = data.time;
-  if (typeof time !== "number") {
-    console.error(`Time is not a number. Check webworkerGo.js`);
-    return;
-  }
-
-  let population = data.population;
-  if (typeof population !== "number") {
-    console.error(`Population is not a number. Check webworkerGo.js`);
-    return;
-  }
-
-  let size = data.size; // should be { left: number; right: number; top: number; bottom: number }
-  if (
-    typeof size !== "object" ||
-    typeof size.left !== "number" ||
-    typeof size.right !== "number" ||
-    typeof size.top !== "number" ||
-    typeof size.bottom !== "number"
-  ) {
-    console.error(`Size is an object with params. Check webworkerGo.js`);
-    return;
-  }
-
-  return { fauna, time, population, size };
-}

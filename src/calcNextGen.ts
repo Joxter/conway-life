@@ -1,6 +1,6 @@
 import { Fauna, FaunaInc, Size } from "./types";
 
-export function newMakeGo(input: Fauna): {
+export function nextGen(input: Fauna): {
   fauna: Fauna;
   time: number;
   size: Size | null;

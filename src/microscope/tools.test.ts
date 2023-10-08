@@ -1,7 +1,7 @@
 import { expect, test, describe } from "bun:test";
 import { isFaunaEq } from "./tools";
 import { getRectOfFauna, rleToFauna } from "../importExport/utils";
-import { newMakeGo } from "../makeGo";
+import { nextGen } from "../calcNextGen";
 import { FaunaData } from "../model/field";
 
 function makeFaunaDataFromRle(rle: string): FaunaData {
@@ -30,7 +30,7 @@ describe("tools", () => {
       let aFauna = makeFaunaDataFromRle(rle);
       let _bFauna = rleToFauna(rle).unwrap();
 
-      let bFauna = newMakeGo(_bFauna.fauna);
+      let bFauna = nextGen(_bFauna.fauna);
 
       expect(isFaunaEq(aFauna, bFauna)).toEqual(false);
     });

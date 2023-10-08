@@ -1,4 +1,4 @@
-import { newMakeGo } from "./makeGo";
+import { nextGen } from "./calcNextGen";
 import path from "node:path";
 import fs from "fs";
 import { parseRleFile, rleToFauna } from "./importExport/utils";
@@ -15,7 +15,7 @@ heavyPatterns.forEach((name) => {
 
   let total = 0;
   for (let i = 0; i < 10; i++) {
-    let res = newMakeGo(fauna);
+    let res = nextGen(fauna);
     console.log(res.time, res.size);
     fauna = res.fauna;
     total += res.time;

@@ -1,7 +1,8 @@
 import { combine, createEvent, createStore, Event, merge, sample, Store } from "effector";
-import { interval } from "patronum";
-import { FaunaData } from "../../model/field";
+import { debug, interval } from "patronum";
+import { $faunaData, FaunaData, progress } from "../../model/field";
 import { getStrFromLS, setStrToLS } from "../../utils";
+import { Fauna } from "../../types";
 
 export function createProgress() {
   const lsStepsPerSecName = "expectedStepsPerSec";
@@ -20,7 +21,7 @@ export function createProgress() {
 
   const $isRunning = createStore(false); // start pressed
   const $isCalculating = createStore(false); // new generation is calculation
-  const $currentStep = createStore(0);
+  const $currentStep = createStore(1);
 
   const speedRange = [1, 200] as const;
 
@@ -30,8 +31,10 @@ export function createProgress() {
   const incExpectedStepsPerSec = createEvent();
   const setSteps = createEvent<number>();
   const decExpectedStepsPerSec = createEvent();
+  const lockWW = createEvent();
+  const unlockWW = createEvent();
 
-  $isCalculating.on([start, getGeneration], () => true).on(calculated, () => false);
+  $isCalculating.on(lockWW, () => true).on(unlockWW, () => false);
 
   const timer = interval({
     timeout: $stepTimeout,
@@ -40,12 +43,18 @@ export function createProgress() {
   });
 
   sample({
-    clock: [timer.tick, start, oneStep],
-    filter: combine($isRunning, $isCalculating, (running, calculating) => running && !calculating),
+    clock: [timer.tick, start],
+    filter: combine($isRunning, $isCalculating, (running, calculating) => {
+      return running && !calculating;
+    }),
     target: gameTick,
   });
 
-  sample({ clock: oneStep, target: gameTick });
+  sample({
+    clock: oneStep,
+    filter: $isRunning.map((it) => !it),
+    target: gameTick,
+  });
 
   sample({
     source: $currentStep,
@@ -92,7 +101,7 @@ export function createProgress() {
     $currentStep,
     $expectedStepsPerSec,
     $isRunning,
-    $isCalculating,
+    // $isCalculating,
     start,
     stop,
     pause,
@@ -105,5 +114,7 @@ export function createProgress() {
     oneStep,
     calculated,
     getGeneration,
+    lockWW,
+    unlockWW,
   };
 }
