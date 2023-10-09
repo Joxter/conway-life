@@ -48,9 +48,9 @@ function run(folder: string, output: string) {
 
         res.type = type;
 
-        if (type === "still-live") {
+        if (type?.name === "still-live") {
           patternTypesStat["still-live"]++;
-        } else if (type?.startsWith("oscillator")) {
+        } else if (type?.name === "oscillator") {
           patternTypesStat["oscillator"]++;
         } else {
           patternTypesStat["none"]++;

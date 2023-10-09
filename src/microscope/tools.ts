@@ -93,11 +93,11 @@ export function typeByRle(rle: string, max = 100): PatternTypes | null {
   let period = isOscillatorsByRle(rle, max);
 
   if (period === 1) {
-    return "still-live";
+    return { name: "still-live" };
   }
 
   if (period) {
-    return `oscillator|p${period}`;
+    return { name: "oscillator", period };
   }
 
   return null;

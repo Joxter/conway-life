@@ -1,7 +1,7 @@
 import { combine, createEffect, createEvent, createStore, sample } from "effector";
 import { allTemplates } from "../../blueprints/all-templates";
 import { fuzzy, newFaunaDataFromRle, objEntries } from "../../utils";
-import { Pattern } from "../../types";
+import { Pattern, PatternTypeNames } from "../../types";
 import { parseRleFile } from "../../importExport/utils";
 import { FaunaData } from "../../model/field";
 
@@ -19,11 +19,20 @@ export type OrderBy = (typeof orderOptions)[number];
 
 export const catalogue = createCatalogue();
 
+type PatTypes = Record<PatternTypeNames, boolean> & { unknown: boolean };
+
 export function createCatalogue() {
   const PAGE_SIZE = 50;
 
   const $search = createStore("");
   const $orderBy = createStore<OrderBy>(orderOptions[0]);
+  const $type = createStore<PatTypes>({
+    "still-live": false,
+    oscillator: false,
+    unknown: false,
+  });
+  const typeChanged = createEvent<Partial<PatTypes>>();
+
   const setSearch = createEvent<string>();
   const selectPattern = createEvent<string>(); // filename
   const loadInitPattern = createEvent<string>(); // filename
@@ -39,27 +48,26 @@ export function createCatalogue() {
   $isOpen.on([open, currentPatternClicked], () => true).on([close, selectPattern], () => false);
   $search.on([setSearch, currentPatternClicked], (_, newSearch) => newSearch);
   $orderBy.on(orderByChanged, (_, newOrderBy) => newOrderBy);
+  $type.on(typeChanged, (state, newVals) => {
+    return { ...state, ...newVals };
+  });
+
+  $type.watch(console.log);
 
   sample({ source: $currentPattern, clock: currentPatternClicked, target: $search });
 
   const $items = createStore<CatItem[]>(
-    objEntries(allTemplates)
-      .map(([key, patt]) => {
-        return {
-          image: `https://cerestle.sirv.com/Images/png/${patt.fileName.replace(".rle", "")}.png`,
-          ...patt,
-        };
-      })
+    objEntries(allTemplates).map(([key, patt]) => {
+      return {
+        image: `https://cerestle.sirv.com/Images/png/${patt.fileName.replace(".rle", "")}.png`,
+        ...patt,
+      };
+    }),
   );
   const $offset = createStore(0);
 
-  const $filteredItems = combine($search, $items, $orderBy, (search, items) => {
-    search = search.toLowerCase().trim();
-    if (!search) {
-      return items;
-    }
-
-    return searchItems(items, search);
+  const $filteredItems = combine($search, $items, $type, (search, items, patType) => {
+    return searchItems(items, search, patType);
   });
   const $foundCnt = $filteredItems.map((items) => items.length);
 
@@ -118,6 +126,9 @@ export function createCatalogue() {
     $pageItems,
     $foundCnt,
 
+    $type,
+    typeChanged,
+
     $orderBy,
     orderByChanged,
 
@@ -158,10 +169,29 @@ export function rankItems(item: CatItem, query: string): number {
   return fuzzy(item.name.toLowerCase(), query);
 }
 
-function searchItems(items: CatItem[], search: string): CatItem[] {
+function searchItems(items: CatItem[], search: string, patType: PatTypes): CatItem[] {
+  const noTypeSelected = Object.values(patType).every((v) => !v);
+
+  search = search.toLowerCase().trim();
+  if (!search && noTypeSelected) {
+    return items;
+  }
+
   return items
     .map((item) => {
       return { score: rankItems(item, search), ...item };
+    })
+    .filter(({ score, type }) => {
+      let currentPatternType = type?.name || ("unknown" as const);
+
+      let typeOk = false;
+      if (noTypeSelected) {
+        typeOk = true;
+      } else if (patType[currentPatternType]) {
+        typeOk = true;
+      }
+
+      return score > 0 && typeOk;
     })
     .sort((a, b) => {
       if (a.score < b.score) {
@@ -171,8 +201,5 @@ function searchItems(items: CatItem[], search: string): CatItem[] {
         return -1;
       }
       return 0;
-    })
-    .filter(({ score }) => {
-      return score > 0;
     });
 }

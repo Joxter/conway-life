@@ -5,6 +5,8 @@ import { catalogue, orderOptions } from "./Catalogue.model";
 import { Modal } from "../../components/Modal/Modal";
 import { JSX } from "solid-js/types/jsx";
 import { createEffect } from "solid-js";
+import { Checkbox } from "../../components/Form";
+import { Pattern } from "../../types";
 
 export function CurrentPattern(props: { style: JSX.CSSProperties }) {
   const [currentPattern] = useUnit([catalogue.$currentPattern]);
@@ -24,12 +26,13 @@ export function CatalogueButton() {
 }
 
 export const CatalogueModal = () => {
-  const [search, pageItems, cnt, isOpen, orderBy] = useUnit([
+  const [search, pageItems, cnt, isOpen, orderBy, patType] = useUnit([
     catalogue.$search,
     catalogue.$pageItems,
     catalogue.$foundCnt,
     catalogue.$isOpen,
     catalogue.$orderBy,
+    catalogue.$type,
   ]);
 
   let listEl: HTMLDivElement;
@@ -71,6 +74,24 @@ export const CatalogueModal = () => {
                 })}
               </select>
             </span>
+            <p class={css.types}>
+              <b>Type:</b>
+              <Checkbox
+                label={"still-live"}
+                value={patType()["still-live"]}
+                onChange={(v) => catalogue.typeChanged({ "still-live": v })}
+              />
+              <Checkbox
+                label={"oscillator"}
+                value={patType().oscillator}
+                onChange={(v) => catalogue.typeChanged({ oscillator: v })}
+              />
+              <Checkbox
+                label={"unknown"}
+                value={patType().unknown}
+                onChange={(v) => catalogue.typeChanged({ unknown: v })}
+              />
+            </p>
           </div>
         </div>
         <div class={css.list} ref={(el) => (listEl = el)}>
@@ -84,11 +105,10 @@ export const CatalogueModal = () => {
                   class={css.patternPreview}
                 />
                 <div>
-                  <div style={{ display: "grid" }}>
-                    <p>
-                      <b>{it.name}</b>
-                    </p>
-                  </div>
+                  <p>
+                    <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>{" "}
+                    <b>{it.name}</b>
+                  </p>
                   <div style={{ display: "flex", gap: "8px" }}>
                     <p>
                       size:{" "}
@@ -96,10 +116,10 @@ export const CatalogueModal = () => {
                         {it.size[0]}x{it.size[1]}
                       </b>
                       ; population: <b>{it.population}</b>
+                      ; type: <PatType type={it.type} />
                     </p>
-                    <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>
                   </div>
-                  {it.comment && <p style={{"max-height": '300px', overflow: "auto"}}>{it.comment}</p>}
+                  {it.comment && <p>{it.comment}</p>}
                   {it.wikiLink && (
                     <a href={it.wikiLink} target={"_blank"}>
                       wiki
@@ -118,3 +138,18 @@ export const CatalogueModal = () => {
     </Modal>
   );
 };
+
+function PatType(props: { type: Pattern["type"] }) {
+  if (!props.type) {
+    return <span>unknown</span>;
+  }
+
+  if (props.type.name === "still-live") {
+    return <b>still live</b>;
+  }
+  if (props.type.name === "oscillator") {
+    return <b>oscillator ({props.type.period})</b>;
+  }
+
+  return <b>unreachable</b>;
+}
