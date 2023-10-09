@@ -25,7 +25,7 @@ export type Pattern = {
   author: string;
   wikiLink: string;
   patternLink: string;
-  population: number;
+  population: number; // population growth maximum "*2.999...4" speed
   size: [x: number, y: number];
   rule: string;
   rle: string;
