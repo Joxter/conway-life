@@ -275,6 +275,7 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
     size, // todo not reliable, nned to fix :(
     rule,
     rle,
+    type: null,
   };
 
   function getFromWikiLink(wikiLink: string) {

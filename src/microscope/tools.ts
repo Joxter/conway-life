@@ -1,9 +1,17 @@
 import { FaunaData } from "../model/field";
 import { getRectOfFauna, rleToFauna } from "../importExport/utils";
 import { nextGen } from "../calcNextGen";
+import { PatternTypes } from "../types";
 
-export function makeFaunaDataFromRle(rle: string): FaunaData {
-  let { fauna, population } = rleToFauna(rle).unwrap();
+export function makeFaunaDataFromRle(rle: string): FaunaData | null {
+  let res = rleToFauna(rle);
+  if (res.isErr()) {
+    // todo dirty
+    console.error(`Failed to parse rle "${rle.slice(0, 20)}..."\n Err: ${res.unwrapErr()}`);
+    return null;
+  }
+
+  let { fauna, population } = res.unwrap();
 
   return {
     fauna,
@@ -66,6 +74,9 @@ export function isRleStillLive(rle: string): boolean {
 export function isOscillatorsByRle(rle: string, max = 100): number | null {
   let firstGen = makeFaunaDataFromRle(rle);
   let currGen = makeFaunaDataFromRle(rle);
+  if (!firstGen || !currGen) {
+    return null;
+  }
 
   for (let i = 1; i <= max; i++) {
     let nextGenData = nextGen(currGen.fauna);
@@ -73,6 +84,20 @@ export function isOscillatorsByRle(rle: string, max = 100): number | null {
       return i;
     }
     currGen = nextGenData;
+  }
+
+  return null;
+}
+
+export function typeByRle(rle: string, max = 100): PatternTypes | null {
+  let period = isOscillatorsByRle(rle, max);
+
+  if (period === 1) {
+    return "still-live";
+  }
+
+  if (period) {
+    return `oscillator|p${period}`;
   }
 
   return null;

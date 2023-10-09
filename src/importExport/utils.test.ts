@@ -193,6 +193,7 @@ x = 62, y = 39, rule = B3/S23
         rule: "b3/s23",
         size: [62, 39],
         wikiLink: "https://conwaylife.com/wiki/Pentoad_2",
+        type: null,
       });
     });
 
@@ -216,6 +217,7 @@ x = 15, y = 12, rule = b3/s23
         rule: "b3/s23",
         size: [15, 12],
         wikiLink: "www.conwaylife.com/wiki/Pentoad_1H2",
+        type: null,
       });
     });
 
@@ -238,6 +240,7 @@ x = 385, y = 337, rule = B3/S23
         rule: "b3/s23",
         size: [385, 337],
         wikiLink: "",
+        type: null,
       });
     });
 
@@ -317,6 +320,7 @@ x = 385, y = 337, rule = B3/S23
         rule: "",
         size: [0, 0],
         wikiLink: "",
+        type: null,
       });
     });
   });

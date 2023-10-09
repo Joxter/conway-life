@@ -7,15 +7,15 @@ describe("tools", () => {
   describe("isFaunaEq", () => {
     test("basic true", () => {
       let rle = "o2b2ob4obo$6ob2o2bo!";
-      let aFauna = makeFaunaDataFromRle(rle);
-      let bFauna = makeFaunaDataFromRle(rle);
+      let aFauna = makeFaunaDataFromRle(rle)!;
+      let bFauna = makeFaunaDataFromRle(rle)!;
 
       expect(isFaunaDataEq(aFauna, bFauna)).toEqual(true);
     });
 
     test("basic false", () => {
       let rle = "o2b2ob4obo$6ob2o2bo!"; // 2x12 infinite growth
-      let aFauna = makeFaunaDataFromRle(rle);
+      let aFauna = makeFaunaDataFromRle(rle)!;
       let _bFauna = rleToFauna(rle).unwrap();
 
       let bFauna = nextGen(_bFauna.fauna);
@@ -27,10 +27,10 @@ describe("tools", () => {
       let patterns = [`2o$b2o$2bo!`, `b2o$2o$o!`, `b2o$bo$2o!`, `b2o$o$obo!`, `2bo$b2o$2o!`]; // 3*3 pop5
 
       for (let i = 0; i < patterns.length; i++) {
-        let aFauna = makeFaunaDataFromRle(patterns[i]);
+        let aFauna = makeFaunaDataFromRle(patterns[i])!;
 
         for (let j = 0; j < patterns.length; j++) {
-          let bFauna = makeFaunaDataFromRle(patterns[j]);
+          let bFauna = makeFaunaDataFromRle(patterns[j])!;
 
           if (i !== j) {
             expect(isFaunaDataEq(aFauna, bFauna)).toEqual(false);
@@ -88,6 +88,12 @@ describe("tools", () => {
 2o2b$o7bobo2b$b2o6bo3b$b2o7b3o$12bo$13b$13b$13b$13b$13b$13b$b2o10b$b2o
 2b2o6b$5bobo5b$7bo5b$7b2o4b!`;
       expect(isOscillatorsByRle(rle)).toEqual(46);
+    });
+
+    test("50P92.1 is a oscillator with period eq 92", () => {
+      let rle = `25b2o5b2o$25b2o5b2o12$27b2ob2o$26bo5bo2$25bo7bo$25bo2bobo2bo$25b3o3b3o
+3$17b2o$2o15bobo$2o17bo$17b3o4$17b3o$2o17bo$2o15bobo$17b2o!`;
+      expect(isOscillatorsByRle(rle)).toEqual(92);
     });
   });
 });

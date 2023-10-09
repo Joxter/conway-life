@@ -14,6 +14,8 @@ export type Fauna = Map<number, Map<number, FieldCell>>;
 export type FaunaInc = Map<number, Map<number, number>>;
 export type Size = { left: number; right: number; top: number; bottom: number };
 
+export type PatternTypes = "still-live" | `oscillator|p${number}`;
+
 export type Pattern = {
   fileName: string;
   rawName: string;
@@ -26,4 +28,5 @@ export type Pattern = {
   size: [x: number, y: number];
   rule: string;
   rle: string;
+  type: PatternTypes | null;
 };
