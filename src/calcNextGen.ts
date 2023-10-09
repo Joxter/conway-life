@@ -23,19 +23,20 @@ export function nextGen(input: Fauna): {
     colMap.forEach((total, row) => {
       let isLive = (input.get(col) && input.get(col)!.get(row)!) === 1;
 
-      if (!isLive && total === 3) {
+      if ((!isLive && total === 3) || (isLive && (total === 2 || total === 3))) {
         rowMap.set(row, 1);
-      } else if (isLive && (total === 2 || total === 3)) {
-        rowMap.set(row, 1);
+
+        if (col < size.left) size.left = col;
+        if (col > size.right) size.right = col;
+        if (row < size.top) size.top = row;
+        if (row > size.bottom) size.bottom = row;
       }
-      if (col < size.left) size.left = col;
-      if (col > size.right) size.right = col;
-      if (row < size.top) size.top = row;
-      if (row > size.bottom) size.bottom = row;
     });
 
-    population += rowMap.size;
-    result.set(col, rowMap);
+    if (rowMap.size > 0) {
+      population += rowMap.size;
+      result.set(col, rowMap);
+    }
   });
   const time = Date.now() - start;
 

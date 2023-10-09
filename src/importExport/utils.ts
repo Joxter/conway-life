@@ -299,7 +299,7 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
 // https://conwaylife.com/wiki/Run_Length_Encoded
 export function parseRle(
   content: string,
-  setXY: (x: number, y: number) => any, // make optional
+  setXY: (x: number, y: number) => any,
 ): Result<true, string> {
   const dead = "b";
   const live = "o"; // or any other ???

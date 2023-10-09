@@ -1,19 +1,7 @@
 import { expect, test, describe } from "bun:test";
-import { isFaunaEq } from "./tools";
-import { getRectOfFauna, rleToFauna } from "../importExport/utils";
+import { isOscillatorsByRle, isFaunaDataEq, isRleStillLive, makeFaunaDataFromRle } from "./tools";
+import { rleToFauna } from "../importExport/utils";
 import { nextGen } from "../calcNextGen";
-import { FaunaData } from "../model/field";
-
-function makeFaunaDataFromRle(rle: string): FaunaData {
-  let { fauna, population } = rleToFauna(rle).unwrap();
-
-  return {
-    fauna,
-    population,
-    size: getRectOfFauna(fauna),
-    time: 0,
-  };
-}
 
 describe("tools", () => {
   describe("isFaunaEq", () => {
@@ -22,7 +10,7 @@ describe("tools", () => {
       let aFauna = makeFaunaDataFromRle(rle);
       let bFauna = makeFaunaDataFromRle(rle);
 
-      expect(isFaunaEq(aFauna, bFauna)).toEqual(true);
+      expect(isFaunaDataEq(aFauna, bFauna)).toEqual(true);
     });
 
     test("basic false", () => {
@@ -32,7 +20,7 @@ describe("tools", () => {
 
       let bFauna = nextGen(_bFauna.fauna);
 
-      expect(isFaunaEq(aFauna, bFauna)).toEqual(false);
+      expect(isFaunaDataEq(aFauna, bFauna)).toEqual(false);
     });
 
     test("same size and population, different patterns", () => {
@@ -45,10 +33,61 @@ describe("tools", () => {
           let bFauna = makeFaunaDataFromRle(patterns[j]);
 
           if (i !== j) {
-            expect(isFaunaEq(aFauna, bFauna)).toEqual(false);
+            expect(isFaunaDataEq(aFauna, bFauna)).toEqual(false);
           }
         }
       }
+    });
+  });
+
+  describe("isRleStillLive", () => {
+    test("block is still-live", () => {
+      let rle = "2o$2o!";
+      expect(isRleStillLive(rle)).toEqual(true);
+    });
+
+    test("29bitstilllifeno1 is still-live", () => {
+      let rle = "5bo$4bobo$2obobobo$2obobobo$3bob2o$2obo$2obo$3bob2o$3bo2bo$4b2o!";
+      expect(isRleStillLive(rle)).toEqual(true);
+    });
+
+    test("glider is not still-life, it is a ship", () => {
+      let rle = "bob$2bo$3o!";
+      expect(isRleStillLive(rle)).toEqual(false);
+    });
+
+    test("1beacon is not still-life", () => {
+      let rle = "2b2o3b$bobo3b$o2bob2o$2obo2bo$bobo3b$bo2bo2b$2b2o!";
+      expect(isRleStillLive(rle)).toEqual(false);
+    });
+  });
+
+  describe("isOscillatorsByRle", () => {
+    test("block has period eq 1", () => {
+      let rle = "2o$2o!";
+      expect(isOscillatorsByRle(rle)).toEqual(1);
+    });
+
+    test("29bitstilllifeno1 has period eq 1", () => {
+      let rle = "5bo$4bobo$2obobobo$2obobobo$3bob2o$2obo$2obo$3bob2o$3bo2bo$4b2o!";
+      expect(isOscillatorsByRle(rle)).toEqual(1);
+    });
+
+    test("glider is a ship, it is no a oscillator", () => {
+      let rle = "bob$2bo$3o!";
+      expect(isOscillatorsByRle(rle)).toEqual(null);
+    });
+
+    test("1beacon is a oscillator with period eq 2", () => {
+      let rle = "2b2o3b$bobo3b$o2bob2o$2obo2bo$bobo3b$bo2bo2b$2b2o!";
+      expect(isOscillatorsByRle(rle)).toEqual(2);
+    });
+
+    test("Tanner is a oscillator with period eq 46", () => {
+      let rle = `2b2o9b$2bo10b$3bo9b$2b2o9b$13b$9b2o2b$9bo3b$10bo2b$9b2o2b$b2o10b$b2o6b
+2o2b$o7bobo2b$b2o6bo3b$b2o7b3o$12bo$13b$13b$13b$13b$13b$13b$b2o10b$b2o
+2b2o6b$5bobo5b$7bo5b$7b2o4b!`;
+      expect(isOscillatorsByRle(rle)).toEqual(46);
     });
   });
 });
