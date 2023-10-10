@@ -4,10 +4,18 @@ import { Coords, Size } from "../types";
 type Fauna = Map<number, Set<number>>;
 type FaunaInc = Map<number, Map<number, number>>; // todo remove
 
+type SerData = {
+  fauna: Fauna;
+  time: number;
+  size: Size | null;
+  population: number;
+  generation: number;
+};
+
 /**
  * My naive implementation of Game of Life with just Map<number, Set<number>>
  * */
-export class MyFauna implements IFauna {
+export class MyFauna implements IFauna<SerData> {
   fauna: Fauna;
   time: number;
   size: Size | null;
@@ -120,6 +128,24 @@ export class MyFauna implements IFauna {
     this.time = time;
     this.size = size;
     this.population = population;
+  }
+
+  serialise() {
+    return {
+      fauna: this.fauna,
+      time: this.time,
+      size: this.size,
+      population: this.population,
+      generation: this.generation,
+    };
+  }
+
+  deserialise(data: SerData) {
+    this.fauna = data.fauna;
+    this.time = data.time;
+    this.size = data.size;
+    this.population = data.population;
+    this.generation = data.generation;
   }
 
   getBounds() {
