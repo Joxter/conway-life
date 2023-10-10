@@ -1,9 +1,8 @@
-import { FaunaData } from "../model/field";
-import { getRectOfFauna, rleToFauna } from "../importExport/utils";
-import { nextGen } from "../calcNextGen";
+import { rleToFauna } from "../importExport/utils";
 import { PatternTypes } from "../types";
+import { IFauna } from "../lifes/interface";
 
-export function makeFaunaDataFromRle(rle: string): FaunaData | null {
+export function makeFaunaDataFromRle(rle: string): IFauna | null {
   let res = rleToFauna(rle);
   if (res.isErr()) {
     // todo dirty
@@ -11,54 +10,39 @@ export function makeFaunaDataFromRle(rle: string): FaunaData | null {
     return null;
   }
 
-  let { fauna, population } = res.unwrap();
+  let fauna = res.unwrap();
 
-  return {
-    fauna,
-    population,
-    size: getRectOfFauna(fauna),
-    time: 0,
-  };
+  return fauna;
 }
 
-export function isFaunaDataEq(a: FaunaData, b: FaunaData): boolean {
+export function isFaunaDataEq(a: IFauna, b: IFauna): boolean {
   // console.log("------- isFaunaDataEq");
-  // console.log("size", JSON.stringify(a.size), JSON.stringify(b.size));
+  // console.log("size", JSON.stringify(aBounds), JSON.stringify(bBounds));
   // console.log("pop", a.population, b.population);
   // console.log("fauna", a.fauna, b.fauna);
 
-  if (a.population !== b.population) {
+  if (a.getPopulation() !== b.getPopulation()) {
     return false;
   }
 
-  if (!a.size || !b.size) {
+  let aBounds = a.getBounds();
+  let bBounds = b.getBounds();
+
+  if (!aBounds || !bBounds) {
     // todo undef??
     return false;
   }
 
-  let aSize = [a.size.right - a.size.left + 1, a.size.bottom - a.size.top + 1];
-  let bSize = [b.size.right - b.size.left + 1, b.size.bottom - b.size.top + 1];
+  let aSize = [aBounds.right - aBounds.left + 1, aBounds.bottom - aBounds.top + 1];
+  let bSize = [bBounds.right - bBounds.left + 1, bBounds.bottom - bBounds.top + 1];
 
   if (aSize[0] !== bSize[0] || aSize[1] !== bSize[1]) {
     return false;
   }
 
-  for (let [x, aRow] of a.fauna) {
-    if (!b.fauna.has(x)) {
+  for (let [x, y] of a.getCells()) {
+    if (!b.getCell(x, y)) {
       return false;
-    }
-
-    let bRow = b.fauna.get(x)!;
-    if (aRow.size !== bRow.size) {
-      return false;
-    }
-
-    for (let [y, aCell] of aRow) {
-      let bCell = bRow.get(y);
-
-      if (aCell !== bCell) {
-        return false;
-      }
     }
   }
 
@@ -79,11 +63,10 @@ export function isOscillatorsByRle(rle: string, max = 100): number | null {
   }
 
   for (let i = 1; i <= max; i++) {
-    let nextGenData = nextGen(currGen.fauna);
-    if (isFaunaDataEq(firstGen, nextGenData)) {
+    currGen.nextGen();
+    if (isFaunaDataEq(firstGen, currGen)) {
       return i;
     }
-    currGen = nextGenData;
   }
 
   return null;

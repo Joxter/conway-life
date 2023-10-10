@@ -1,5 +1,5 @@
 import { createEffect, createEvent, createStore, sample } from "effector";
-import { Fauna } from "../types";
+import { IFauna } from "../lifes/interface";
 import { faunaToRle } from "../importExport/utils";
 
 type HistoryItem = {
@@ -12,7 +12,7 @@ type HistoryItem = {
 export const $history = createStore<HistoryItem[]>(getSavedFromLS() || []);
 
 /** @deprecated */
-export const addToHistory = createEvent<Fauna>();
+export const addToHistory = createEvent<IFauna>();
 /** @deprecated */
 export const removeClicked = createEvent<string>();
 /** @deprecated */

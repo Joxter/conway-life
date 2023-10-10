@@ -30,7 +30,7 @@ export function makeFaunaFromLexicon(input: string): Fauna {
 const DEAD = "b";
 const LIVE = "o";
 
-export function faunaToCells(fauna: Fauna): string {
+export function faunaToCells(fauna: IFauna): string {
   let grid = faunaToGrid(fauna);
 
   return grid
@@ -47,7 +47,7 @@ export function faunaToCells(fauna: Fauna): string {
     .join("\n");
 }
 
-export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
+export function faunaToGrid(fauna: IFauna): Array<(0 | 1)[]> {
   let optRect = getRectOfFauna(fauna);
   if (!optRect) {
     return [];
@@ -63,10 +63,8 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
       return Array(rectWidth).fill(0);
     });
 
-  for (let [x, row] of fauna) {
-    for (let [y, val] of row) {
-      grid[y - rect.top][x - rect.left] = 1;
-    }
+  for (let [x, y] of fauna.getCells()) {
+    grid[y - rect.top][x - rect.left] = 1;
   }
 
   return grid;
@@ -100,19 +98,17 @@ function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
     });
 }
 
-export function getRectOfFauna(fauna: Fauna): Size | null {
+export function getRectOfFauna(fauna: IFauna): Size | null {
   let top = Infinity;
   let bottom = -Infinity;
   let left = Infinity;
   let right = -Infinity;
 
-  for (let [x, row] of fauna) {
-    for (let [y, val] of row) {
-      if (x < left) left = x;
-      if (x > right) right = x;
-      if (y < top) top = y;
-      if (y > bottom) bottom = y;
-    }
+  for (let [x, y] of fauna.getCells()) {
+    if (x < left) left = x;
+    if (x > right) right = x;
+    if (y < top) top = y;
+    if (y > bottom) bottom = y;
   }
 
   if (
@@ -127,7 +123,7 @@ export function getRectOfFauna(fauna: Fauna): Size | null {
   return null;
 }
 
-export function faunaToRle(fauna: Fauna): string {
+export function faunaToRle(fauna: IFauna): string {
   let grid = faunaToGrid(fauna);
 
   return squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join("$")) + "!";

@@ -8,6 +8,7 @@ import {
   parseRleFile,
   getRectOfFauna,
 } from "./utils";
+import { MyFauna } from "../lifes/myFauna";
 
 let glider = "bo$2bo$3o!";
 let gliderGun = `24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4bobo$10bo5bo7bo$11bo3bo$12b2o!`;
@@ -16,29 +17,28 @@ let gliderGunTest = `24bo$22bobo$12b2o6b2o12b2o3$11bo3bo4b2o12b2o$2o8bo5bo3b2o6$
 describe("import-export utils", () => {
   describe("faunaToGrid", () => {
     test("should work with simples test", () => {
-      let fauna = new Map();
-      // prettier-ignore
-      fauna.set(1, new Map([[2, 1], [5, 1]]));
+      let fauna = new MyFauna();
+      fauna.setCell(1, 2, true);
+      fauna.setCell(1, 5, true);
 
       // two cells vertically
       expect(faunaToGrid(fauna)).toEqual([[1], [0], [0], [1]]);
     });
     test("should work with simples test 2", () => {
-      let fauna = new Map();
-      // prettier-ignore
-      fauna.set(2, new Map([[2, 1]]));
-      // prettier-ignore
-      fauna.set(5, new Map([[2, 1]]));
+      let fauna = new MyFauna();
+      fauna.setCell(2, 2, true);
+      fauna.setCell(5, 2, true);
 
       // two cells horizontally
       expect(faunaToGrid(fauna)).toEqual([[1, 0, 0, 1]]);
     });
+
     test("should work with simples test 3", () => {
-      let fauna = new Map();
-      // prettier-ignore
-      fauna.set(-2, new Map([[-1, 1],[0, 1]]));
-      // prettier-ignore
-      fauna.set(1, new Map([[2, 1], [-1, 1]]));
+      let fauna = new MyFauna();
+      fauna.setCell(-2, -1, true);
+      fauna.setCell(-2, 0, true);
+      fauna.setCell(1, 2, true);
+      fauna.setCell(1, -1, true);
 
       // two cells horizontally
       expect(faunaToGrid(fauna)).toEqual([
@@ -51,41 +51,34 @@ describe("import-export utils", () => {
     });
 
     test("empty fauna should be fine", () => {
-      let fauna = new Map();
-      expect(faunaToGrid(fauna)).toEqual([]);
-
-      let fauna2 = new Map();
-
-      fauna2.set(123, new Map());
+      let fauna = new MyFauna();
       expect(faunaToGrid(fauna)).toEqual([]);
     });
   });
 
   describe("faunaToRle", () => {
     test("should work with simples test", () => {
-      let fauna = new Map();
-      // prettier-ignore
-      fauna.set(1, new Map([[2, 1], [5, 1]]));
+      let fauna = new MyFauna();
+      fauna.setCell(1, 2, true);
+      fauna.setCell(1, 5, true);
 
       expect(faunaToRle(fauna)).toEqual("o3$o!");
     });
 
     test("should work with simples test 2", () => {
-      let fauna = new Map();
-      // prettier-ignore
-      fauna.set(2, new Map([[2, 1]]));
-      // prettier-ignore
-      fauna.set(5, new Map([[2, 1]]));
+      let fauna = new MyFauna();
+      fauna.setCell(2, 2, true);
+      fauna.setCell(5, 2, true);
 
       expect(faunaToRle(fauna)).toEqual("o2bo!");
     });
 
     test("should work with simples test 3", () => {
-      let fauna = new Map();
-      // prettier-ignore
-      fauna.set(-2, new Map([[-1, 1],[0, 1]]));
-      // prettier-ignore
-      fauna.set(1, new Map([[2, 1], [-1, 1]]));
+      let fauna = new MyFauna();
+      fauna.setCell(-2, -1, true);
+      fauna.setCell(-2, 0, true);
+      fauna.setCell(1, 2, true);
+      fauna.setCell(1, -1, true);
 
       expect(faunaToRle(fauna)).toEqual("o2bo$o2$3bo!");
     });
@@ -93,21 +86,20 @@ describe("import-export utils", () => {
 
   describe("rleToFauna", () => {
     test("glider", () => {
-      expect(faunaToRle(rleToFauna(glider).unwrap().fauna)).toEqual(glider);
-
-      // prettier-ignore
-      expect(rleToFauna(glider).unwrap().fauna).toEqual(new Map([
-        [1, new Map([[0, 1], [2, 1]])],
-        [2, new Map([[1, 1], [2, 1]])],
-        [0, new Map([[2, 1]])],
-      ]
-      ));
+      expect(faunaToRle(rleToFauna(glider).unwrap())).toEqual(glider);
+      expect(faunaToCells(rleToFauna(glider).unwrap())).toEqual(".O\n..O\nOOO");
     });
     test("gliderGun", () => {
-      expect(faunaToRle(rleToFauna(gliderGun).unwrap().fauna)).toEqual(gliderGun);
+      expect(faunaToRle(rleToFauna(gliderGun).unwrap())).toEqual(gliderGun);
+      expect(faunaToCells(rleToFauna(gliderGun).unwrap())).toEqual(
+        "........................O\n......................O.O\n............OO......OO............OO\n...........O...O....OO............OO\nOO........O.....O...OO\nOO........O...O.OO....O.O\n..........O.....O.......O\n...........O...O\n............OO",
+      );
     });
     test("gliderGunTest", () => {
-      expect(faunaToRle(rleToFauna(gliderGunTest).unwrap().fauna)).toEqual(gliderGunTest);
+      expect(faunaToRle(rleToFauna(gliderGunTest).unwrap())).toEqual(gliderGunTest);
+      expect(faunaToCells(rleToFauna(gliderGunTest).unwrap())).toEqual(
+        "........................O\n......................O.O\n............OO......OO............OO\n\n\n...........O...O....OO............OO\nOO........O.....O...OO\n\n\n\n\n\nOO........O...O.OO....O.O\n..........O.....O.......O\n...........O...O\n............OO",
+      );
     });
   });
 
@@ -166,7 +158,7 @@ O...O....................................O...O
 .........OO........................OO
 ................O............O`;
 
-      expect(faunaToCells(rleToFauna(rle).unwrap().fauna)).toEqual(cells);
+      expect(faunaToCells(rleToFauna(rle).unwrap())).toEqual(cells);
     });
   });
 
@@ -273,7 +265,7 @@ x = 385, y = 337, rule = B3/S23
       expect(parsed.name).toEqual("Achim's other p^16");
     });
 
-    test("crazy \\n and \\r should be fine", () => {
+    test("crazy \n and \\r should be fine", () => {
       let pattern = `#N Foo, 2022
 #N Bar, 1234
 x = 385, y = 337, rule = B3/S23
@@ -332,7 +324,7 @@ x = 385, y = 337, rule = B3/S23
       3b3o$bo5bo$o$o6bo$7o!
       */
 
-      let size = getRectOfFauna(rleToFauna("3b3o$bo5bo$o$o6bo$7o!").unwrap().fauna);
+      let size = getRectOfFauna(rleToFauna("3b3o$bo5bo$o$o6bo$7o!").unwrap());
       expect(size).toEqual({ bottom: 4, left: 0, right: 7, top: 0 }); //
     });
   });

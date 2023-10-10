@@ -1,6 +1,5 @@
 import { expect, test, describe } from "bun:test";
 import { adjustOffset, newFaunaDataFromRle } from "./utils";
-import { None } from "@sniptt/monads";
 
 describe("adjustOffset", () => {
   test("basic", () => {
@@ -27,19 +26,16 @@ describe("newFaunaDataFromRle", () => {
   test("should return empty state", () => {
     let res = newFaunaDataFromRle("");
 
-    expect(res).toEqual({
-      fauna: new Map(),
-      population: 0,
-      size: null,
-      time: 0,
-    });
+    expect(res.getPopulation()).toEqual(0);
+    expect(res.getTime()).toEqual(0);
+    expect(res.getBounds()).toEqual(null);
   });
 
   test("should work", () => {
     let res = newFaunaDataFromRle("b2ob$o2bo$b3o!");
 
-    expect(res.population).toEqual(7);
-    expect(res.time).toEqual(0);
-    expect(res.size).toEqual({ bottom: 2, left: 0, right: 3, top: 0 });
+    expect(res.getPopulation()).toEqual(7);
+    expect(res.getTime()).toEqual(0);
+    expect(res.getBounds()).toEqual({ bottom: 2, left: 0, right: 3, top: 0 });
   });
 });

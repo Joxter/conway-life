@@ -13,16 +13,15 @@ heavyPatterns.forEach((name) => {
 
   let { rle } = parseRleFile(content, name);
 
-  let fauna = rleToFauna(rle).unwrap().fauna;
+  let fauna = rleToFauna(rle).unwrap();
 
   let total = 0;
   for (let i = 0; i < 1000; i++) {
-    let res = nextGen(fauna);
+    fauna.nextGen();
     if (i % 50 === 0) {
-      console.log(i, res.population);
+      console.log(i, fauna.getPopulation());
     }
-    fauna = res.fauna;
-    total += res.time;
+    total += fauna.getTime();
   }
   console.log("my time", (total / 1000).toFixed(3), "sec"); // naive but ok
   console.log("-------------");

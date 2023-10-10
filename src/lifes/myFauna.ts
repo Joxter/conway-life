@@ -58,6 +58,14 @@ export class MyFauna implements IFauna<SerData> {
     }
   }
 
+  getCell(faunaX: number, faunaY: number) {
+    if (!this.fauna.has(faunaX)) {
+      return false;
+    }
+    const xRow = this.fauna.get(faunaX)!;
+    return xRow.has(faunaY);
+  }
+
   setCell(faunaX: number, faunaY: number, live: boolean) {
     if (!this.fauna.has(faunaX)) {
       this.fauna.set(faunaX, new Set());
@@ -155,6 +163,20 @@ export class MyFauna implements IFauna<SerData> {
   }
 
   getBounds() {
+    if (this.population === 0) return null;
+
+    let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity }; // todo FIX
+
+    this.fauna.forEach((colMap, col) => {
+      colMap.forEach((val, row) => {
+        if (col < size.left) size.left = col;
+        if (col > size.right) size.right = col;
+        if (row < size.top) size.top = row;
+        if (row > size.bottom) size.bottom = row;
+      });
+    });
+    this.size = size;
+
     return this.size;
   }
   getPopulation() {
