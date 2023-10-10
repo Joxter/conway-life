@@ -10,8 +10,8 @@ const MASK_BOTTOM = 8;
 
 type Bounds = { top: number; left: number; bottom: number; right: number };
 
-function redraw(node: TreeNode) {
-  var size = Math.pow(2, node.level - 1) * 1;
+export function redraw(node: TreeNode) {
+  var size = Math.pow(2, node.level - 1) * 1; //  var size = Math.pow(2, node.level - 1) * drawer.cell_width;
 
   let grid = Array(size)
     .fill(0)
@@ -23,26 +23,29 @@ function redraw(node: TreeNode) {
 
   return grid
     .map((r) => {
-      return r.map((c) => (c ? 'X' : '.')).join('');
+      return r.map((c) => (c ? "X" : ".")).join("");
     })
-    .join('\n');
-
-  function fill_square(left: number, top: number) {
-    grid[left][top] = 1;
-  }
+    .join("\n");
 
   function draw_node(node: TreeNode, size: number, left: number, top: number) {
+    // console.log(
+    //   node.population,
+    //   node.level,
+    //   // size,
+    //   // left,
+    //   // top,
+    //   [size + left, size * 2 + left],
+    //   [size + top, size * 2 + top],
+    // );
+    // console.log("absolute bounds", );
     if (node.population === 0) {
       return;
     }
 
-    if (size <= 1) {
+    if (size <= 1 || node.level === 0) {
+      // console.log(">>>>", [left, top]);
       if (node.population) {
-        fill_square(left, top);
-      }
-    } else if (node.level === 0) {
-      if (node.population) {
-        fill_square(left, top);
+        grid[left][top] = 1;
       }
     } else {
       size /= 2;
@@ -172,7 +175,7 @@ export class LifeUniverse {
       bitmask & 1 ? this.true_leaf : this.false_leaf,
       bitmask & 2 ? this.true_leaf : this.false_leaf,
       bitmask & 4 ? this.true_leaf : this.false_leaf,
-      bitmask & 8 ? this.true_leaf : this.false_leaf
+      bitmask & 8 ? this.true_leaf : this.false_leaf,
     );
   }
 
@@ -226,7 +229,7 @@ export class LifeUniverse {
       -offset,
       -offset,
       MASK_TOP | MASK_LEFT | MASK_BOTTOM | MASK_RIGHT,
-      bounds
+      bounds,
     );
 
     return bounds;
@@ -256,7 +259,7 @@ export class LifeUniverse {
       this.create_tree(t, t, t, node.nw),
       this.create_tree(t, t, node.ne, t),
       this.create_tree(t, node.sw, t, t),
-      this.create_tree(node.se, t, t, t)
+      this.create_tree(node.se, t, t, t),
     );
   }
 
@@ -624,7 +627,7 @@ export class LifeUniverse {
     end: number,
     test_field: number[],
     other_field: number[],
-    offset: number
+    offset: number,
   ) {
     // Like quicksort's partition: Seperate the values from start to end by
     // the bitmask in offset in the array test_field, returning the middle
@@ -665,7 +668,7 @@ export class LifeUniverse {
     end: number,
     field_x: number[],
     field_y: number[],
-    level: number
+    level: number,
   ): TreeNode {
     if (start > end) {
       return this.empty_tree(level);
@@ -694,7 +697,7 @@ export class LifeUniverse {
       this.setup_field_recurse(start, part2 - 1, field_x, field_y, level),
       this.setup_field_recurse(part2, part3 - 1, field_x, field_y, level),
       this.setup_field_recurse(part3, part4 - 1, field_x, field_y, level),
-      this.setup_field_recurse(part4, end, field_x, field_y, level)
+      this.setup_field_recurse(part4, end, field_x, field_y, level),
     );
   }
 
@@ -720,7 +723,7 @@ export class LifeUniverse {
       this.level1_create(set),
       this.level1_create(set >> 4),
       this.level1_create(set >> 8),
-      this.level1_create(set >> 12)
+      this.level1_create(set >> 12),
     ));
   }
 
@@ -742,7 +745,7 @@ export class LifeUniverse {
           setup_meta_from_tree(node.nw, level),
           setup_meta_from_tree(node.ne, level),
           setup_meta_from_tree(node.sw, level),
-          setup_meta_from_tree(node.se, level)
+          setup_meta_from_tree(node.se, level),
         );
       }
     };
@@ -750,15 +753,14 @@ export class LifeUniverse {
     this.root = setup_meta_from_tree(node, level + 11);
   }
 
-  // get_field(node) {
-  //   var offset = this.pow2(node.level - 1),
-  //     field = [];
-  //
-  //   this.node_get_field(node, -offset, -offset, field);
-  //   //node.get_field(-offset, -offset, field);
-  //
-  //   return field;
-  // }
+  get_field(node: TreeNode) {
+    let offset = this.pow2(node.level - 1);
+    let field: { x: number; y: number }[] = [];
+
+    this.node_get_field(node, -offset, -offset, field);
+
+    return field;
+  }
 
   // set the base step for generations forward
   set_step(step: number) {
@@ -880,7 +882,7 @@ export class LifeUniverse {
       this.eval_mask(bitmask >> 5) |
         (this.eval_mask(bitmask >> 4) << 1) |
         (this.eval_mask(bitmask >> 1) << 2) |
-        (this.eval_mask(bitmask) << 3)
+        (this.eval_mask(bitmask) << 3),
     );
   }
 
@@ -919,7 +921,7 @@ export class LifeUniverse {
       this.node_next_generation(this.create_tree(n00, n01, n10, n11)),
       this.node_next_generation(this.create_tree(n01, n02, n11, n12)),
       this.node_next_generation(this.create_tree(n10, n11, n20, n21)),
-      this.node_next_generation(this.create_tree(n11, n12, n21, n22))
+      this.node_next_generation(this.create_tree(n11, n12, n21, n22)),
     ));
   }
 
@@ -950,7 +952,7 @@ export class LifeUniverse {
       this.node_quick_next_generation(this.create_tree(n00, n01, n10, n11)),
       this.node_quick_next_generation(this.create_tree(n01, n02, n11, n12)),
       this.node_quick_next_generation(this.create_tree(n10, n11, n20, n21)),
-      this.node_quick_next_generation(this.create_tree(n11, n12, n21, n22))
+      this.node_quick_next_generation(this.create_tree(n11, n12, n21, n22)),
     ));
   }
 
@@ -986,7 +988,7 @@ export class LifeUniverse {
     left: number,
     top: number,
     find_mask: number,
-    boundary: { top: number; left: number; bottom: number; right: number }
+    boundary: { top: number; left: number; bottom: number; right: number },
   ): void {
     if (node.population === 0 || !find_mask) {
       return;
@@ -1087,18 +1089,3 @@ class TreeNode {
     }*/
   }
 }
-
-let life = new LifeUniverse();
-
-life.set_bit(1, 1, true);
-life.set_bit(2, 2, true);
-life.set_bit(2, 3, true);
-life.set_bit(3, 2, true);
-life.set_bit(3, 1, true);
-
-setInterval(() => {
-  life.next_generation(true);
-
-  console.log('next_generation');
-  console.log(redraw(life.root!));
-}, 1000);
