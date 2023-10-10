@@ -1,4 +1,4 @@
-import { ColRow, Size, XY } from "./types";
+import { Size, XY } from "./types";
 import { rleToFauna } from "./importExport/utils";
 import { IFauna } from "./lifes/interface";
 import { MyFauna } from "./lifes/myFauna";
@@ -14,7 +14,11 @@ export function getViewPortParams() {
   };
 }
 
-export function adjustOffset(pivotCell: ColRow, pivotXY: XY, sizeNew: number) {
+export function adjustOffset(
+  pivotCell: { col: number; row: number },
+  pivotXY: XY,
+  sizeNew: number,
+) {
   return {
     x: pivotXY.x - pivotCell.col * sizeNew,
     y: pivotXY.y - pivotCell.row * sizeNew,

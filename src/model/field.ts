@@ -1,5 +1,5 @@
 import { combine, createEvent, createStore, sample } from "effector";
-import { Fauna, Field, Size, XY } from "../types";
+import { Field, XY } from "../types";
 import { adjustOffset, getMiddleOfFauna, getViewPortParams } from "../utils";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
@@ -11,14 +11,6 @@ const ViewPort = getViewPortParams();
 
 export const screen = createScreen();
 export const fieldSize = createFieldSize();
-
-/** @deprecated */
-export type FaunaData = {
-  fauna: Fauna;
-  time: number;
-  population: number;
-  size: Size | null;
-};
 
 export const $faunaData = createStore<{ ref: IFauna }>({ ref: new MyFauna() });
 

@@ -1,31 +1,7 @@
 import { Result, Err, Ok } from "@sniptt/monads";
-import { Fauna, Pattern, Size } from "../types";
+import { Pattern, Size } from "../types";
 import { IFauna } from "../lifes/interface";
 import { MyFauna } from "../lifes/myFauna";
-
-/*
- *    .OO..
- *    O..O.
- *    .O..O
- *    ..OO.
- */
-export function makeFaunaFromLexicon(input: string): Fauna {
-  let result: Fauna = new Map();
-
-  input.split("\n").forEach((line, rowI) => {
-    line = line.trim();
-
-    let row = new Map();
-    for (let colI = 0; colI < line.length; colI++) {
-      if (line[colI] === "O") {
-        row.set(colI, 1);
-      }
-    }
-    result.set(rowI, row);
-  });
-
-  return result;
-}
 
 const DEAD = "b";
 const LIVE = "o";

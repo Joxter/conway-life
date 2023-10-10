@@ -1,4 +1,3 @@
-import { nextGen } from "./calcNextGen";
 import path from "node:path";
 import fs from "fs";
 import { parseRle, parseRleFile, rleToFauna } from "./importExport/utils";

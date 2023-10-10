@@ -1,8 +1,10 @@
 import { $viewField, $viewHoveredCells, $viewLabels, fieldSize, screen } from "../../model/field";
-import { Color1, XY } from "../../types";
+import { XY } from "../../types";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { onMount } from "solid-js";
+
+const Color1 = "#5583e5";
 
 let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 const scale = window.devicePixelRatio;
