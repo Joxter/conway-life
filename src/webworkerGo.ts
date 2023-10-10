@@ -1,25 +1,19 @@
-import { currGen, nextGen } from "./calcNextGen";
+import { MyFauna } from "./lifes/myFauna";
 
-let gen = 0;
-let lastRes: ReturnType<typeof nextGen> | null = null;
+let lastRes: MyFauna | null = null;
 
 self.addEventListener("message", (ev) => {
   if (ev.data.fauna) {
-    lastRes = currGen(ev.data.fauna);
-    gen = 1;
-
-    self.postMessage({ res: lastRes, gen });
+    lastRes = new MyFauna();
+    lastRes.deserialise(ev.data.fauna);
   } else if (ev.data.gen) {
     if (!lastRes) {
       console.log("no lastRes");
       return;
     }
 
-    // while (gen < ev.data.gen) {
-    gen++;
-    lastRes = nextGen(lastRes!.fauna);
-    // }
+    lastRes.nextGen();
 
-    self.postMessage({ res: lastRes!, gen });
+    self.postMessage({ calculated: lastRes.serialise() });
   }
 });

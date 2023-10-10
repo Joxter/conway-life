@@ -3,7 +3,7 @@ import { allTemplates } from "../../blueprints/all-templates";
 import { fuzzy, newFaunaDataFromRle, objEntries } from "../../utils";
 import { Pattern, PatternTypeNames } from "../../types";
 import { parseRleFile } from "../../importExport/utils";
-import { FaunaData } from "../../model/field";
+import { IFauna } from "../../lifes/interface";
 
 type CatItem = Omit<Pattern, "rle"> & { image: string };
 
@@ -148,12 +148,12 @@ export function createCatalogue() {
   };
 }
 
-function apiFetchPattern(fileName: string): Promise<{ pattern: Pattern; faunaData: FaunaData }> {
+function apiFetchPattern(fileName: string): Promise<{ pattern: Pattern; faunaData: IFauna }> {
   return fetch("patterns/" + fileName)
     .then((res) => {
       return res.text();
     })
-    .then((rleFile): { pattern: Pattern; faunaData: FaunaData } => {
+    .then((rleFile): { pattern: Pattern; faunaData: IFauna } => {
       let pattern = parseRleFile(rleFile, fileName);
 
       let faunaData = newFaunaDataFromRle(pattern.rle);

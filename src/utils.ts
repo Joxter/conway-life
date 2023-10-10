@@ -1,7 +1,7 @@
-import { ColRow, Fauna, FaunaInc, Size, XY } from "./types";
-import { getRectOfFauna, rleToFauna } from "./importExport/utils";
-import { FaunaData } from "./model/field";
-import { None } from "@sniptt/monads";
+import { ColRow, Size, XY } from "./types";
+import { rleToFauna } from "./importExport/utils";
+import { IFauna } from "./lifes/interface";
+import { MyFauna } from "./lifes/myFauna";
 
 export function objEntries<T extends string, R>(obj: Record<T, R>): Array<[T, R]> {
   return Object.entries(obj) as Array<[T, R]>;
@@ -21,36 +21,19 @@ export function adjustOffset(pivotCell: ColRow, pivotXY: XY, sizeNew: number) {
   };
 }
 
-export function newFauna(colRows: ColRow[]): Fauna {
-  let fauna: Fauna = new Map();
-
-  colRows.forEach(({ col, row }) => {
-    if (!fauna.has(col)) {
-      fauna.set(col, new Map());
-    }
-    fauna.get(col)!.set(row, 1);
-  });
-
-  return fauna;
-}
-
-export function getMiddleOfFauna(fauna: Fauna) {
+export function getMiddleOfFauna(fauna: IFauna) {
   let col = 0;
   let row = 0;
-  let totalSize = 0;
-  if (fauna.size === 0) return { col, row };
+  if (fauna.getPopulation() === 0) return { col, row };
 
-  fauna.forEach((colMap, _col) => {
-    totalSize += colMap.size;
-    colMap.forEach((color, _row) => {
-      col += _col;
-      row += _row;
-    });
+  fauna.getCells().forEach(([_col, _row]) => {
+    col += _col;
+    row += _row;
   });
 
   return {
-    col: Math.round(col / totalSize),
-    row: Math.round(row / totalSize),
+    col: Math.round(col / fauna.getPopulation()),
+    row: Math.round(row / fauna.getPopulation()),
   };
 }
 
@@ -111,14 +94,8 @@ function minDistance(str: string, query: string): number {
   return dp[dp.length - 1][dp[0].length - 1];
 }
 
-export function newFaunaDataFromRle(rle: string): FaunaData {
-  let emptyFauna: Fauna = new Map();
-
-  return rleToFauna(rle)
-    .map(({ fauna, population }) => {
-      return { fauna, time: 0, population, size: getRectOfFauna(fauna) };
-    })
-    .unwrapOr({ fauna: emptyFauna, time: 0, population: 0, size: null });
+export function newFaunaDataFromRle(rle: string): IFauna {
+  return rleToFauna(rle).unwrapOr(new MyFauna());
 }
 
 export function getParamsFromSize({ right, top, left, bottom }: Size): [number, number] {

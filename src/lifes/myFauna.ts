@@ -10,17 +10,19 @@ type SerData = {
   size: Size | null;
   population: number;
   generation: number;
+  cells: Coords[];
 };
 
 /**
  * My naive implementation of Game of Life with just Map<number, Set<number>>
  * */
 export class MyFauna implements IFauna<SerData> {
-  fauna: Fauna;
-  time: number;
-  size: Size | null;
-  population: number;
-  generation: number;
+  private fauna: Fauna;
+  private time: number;
+  private size: Size | null;
+  private population: number;
+  private generation: number;
+  private cells: Coords[];
 
   constructor() {
     this.fauna = new Map();
@@ -28,6 +30,7 @@ export class MyFauna implements IFauna<SerData> {
     this.size = null;
     this.population = 0;
     this.generation = 0;
+    this.cells = [];
   }
 
   initNew() {
@@ -36,6 +39,7 @@ export class MyFauna implements IFauna<SerData> {
     this.size = null;
     this.population = 0;
     this.generation = 0;
+    this.cells = [];
   }
 
   toggleCell(x: number, y: number) {
@@ -50,6 +54,7 @@ export class MyFauna implements IFauna<SerData> {
     } else {
       xRow.add(y);
       this.population++;
+      this.cells.push([x, y]); // todo Fix
     }
   }
 
@@ -63,6 +68,7 @@ export class MyFauna implements IFauna<SerData> {
       this.population--;
     } else {
       this.population++;
+      this.cells.push([faunaX, faunaY]); // todo Fix
     }
 
     if (live) {
@@ -70,17 +76,6 @@ export class MyFauna implements IFauna<SerData> {
     } else {
       xRow.delete(faunaY);
     }
-  }
-
-  getCells() {
-    let field: Coords[] = [];
-    this.fauna.forEach((colMap, x) => {
-      colMap.forEach((val, y) => {
-        field.push([x, y]);
-      });
-    });
-
-    return field;
   }
 
   nextGen() {
@@ -91,6 +86,7 @@ export class MyFauna implements IFauna<SerData> {
     let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
 
     const input = this.fauna;
+    let field: Coords[] = [];
 
     input.forEach((colMap, col) => {
       colMap.forEach((val, row) => {
@@ -110,6 +106,7 @@ export class MyFauna implements IFauna<SerData> {
           if (col > size.right) size.right = col;
           if (row < size.top) size.top = row;
           if (row > size.bottom) size.bottom = row;
+          field.push([col, row]);
         }
       });
 
@@ -122,12 +119,15 @@ export class MyFauna implements IFauna<SerData> {
 
     if (population === 0) {
       this.initNew();
+      return;
     }
 
     this.fauna = result;
     this.time = time;
     this.size = size;
     this.population = population;
+    this.cells = field;
+    this.generation++;
   }
 
   serialise() {
@@ -137,6 +137,7 @@ export class MyFauna implements IFauna<SerData> {
       size: this.size,
       population: this.population,
       generation: this.generation,
+      cells: this.cells, // todo remove cells
     };
   }
 
@@ -146,6 +147,11 @@ export class MyFauna implements IFauna<SerData> {
     this.size = data.size;
     this.population = data.population;
     this.generation = data.generation;
+    this.cells = data.cells; // todo remove cells
+  }
+
+  getCells() {
+    return this.cells; // todo remove cells
   }
 
   getBounds() {

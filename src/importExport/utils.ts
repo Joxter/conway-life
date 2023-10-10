@@ -1,5 +1,7 @@
 import { Result, Err, Ok } from "@sniptt/monads";
 import { Fauna, Pattern, Size } from "../types";
+import { IFauna } from "../lifes/interface";
+import { MyFauna } from "../lifes/myFauna";
 
 /*
  *    .OO..
@@ -70,20 +72,14 @@ export function faunaToGrid(fauna: Fauna): Array<(0 | 1)[]> {
   return grid;
 }
 
-export function rleToFauna(rle: string): Result<{ fauna: Fauna; population: number }, string> {
-  let fauna: Fauna = new Map();
-  let population = 0;
-
+export function rleToFauna(rle: string): Result<IFauna, string> {
+  let fauna = new MyFauna();
   let res = parseRle(rle, (x, y) => {
-    if (!fauna.has(x)) {
-      fauna.set(x, new Map());
-    }
-    population++;
-    fauna.get(x)!.set(y, 1);
+    fauna.setCell(x, y, true);
   });
 
   return res.map(() => {
-    return { fauna, population };
+    return fauna;
   });
 }
 

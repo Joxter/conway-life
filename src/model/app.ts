@@ -1,59 +1,28 @@
 import { sample } from "effector";
 import { importExport } from "../feature/ImportExport/importExport.model";
-import {
-  $faunaData,
-  FaunaData,
-  focusToTheMiddle,
-  progress,
-  resetFieldPressed,
-  screen,
-} from "./field";
-import { $history, addToHistory, historySelected, saveClicked } from "./history";
-import { faunaToRle } from "../importExport/utils";
+import { $faunaData, focusToTheMiddle, progress, resetFieldPressed, screen } from "./field";
 import { catalogue } from "../feature/Catalogue/Catalogue.model";
 import { allTemplates } from "../blueprints/all-templates";
 import { newFaunaDataFromRle } from "../utils";
-import { Fauna } from "../types";
+import { MyFauna } from "../lifes/myFauna";
 
 sample({
-  source: $faunaData,
-  clock: saveClicked,
-  fn: (it) => it.fauna,
-  target: addToHistory,
-});
-
-sample({
-  source: $history,
-  clock: historySelected,
-  fn: (history, selected) => {
-    const savedRle = history.find((it) => it.name === selected)!.rle;
-    return newFaunaDataFromRle(savedRle);
-  },
-  target: $faunaData,
-});
-
-sample({
-  clock: [
-    historySelected,
-    resetFieldPressed,
-    importExport.exportClicked,
-    importExport.importClicked,
-  ],
+  clock: [resetFieldPressed, importExport.exportClicked, importExport.importClicked],
   target: progress.reset,
 });
 
-sample({
-  source: $faunaData,
-  clock: importExport.exportClicked,
-  fn: ({ fauna }) => faunaToRle(fauna),
-  target: importExport.$textField,
-});
+// sample({ // TODO fix
+//   source: $faunaData,
+//   clock: importExport.exportClicked,
+//   fn: ({ fauna }) => faunaToRle(fauna),
+//   target: importExport.$textField,
+// });
 
 sample({
   source: importExport.$textField,
   clock: importExport.importClicked,
   fn: (str) => {
-    return newFaunaDataFromRle(str);
+    return { ref: newFaunaDataFromRle(str) };
   },
   target: $faunaData,
 });
@@ -72,12 +41,14 @@ setTimeout(() => {
 
 sample({
   clock: catalogue.patternFetched,
-  fn: ({ faunaData }) => faunaData,
+  fn: ({ faunaData }) => {
+    return { ref: faunaData };
+  },
   target: $faunaData,
 });
 
 sample({
-  clock: [historySelected, importExport.importClicked, catalogue.patternFetched],
+  clock: [importExport.importClicked, catalogue.patternFetched],
   target: focusToTheMiddle,
 });
 
@@ -95,9 +66,10 @@ export function initWW() {
 
   worker.addEventListener("message", (ev) => {
     try {
-      let data = validateWWRes(ev.data.res);
-      if (data) {
-        progress.calculated({ data, gen: ev.data.gen as any as number });
+      if (ev.data.calculated) {
+        let fauna = new MyFauna();
+        fauna.deserialise(ev.data.calculated);
+        progress.calculated(fauna);
       }
     } catch (err) {
       console.error(err);
@@ -112,14 +84,13 @@ export function initWW() {
   sample({
     source: $faunaData,
     clock: [
-      historySelected,
       importExport.importClicked,
       catalogue.patternFetched,
       progress.reset,
       screen.onPointerClick,
     ],
-  }).watch(({ fauna }) => {
-    worker.postMessage({ fauna });
+  }).watch((fauna) => {
+    worker.postMessage({ fauna: fauna.ref.serialise() });
   });
 
   progress.getGeneration.watch((n) => {
@@ -127,7 +98,7 @@ export function initWW() {
     worker.postMessage({ gen: n });
   });
 }
-
+/* TODO
 function validateWWRes(data: any): FaunaData | undefined {
   let fauna: Fauna = data.fauna;
   if (!(fauna instanceof Map)) {
@@ -162,3 +133,4 @@ function validateWWRes(data: any): FaunaData | undefined {
 
   return { fauna, time, population, size };
 }
+*/

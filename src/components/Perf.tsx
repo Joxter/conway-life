@@ -28,7 +28,7 @@ export function Perf() {
   }
 
   function getSize() {
-    let { size } = faunaData();
+    let size = faunaData().ref.getBounds();
     if (!size) return "unknown";
 
     let [width, height] = getParamsFromSize(size);

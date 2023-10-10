@@ -1,8 +1,7 @@
 import { combine, createEvent, createStore, Event, merge, sample, Store } from "effector";
-import { debug, interval } from "patronum";
-import { $faunaData, FaunaData, progress } from "../../model/field";
+import { interval } from "patronum";
 import { getStrFromLS, setStrToLS } from "../../utils";
-import { Fauna } from "../../types";
+import { IFauna } from "../../lifes/interface";
 
 export function createProgress() {
   const lsStepsPerSecName = "expectedStepsPerSec";
@@ -14,7 +13,7 @@ export function createProgress() {
   const stop = createEvent<any>();
   const pause = createEvent<any>();
   const oneStep = createEvent<any>();
-  const calculated = createEvent<{ data: FaunaData; gen: number }>();
+  const calculated = createEvent<IFauna>();
   const getGeneration = createEvent<number>();
 
   const reset = createEvent<any>();
@@ -89,7 +88,7 @@ export function createProgress() {
     .on(setSteps, (_, val) => val);
 
   $currentStep
-    .on(calculated, (_, res) => res.gen)
+    .on(calculated, (_, res) => res.getGeneration())
     .on(stop, () => 0)
     .reset(reset);
 

@@ -1,15 +1,18 @@
 import { combine, createEvent, createStore, sample } from "effector";
 import { Fauna, Field, Size, XY } from "../types";
-import { adjustOffset, getMiddleOfFauna, getViewPortParams, newFauna } from "../utils";
+import { adjustOffset, getMiddleOfFauna, getViewPortParams } from "../utils";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
 import { createProgress } from "../feature/Progress/progress.model";
+import { MyFauna } from "../lifes/myFauna";
+import { IFauna } from "../lifes/interface";
 
 const ViewPort = getViewPortParams();
 
 export const screen = createScreen();
 export const fieldSize = createFieldSize();
 
+/** @deprecated */
 export type FaunaData = {
   fauna: Fauna;
   time: number;
@@ -17,12 +20,7 @@ export type FaunaData = {
   size: Size | null;
 };
 
-export const $faunaData = createStore<FaunaData>({
-  fauna: newFauna([]),
-  time: 0,
-  population: 0,
-  size: null,
-});
+export const $faunaData = createStore<{ ref: IFauna }>({ ref: new MyFauna() });
 
 export const $labels = createStore<{ col: number; row: number; label: string }[]>([
   // { col: 0, row: 0, label: "0,0" },
@@ -36,14 +34,14 @@ export const $labels = createStore<{ col: number; row: number; label: string }[]
   // { col: 0, row: -10, label: "0,-10" },
 ]);
 
-export const setNewFauna = createEvent<FaunaData>();
+export const setNewFauna = createEvent<IFauna>();
 
 export const progress = createProgress();
 
 export const perf = createPerf(
   progress.$currentStep,
   progress.reset,
-  progress.calculated.map((it) => it.data.time),
+  progress.calculated.map((it) => it.getTime()),
 );
 
 export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
@@ -53,8 +51,12 @@ export const focusToTheMiddle = createEvent<any>();
 export const resetFieldPressed = createEvent<any>();
 
 $faunaData
-  .on(setNewFauna, (_, data) => data)
-  .on(progress.calculated, (_, res) => res.data)
+  .on(setNewFauna, (_, data) => {
+    return { ref: data };
+  })
+  .on(progress.calculated, (_, data) => {
+    return { ref: data };
+  })
   .reset(resetFieldPressed);
 
 sample({
@@ -86,22 +88,20 @@ export const $field = combine(
   $screenOffsetXY,
   fieldSize.$cellSize,
   fieldSize.$viewPortSize,
-  ({ fauna }, screenOffsetXY, { size: cellSize }, viewPortSize): Field => {
+  (fauna, screenOffsetXY, { size: cellSize }, viewPortSize): Field => {
     const field: Field = [];
 
-    fauna.forEach((colMap, cellCol) => {
-      colMap.forEach((val, cellRow) => {
-        const finX = cellCol * cellSize + screenOffsetXY.x;
-        const finY = cellRow * cellSize + screenOffsetXY.y;
-        // const finX = (cellCol * cellSize + screenOffsetXY.x) >> 1;
-        // const finY = (cellRow * cellSize + screenOffsetXY.y) >> 1;
+    fauna.ref.getCells().forEach(([cellCol, cellRow]) => {
+      const finX = cellCol * cellSize + screenOffsetXY.x;
+      const finY = cellRow * cellSize + screenOffsetXY.y;
+      // const finX = (cellCol * cellSize + screenOffsetXY.x) >> 1;
+      // const finY = (cellRow * cellSize + screenOffsetXY.y) >> 1;
 
-        if (finX >= 0 && finX < viewPortSize.width) {
-          if (finY >= 0 && finY < viewPortSize.height) {
-            field.push([finX, finY]);
-          }
+      if (finX >= 0 && finX < viewPortSize.width) {
+        if (finY >= 0 && finY < viewPortSize.height) {
+          field.push([finX, finY]);
         }
-      });
+      }
     });
 
     return field;
@@ -109,7 +109,7 @@ export const $field = combine(
 );
 
 export const $stats = combine($field, $faunaData, (field, fauna) => {
-  return { fieldCellsAmount: field.length, population: fauna.population };
+  return { fieldCellsAmount: field.length, population: fauna.ref.getPopulation() };
 });
 
 export const $labelsOnField = combine(
@@ -214,11 +214,12 @@ sample({
   source: { faunaData: $faunaData, cellSize: fieldSize.$cellSize },
   clock: focusToTheMiddle,
   fn: ({ faunaData, cellSize }) => {
-    if (!faunaData.size) {
+    const size = faunaData.ref.getBounds();
+    if (!size) {
       return cellSize;
     }
 
-    let { right, top, bottom, left } = faunaData.size;
+    let { right, top, bottom, left } = size;
     let width = right - left + 1;
     let height = bottom - top + 1;
 
@@ -239,7 +240,7 @@ sample({
   source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize, cellSize: fieldSize.$cellSize },
   clock: focusToTheMiddle,
   fn: ({ faunaData, fieldSize, cellSize }) => {
-    const middle = getMiddleOfFauna(faunaData.fauna);
+    const middle = getMiddleOfFauna(faunaData.ref);
     return {
       x: (fieldSize.width / 2 - middle.col) * cellSize.size,
       y: (fieldSize.height / 2 - middle.row) * cellSize.size,
@@ -256,24 +257,12 @@ sample({
   },
   clock: screen.onPointerClick,
   fn: ({ faunaData, screenOffsetXY, cellSize: { size } }, coords) => {
-    const newFauna = new Map(faunaData.fauna);
-    let population = faunaData.population;
-
     const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
     const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size);
 
-    if (!newFauna.has(faunaX)) {
-      newFauna.set(faunaX, new Map());
-    }
-    if (newFauna.get(faunaX)!.has(faunaY)) {
-      newFauna.get(faunaX)!.delete(faunaY);
-      population--;
-    } else {
-      newFauna.get(faunaX)!.set(faunaY, 1);
-      population++;
-    }
+    faunaData.ref.toggleCell(faunaX, faunaY);
 
-    return { fauna: newFauna, time: faunaData.time, population, size: null };
+    return { ref: faunaData.ref };
   },
   target: $faunaData,
 });

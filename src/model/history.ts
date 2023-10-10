@@ -11,10 +11,15 @@ type HistoryItem = {
 /** @deprecated */
 export const $history = createStore<HistoryItem[]>(getSavedFromLS() || []);
 
+/** @deprecated */
 export const addToHistory = createEvent<Fauna>();
+/** @deprecated */
 export const removeClicked = createEvent<string>();
+/** @deprecated */
 export const restoreClicked = createEvent<string>();
+/** @deprecated */
 export const historySelected = createEvent<string>();
+/** @deprecated */
 export const saveClicked = createEvent<any>();
 
 $history
@@ -51,7 +56,7 @@ sample({
   }),
 });
 
-export function saveFaunasToLS(name: string, history: HistoryItem[]) {
+function saveFaunasToLS(name: string, history: HistoryItem[]) {
   let res: { rle: string; name: string }[] = history
     .filter((it) => !it.removed)
     .map(({ name, rle }) => {
@@ -60,7 +65,7 @@ export function saveFaunasToLS(name: string, history: HistoryItem[]) {
   localStorage.setItem(name, JSON.stringify(res));
 }
 
-export function getSavedFromLS(): HistoryItem[] {
+function getSavedFromLS(): HistoryItem[] {
   try {
     // @ts-ignore
     let saved: { rle: string; name: string }[] =
