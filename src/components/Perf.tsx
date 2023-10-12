@@ -1,14 +1,14 @@
-import { $centerScreenColRow, $faunaData, $hoveredCellColRow, $stats, perf } from "../model/field";
+import { fieldSize, $faunaData, $field, $hoveredCellColRow, perf } from "../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { getParamsFromSize } from "../utils";
 
 export function Perf() {
   const [time, fps] = useUnit([perf.$time, perf.$fps]);
-  const [stats, hovered, centerScreenColRow, faunaData] = useUnit([
-    $stats,
+  const [field, hovered, centerScreenColRow, faunaData] = useUnit([
+    $field,
     $hoveredCellColRow,
-    $centerScreenColRow,
+    fieldSize.$centerScreenColRow,
     $faunaData,
   ]);
 
@@ -41,9 +41,9 @@ export function Perf() {
         <span>FPS: {fps()}</span>
         <span>calc time {time()} msec</span>
         {/* --- */}
-        <span>population: {stats().population}</span>
+        <span>population: {faunaData().ref.getPopulation()}</span>
         <span>size: {getSize()}</span>
-        <span>cells on screen: {stats().fieldCellsAmount}</span>
+        <span>cells on screen: {field().length}</span>
         <span>cursor: {hoveredCoords()}</span>
         <span>screen center: {screenCenterCoords()}</span>
       </p>

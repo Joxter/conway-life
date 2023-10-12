@@ -14,30 +14,28 @@ export function getViewPortParams() {
   };
 }
 
-export function adjustOffset(
-  pivotCell: { col: number; row: number },
-  pivotXY: XY,
-  size: number,
-) {
+export function adjustOffset(cursor: XY, screenOffset: XY, size: number, prevSize: number) {
+  let k = size / prevSize;
   return {
-    x: pivotXY.x - pivotCell.col * size,
-    y: pivotXY.y - pivotCell.row * size,
+    x: cursor.x - k * (cursor.x - screenOffset.x),
+    y: cursor.y - k * (cursor.y - screenOffset.y),
   };
 }
 
 export function getMiddleOfFauna(fauna: IFauna) {
-  let col = 0;
-  let row = 0;
-  if (fauna.getPopulation() === 0) return { col, row };
+  let middleX = 0;
+  let middleY = 0;
+  if (fauna.getPopulation() === 0) return { x: middleX, y: middleY };
 
-  fauna.getCells().forEach(([_col, _row]) => {
-    col += _col;
-    row += _row;
+  fauna.getCells().forEach(([x, y]) => {
+    // todo overflow???
+    middleX += x;
+    middleY += y;
   });
 
   return {
-    col: Math.round(col / fauna.getPopulation()),
-    row: Math.round(row / fauna.getPopulation()),
+    x: Math.round(middleX / fauna.getPopulation()),
+    y: Math.round(middleY / fauna.getPopulation()),
   };
 }
 

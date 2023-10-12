@@ -1,6 +1,7 @@
-import { createEvent, createStore, Store } from "effector";
+import { combine, createEvent, createStore, Store } from "effector";
 import { XY } from "../types";
 import { getStrFromLS, getViewPortParams, setStrToLS } from "../utils";
+import { fieldSize } from "./field";
 
 const vp = getViewPortParams();
 
@@ -14,13 +15,7 @@ export function createFieldSize() {
 
   const $viewPortSize = createStore({ width: vp.width, height: vp.height });
 
-  // amount of fauna's cols and rows on the screen
-  const $fieldSize = $cellSize.map(({ size }) => {
-    return {
-      height: Math.ceil(vp.height / size),
-      width: Math.ceil(vp.width / size),
-    };
-  });
+  const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 
   const plus = createEvent();
   const minus = createEvent();
@@ -41,8 +36,14 @@ export function createFieldSize() {
     setStrToLS(lsCellSizeName, String(val.size));
   });
 
-  const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
-  return fieldSize;
+  const $centerScreenColRow = combine($cellSize, $screenOffsetXY, ({ size }, screenOffsetXY) => {
+    const cellCol = Math.floor((vp.width / 2 - screenOffsetXY.x) / size);
+    const cellRow = Math.floor((vp.height / 2 - screenOffsetXY.y) / size);
+
+    return { col: cellCol, row: cellRow };
+  });
+
+  return { options, $cellSize, plus, minus, $viewPortSize, $screenOffsetXY, $centerScreenColRow };
 }
 
 export function createScreen() {

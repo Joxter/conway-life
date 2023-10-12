@@ -27,7 +27,6 @@ export const perf = createPerf(
   progress.calculated.map((it) => it.getTime()),
 );
 
-const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 export const focusToTheMiddle = createEvent<any>();
 
 export const resetFieldPressed = createEvent<any>();
@@ -42,46 +41,33 @@ $faunaData
   .reset(resetFieldPressed);
 
 sample({
-  source: [$screenOffsetXY, screen.$hovered] as const,
+  source: [fieldSize.$screenOffsetXY, screen.$hovered] as const,
   clock: fieldSize.$cellSize,
-  fn: ([currentOffset, hovered], { size, prevSize }) => {
-    if (hovered) {
-      let pivotCell = {
-        col: (hovered.x - currentOffset.x) / prevSize,
-        row: (hovered.y - currentOffset.y) / prevSize,
-      };
+  fn: ([screenOffset, hovered], { size, prevSize }) => {
+    let cursor = hovered || { x: ViewPort.width / 2, y: ViewPort.height / 2 };
 
-      return adjustOffset(pivotCell, hovered, size);
-    } else {
-      let center = { x: ViewPort.width / 2, y: ViewPort.height / 2 };
-
-      let pivotCell = {
-        col: (center.x - currentOffset.x) / prevSize,
-        row: (center.y - currentOffset.y) / prevSize,
-      };
-      return adjustOffset(pivotCell, center, size);
-    }
+    return adjustOffset(cursor, screenOffset, size, prevSize);
   },
-  target: $screenOffsetXY,
+  target: fieldSize.$screenOffsetXY,
 });
 
 export const $field = combine(
   $faunaData,
-  $screenOffsetXY,
-  fieldSize.$cellSize,
+  fieldSize.$screenOffsetXY,
   fieldSize.$viewPortSize,
-  (fauna, screenOffsetXY, { size: cellSize }, viewPortSize): Field => {
+  fieldSize.$cellSize,
+  (fauna, focus, { width, height }, { size }): Field => {
     const field: Field = [];
+    let screenWidth = width - focus.x;
+    let screenHeight = height - focus.y;
 
     fauna.ref.getCells().forEach(([cellCol, cellRow]) => {
-      const finX = cellCol * cellSize + screenOffsetXY.x;
-      const finY = cellRow * cellSize + screenOffsetXY.y;
-      // const finX = (cellCol * cellSize + screenOffsetXY.x) >> 1;
-      // const finY = (cellRow * cellSize + screenOffsetXY.y) >> 1;
+      let cellX = cellCol * size;
+      let cellY = cellRow * size;
 
-      if (finX >= 0 && finX < viewPortSize.width) {
-        if (finY >= 0 && finY < viewPortSize.height) {
-          field.push([finX, finY]);
+      if (cellX >= -focus.x && cellX < screenWidth) {
+        if (cellY >= -focus.y && cellY < screenHeight) {
+          field.push([cellX + focus.x, cellY + focus.y]);
         }
       }
     });
@@ -90,27 +76,23 @@ export const $field = combine(
   },
 );
 
-export const $stats = combine($field, $faunaData, (field, fauna) => {
-  return { fieldCellsAmount: field.length, population: fauna.ref.getPopulation() };
-});
-
-export const $labelsOnField = combine(
+export const $viewLabels = combine(
   labels.$labels,
-  fieldSize.$fieldSize,
+  fieldSize.$screenOffsetXY,
+  fieldSize.$viewPortSize,
   fieldSize.$cellSize,
-  $screenOffsetXY,
-  (labels, { width, height }, { size }, focus): { col: number; row: number; label: string }[] => {
-    const labelsOnField: { col: number; row: number; label: string }[] = [];
-    let deltaCol = focus.x / size;
-    let deltaRow = focus.y / size;
+  (labels, focus, { width, height }, { size }) => {
+    const labelsOnField: { x: number; y: number; label: string }[] = [];
+    let screenWidth = width - focus.x;
+    let screenHeight = height - focus.y;
 
     labels.forEach(({ col, row, label }) => {
-      const _col = col + deltaCol;
-      const _row = row + deltaRow;
+      let cellX = col * size;
+      let cellY = row * size;
 
-      if (_col >= 0 && _col < width) {
-        if (_row >= 0 && _row < height) {
-          labelsOnField.push({ col: _col, row: _row, label });
+      if (cellX >= -focus.x && cellX < screenWidth) {
+        if (cellY >= -focus.y && cellY < screenHeight) {
+          labelsOnField.push({ x: cellX + focus.x, y: cellY + focus.y, label });
         }
       }
     });
@@ -126,7 +108,7 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
 export const $viewHoveredCells = combine(
   screen.$hovered,
   fieldSize.$cellSize,
-  $screenOffsetXY,
+  fieldSize.$screenOffsetXY,
   (hovered, { size }, screenOffsetXY) => {
     if (hovered) {
       const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
@@ -143,7 +125,7 @@ export const $viewHoveredCells = combine(
 export const $hoveredCellColRow = combine(
   screen.$hovered,
   fieldSize.$cellSize,
-  $screenOffsetXY,
+  fieldSize.$screenOffsetXY,
   (hovered, { size }, screenOffsetXY) => {
     if (hovered) {
       const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
@@ -155,27 +137,10 @@ export const $hoveredCellColRow = combine(
   },
 );
 
-export const $centerScreenColRow = combine(
-  fieldSize.$cellSize,
-  $screenOffsetXY,
-  ({ size }, screenOffsetXY) => {
-    const cellCol = Math.floor((ViewPort.width / 2 - screenOffsetXY.x) / size);
-    const cellRow = Math.floor((ViewPort.height / 2 - screenOffsetXY.y) / size);
-
-    return { col: cellCol, row: cellRow };
-  },
-);
-
-export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, { size }) => {
-  return ls.map(({ row, col, label }) => {
-    return { y: row * size, x: col * size, label };
-  });
-});
-
 const $initScreenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 
 sample({
-  source: $screenOffsetXY,
+  source: fieldSize.$screenOffsetXY,
   clock: screen.onPointerDown,
   target: $initScreenOffsetXY,
 });
@@ -189,7 +154,7 @@ sample({
       y: initFocus.y + to.y - from.y,
     };
   },
-  target: $screenOffsetXY,
+  target: fieldSize.$screenOffsetXY,
 });
 
 sample({
@@ -211,7 +176,7 @@ sample({
     let pixelSize = Math.floor(Math.min(maxVisualWidth / width, maxVisualHeight / height));
 
     if (pixelSize < 1) pixelSize = 1;
-    if (pixelSize > 30) pixelSize = 30;
+    if (pixelSize > 25) pixelSize = 25;
 
     return { size: pixelSize, prevSize: cellSize.size };
   },
@@ -219,22 +184,26 @@ sample({
 });
 
 sample({
-  source: { faunaData: $faunaData, fieldSize: fieldSize.$fieldSize, cellSize: fieldSize.$cellSize },
+  source: {
+    fauna: $faunaData,
+    viewPort: fieldSize.$viewPortSize,
+    cellSize: fieldSize.$cellSize,
+  },
   clock: focusToTheMiddle,
-  fn: ({ faunaData, fieldSize, cellSize }) => {
-    const middle = getMiddleOfFauna(faunaData.ref);
+  fn: ({ fauna, viewPort, cellSize }) => {
+    const middle = getMiddleOfFauna(fauna.ref);
     return {
-      x: (fieldSize.width / 2 - middle.col) * cellSize.size,
-      y: (fieldSize.height / 2 - middle.row) * cellSize.size,
+      x: viewPort.width / 2 - middle.x * cellSize.size,
+      y: viewPort.height / 2 - middle.y * cellSize.size,
     };
   },
-  target: $screenOffsetXY,
+  target: fieldSize.$screenOffsetXY,
 });
 
 sample({
   source: {
     faunaData: $faunaData,
-    screenOffsetXY: $screenOffsetXY,
+    screenOffsetXY: fieldSize.$screenOffsetXY,
     cellSize: fieldSize.$cellSize,
   },
   clock: screen.onPointerClick,

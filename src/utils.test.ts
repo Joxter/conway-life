@@ -6,18 +6,20 @@ describe("adjustOffset", () => {
     expect(
       adjustOffset(
         //
-        { row: 38, col: 58 },
+        { x: 40, y: 60 },
         { x: 200, y: 150 },
         4,
+        5,
       ),
-    ).toEqual({ x: -32, y: -2 });
+    ).toEqual({ x: 168, y: 132 });
     expect(
       adjustOffset(
         //
-        { row: 38, col: 58 },
-        { x: 200, y: 150 },
+        { x: 40, y: 60 },
+        { x: 168, y: 132 },
         5,
+        4,
       ),
-    ).toEqual({ x: -90, y: -40 });
+    ).toEqual({ x: 200, y: 150 });
   });
 });
