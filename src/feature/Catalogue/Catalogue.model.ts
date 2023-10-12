@@ -1,9 +1,10 @@
 import { combine, createEffect, createEvent, createStore, sample } from "effector";
 import { allTemplates } from "../../blueprints/all-templates";
-import { fuzzy, newFaunaDataFromRle, objEntries } from "../../utils";
+import { fuzzy, objEntries } from "../../utils";
 import { Pattern, PatternTypeNames } from "../../types";
-import { parseRleFile } from "../../importExport/utils";
+import { parseRleFile, rleToFauna } from "../../importExport/utils";
 import { IFauna } from "../../lifes/interface";
+import { MyFauna } from "../../lifes/myFauna";
 
 type CatItem = Omit<Pattern, "rle"> & { image: string };
 
@@ -156,8 +157,7 @@ function apiFetchPattern(fileName: string): Promise<{ pattern: Pattern; faunaDat
     .then((rleFile): { pattern: Pattern; faunaData: IFauna } => {
       let pattern = parseRleFile(rleFile, fileName);
 
-      let faunaData = newFaunaDataFromRle(pattern.rle);
-
+      let faunaData = rleToFauna(pattern.rle).unwrapOr(new MyFauna());
       return { faunaData, pattern };
     });
 }
@@ -172,7 +172,7 @@ export function rankItems(item: CatItem, query: string): number {
 function searchItems(items: CatItem[], search: string, patType: PatTypes): CatItem[] {
   const noTypeSelected = Object.values(patType).every((v) => !v);
 
-  search = search.toLowerCase().trim();
+  search = search?.toLowerCase().trim();
   if (!search && noTypeSelected) {
     return items;
   }

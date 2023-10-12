@@ -8,12 +8,11 @@ type Props = {
 };
 
 export function Modal(props: Props) {
-  document.onkeydown = function (ev) {
-    // todo FIX
+  document.addEventListener("keydown", (ev) => {
     if (props.open && ev.code == "Escape") {
       props.close();
     }
-  };
+  });
 
   return (
     <div

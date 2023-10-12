@@ -2,7 +2,7 @@ import { $viewField, $viewHoveredCells, $viewLabels, fieldSize, screen } from ".
 import { XY } from "../../types";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
-import { onMount } from "solid-js";
+import { For, onMount } from "solid-js";
 
 const Color1 = "#5583e5";
 
@@ -173,13 +173,18 @@ export function Field() {
           />
         );
       })}
-      {viewLabels().map((labelStore) => {
-        return (
-          <div style={{ left: labelStore.x, top: labelStore.y }} classList={{ [css.label]: true }}>
-            {labelStore.label}
-          </div>
-        );
-      })}
+      <For each={viewLabels()}>
+        {(labelStore) => {
+          return (
+            <div
+              style={{ left: labelStore.x + "px", top: labelStore.y + "px" }}
+              classList={{ [css.label]: true }}
+            >
+              {labelStore.label}
+            </div>
+          );
+        }}
+      </For>
     </div>
   );
 }

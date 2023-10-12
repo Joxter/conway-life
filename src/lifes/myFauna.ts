@@ -2,7 +2,7 @@ import { IFauna } from "./interface";
 import { Coords, Size } from "../types";
 
 type Fauna = Map<number, Set<number>>;
-type FaunaInc = Map<number, Map<number, number>>; // todo remove
+type FaunaInc = Map<number, Map<number, number>>;
 
 type SerData = {
   fauna: Fauna;

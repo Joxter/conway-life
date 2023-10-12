@@ -7,7 +7,7 @@ export interface IFauna<T = any> {
   nextGen: () => any; // todo add optional step?
   getCells: () => Coords[]; // todo add frame
 
-  getTime: () => number; // last calc msec
+  getTime: () => number; // last calc msec todo I should measure time outside of Life code
   getPopulation: () => number;
   getGeneration: () => number;
   getBounds: () => Size | null; // null for empty life

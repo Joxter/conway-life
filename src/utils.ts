@@ -17,11 +17,11 @@ export function getViewPortParams() {
 export function adjustOffset(
   pivotCell: { col: number; row: number },
   pivotXY: XY,
-  sizeNew: number,
+  size: number,
 ) {
   return {
-    x: pivotXY.x - pivotCell.col * sizeNew,
-    y: pivotXY.y - pivotCell.row * sizeNew,
+    x: pivotXY.x - pivotCell.col * size,
+    y: pivotXY.y - pivotCell.row * size,
   };
 }
 
@@ -96,10 +96,6 @@ function minDistance(str: string, query: string): number {
   }
 
   return dp[dp.length - 1][dp[0].length - 1];
-}
-
-export function newFaunaDataFromRle(rle: string): IFauna {
-  return rleToFauna(rle).unwrapOr(new MyFauna());
 }
 
 export function getParamsFromSize({ right, top, left, bottom }: Size): [number, number] {

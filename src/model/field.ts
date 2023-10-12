@@ -6,6 +6,7 @@ import { createPerf } from "./fps";
 import { createProgress } from "../feature/Progress/progress.model";
 import { MyFauna } from "../lifes/myFauna";
 import { IFauna } from "../lifes/interface";
+import { createLabels } from "../feature/Labels/labels.model";
 
 const ViewPort = getViewPortParams();
 
@@ -14,17 +15,7 @@ export const fieldSize = createFieldSize();
 
 export const $faunaData = createStore<{ ref: IFauna }>({ ref: new MyFauna() });
 
-export const $labels = createStore<{ col: number; row: number; label: string }[]>([
-  // { col: 0, row: 0, label: "0,0" },
-  // { col: 10, row: 10, label: "10,10" },
-  // { col: 10, row: -10, label: "10,-10" },
-  // { col: -10, row: 10, label: "-10,10" },
-  // { col: -10, row: -10, label: "-10,-10" },
-  // { col: 10, row: 0, label: "10,0" },
-  // { col: 0, row: 10, label: "0,10" },
-  // { col: -10, row: 0, label: "-10,0" },
-  // { col: 0, row: -10, label: "0,-10" },
-]);
+export const labels = createLabels();
 
 export const setNewFauna = createEvent<IFauna>();
 
@@ -36,8 +27,7 @@ export const perf = createPerf(
   progress.calculated.map((it) => it.getTime()),
 );
 
-export const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
-export const resetFocus = createEvent<any>();
+const $screenOffsetXY = createStore<XY>({ x: 0, y: 0 });
 export const focusToTheMiddle = createEvent<any>();
 
 export const resetFieldPressed = createEvent<any>();
@@ -105,16 +95,18 @@ export const $stats = combine($field, $faunaData, (field, fauna) => {
 });
 
 export const $labelsOnField = combine(
-  $labels,
+  labels.$labels,
   fieldSize.$fieldSize,
   fieldSize.$cellSize,
   $screenOffsetXY,
   (labels, { width, height }, { size }, focus): { col: number; row: number; label: string }[] => {
     const labelsOnField: { col: number; row: number; label: string }[] = [];
+    let deltaCol = focus.x / size;
+    let deltaRow = focus.y / size;
 
     labels.forEach(({ col, row, label }) => {
-      const _col = col + focus.x / size;
-      const _row = row + focus.y / size;
+      const _col = col + deltaCol;
+      const _row = row + deltaRow;
 
       if (_col >= 0 && _col < width) {
         if (_row >= 0 && _row < height) {
@@ -176,7 +168,7 @@ export const $centerScreenColRow = combine(
 
 export const $viewLabels = combine($labelsOnField, fieldSize.$cellSize, (ls, { size }) => {
   return ls.map(({ row, col, label }) => {
-    return { y: row * size + "px", x: col * size + "px", label };
+    return { y: row * size, x: col * size, label };
   });
 });
 
@@ -199,8 +191,6 @@ sample({
   },
   target: $screenOffsetXY,
 });
-
-$screenOffsetXY.reset(resetFocus);
 
 sample({
   source: { faunaData: $faunaData, cellSize: fieldSize.$cellSize },

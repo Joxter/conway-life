@@ -8,12 +8,13 @@
 }
 
 .actionBtn {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 30px;
   background-color: #fff;
-  border-radius: 100%;
-  border: 5px solid #e57b55;
-  padding: 0;
+  border: 5px solid #5583e5;
+  --size: 5px;
+  -webkit-mask: conic-gradient(at var(--size) var(--size), #000 270deg, #0000 0) 0 0 /
+    calc(100% - var(--size)) calc(100% - var(--size));
 }
 
 .actionBtn:hover,

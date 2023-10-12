@@ -3,7 +3,7 @@ import { importExport } from "../feature/ImportExport/importExport.model";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed, screen } from "./field";
 import { catalogue } from "../feature/Catalogue/Catalogue.model";
 import { allTemplates } from "../blueprints/all-templates";
-import { newFaunaDataFromRle } from "../utils";
+import { faunaToRle, rleToFauna } from "../importExport/utils";
 import { MyFauna } from "../lifes/myFauna";
 
 sample({
@@ -11,18 +11,18 @@ sample({
   target: progress.reset,
 });
 
-// sample({ // TODO fix
-//   source: $faunaData,
-//   clock: importExport.exportClicked,
-//   fn: ({ fauna }) => faunaToRle(fauna),
-//   target: importExport.$textField,
-// });
+sample({
+  source: $faunaData,
+  clock: importExport.exportClicked,
+  fn: (faunaRef) => faunaToRle(faunaRef.ref),
+  target: importExport.$textField,
+});
 
 sample({
   source: importExport.$textField,
   clock: importExport.importClicked,
   fn: (str) => {
-    return { ref: newFaunaDataFromRle(str) };
+    return { ref: rleToFauna(str).unwrapOr(new MyFauna()) };
   },
   target: $faunaData,
 });

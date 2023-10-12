@@ -12,26 +12,15 @@ export function createFieldSize() {
   let initCellSize = +getStrFromLS(lsCellSizeName, "10") || 10;
   const $cellSize = createStore({ size: initCellSize, prevSize: initCellSize });
 
-  type FS = {
-    height: number;
-    width: number;
-    prevHeight: number;
-    prevWidth: number;
-  };
-
   const $viewPortSize = createStore({ width: vp.width, height: vp.height });
 
-  // @ts-ignore
-  const $fieldSize: Store<FS> = $cellSize.map(
-    ({ size }, _prev: { width: number; height: number } | undefined): FS => {
-      return {
-        height: Math.ceil(vp.height / size),
-        width: Math.ceil(vp.width / size),
-        prevHeight: (_prev && _prev.height) || Math.ceil(vp.height / size),
-        prevWidth: (_prev && _prev.width) || Math.ceil(vp.width / size),
-      };
-    },
-  );
+  // amount of fauna's cols and rows on the screen
+  const $fieldSize = $cellSize.map(({ size }) => {
+    return {
+      height: Math.ceil(vp.height / size),
+      width: Math.ceil(vp.width / size),
+    };
+  });
 
   const plus = createEvent();
   const minus = createEvent();
@@ -54,15 +43,6 @@ export function createFieldSize() {
 
   const fieldSize = { options, $cellSize, $fieldSize, plus, minus, $viewPortSize };
   return fieldSize;
-}
-
-export function createELsaMode() {
-  const $isOn = createStore(false);
-  const changed = createEvent<boolean>();
-
-  $isOn.on(changed, (_, val) => val);
-  const elsaMode = { $isOn, changed };
-  return elsaMode;
 }
 
 export function createScreen() {
