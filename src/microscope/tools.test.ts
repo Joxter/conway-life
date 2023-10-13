@@ -1,10 +1,10 @@
 import { expect, test, describe } from "bun:test";
-import { isFaunaDataEq } from "./tools";
+import { isFaunaDataEq, typeByRle } from "./tools";
 import { rleToFauna } from "../importExport/utils";
 
 describe("tools", () => {
   describe("isFaunaEq", () => {
-    test("basic true fff", () => {
+    test("basic true", () => {
       let rle = "o2b2ob4obo$6ob2o2bo!";
       let aFauna = rleToFauna(rle).unwrap();
       let bFauna = rleToFauna(rle).unwrap();
@@ -36,6 +36,37 @@ describe("tools", () => {
           }
         }
       }
+    });
+  });
+
+  describe("typeByRle (ship)", () => {
+    test("glider is a ship", () => {
+      let rle = "bob$2bo$3o!";
+      let type = typeByRle(rle, 100).unwrap().unwrap();
+
+      expect(type.name).toEqual("ship");
+      if (type.name === "ship") {
+        expect(type.period).toEqual(4);
+      }
+    });
+
+    test("35p12h6v0 is a ship with period sd", () => {
+      let rle =
+        "8b3o$8bo2bo2b3o$2b3o3bo5bo2bo$bo2bo3bo5bo$4bo3bo5bo3bo$o2bo4bo2bo2bo3bo$b2o6b2o3bo$15bobo!";
+
+      let type = typeByRle(rle, 100).unwrap().unwrap();
+
+      expect(type.name).toEqual("ship");
+      if (type.name === "ship") {
+        expect(type.period).toEqual(12);
+      }
+    });
+
+    test("block is not a ship", () => {
+      let rle = "2o$2o!";
+      let type = typeByRle(rle, 100).unwrap().unwrap();
+
+      expect(type.name).not.toEqual("ship");
     });
   });
 

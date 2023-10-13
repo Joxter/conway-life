@@ -20,6 +20,7 @@ function run(folder: string, output: string) {
   let patternTypesStat: Record<PatternTypeNames, number> = {
     "still-live": 0,
     oscillator: 0,
+    ship: 0,
     unknown: 0,
     "died-at": 0,
   };
@@ -69,15 +70,7 @@ function run(folder: string, output: string) {
         res.type = type;
 
         if (type) {
-          if (type.name === "still-live") {
-            patternTypesStat["still-live"]++;
-          } else if (type.name === "unknown") {
-            patternTypesStat["unknown"]++;
-          } else if (type.name === "died-at") {
-            patternTypesStat["died-at"]++;
-          } else if (type.name === "oscillator") {
-            patternTypesStat["oscillator"]++;
-          }
+          patternTypesStat[type.name]++;
         }
 
         patterns.push(PATTERN_COLS.map((colName) => res[colName]) as PatternRow);

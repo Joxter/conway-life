@@ -174,6 +174,26 @@ export class MyFauna implements IFauna<SerData> {
     return this.cells;
   }
 
+  normalise() {
+    if (this.population === 0) return;
+
+    let newFauna: Fauna = new Map();
+    let { left, top } = this.bounds!;
+
+    this.getCells().forEach(([x, y]) => {
+      if (!newFauna.has(x - left)) {
+        newFauna.set(x - left, new Set());
+      }
+      newFauna.get(x - left)!.add(y - top);
+    });
+
+    this.fauna = newFauna;
+    this.bounds!.top = 0;
+    this.bounds!.left = 0;
+    this.bounds!.right = this.bounds!.right - left;
+    this.bounds!.bottom = this.bounds!.bottom - top;
+  }
+
   getBounds() {
     if (this.population === 0) return null;
 

@@ -30,6 +30,7 @@ export function createCatalogue() {
   const $type = createStore<PatTypes>({
     "still-live": false,
     oscillator: false,
+    ship: false,
     "died-at": false,
     unknown: false,
   });

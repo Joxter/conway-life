@@ -1,9 +1,9 @@
 import { rleToFauna } from "../importExport/utils";
-import { PatternTypes } from "../types";
+import { PatternTypes, XY } from "../types";
 import { IFauna } from "../lifes/interface";
 import { Result, Option, Some } from "@sniptt/monads";
 
-export function isFaunaDataEq(a: IFauna, b: IFauna): boolean {
+export function isFaunaDataEq(a: IFauna, b: IFauna, offset?: XY): boolean {
   // console.log("------- isFaunaDataEq");
   // console.log("size", JSON.stringify(aBounds), JSON.stringify(bBounds));
   // console.log("pop", a.population, b.population);
@@ -28,9 +28,17 @@ export function isFaunaDataEq(a: IFauna, b: IFauna): boolean {
     return false;
   }
 
-  for (let [x, y] of a.getCells()) {
-    if (!b.getCell(x, y)) {
-      return false;
+  if (offset) {
+    for (let [x, y] of a.getCells()) {
+      if (!b.getCell(x + offset.x, y + offset.y)) {
+        return false;
+      }
+    }
+  } else {
+    for (let [x, y] of a.getCells()) {
+      if (!b.getCell(x, y)) {
+        return false;
+      }
     }
   }
 
@@ -38,20 +46,26 @@ export function isFaunaDataEq(a: IFauna, b: IFauna): boolean {
 }
 
 export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, string> {
-  return rleToFauna(rle).map((firstGen) => {
-    let currGen = rleToFauna(rle).unwrap(); // todo add .clone() method?
+  return rleToFauna(rle).map((initFauna) => {
+    if (initFauna.getPopulation() === 0) return Some({ name: "unknown" });
+
+    let currFauna = rleToFauna(rle).unwrap(); // todo add .clone() method?
 
     for (let i = 1; i <= max; i++) {
-      if (currGen.getPopulation() === 0) {
+      currFauna.nextGen();
+      if (currFauna.getPopulation() === 0) {
         return Some({ name: "died-at", gen: i });
       }
-      currGen.nextGen();
-      if (isFaunaDataEq(firstGen, currGen)) {
+      let { left, top } = currFauna.getBounds()!;
+
+      if (isFaunaDataEq(initFauna, currFauna)) {
         if (i === 1) {
           return Some({ name: "still-live" });
         } else {
           return Some({ name: "oscillator", period: i });
         }
+      } else if (isFaunaDataEq(initFauna, currFauna, { x: left, y: top })) {
+        return Some({ name: "ship", period: i });
       }
     }
 

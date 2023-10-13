@@ -12,6 +12,7 @@ export interface IFauna<T = any> {
   getGeneration: () => number;
   getBounds: () => Size | null; // null for empty life
 
+  normalise: () => void; // move cells to make left ant top border = 0 // TODO do I need it?
   serialise: () => T;
   deserialise: (data: T) => void;
 }
