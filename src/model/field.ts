@@ -10,15 +10,11 @@ import { createLabels } from "../feature/Labels/labels.model";
 
 const ViewPort = getViewPortParams();
 
-export const screen = createScreen();
-export const fieldSize = createFieldSize();
-
 export const $faunaData = createStore<{ ref: IFauna }>({ ref: new MyFauna() });
 
+export const fieldSize = createFieldSize();
+export const screen = createScreen(fieldSize.$screenOffsetXY);
 export const labels = createLabels();
-
-export const setNewFauna = createEvent<IFauna>();
-
 export const progress = createProgress();
 
 export const perf = createPerf(
@@ -28,13 +24,9 @@ export const perf = createPerf(
 );
 
 export const focusToTheMiddle = createEvent<any>();
-
 export const resetFieldPressed = createEvent<any>();
 
 $faunaData
-  .on(setNewFauna, (_, data) => {
-    return { ref: data };
-  })
   .on(progress.calculated, (_, data) => {
     return { ref: data };
   })
@@ -137,25 +129,7 @@ export const $hoveredCellColRow = combine(
   },
 );
 
-const $initScreenOffsetXY = createStore<XY>({ x: 0, y: 0 });
-
-sample({
-  source: fieldSize.$screenOffsetXY,
-  clock: screen.onPointerDown,
-  target: $initScreenOffsetXY,
-});
-
-sample({
-  source: $initScreenOffsetXY,
-  clock: screen.onDrag,
-  fn: (initFocus, { from, to }) => {
-    return {
-      x: initFocus.x + to.x - from.x,
-      y: initFocus.y + to.y - from.y,
-    };
-  },
-  target: fieldSize.$screenOffsetXY,
-});
+sample({ clock: screen.screenOffsetMoved, target: fieldSize.$screenOffsetXY });
 
 sample({
   source: { faunaData: $faunaData, cellSize: fieldSize.$cellSize },

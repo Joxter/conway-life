@@ -1,7 +1,6 @@
-import { combine, createEvent, createStore, Store } from "effector";
+import { combine, createEvent, createStore, sample, Store } from "effector";
 import { XY } from "../types";
 import { getStrFromLS, getViewPortParams, setStrToLS } from "../utils";
-import { fieldSize } from "./field";
 
 const vp = getViewPortParams();
 
@@ -46,7 +45,7 @@ export function createFieldSize() {
   return { options, $cellSize, plus, minus, $viewPortSize, $screenOffsetXY, $centerScreenColRow };
 }
 
-export function createScreen() {
+export function createScreen($screenOffset: Store<XY>) {
   const onHover = createEvent<XY>(); // on MOUSE moved without button pressed
   const onPointerDown = createEvent<XY>(); // on MOUSE or FINGER down
   const onPointerUp = createEvent(); // on MOUSE or FINGER up
@@ -54,6 +53,7 @@ export function createScreen() {
   const onPointerClick = createEvent<XY>(); // on MOUSE or FINGER makes a click without move
   const onDrag = createEvent<{ from: XY; to: XY }>(); // on MOUSE moves with PRESSED button or FINGER moves with TOUCH
   //                           from: where mouse/finger was pressed, to: where mouse/finger is now
+  const screenOffsetMoved = createEvent<XY>();
 
   const $hovered = createStore<XY | null>(null);
   $hovered.on(onHover, (_, xy) => xy).on(onPointerLeave, () => null);
@@ -65,6 +65,26 @@ export function createScreen() {
     .on(onDrag, (_, val) => val)
     .on([onPointerLeave /*, onPointerUp*/], () => null);
 
+  const $initScreenOffsetXY = createStore<XY>({ x: 0, y: 0 });
+
+  sample({
+    source: $screenOffset,
+    clock: onPointerDown,
+    target: $initScreenOffsetXY,
+  });
+
+  sample({
+    source: $initScreenOffsetXY,
+    clock: onDrag,
+    fn: (initFocus, { from, to }) => {
+      return {
+        x: initFocus.x + to.x - from.x,
+        y: initFocus.y + to.y - from.y,
+      };
+    },
+    target: screenOffsetMoved,
+  });
+
   return {
     $hovered,
     $dragDelta,
@@ -74,5 +94,6 @@ export function createScreen() {
     onPointerLeave,
     onDrag,
     onPointerClick,
+    screenOffsetMoved,
   };
 }
