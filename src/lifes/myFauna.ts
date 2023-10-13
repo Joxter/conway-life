@@ -10,7 +10,6 @@ type SerData = {
   size: Size | null;
   population: number;
   generation: number;
-  cells: Coords[];
 };
 
 /**
@@ -19,15 +18,15 @@ type SerData = {
 export class MyFauna implements IFauna<SerData> {
   private fauna: Fauna;
   private time: number;
-  private size: Size | null;
+  private bounds: Size | null;
   private population: number;
   private generation: number;
-  private cells: Coords[];
+  private cells: Coords[] | null;
 
   constructor() {
     this.fauna = new Map();
     this.time = 0;
-    this.size = null;
+    this.bounds = null;
     this.population = 0;
     this.generation = 0;
     this.cells = [];
@@ -36,7 +35,7 @@ export class MyFauna implements IFauna<SerData> {
   initNew() {
     this.fauna = new Map();
     this.time = 0;
-    this.size = null;
+    this.bounds = null;
     this.population = 0;
     this.generation = 0;
     this.cells = [];
@@ -54,8 +53,8 @@ export class MyFauna implements IFauna<SerData> {
     } else {
       xRow.add(y);
       this.population++;
-      this.cells.push([x, y]); // todo Fix
     }
+    this.cells = null;
   }
 
   getCell(faunaX: number, faunaY: number) {
@@ -76,7 +75,6 @@ export class MyFauna implements IFauna<SerData> {
       this.population--;
     } else {
       this.population++;
-      this.cells.push([faunaX, faunaY]); // todo Fix
     }
 
     if (live) {
@@ -84,6 +82,7 @@ export class MyFauna implements IFauna<SerData> {
     } else {
       xRow.delete(faunaY);
     }
+    this.cells = null;
   }
 
   nextGen() {
@@ -91,7 +90,7 @@ export class MyFauna implements IFauna<SerData> {
     let result: Fauna = new Map();
     let faunaInc: FaunaInc = new Map();
     let population = 0;
-    let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+    let bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
 
     const input = this.fauna;
     let field: Coords[] = [];
@@ -104,16 +103,19 @@ export class MyFauna implements IFauna<SerData> {
 
     faunaInc.forEach((colMap, col) => {
       let rowSet: Set<number> = new Set();
-      colMap.forEach((total, row) => {
+      colMap.forEach((liveNeighbors, row) => {
         let isLive = input.has(col) && input.get(col)!.has(row);
 
-        if ((!isLive && total === 3) || (isLive && (total === 2 || total === 3))) {
+        if (
+          (!isLive && liveNeighbors === 3) ||
+          (isLive && (liveNeighbors === 2 || liveNeighbors === 3))
+        ) {
           rowSet.add(row);
 
-          if (col < size.left) size.left = col;
-          if (col > size.right) size.right = col;
-          if (row < size.top) size.top = row;
-          if (row > size.bottom) size.bottom = row;
+          if (col < bounds.left) bounds.left = col;
+          if (col > bounds.right) bounds.right = col;
+          if (row < bounds.top) bounds.top = row;
+          if (row > bounds.bottom) bounds.bottom = row;
           field.push([col, row]);
         }
       });
@@ -132,7 +134,7 @@ export class MyFauna implements IFauna<SerData> {
 
     this.fauna = result;
     this.time = time;
-    this.size = size;
+    this.bounds = bounds;
     this.population = population;
     this.cells = field;
     this.generation++;
@@ -142,42 +144,52 @@ export class MyFauna implements IFauna<SerData> {
     return {
       fauna: this.fauna,
       time: this.time,
-      size: this.size,
+      size: this.bounds,
       population: this.population,
       generation: this.generation,
-      cells: this.cells, // todo remove cells
     };
   }
 
   deserialise(data: SerData) {
     this.fauna = data.fauna;
     this.time = data.time;
-    this.size = data.size;
+    this.bounds = data.size;
     this.population = data.population;
     this.generation = data.generation;
-    this.cells = data.cells; // todo remove cells
+    this.cells = null;
   }
 
   getCells() {
-    return this.cells; // todo remove cells
+    if (this.cells === null) {
+      let cells: Coords[] = [];
+
+      this.fauna.forEach((colMap, col) => {
+        colMap.forEach((val, row) => {
+          cells.push([col, row]);
+        });
+      });
+      this.cells = cells;
+    }
+
+    return this.cells;
   }
 
   getBounds() {
     if (this.population === 0) return null;
 
-    let size = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity }; // todo FIX
+    let bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity }; // todo optimize
 
     this.fauna.forEach((colMap, col) => {
       colMap.forEach((val, row) => {
-        if (col < size.left) size.left = col;
-        if (col > size.right) size.right = col;
-        if (row < size.top) size.top = row;
-        if (row > size.bottom) size.bottom = row;
+        if (col < bounds.left) bounds.left = col;
+        if (col > bounds.right) bounds.right = col;
+        if (row < bounds.top) bounds.top = row;
+        if (row > bounds.bottom) bounds.bottom = row;
       });
     });
-    this.size = size;
+    this.bounds = bounds;
 
-    return this.size;
+    return this.bounds;
   }
   getPopulation() {
     return this.population;
