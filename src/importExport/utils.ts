@@ -57,10 +57,20 @@ export function rleToFauna(rle: string): Result<IFauna, string> {
   });
 }
 
-export function rleToPopulation(rle: string): Result<number, string> {
-  let population = 0;
+export function rleToPopulationAndSize(
+  rle: string,
+): Result<{ pop: number; x: number; y: number }, string> {
+  let pop = 0;
+  let maxX = 0;
+  let maxY = 0;
 
-  return parseRle(rle, () => population++).map(() => population);
+  return parseRle(rle, (x, y) => {
+    pop++;
+    if (x > maxX) maxX = x;
+    if (y > maxY) maxY = y;
+  }).map(() => {
+    return { pop, x: maxX + 1, y: maxY + 1 };
+  });
 }
 
 function sortedEntries<T>(m: Map<number, T>): Array<[number, T]> {
@@ -182,6 +192,7 @@ export function cellsToGrid(cells: string): boolean[][] {
 }
 
 export function parseRleFile(rleFile: string, fileName: string): Pattern {
+  // todo add Result<>
   let lines = rleFile.split("\n");
 
   let rawName = "";
@@ -230,6 +241,8 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
   });
   rawName = rawName.trim();
 
+  let statsFromRle = rleToPopulationAndSize(rle).unwrapOr({ pop: 0, x: size[0], y: size[1] });
+
   return {
     fileName,
     rawName: rawName.trim(),
@@ -237,10 +250,10 @@ export function parseRleFile(rleFile: string, fileName: string): Pattern {
       prettifyName(getFromWikiLink(wikiLink)) || prettifyName(rawName) || prettifyName(fileName),
     author: author.trim(),
     comment: comment.trim(),
-    population: rleToPopulation(rle).unwrapOr(0), // todo do I really need ot here?
+    population: statsFromRle.pop,
     wikiLink,
     patternLink,
-    size, // todo not reliable, nned to fix :(
+    size: [statsFromRle.x, statsFromRle.y],
     rule,
     rle,
     type: null,

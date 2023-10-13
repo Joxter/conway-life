@@ -9,7 +9,7 @@ export type Size = { left: number; right: number; top: number; bottom: number };
 export type PatternTypes =
   | { name: "still-live" }
   | { name: "oscillator"; period: number }
-  | { name: "ship"; period: number }
+  | { name: "ship"; period: number } // add direction
   | { name: "died-at"; gen: number }
   | { name: "unknown" };
 export type PatternTypeNames = "still-live" | "oscillator" | "died-at" | "ship" | "unknown";

@@ -2,7 +2,7 @@ import { sample } from "effector";
 import { importExport } from "../feature/ImportExport/importExport.model";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed, screen } from "./field";
 import { catalogue } from "../feature/Catalogue/Catalogue.model";
-import { allTemplates } from "../blueprints/all-templates";
+import { allTemplates } from "../all-templates";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
 import { MyFauna } from "../lifes/myFauna";
 

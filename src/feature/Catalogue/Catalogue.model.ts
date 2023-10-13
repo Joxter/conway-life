@@ -1,5 +1,5 @@
 import { combine, createEffect, createEvent, createStore, sample } from "effector";
-import { allTemplates } from "../../blueprints/all-templates";
+import { allTemplates } from "../../all-templates";
 import { fuzzy, objEntries } from "../../utils";
 import { Pattern, PatternTypeNames } from "../../types";
 import { parseRleFile, rleToFauna } from "../../importExport/utils";
@@ -23,7 +23,7 @@ export const catalogue = createCatalogue();
 type PatTypes = Record<PatternTypeNames, boolean> & { unknown: boolean };
 
 export function createCatalogue() {
-  const PAGE_SIZE = 50;
+  const PAGE_SIZE = 1000;
 
   const $search = createStore("");
   const $orderBy = createStore<OrderBy>(orderOptions[0]);

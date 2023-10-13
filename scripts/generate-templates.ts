@@ -6,7 +6,7 @@ import { typeByRle } from "../src/microscope/tools";
 import { None } from "@sniptt/monads";
 
 let patternsFolderPath = path.join(import.meta.dir, "../public/patterns");
-let outputFilePath = path.join(import.meta.dir, "all-templates.ts");
+let outputFilePath = path.join(import.meta.dir, "../src/all-templates.ts");
 
 let startTime = Date.now();
 run(patternsFolderPath, outputFilePath);
@@ -39,39 +39,28 @@ function run(folder: string, output: string) {
         console.warn("Skip .cells file", fileName);
       } else if (fileName.endsWith(".rle")) {
         let noExtName = fileName.slice(0, -4);
-        // console.log(fileName);
 
         let filePath = path.join(folder, fileName);
         let content = fs.readFileSync(filePath, "utf8").toString();
 
         let { rle, ...res } = parseRleFile(content, fileName);
-        let start = Date.now();
-        let limit =
-          res.population < 100
-            ? 300
-            : res.population < 300
-            ? 100
-            : res.population < 1000
-            ? 1
-            : null;
+        if (res.population === 0) {
+          // console.error(`Failed to parse rle "${rle.slice(0, 20)}..."\n Err: ${err}`);
+          return;
+        }
 
-        let type = limit
-          ? typeByRle(rle, limit)
-              .unwrapOrElse((err) => {
-                // console.error(`Failed to parse rle "${rle.slice(0, 20)}..."\n Err: ${err}`);
-                return None;
-              })
-              .match({ some: (p) => p, none: null })
-          : null;
+        let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
+
+        let start = Date.now();
+
+        let type = typeByRle(rle, limit).unwrap().unwrap();
+        // .match({ some: (p) => p, none: null });
 
         let time = formatTimeSec(Date.now() - start);
         total[time] = total[time] ? total[time] + 1 : 1;
 
         res.type = type;
-
-        if (type) {
-          patternTypesStat[type.name]++;
-        }
+        patternTypesStat[type.name]++;
 
         patterns.push(PATTERN_COLS.map((colName) => res[colName]) as PatternRow);
         patternsNames[fileName] = patterns.length - 1;
@@ -79,17 +68,17 @@ function run(folder: string, output: string) {
     });
 
   console.log("Types: ");
-  console.log(patternTypesStat);
-  console.log("Time stat sorted by asc:");
-  console.log(JSON.stringify(sortTimes(total)));
+  console.log(JSON.stringify(patternTypesStat));
+  // console.log("Time stat sorted by asc:");
+  // console.log(JSON.stringify(sortTimes(total)));
 
-  let fileContent = `import { PatternNoRle, Pattern, PATTERN_COLS } from "../types";
+  let fileContent = `import { PatternNoRle, Pattern, PATTERN_COLS } from "./types";
 
 // prettier-ignore
 // @ts-ignore
-export let patterns: PatternNoRle[] = ${JSON.stringify(patterns)};
+let patterns: PatternNoRle[] = ${JSON.stringify(patterns)};
 // prettier-ignore
-export let patternsNames: Record<string, number> = ${JSON.stringify(patternsNames)};
+let patternsNames: Record<string, number> = ${JSON.stringify(patternsNames)};
 
 // TODO optimise
 // @ts-ignore
@@ -117,3 +106,12 @@ function sortTimes(times: Record<string, number>) {
 function formatTimeSec(durationMsec: number) {
   return (durationMsec / 1000).toFixed(3);
 }
+
+/*
+
+=== 13 oct
+let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
+Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1974,"died-at":53}
+Done in 53.826 sec
+
+*/
