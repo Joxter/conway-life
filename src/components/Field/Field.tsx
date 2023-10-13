@@ -1,4 +1,4 @@
-import { $viewField, $viewHoveredCells, $viewLabels, fieldSize, screen } from "../../model/field";
+import { $viewField, $viewHoveredCell, $viewLabels, fieldSize, screen } from "../../model/field";
 import { XY } from "../../types";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
@@ -10,8 +10,8 @@ let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 const scale = window.devicePixelRatio;
 
 export function Field() {
-  let [viewHoveredCells, viewLabels, cellSize] = useUnit([
-    $viewHoveredCells,
+  let [viewHoveredCell, viewLabels, cellSize] = useUnit([
+    $viewHoveredCell,
     $viewLabels,
     fieldSize.$cellSize,
   ]);
@@ -165,14 +165,17 @@ export function Field() {
         height={document.body.offsetHeight}
         ref={(el) => (canvas = el)}
       ></canvas>
-      {viewHoveredCells().map((cell) => {
-        return (
-          <div
-            style={{ left: cell.x + "px", top: cell.y + "px" }}
-            classList={{ [css.cell]: true, [css.hoveredCell]: true }}
-          />
-        );
-      })}
+      {viewHoveredCell() && (
+        <div
+          style={{
+            left: viewHoveredCell()!.x + "px",
+            top: viewHoveredCell()!.y + "px",
+            width: viewHoveredCell()!.size.width + "px",
+            height: viewHoveredCell()!.size.height + "px",
+          }}
+          classList={{ [css.cell]: true, [css.hoveredCell]: true }}
+        />
+      )}
       <For each={viewLabels()}>
         {(labelStore) => {
           return (

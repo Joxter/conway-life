@@ -1,0 +1,27 @@
+.root {
+  position: absolute;
+  top: 100px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item {
+  width: 50px;
+  height: 50px;
+  background-position: center;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  image-rendering: pixelated;
+
+  border: 5px solid #5583e5;
+  --size: 5px;
+  -webkit-mask: conic-gradient(at var(--size) var(--size), #000 270deg, #0000 0) 0 0 /
+    calc(100% - var(--size)) calc(100% - var(--size));
+}
+
+.current {
+  border: 5px solid #ec4dc7;
+}

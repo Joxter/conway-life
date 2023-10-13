@@ -1,4 +1,4 @@
-import { fieldSize, $faunaData, $field, $hoveredCellColRow, perf } from "../model/field";
+import { fieldSize, $faunaData, $field, perf, $viewHoveredCell } from "../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { getParamsFromSize } from "../utils";
@@ -7,7 +7,7 @@ export function Perf() {
   const [time, fps] = useUnit([perf.$time, perf.$fps]);
   const [field, hovered, centerScreenColRow, faunaData] = useUnit([
     $field,
-    $hoveredCellColRow,
+    $viewHoveredCell,
     fieldSize.$centerScreenColRow,
     $faunaData,
   ]);

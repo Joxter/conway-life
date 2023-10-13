@@ -30,7 +30,7 @@
 }
 
 .hoveredCell {
-  box-shadow: inset 0 0 0 3px #ec4dc7;
+  box-shadow: inset 0 0 0 2px #ec4dc7;
 }
 
 .heartMode.on1,

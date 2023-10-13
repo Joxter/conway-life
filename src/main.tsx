@@ -12,6 +12,7 @@ import { WhiteBox } from "./components/WhiteBox/WhiteBox";
 import { ImportExportButton, ImportExportModal } from "./feature/ImportExport/ImportExport";
 import { createSignal } from "solid-js";
 import { initWW } from "./model/app";
+import { Palette } from "./feature/Palette/Palette";
 
 /*
 function Counter() {
@@ -40,6 +41,7 @@ function App() {
     >
       <div>
         <Field />
+        <Palette />
         <WhiteBox
           style={{
             top: "0",
@@ -74,7 +76,6 @@ function App() {
         <div style={{ position: "absolute", bottom: "30px", left: "10px", right: "10px" }}>
           <Progress />
         </div>
-
         <WhiteBox style={{ bottom: "110px", left: "10px" }}>
           <Navigation />
         </WhiteBox>

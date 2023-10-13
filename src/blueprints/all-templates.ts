@@ -12,7 +12,6 @@ export let allTemplates: Record<string, Omit<Pattern, "rle">> = Object.fromEntri
   Object.keys(patternsNames).map((fileNames) => {
     let patData = patterns[patternsNames[fileNames]];
 
-    console.log(patData);
     let pat = {};
     PATTERN_COLS.forEach((colName, i) => {
       // @ts-ignore

@@ -1,5 +1,5 @@
 import { combine, createEvent, createStore, sample } from "effector";
-import { Field, XY } from "../types";
+import { Field } from "../types";
 import { adjustOffset, getMiddleOfFauna, getViewPortParams } from "../utils";
 import { createFieldSize, createScreen } from "./fieldParams";
 import { createPerf } from "./fps";
@@ -7,6 +7,7 @@ import { createProgress } from "../feature/Progress/progress.model";
 import { MyFauna } from "../lifes/myFauna";
 import { IFauna } from "../lifes/interface";
 import { createLabels } from "../feature/Labels/labels.model";
+import { createPalette } from "../feature/Palette/palette.model";
 
 const ViewPort = getViewPortParams();
 
@@ -16,6 +17,7 @@ export const fieldSize = createFieldSize();
 export const screen = createScreen(fieldSize.$screenOffsetXY);
 export const labels = createLabels();
 export const progress = createProgress();
+export const palette = createPalette();
 
 export const perf = createPerf(
   progress.$currentStep,
@@ -97,33 +99,30 @@ export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => 
   return { size, field };
 });
 
-export const $viewHoveredCells = combine(
+export const $viewHoveredCell = combine(
   screen.$hovered,
   fieldSize.$cellSize,
   fieldSize.$screenOffsetXY,
-  (hovered, { size }, screenOffsetXY) => {
+  palette.$currentPalette,
+  (hovered, { size }, screenOffsetXY, currentPalette) => {
     if (hovered) {
       const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
       const cellRow = Math.floor((hovered.y - screenOffsetXY.y) / size);
       const finX = (cellCol * size + screenOffsetXY.x).toFixed(0);
       const finY = (cellRow * size + screenOffsetXY.y).toFixed(0);
 
-      return [{ x: finX, y: finY }];
-    }
-    return [];
-  },
-);
-
-export const $hoveredCellColRow = combine(
-  screen.$hovered,
-  fieldSize.$cellSize,
-  fieldSize.$screenOffsetXY,
-  (hovered, { size }, screenOffsetXY) => {
-    if (hovered) {
-      const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
-      const cellRow = Math.floor((hovered.y - screenOffsetXY.y) / size);
-
-      return { col: cellCol, row: cellRow };
+      return {
+        x: finX,
+        y: finY,
+        col: cellCol,
+        row: cellRow,
+        size: currentPalette
+          ? {
+              width: currentPalette.width * size || size,
+              height: currentPalette.height * size || size,
+            }
+          : { width: size, height: size },
+      };
     }
     return null;
   },
@@ -179,13 +178,23 @@ sample({
     faunaData: $faunaData,
     screenOffsetXY: fieldSize.$screenOffsetXY,
     cellSize: fieldSize.$cellSize,
+    currentPalette: palette.$currentPalette,
   },
   clock: screen.onPointerClick,
-  fn: ({ faunaData, screenOffsetXY, cellSize: { size } }, coords) => {
-    const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
-    const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size);
+  fn: ({ faunaData, screenOffsetXY, cellSize: { size }, currentPalette }, coords) => {
+    if (currentPalette) {
+      currentPalette.cells.forEach(([x, y]) => {
+        const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size) + x;
+        const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size) + y;
 
-    faunaData.ref.toggleCell(faunaX, faunaY);
+        faunaData.ref.toggleCell(faunaX, faunaY);
+      });
+    } else {
+      const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
+      const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size);
+
+      faunaData.ref.toggleCell(faunaX, faunaY);
+    }
 
     return { ref: faunaData.ref };
   },
