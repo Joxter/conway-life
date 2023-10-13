@@ -31,14 +31,14 @@ var incNeighbors = function(faunaInc, col, row) {
 class MyFauna {
   fauna;
   time;
-  bounds;
+  size;
   population;
   generation;
   cells;
   constructor() {
     this.fauna = new Map;
     this.time = 0;
-    this.bounds = null;
+    this.size = null;
     this.population = 0;
     this.generation = 0;
     this.cells = [];
@@ -46,7 +46,7 @@ class MyFauna {
   initNew() {
     this.fauna = new Map;
     this.time = 0;
-    this.bounds = null;
+    this.size = null;
     this.population = 0;
     this.generation = 0;
     this.cells = [];
@@ -62,8 +62,8 @@ class MyFauna {
     } else {
       xRow.add(y);
       this.population++;
+      this.cells.push([x, y]);
     }
-    this.cells = null;
   }
   getCell(faunaX, faunaY) {
     if (!this.fauna.has(faunaX)) {
@@ -81,20 +81,20 @@ class MyFauna {
       this.population--;
     } else {
       this.population++;
+      this.cells.push([faunaX, faunaY]);
     }
     if (live) {
       xRow.add(faunaY);
     } else {
       xRow.delete(faunaY);
     }
-    this.cells = null;
   }
   nextGen() {
     let start = Date.now();
     let result = new Map;
     let faunaInc = new Map;
     let population = 0;
-    let bounds = { left: Infinity, right: (-Infinity), top: Infinity, bottom: (-Infinity) };
+    let size = { left: Infinity, right: (-Infinity), top: Infinity, bottom: (-Infinity) };
     const input = this.fauna;
     let field = [];
     input.forEach((colMap, col) => {
@@ -104,18 +104,18 @@ class MyFauna {
     });
     faunaInc.forEach((colMap, col) => {
       let rowSet = new Set;
-      colMap.forEach((liveNeighbors, row) => {
+      colMap.forEach((total, row) => {
         let isLive = input.has(col) && input.get(col).has(row);
-        if (!isLive && liveNeighbors === 3 || isLive && (liveNeighbors === 2 || liveNeighbors === 3)) {
+        if (!isLive && total === 3 || isLive && (total === 2 || total === 3)) {
           rowSet.add(row);
-          if (col < bounds.left)
-            bounds.left = col;
-          if (col > bounds.right)
-            bounds.right = col;
-          if (row < bounds.top)
-            bounds.top = row;
-          if (row > bounds.bottom)
-            bounds.bottom = row;
+          if (col < size.left)
+            size.left = col;
+          if (col > size.right)
+            size.right = col;
+          if (row < size.top)
+            size.top = row;
+          if (row > size.bottom)
+            size.bottom = row;
           field.push([col, row]);
         }
       });
@@ -131,7 +131,7 @@ class MyFauna {
     }
     this.fauna = result;
     this.time = time;
-    this.bounds = bounds;
+    this.size = size;
     this.population = population;
     this.cells = field;
     this.generation++;
@@ -140,49 +140,41 @@ class MyFauna {
     return {
       fauna: this.fauna,
       time: this.time,
-      size: this.bounds,
+      size: this.size,
       population: this.population,
-      generation: this.generation
+      generation: this.generation,
+      cells: this.cells
     };
   }
   deserialise(data) {
     this.fauna = data.fauna;
     this.time = data.time;
-    this.bounds = data.size;
+    this.size = data.size;
     this.population = data.population;
     this.generation = data.generation;
-    this.cells = null;
+    this.cells = data.cells;
   }
   getCells() {
-    if (this.cells === null) {
-      let cells = [];
-      this.fauna.forEach((colMap, col) => {
-        colMap.forEach((val, row) => {
-          cells.push([col, row]);
-        });
-      });
-      this.cells = cells;
-    }
     return this.cells;
   }
   getBounds() {
     if (this.population === 0)
       return null;
-    let bounds = { left: Infinity, right: (-Infinity), top: Infinity, bottom: (-Infinity) };
+    let size = { left: Infinity, right: (-Infinity), top: Infinity, bottom: (-Infinity) };
     this.fauna.forEach((colMap, col) => {
       colMap.forEach((val, row) => {
-        if (col < bounds.left)
-          bounds.left = col;
-        if (col > bounds.right)
-          bounds.right = col;
-        if (row < bounds.top)
-          bounds.top = row;
-        if (row > bounds.bottom)
-          bounds.bottom = row;
+        if (col < size.left)
+          size.left = col;
+        if (col > size.right)
+          size.right = col;
+        if (row < size.top)
+          size.top = row;
+        if (row > size.bottom)
+          size.bottom = row;
       });
     });
-    this.bounds = bounds;
-    return this.bounds;
+    this.size = size;
+    return this.size;
   }
   getPopulation() {
     return this.population;
