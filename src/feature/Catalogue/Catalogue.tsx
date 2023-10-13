@@ -82,6 +82,11 @@ export const CatalogueModal = () => {
                 onChange={(v) => catalogue.typeChanged({ "still-live": v })}
               />
               <Checkbox
+                label={"died-at"}
+                value={patType()["died-at"]}
+                onChange={(v) => catalogue.typeChanged({ "died-at": v })}
+              />
+              <Checkbox
                 label={"oscillator"}
                 value={patType().oscillator}
                 onChange={(v) => catalogue.typeChanged({ oscillator: v })}
@@ -149,6 +154,9 @@ function PatType(props: { type: Pattern["type"] }) {
   }
   if (props.type.name === "oscillator") {
     return <b>oscillator ({props.type.period})</b>;
+  }
+  if (props.type.name === "died-at") {
+    return <b>died-at ({props.type.gen})</b>;
   }
 
   return <b>unreachable</b>;

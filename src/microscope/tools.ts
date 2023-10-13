@@ -1,19 +1,7 @@
 import { rleToFauna } from "../importExport/utils";
 import { PatternTypes } from "../types";
 import { IFauna } from "../lifes/interface";
-
-export function makeFaunaDataFromRle(rle: string): IFauna | null {
-  let res = rleToFauna(rle);
-  if (res.isErr()) {
-    // todo dirty
-    console.error(`Failed to parse rle "${rle.slice(0, 20)}..."\n Err: ${res.unwrapErr()}`);
-    return null;
-  }
-
-  let fauna = res.unwrap();
-
-  return fauna;
-}
+import { Result, Option, Some } from "@sniptt/monads";
 
 export function isFaunaDataEq(a: IFauna, b: IFauna): boolean {
   // console.log("------- isFaunaDataEq");
@@ -49,39 +37,24 @@ export function isFaunaDataEq(a: IFauna, b: IFauna): boolean {
   return true;
 }
 
-export function isRleStillLive(rle: string): boolean {
-  let period = isOscillatorsByRle(rle, 1);
+export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, string> {
+  return rleToFauna(rle).map((firstGen) => {
+    let currGen = rleToFauna(rle).unwrap(); // todo add .clone() method?
 
-  return period === 1;
-}
-
-export function isOscillatorsByRle(rle: string, max = 100): number | null {
-  let firstGen = makeFaunaDataFromRle(rle);
-  let currGen = makeFaunaDataFromRle(rle);
-  if (!firstGen || !currGen) {
-    return null;
-  }
-
-  for (let i = 1; i <= max; i++) {
-    currGen.nextGen();
-    if (isFaunaDataEq(firstGen, currGen)) {
-      return i;
+    for (let i = 1; i <= max; i++) {
+      if (currGen.getPopulation() === 0) {
+        return Some({ name: "died-at", gen: i });
+      }
+      currGen.nextGen();
+      if (isFaunaDataEq(firstGen, currGen)) {
+        if (i === 1) {
+          return Some({ name: "still-live" });
+        } else {
+          return Some({ name: "oscillator", period: i });
+        }
+      }
     }
-  }
 
-  return null;
-}
-
-export function typeByRle(rle: string, max = 100): PatternTypes | null {
-  let period = isOscillatorsByRle(rle, max);
-
-  if (period === 1) {
-    return { name: "still-live" };
-  }
-
-  if (period) {
-    return { name: "oscillator", period };
-  }
-
-  return null;
+    return Some({ name: "unknown" });
+  });
 }

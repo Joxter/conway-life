@@ -30,6 +30,7 @@ export function createCatalogue() {
   const $type = createStore<PatTypes>({
     "still-live": false,
     oscillator: false,
+    "died-at": false,
     unknown: false,
   });
   const typeChanged = createEvent<Partial<PatTypes>>();
@@ -52,8 +53,6 @@ export function createCatalogue() {
   $type.on(typeChanged, (state, newVals) => {
     return { ...state, ...newVals };
   });
-
-  $type.watch(console.log);
 
   sample({ source: $currentPattern, clock: currentPatternClicked, target: $search });
 
