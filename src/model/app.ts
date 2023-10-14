@@ -83,6 +83,7 @@ export function initWW() {
 
   sample({
     source: $faunaData,
+    filter: progress.$isWW,
     clock: [
       importExport.importClicked,
       catalogue.patternFetched,
@@ -93,7 +94,10 @@ export function initWW() {
     worker.postMessage({ fauna: fauna.ref.serialise() });
   });
 
-  progress.getGeneration.watch((n) => {
+  sample({
+    filter: progress.$isWW,
+    clock: progress.getGeneration,
+  }).watch((n) => {
     progress.lockWW();
     worker.postMessage({ gen: n });
   });

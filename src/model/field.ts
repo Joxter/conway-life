@@ -200,3 +200,14 @@ sample({
   },
   target: $faunaData,
 });
+
+sample({
+  source: $faunaData,
+  clock: progress.getGeneration,
+  filter: progress.$isWW.map((it) => !it),
+  fn: (faunaData) => {
+    faunaData.ref.nextGen();
+    return faunaData.ref;
+  },
+  target: progress.calculated,
+});

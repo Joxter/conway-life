@@ -17,6 +17,7 @@ export function createProgress() {
   const getGeneration = createEvent<number>();
 
   const reset = createEvent<any>();
+  const $isWW = createStore(true);
 
   const $isRunning = createStore(false); // start pressed
   const $isCalculating = createStore(false); // new generation is calculation
@@ -100,7 +101,7 @@ export function createProgress() {
     $currentStep,
     $expectedStepsPerSec,
     $isRunning,
-    // $isCalculating,
+    $isWW,
     start,
     stop,
     pause,
