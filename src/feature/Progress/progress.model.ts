@@ -29,7 +29,6 @@ export function createProgress() {
 
   const $stepTimeout = $expectedStepsPerSec.map((it) => 1000 / it);
   const incExpectedStepsPerSec = createEvent();
-  const setSteps = createEvent<number>();
   const decExpectedStepsPerSec = createEvent();
   const lockWW = createEvent();
   const unlockWW = createEvent();
@@ -85,8 +84,7 @@ export function createProgress() {
         return 1;
       }
       return newSpeed;
-    })
-    .on(setSteps, (_, val) => val);
+    });
 
   $currentStep
     .on(calculated, (_, res) => res.getGeneration())
@@ -107,9 +105,7 @@ export function createProgress() {
     pause,
     incExpectedStepsPerSec,
     decExpectedStepsPerSec,
-    setSteps,
     speedRange,
-    gameTick,
     reset,
     oneStep,
     calculated,

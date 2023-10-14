@@ -23,7 +23,7 @@ export const catalogue = createCatalogue();
 type PatTypes = Record<PatternTypeNames, boolean> & { unknown: boolean };
 
 export function createCatalogue() {
-  const PAGE_SIZE = 1000;
+  const PAGE_SIZE = 50;
 
   const $search = createStore("");
   const $orderBy = createStore<OrderBy>(orderOptions[0]);
@@ -49,7 +49,7 @@ export function createCatalogue() {
   const orderByChanged = createEvent<OrderBy>();
 
   $isOpen.on([open, currentPatternClicked], () => true).on([close, selectPattern], () => false);
-  $search.on([setSearch, currentPatternClicked], (_, newSearch) => newSearch);
+  $search.on(setSearch, (_, newSearch) => newSearch);
   $orderBy.on(orderByChanged, (_, newOrderBy) => newOrderBy);
   $type.on(typeChanged, (state, newVals) => {
     return { ...state, ...newVals };

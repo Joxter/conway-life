@@ -4,7 +4,7 @@ import css from "./styles.module.css";
 import { catalogue, orderOptions } from "./Catalogue.model";
 import { Modal } from "../../components/Modal/Modal";
 import { JSX } from "solid-js/types/jsx";
-import { createEffect } from "solid-js";
+import { createEffect, For, on } from "solid-js";
 import { Checkbox } from "../../components/Form";
 import { Pattern } from "../../types";
 
@@ -36,10 +36,12 @@ export const CatalogueModal = () => {
   ]);
 
   let listEl: HTMLDivElement;
-  createEffect(() => {
-    search();
-    listEl.scrollTo(0, 0);
-  });
+
+  createEffect(
+    on([search, isOpen, orderBy, patType], () => {
+      listEl.scrollTo(0, 0);
+    }),
+  );
 
   return (
     <Modal open={isOpen()} close={catalogue.close}>
@@ -105,41 +107,38 @@ export const CatalogueModal = () => {
           </div>
         </div>
         <div class={css.list} ref={(el) => (listEl = el)}>
-          {pageItems().map((it) => {
-            return (
-              <div class={css.listItem}>
-                <div
-                  style={{
-                    "background-image": `url("${it.image}")`,
-                  }}
-                  class={css.patternPreview}
-                />
-                <div>
-                  <p>
-                    <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>{" "}
-                    <b>{it.name}</b>
-                  </p>
-                  <div style={{ display: "flex", gap: "8px" }}>
+          <For each={isOpen() ? pageItems() : null}>
+            {(it) => {
+              return (
+                <div class={css.listItem}>
+                  <img src={it.image} loading={"lazy"} class={css.patternPreview} />
+                  <div>
                     <p>
-                      size:{" "}
-                      <b>
-                        {it.size[0]}x{it.size[1]}
-                      </b>
-                      ; population: <b>{it.population}</b>
-                      ; type: <PatType type={it.type} />
+                      <button onClick={() => catalogue.selectPattern(it.fileName)}>OPEN</button>{" "}
+                      <b>{it.name}</b>
                     </p>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <p>
+                        size:{" "}
+                        <b>
+                          {it.size[0]}x{it.size[1]}
+                        </b>
+                        ; population: <b>{it.population}</b>
+                        ; type: <PatType type={it.type} />
+                      </p>
+                    </div>
+                    {it.comment && <p>{it.comment}</p>}
+                    {it.wikiLink && (
+                      <a href={it.wikiLink} target={"_blank"}>
+                        wiki
+                      </a>
+                    )}
+                    {it.author && <p style={{ display: "grid" }}>{it.author}</p>}
                   </div>
-                  {it.comment && <p>{it.comment}</p>}
-                  {it.wikiLink && (
-                    <a href={it.wikiLink} target={"_blank"}>
-                      wiki
-                    </a>
-                  )}
-                  {it.author && <p style={{ display: "grid" }}>{it.author}</p>}
                 </div>
-              </div>
-            );
-          })}
+              );
+            }}
+          </For>
         </div>
         <div>
           <p>found: {cnt()}</p>

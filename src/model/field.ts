@@ -95,7 +95,7 @@ export const $viewLabels = combine(
   },
 );
 
-export const $viewField = combine($field, fieldSize.$cellSize, (field, size) => {
+export const $viewField = combine($field, fieldSize.$cellSize, (field, { size }) => {
   return { size, field };
 });
 

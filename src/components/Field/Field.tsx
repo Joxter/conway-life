@@ -1,5 +1,5 @@
 import { $viewField, $viewHoveredCell, $viewLabels, fieldSize, screen } from "../../model/field";
-import { XY } from "../../types";
+import { Field as FieldType, XY } from "../../types";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { For, onMount } from "solid-js";
@@ -22,12 +22,22 @@ export function Field() {
   let touchCurrentRef: XY | null = null;
 
   onMount(() => {
+    let lastField: FieldType | null = null;
     requestAnimationFrame(render);
 
     function render() {
       if (!canvas) {
         console.warn("no canvas");
         return;
+      }
+      let { size, field } = $viewField.getState();
+
+      if (lastField === field) {
+        // hacky, I know
+        requestAnimationFrame(render);
+        return;
+      } else {
+        lastField = field;
       }
 
       // @ts-ignore
@@ -36,11 +46,6 @@ export function Field() {
         console.warn("no context");
         return;
       }
-
-      let {
-        size: { size },
-        field,
-      } = $viewField.getState();
 
       canvas.width = Math.floor(window.innerWidth * scale);
       canvas.height = Math.floor(document.body.offsetHeight * scale);
