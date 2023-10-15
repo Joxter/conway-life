@@ -213,9 +213,9 @@ export class MyFauna implements IFauna<SerData> {
   }
 
   getSize() {
-    if (this.population === 0) return [0, 0] as const;
+    let bounds = this.getBounds();
+    if (!bounds) return [0, 0] as const;
 
-    let bounds = this.getBounds()!;
     return [bounds.right - bounds.left + 1, bounds.bottom - bounds.top + 1] as const;
   }
 
