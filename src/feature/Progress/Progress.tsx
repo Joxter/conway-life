@@ -1,45 +1,17 @@
-import { perf, progress, resetFieldPressed } from "../../model/field";
+import { progress, resetFieldPressed } from "../../model/field";
 import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
-import { Show } from "solid-js";
 import { PlusMinus } from "../../components/PlusMinus";
 
 export function Progress() {
-  let [stepsPerSec, isRunning, currentStep, expectedStepsPerSec] = useUnit([
-    perf.$stepsPerSec,
+  let [isRunning, expectedStepsPerSec] = useUnit([
     progress.$isRunning,
-    progress.$currentStep,
     progress.$expectedStepsPerSec,
   ]);
 
   return (
     <div class={css.root}>
       <div class={css.row}>
-        {`gen: ${currentStep()} `}
-        <span style={{ "padding-left": "64px" }}>{`real speed: ${stepsPerSec()} `}</span>
-      </div>
-      <div class={css.row}>
-        <button class={css.actionBtn} onClick={progress.oneStep}>
-          1 step
-        </button>
-        <Show when={isRunning()}>
-          <button
-            class={css.actionBtn}
-            style={{ color: "#f8f8f8", "background-color": "#de4040" }}
-            onClick={progress.stop}
-          >
-            STOP
-          </button>
-        </Show>
-        <Show when={!isRunning()}>
-          <button
-            class={css.actionBtn}
-            style={{ color: "#f8f8f8", "background-color": "#50c40e" }}
-            onClick={progress.start}
-          >
-            START
-          </button>
-        </Show>
         <div class={css.plusMinus}>
           <PlusMinus
             value={expectedStepsPerSec()}
@@ -50,6 +22,41 @@ export function Progress() {
             speed
           </PlusMinus>
         </div>
+      </div>
+      <div class={css.row}>
+        <button
+          classList={{
+            [css.actionBtn]: true,
+            [css.disabled]: isRunning(),
+          }}
+          style={{ color: "#f8f8f8", "background-color": "#50c40e" }}
+          onClick={progress.start}
+        >
+          START
+        </button>
+        <button
+          classList={{
+            [css.actionBtn]: true,
+            [css.disabled]: !isRunning(),
+          }}
+          onClick={progress.pause}
+        >
+          PAUSE
+        </button>
+        <button
+          classList={{
+            [css.actionBtn]: true,
+            [css.disabled]: !isRunning(),
+          }}
+          style={{ color: "#f8f8f8", "background-color": "#de4040" }}
+          onClick={progress.stop}
+        >
+          STOP
+        </button>
+        <button class={css.actionBtn} style={{ "min-width": "auto" }} onClick={progress.oneStep}>
+          + 1
+        </button>
+
         <div class={css.sep}></div>
         <button class={css.actionBtn} onClick={resetFieldPressed}>
           Reset

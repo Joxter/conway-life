@@ -7,7 +7,12 @@ import { faunaToRle, rleToFauna } from "../importExport/utils";
 import { MyFauna } from "../lifes/myFauna";
 
 sample({
-  clock: [resetFieldPressed, importExport.exportClicked, importExport.importClicked],
+  clock: [
+    resetFieldPressed,
+    importExport.exportClicked,
+    importExport.importClicked,
+    catalogue.patternFetched,
+  ],
   target: progress.reset,
 });
 

@@ -5,10 +5,11 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  margin-top: 4px;
 }
 
 .actionBtn {
-  width: 60px;
+  min-width: 60px;
   height: 30px;
   background-color: #fff;
   border: 5px solid #5583e5;
@@ -18,8 +19,13 @@
 }
 
 .actionBtn:hover,
-.actionBtn:focus {
+.actionBtn:focus-visible {
   border: 5px solid #efb49e;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .sep {

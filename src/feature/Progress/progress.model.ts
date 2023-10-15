@@ -20,8 +20,8 @@ export function createProgress() {
   const $isWW = createStore(true);
 
   const $isRunning = createStore(false); // start pressed
-  const $isCalculating = createStore(false); // new generation is calculation
-  const $currentStep = createStore(1);
+  const $isCalculating = createStore(false); // new generation is calculating
+  const $currentStep = createStore(0);
 
   const speedRange = [1, 200] as const;
 
@@ -86,10 +86,7 @@ export function createProgress() {
       return newSpeed;
     });
 
-  $currentStep
-    .on(calculated, (_, res) => res.getGeneration())
-    .on(stop, () => 0)
-    .reset(reset);
+  $currentStep.on(calculated, (_, res) => res.getGeneration()).reset(reset);
 
   $expectedStepsPerSec.watch((val) => {
     setStrToLS(lsStepsPerSecName, String(val));
