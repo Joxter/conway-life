@@ -51,13 +51,10 @@ function run(folder: string, output: string) {
 
         let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
 
-        let start = Date.now();
-
+        // let start = Date.now();
         let type = typeByRle(rle, limit).unwrap().unwrap();
-        // .match({ some: (p) => p, none: null });
-
-        let time = formatTimeSec(Date.now() - start);
-        total[time] = total[time] ? total[time] + 1 : 1;
+        // let time = formatTimeSec(Date.now() - start);
+        // total[time] = total[time] ? total[time] + 1 : 1;
 
         res.type = type;
         patternTypesStat[type.name]++;
@@ -111,7 +108,7 @@ function formatTimeSec(durationMsec: number) {
 
 === 13 oct
 let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
-Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1974,"died-at":53}
+Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
 Done in 53.826 sec
 
 */
