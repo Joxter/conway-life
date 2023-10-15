@@ -183,7 +183,7 @@ x = 62, y = 39, rule = B3/S23
         patternLink: "https://conwaylife.com/patterns/pentoad2_synth.rle",
         rle: "61bo$40bo18b2o$41b2o17b2o$40b2o2$54bo$44bo8bo$45b2o6b3o$44b2o5$15bo$39b2o18bo$38bo!",
         rule: "b3/s23",
-        size: [62, 39],
+        size: [62, 16],
         wikiLink: "https://conwaylife.com/wiki/Pentoad_2",
         type: null,
       });
@@ -230,7 +230,7 @@ x = 385, y = 337, rule = B3/S23
         patternLink: "",
         rle: "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
         rule: "b3/s23",
-        size: [385, 337],
+        size: [332, 2],
         wikiLink: "",
         type: null,
       });
@@ -282,7 +282,7 @@ x = 385, y = 337, rule = B3/S23
 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
       let parsed = parseRleFile(pattern, "foo");
-      expect(parsed.size).toEqual([385, 337]);
+      expect(parsed.size).toEqual([332, 2]);
       expect(parsed.rle).toEqual(
         "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
       );

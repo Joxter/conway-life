@@ -81,6 +81,7 @@ export function rleToPopulationAndSize(
     if (x > maxX) maxX = x;
     if (y > maxY) maxY = y;
   }).map(() => {
+    if (pop === 0) return { pop, x: 0, y: 0 };
     return { pop, x: maxX + 1, y: maxY + 1 };
   });
 }
