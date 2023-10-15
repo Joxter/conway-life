@@ -2,7 +2,7 @@ import path from "node:path";
 import fs from "fs";
 import { parseRle, parseRleFile, rleToFauna } from "./importExport/utils";
 import { Result } from "@sniptt/monads";
-import { LifeUniverse, redraw } from "./hashlife";
+import { LifeUniverse } from "./lifes/hashlife";
 
 let heavyPatterns = ["universalturingmachine.rle"];
 
