@@ -11,8 +11,10 @@ export type PatternTypes =
   | { name: "oscillator"; period: number }
   | { name: "ship"; period: number } // add direction
   | { name: "died-at"; gen: number }
+  | { name: "gun"; period: number }
   | { name: "unknown" };
-export type PatternTypeNames = "still-live" | "oscillator" | "died-at" | "ship" | "unknown";
+
+export type PatternTypeNames = "still-live" | "oscillator" | "died-at" | "ship" | "gun" | "unknown";
 
 export type Pattern = {
   fileName: string;

@@ -1,5 +1,5 @@
 import { expect, test, describe } from "bun:test";
-import { isFaunaDataEq, typeByRle } from "./tools";
+import { isFaunaEq, typeByRle } from "./tools";
 import { rleToFauna } from "../importExport/utils";
 
 describe("tools", () => {
@@ -9,7 +9,7 @@ describe("tools", () => {
       let aFauna = rleToFauna(rle).unwrap();
       let bFauna = rleToFauna(rle).unwrap();
 
-      expect(isFaunaDataEq(aFauna, bFauna)).toEqual(true);
+      expect(isFaunaEq(aFauna, bFauna)).toEqual(true);
     });
 
     test("basic false", () => {
@@ -19,7 +19,7 @@ describe("tools", () => {
 
       bFauna.nextGen();
 
-      expect(isFaunaDataEq(aFauna, bFauna)).toEqual(false);
+      expect(isFaunaEq(aFauna, bFauna)).toEqual(false);
     });
 
     test("same size(3*3) and population(5), different patterns", () => {
@@ -32,7 +32,7 @@ describe("tools", () => {
           let bFauna = rleToFauna(patterns[j]).unwrap();
 
           if (i !== j) {
-            expect(isFaunaDataEq(aFauna, bFauna)).toEqual(false);
+            expect(isFaunaEq(aFauna, bFauna)).toEqual(false);
           }
         }
       }

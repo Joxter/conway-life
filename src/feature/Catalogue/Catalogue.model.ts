@@ -31,6 +31,7 @@ export function createCatalogue() {
     "still-live": false,
     oscillator: false,
     ship: false,
+    gun: false,
     "died-at": false,
     unknown: false,
   });

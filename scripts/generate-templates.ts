@@ -20,6 +20,7 @@ function run(folder: string, output: string) {
     "still-live": 0,
     oscillator: 0,
     ship: 0,
+    gun: 0,
     unknown: 0,
     "died-at": 0,
   };
@@ -110,11 +111,9 @@ let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
 Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
 Done in 53.826 sec
 
-
 === 15 oct
 + hashlife
-Types:
-{"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
+Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
 Done in 30.354 sec
 
 */
