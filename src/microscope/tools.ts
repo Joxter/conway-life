@@ -1,4 +1,4 @@
-import { rleToFauna } from "../importExport/utils";
+import { rleToHashLife } from "../importExport/utils";
 import { PatternTypes, XY } from "../types";
 import { IFauna } from "../lifes/interface";
 import { Result, Option, Some } from "@sniptt/monads";
@@ -46,10 +46,10 @@ export function isFaunaDataEq(a: IFauna, b: IFauna, offset?: XY): boolean {
 }
 
 export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, string> {
-  return rleToFauna(rle).map((initFauna) => {
+  return rleToHashLife(rle).map((initFauna) => {
     if (initFauna.getPopulation() === 0) return Some({ name: "unknown" });
 
-    let currFauna = rleToFauna(rle).unwrap(); // todo add .clone() method?
+    let currFauna = rleToHashLife(rle).unwrap(); // todo add .clone() method?
 
     for (let i = 1; i <= max; i++) {
       currFauna.nextGen();

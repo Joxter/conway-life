@@ -3,7 +3,6 @@ import path from "node:path";
 import { PATTERN_COLS, PatternRow, PatternTypeNames } from "../src/types";
 import { parseRleFile } from "../src/importExport/utils";
 import { typeByRle } from "../src/microscope/tools";
-import { None } from "@sniptt/monads";
 
 let patternsFolderPath = path.join(import.meta.dir, "../public/patterns");
 let outputFilePath = path.join(import.meta.dir, "../src/all-templates.ts");
@@ -93,7 +92,7 @@ export let allTemplates: Record<string, Omit<Pattern, "rle">> = Object.fromEntri
 );
 `;
 
-  fs.writeFileSync(output, fileContent);
+  // fs.writeFileSync(output, fileContent);
 }
 
 function sortTimes(times: Record<string, number>) {
@@ -110,5 +109,12 @@ function formatTimeSec(durationMsec: number) {
 let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
 Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
 Done in 53.826 sec
+
+
+=== 15 oct
++ hashlife
+Types:
+{"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
+Done in 30.354 sec
 
 */

@@ -2,6 +2,7 @@ import { Result, Err, Ok } from "@sniptt/monads";
 import { Pattern, Size } from "../types";
 import { IFauna } from "../lifes/interface";
 import { MyFauna } from "../lifes/myFauna";
+import { HashlifeAdapter } from "../lifes/hashlifeAdapter";
 
 const DEAD = "b";
 const LIVE = "o";
@@ -48,6 +49,17 @@ export function faunaToGrid(fauna: IFauna): Array<(0 | 1)[]> {
 
 export function rleToFauna(rle: string): Result<IFauna, string> {
   let fauna = new MyFauna();
+  let res = parseRle(rle, (x, y) => {
+    fauna.setCell(x, y, true);
+  });
+
+  return res.map(() => {
+    return fauna;
+  });
+}
+
+export function rleToHashLife(rle: string): Result<IFauna, string> {
+  let fauna = new HashlifeAdapter();
   let res = parseRle(rle, (x, y) => {
     fauna.setCell(x, y, true);
   });
