@@ -116,4 +116,8 @@ Done in 53.826 sec
 Types: {"still-live":580,"oscillator":1572,"ship":235,"unknown":1961,"died-at":53}
 Done in 30.354 sec
 
++ gun
+Types: {"still-live":580,"oscillator":1572,"ship":235,"gun":74,"unknown":1887,"died-at":53}
+Done in 32.677 sec
+
 */

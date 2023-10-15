@@ -98,13 +98,11 @@ export const CatalogueModal = () => {
                 value={patType().ship}
                 onChange={(v) => catalogue.typeChanged({ ship: v })}
               />
-{/*
               <Checkbox
                 label={"gun"}
                 value={patType().gun}
                 onChange={(v) => catalogue.typeChanged({ gun: v })}
               />
-*/}
               <Checkbox
                 label={"unknown"}
                 value={patType().unknown}

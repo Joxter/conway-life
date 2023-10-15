@@ -2,6 +2,7 @@ import { rleToHashLife } from "../importExport/utils";
 import { PatternTypes, XY } from "../types";
 import { IFauna } from "../lifes/interface";
 import { Result, Option, Some } from "@sniptt/monads";
+import { MyFauna } from "../lifes/myFauna";
 
 export function isFaunaEq(a: IFauna, b: IFauna, offset?: XY): boolean {
   if (a.getPopulation() !== b.getPopulation()) {
@@ -70,6 +71,36 @@ export function isFaunaAinB(a: IFauna, b: IFauna): boolean {
   return true;
 }
 
+export function aMinusB(a: IFauna, b: IFauna): IFauna {
+  let fauna = new MyFauna();
+
+  for (let [x, y] of a.getCells()) {
+    if (!b.getCell(x, y)) {
+      fauna.setCell(x, y, true);
+    }
+  }
+
+  return fauna;
+}
+
+export function isSpaceship(init: IFauna, currFauna: IFauna, max: number): boolean {
+  init.normalise();
+  currFauna.normalise();
+
+  for (let i = 1; i <= 10; i++) {
+    currFauna.nextGen();
+    if (currFauna.getPopulation() === 0) {
+      return false;
+    }
+    let { left, top } = currFauna.getBounds()!;
+
+    if (left !== 0 && top !== 0 && isFaunaEq(init, currFauna, { x: left, y: top })) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, string> {
   return rleToHashLife(rle).map((initFauna) => {
     if (initFauna.getPopulation() === 0) return Some({ name: "unknown" });
@@ -91,8 +122,18 @@ export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, 
         }
       } else if (isFaunaEq(initFauna, currFauna, { x: left, y: top })) {
         return Some({ name: "ship", period: i });
-        // } else if (isFaunaAinB(initFauna, currFauna)) {  // todo false-positive on oscillators :(
-        // return Some({ name: "gun", period: i });
+      } else if (isFaunaAinB(initFauna, currFauna)) {
+        // todo extremely unoptimised
+        if (
+          isSpaceship(
+            //
+            aMinusB(currFauna, initFauna),
+            aMinusB(currFauna, initFauna),
+            max,
+          )
+        ) {
+          return Some({ name: "gun", period: i });
+        }
       }
     }
 

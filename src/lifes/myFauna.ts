@@ -178,7 +178,7 @@ export class MyFauna implements IFauna<SerData> {
     if (this.population === 0) return;
 
     let newFauna: Fauna = new Map();
-    let { left, top } = this.bounds!;
+    let { left, top } = this.getBounds()!;
 
     this.getCells().forEach(([x, y]) => {
       if (!newFauna.has(x - left)) {
@@ -188,6 +188,7 @@ export class MyFauna implements IFauna<SerData> {
     });
 
     this.fauna = newFauna;
+    this.cells = null;
     this.bounds!.top = 0;
     this.bounds!.left = 0;
     this.bounds!.right = this.bounds!.right - left;
