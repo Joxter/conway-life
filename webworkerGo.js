@@ -169,7 +169,7 @@ class MyFauna {
     if (this.population === 0)
       return;
     let newFauna = new Map;
-    let { left, top } = this.bounds;
+    let { left, top } = this.getBounds();
     this.getCells().forEach(([x, y]) => {
       if (!newFauna.has(x - left)) {
         newFauna.set(x - left, new Set);
@@ -177,6 +177,7 @@ class MyFauna {
       newFauna.get(x - left).add(y - top);
     });
     this.fauna = newFauna;
+    this.cells = null;
     this.bounds.top = 0;
     this.bounds.left = 0;
     this.bounds.right = this.bounds.right - left;
