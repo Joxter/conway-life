@@ -201,6 +201,12 @@ class MyFauna {
     this.bounds = bounds;
     return this.bounds;
   }
+  getSize() {
+    let bounds = this.getBounds();
+    if (!bounds)
+      return [0, 0];
+    return [bounds.right - bounds.left + 1, bounds.bottom - bounds.top + 1];
+  }
   getPopulation() {
     return this.population;
   }
