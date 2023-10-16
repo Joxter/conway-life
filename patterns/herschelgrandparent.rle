@@ -1,5 +1,6 @@
 #N Herschel grandparent
 #C A grandparent of the herschel.
 #C https://www.conwaylife.com/wiki/index.php?title=Herschel_grandparent
-x = 5, y = 4, rule = B3/S23
+#C population=7
+x = 5, y = 4, rule = b3/s23
 obo2b$o4b$obo2b$3b2o!

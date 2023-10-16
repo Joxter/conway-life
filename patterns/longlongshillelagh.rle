@@ -1,5 +1,6 @@
 #N Long long shillelagh
 #C A 10-cell still life that is the long long version of the shillelagh.
 #C https://www.conwaylife.com/wiki/index.php?title=Long_long_shillelagh
-x = 7, y = 4, rule = B3/S23
+#C population=10
+x = 7, y = 4, rule = b3/s23
 5b2o$2o2bobo$o2bo3b$b2o!

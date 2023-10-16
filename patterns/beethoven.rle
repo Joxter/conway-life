@@ -1,5 +1,6 @@
 #N beethoven.rle
 #C https://conwaylife.com/wiki/Beethoven
 #C https://www.conwaylife.com/patterns/beethoven.rle
-x = 9, y = 6, rule = B3/S23
+#C population=15
+x = 9, y = 6, rule = b3/s23
 bo5bo$obo3bobo$obo3bobo$bo5bo2$3b3o!

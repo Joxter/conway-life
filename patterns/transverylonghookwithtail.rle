@@ -1,5 +1,6 @@
 #N transverylonghookwithtail.rle
 #C https://conwaylife.com/wiki/Trans-very_long_hook_with_tail
 #C https://www.conwaylife.com/patterns/transverylonghookwithtail.rle
-x = 7, y = 4, rule = B3/S23
+#C population=10
+x = 7, y = 4, rule = b3/s23
 4bo$3bobo$obo2bo$2o3b2o!

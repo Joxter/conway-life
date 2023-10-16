@@ -1,5 +1,6 @@
 #N bipoletieship.rle
 #C https://conwaylife.com/wiki/Bipole_tie_ship
 #C https://www.conwaylife.com/patterns/bipoletieship.rle
-x = 8, y = 8, rule = B3/S23
+#C population=14
+x = 8, y = 8, rule = b3/s23
 2o$obo$b2o$3b2o$3bobo2$5bobo$6b2o!

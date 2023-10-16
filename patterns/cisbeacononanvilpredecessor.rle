@@ -1,5 +1,6 @@
 #N cisbeacononanvilpredecessor.rle
 #C https://conwaylife.com/wiki/Beacon_variants
 #C https://www.conwaylife.com/patterns/cisbeacononanvilpredecessor.rle
-x = 6, y = 12, rule = B3/S23
+#C population=14
+x = 6, y = 12, rule = b3/s23
 2b2o$3bo$o$2o4$b3o$bo2bo$5bo$5bo$5bo!

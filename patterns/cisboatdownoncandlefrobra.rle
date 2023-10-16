@@ -1,5 +1,6 @@
 #N cisboatdownoncandlefrobra.rle
 #C https://conwaylife.com/wiki/Cis-boat_down_on_candlefrobra
 #C https://www.conwaylife.com/patterns/cisboatdownoncandlefrobra.rle
-x = 5, y = 11, rule = B3/S23
+#C population=17
+x = 5, y = 11, rule = b3/s23
 2bo$bobo$2b2o2$4o$o3bo$3bo$3bo$2bo$bobo$2bo!

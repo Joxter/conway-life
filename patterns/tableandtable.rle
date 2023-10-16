@@ -1,5 +1,6 @@
 #N tableandtable.rle
 #C https://conwaylife.com/wiki/Table_and_table
 #C https://conwaylife.com/patterns/tableandtable.rle
-x = 4, y = 5, rule = B3/S23
+#C population=12
+x = 4, y = 5, rule = b3/s23
 o2bo$4o2$4o$o2bo!

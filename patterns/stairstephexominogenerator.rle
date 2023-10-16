@@ -1,5 +1,6 @@
 #N stairstephexominogenerator.rle
 #C https://conwaylife.com/wiki/Lumps_of_muck
 #C https://www.conwaylife.com/patterns/stairstephexominogenerator.rle
-x = 4, y = 3, rule = B3/S23
+#C population=6
+x = 4, y = 3, rule = b3/s23
 b3o2$3o!

@@ -1,5 +1,6 @@
 #N Block
 #C An extremely common 4-cell still life.
 #C www.conwaylife.com/wiki/index.php?title=Block
-x = 2, y = 2, rule = B3/S23
+#C population=4
+x = 2, y = 2, rule = b3/s23
 2o$2o!

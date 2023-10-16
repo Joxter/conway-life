@@ -1,5 +1,6 @@
 #N transboatoncap.rle
 #C https://conwaylife.com/wiki/Trans-boat_on_cap
 #C https://www.conwaylife.com/patterns/transboatoncap.rle
-x = 5, y = 7, rule = B3/S23
+#C population=13
+x = 5, y = 7, rule = b3/s23
 bo$obo$b2o2$b4o$bo2bo$2b2o!

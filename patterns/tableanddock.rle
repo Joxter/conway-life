@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Table_and_dock
 #C https://conwaylife.com/patterns/tableanddock.rle
-x = 6, y = 6, rule = B3/S23
+#C population=16
+x = 6, y = 6, rule = b3/s23
 2o2b2o$o4bo$b4o2$b4o$bo2bo!

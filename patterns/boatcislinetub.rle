@@ -1,5 +1,6 @@
 #N boatcislinetub.rle
 #C https://conwaylife.com/wiki/Cis-boat_trans-line_tub
 #C https://www.conwaylife.com/patterns/boatcislinetub.rle
-x = 4, y = 7, rule = B3/S23
+#C population=12
+x = 4, y = 7, rule = b3/s23
 bo$obo$bobo$3bo$bobo$obo$2o!

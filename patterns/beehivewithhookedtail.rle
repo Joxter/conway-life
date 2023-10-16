@@ -1,5 +1,6 @@
 #N beehivewithhookedtail.rle
 #C https://conwaylife.com/wiki/Beehive_with_hooked_tail
 #C https://www.conwaylife.com/patterns/beehivewithhookedtail.rle
-x = 5, y = 6, rule = B3/S23
+#C population=12
+x = 5, y = 6, rule = b3/s23
 b2o$o2bo$b2obo$4bo$b3o$bo!

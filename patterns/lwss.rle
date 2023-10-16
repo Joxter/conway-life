@@ -2,5 +2,6 @@
 #O John Conway
 #C A very well-known period 4 c/2 orthogonal spaceship.
 #C www.conwaylife.com/wiki/index.php?title=Lightweight_spaceship
-x = 5, y = 4, rule = B3/S23
+#C population=9
+x = 5, y = 4, rule = b3/s23
 bo2bo$o4b$o3bo$4o!

@@ -1,5 +1,6 @@
 #N Trans-loaf with tail
 #C An 11-cell still life.
 #C https://www.conwaylife.com/wiki/index.php?title=Trans-loaf_with_tail
-x = 6, y = 6, rule = B3/S23
+#C population=11
+x = 6, y = 6, rule = b3/s23
 2o4b$bo4b$bob2ob$2bo2bo$3bobo$4bo!

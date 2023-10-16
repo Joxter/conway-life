@@ -2,5 +2,6 @@
 #O Nick Gotts, 2019
 #C https://conwaylife.com/wiki/Bunnies_10b
 #C https://www.conwaylife.com/patterns/bunnies10b.rle
-x = 9, y = 6, rule = B3/S23
+#C population=10
+x = 9, y = 6, rule = b3/s23
 o$bo$2bo$3bo$2b2obo$6b3o!

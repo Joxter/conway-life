@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Super_loaf
 #C https://conwaylife.com/patterns/superloaf.rle
-x = 7, y = 7, rule = B3/S23
+#C population=17
+x = 7, y = 7, rule = b3/s23
 2bo$bobo$obobo$obo2bo$bob2obo$2bo2bo$3b2o!

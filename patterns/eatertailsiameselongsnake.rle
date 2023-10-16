@@ -1,5 +1,6 @@
 #N eatertailsiameselongsnake.rle
 #C https://conwaylife.com/wiki/Eater_tail_siamese_long_snake
 #C https://conwaylife.com/patterns/eatertailsiameselongsnake.rle
-x = 4, y = 8, rule = B3/S23
+#C population=12
+x = 4, y = 8, rule = b3/s23
 b2o$bo$2bo$3bo$2b2o$2bo$obo$2o!

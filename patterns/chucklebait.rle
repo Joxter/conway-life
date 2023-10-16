@@ -2,5 +2,6 @@
 #O Luke Kiernan, 2022
 #C https://conwaylife.com/wiki/Chucklebait
 #C https://www.conwaylife.com/patterns/chucklebait.rle
-x = 9, y = 8, rule = B3/S23
+#C population=23
+x = 9, y = 8, rule = b3/s23
 6bo$5bobo$b2obobo$obobobobo$o4bob2o$b3obo$3bobo$4bo!

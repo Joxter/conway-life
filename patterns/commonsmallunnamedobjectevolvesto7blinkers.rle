@@ -1,5 +1,6 @@
 #N commonsmallunnamedobjectevolvesto7blinkers.rle
 #C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
 #C https://www.conwaylife.com/patterns/commonsmallunnamedobjectevolvesto7blinkers.rle
-x = 5, y = 4, rule = B3/S23
+#C population=9
+x = 5, y = 4, rule = b3/s23
 3o$bo$bob2o$b2o!

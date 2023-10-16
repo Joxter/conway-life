@@ -1,5 +1,6 @@
 #N transbunanddove.rle
 #C https://conwaylife.com/wiki/Trans-bun_and_dove
 #C https://www.conwaylife.com/patterns/transbunanddove.rle
-x = 8, y = 6, rule = B3/S23
+#C population=16
+x = 8, y = 6, rule = b3/s23
 bo$obob2o$obobobo$b2obo2bo$5bobo$6bo!

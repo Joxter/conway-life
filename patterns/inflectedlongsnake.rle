@@ -1,5 +1,6 @@
 #N inflectedlongsnake.rle
 #C https://conwaylife.com/wiki/Inflected_long_snake
 #C https://conwaylife.com/patterns/inflectedlongsnake.rle
-x = 4, y = 8, rule = B3/S23
+#C population=12
+x = 4, y = 8, rule = b3/s23
 2b2o$bobo$o$b2o$2bo$bo$o$2o!

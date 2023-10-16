@@ -1,5 +1,6 @@
 #N prepond.rle
 #C https://conwaylife.com/wiki/Pond
 #C https://www.conwaylife.com/patterns/prepond.rle
-x = 3, y = 3, rule = B3/S23
+#C population=4
+x = 3, y = 3, rule = b3/s23
 bo$2o$2bo!

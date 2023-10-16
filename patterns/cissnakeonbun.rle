@@ -1,5 +1,6 @@
 #N cissnakeonbun.rle
 #C https://conwaylife.com/wiki/Cis-snake_on_bun
 #C https://www.conwaylife.com/patterns/cissnakeonbun.rle
-x = 6, y = 4, rule = B3/S23
+#C population=13
+x = 6, y = 4, rule = b3/s23
 2o2bo$o2bobo$bobobo$2ob2o!

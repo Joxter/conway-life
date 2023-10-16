@@ -1,5 +1,6 @@
 #N U-pentomino
 #C One of the 12 pentominoes.
 #C www.conwaylife.com/wiki/index.php?title=Polyomino#Pentominoes
-x = 3, y = 2, rule = B3/S23
+#C population=5
+x = 3, y = 2, rule = b3/s23
 obo$3o!

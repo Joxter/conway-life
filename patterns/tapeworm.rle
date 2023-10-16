@@ -1,5 +1,6 @@
 #N tapeworm.rle
 #C https://conwaylife.com/wiki/Tapeworm
 #C https://www.conwaylife.com/patterns/tapeworm.rle
-x = 7, y = 5, rule = B3/S23
+#C population=13
+x = 7, y = 5, rule = b3/s23
 ob2o$2obo$3bob2o$3bo2bo$4b2o!

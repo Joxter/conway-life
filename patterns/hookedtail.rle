@@ -1,5 +1,6 @@
 #N hookedtail.rle
 #C https://conwaylife.com/wiki/Hooked_tail
 #C https://www.conwaylife.com/patterns/hookedtail.rle
-x = 4, y = 4, rule = B3/S23
+#C population=6
+x = 4, y = 4, rule = b3/s23
 2o$2bo$2bo$2b2o!

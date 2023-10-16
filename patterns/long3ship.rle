@@ -1,5 +1,6 @@
 #N long3ship.rle
 #C https://conwaylife.com/wiki/Long%5E3_ship
 #C https://www.conwaylife.com/patterns/long3ship.rle
-x = 6, y = 6, rule = B3/S23
+#C population=12
+x = 6, y = 6, rule = b3/s23
 2o$obo$bobo$2bobo$3bobo$4b2o!

@@ -1,5 +1,6 @@
 #N Cover
 #C An 8-bit induction coil
 #C https://www.conwaylife.com/wiki/index.php?title=Cover
+#C population=8
 x = 5, y = 5, rule = b3/s23
 4bo$2b3o$bo3b$bo3b$2o!

@@ -1,5 +1,6 @@
 #N shipontripole.rle
 #C https://conwaylife.com/wiki/Tripole_tie_ship
 #C https://conwaylife.com/patterns/shipontripole.rle
-x = 9, y = 9, rule = B3/S23
+#C population=15
+x = 9, y = 9, rule = b3/s23
 2o$obo$b2o$3b2o$3bobo2$5bobo$8bo$7b2o!

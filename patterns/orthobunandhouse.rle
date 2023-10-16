@@ -1,5 +1,6 @@
 #N orthobunandhouse.rle
 #C https://conwaylife.com/wiki/Ortho-bun_and_house
 #C https://www.conwaylife.com/patterns/orthobunandhouse.rle
-x = 7, y = 7, rule = B3/S23
+#C population=16
+x = 7, y = 7, rule = b3/s23
 bo$obo$obo2b2o$b2obobo$4bo$4bobo$5b2o!

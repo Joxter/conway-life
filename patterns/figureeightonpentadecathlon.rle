@@ -2,6 +2,6 @@
 #C The smallest known period 120 oscillator.
 #C https://www.conwaylife.com/wiki/index.php?title=Figure_eight_on_pent
 #C adecathlon
-x = 14, y = 10, rule = 23/3
-bo6b2o4b$bo6b2obo2b$obo9bob$bo7bo4b$bo8bob2o$bo10b2o$bo12b$obo11b$bo
-12b$bo!
+#C population=24
+x = 14, y = 10, rule = b3/s23
+bo6b2o4b$bo6b2obo2b$obo9bob$bo7bo4b$bo8bob2o$bo10b2o$bo12b$obo11b$bo12b$bo!

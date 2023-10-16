@@ -1,5 +1,6 @@
 #N Claw with tail
 #C A 10-cell still life similar to hook with tail.
 #C https://www.conwaylife.com/wiki/index.php?title=Claw_with_tail
-x = 6, y = 5, rule = B3/S23
+#C population=10
+x = 6, y = 5, rule = b3/s23
 2o4b$bo4b$bob2ob$2bo2bo$4b2o!

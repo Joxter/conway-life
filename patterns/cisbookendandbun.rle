@@ -1,5 +1,6 @@
 #N cisbookendandbun.rle
 #C https://conwaylife.com/wiki/Cis-bookend_and_bun
 #C https://www.conwaylife.com/patterns/cisbookendandbun.rle
-x = 7, y = 4, rule = B3/S23
+#C population=14
+x = 7, y = 4, rule = b3/s23
 2o3bo$obobobo$2bobobo$b2ob2o!

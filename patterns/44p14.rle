@@ -4,6 +4,6 @@
 #C https://www.conwaylife.com/patterns/44p14.rle
 #C 44p14 billiard table
 #C Dean Hickerson, 21 Apr 1997
-x = 13, y = 10, rule = B3/S23
-8b2o$4b2obo2bo$3bobob2obo$3bobobo2b2o$2obo3bobo2bo$o2bo3bobob2o$b2o2bo
-bobo$2bob2obobo$2bo2bob2o$3b2o!
+#C population=44
+x = 13, y = 10, rule = b3/s23
+8b2o$4b2obo2bo$3bobob2obo$3bobobo2b2o$2obo3bobo2bo$o2bo3bobob2o$b2o2bobobo$2bob2obobo$2bo2bob2o$3b2o!

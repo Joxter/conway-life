@@ -2,6 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Very_long_clock
 #C https://conwaylife.com/patterns/verylongclock.rle
-x = 12, y = 8, rule = B3/S23
-6bo$4bobobo$2bobobobobo$obobobobobo$bobobobobobo$bobobobobo$3bobobo$5b
-o!
+#C population=30
+x = 12, y = 8, rule = b3/s23
+6bo$4bobobo$2bobobobobo$obobobobobo$bobobobobobo$bobobobobo$3bobobo$5bo!

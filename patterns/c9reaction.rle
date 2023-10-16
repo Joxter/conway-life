@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/C/9_reaction
 #C https://conwaylife.com/patterns/c9reaction.rle
-x = 9, y = 4, rule = B3/S23
+#C population=8
+x = 9, y = 4, rule = b3/s23
 6b3o$bo$3o$2bo!

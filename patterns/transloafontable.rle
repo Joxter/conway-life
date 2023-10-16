@@ -1,5 +1,6 @@
 #N transloafontable.rle
 #C https://conwaylife.com/wiki/Trans-loaf_on_table
 #C https://www.conwaylife.com/patterns/transloafontable.rle
-x = 5, y = 7, rule = B3/S23
+#C population=13
+x = 5, y = 7, rule = b3/s23
 bo$obo$o2bo$b2o2$b4o$bo2bo!

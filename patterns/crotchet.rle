@@ -1,5 +1,6 @@
 #N crotchet.rle
 #C https://conwaylife.com/wiki/Crotchet
 #C https://www.conwaylife.com/patterns/crotchet.rle
-x = 2, y = 3, rule = B3/S23
+#C population=5
+x = 2, y = 3, rule = b3/s23
 bo$2o$2o!

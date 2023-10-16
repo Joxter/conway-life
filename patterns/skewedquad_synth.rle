@@ -3,7 +3,6 @@
 #C 8-glider synthesis of skewed quad
 #C https://conwaylife.com/wiki/Skewed_quad
 #C https://conwaylife.com/forums/viewtopic.php?p=15718#p15718
-x = 30, y = 15, rule = B3/S23
-12bo$10b2o$obo5bo2b2o$b2o3bobo$bo5b2o15b2o$24bo3b2o$2b3o6bo13bobobo$4b
-o5bo$3bo6b3o10bobobo$23b2o3bo$6b2o5bo13b2o$6bobo3b2o$2b2o2bo5bobo$3b2o
-$2bo!
+#C population=56
+x = 30, y = 15, rule = b3/s23
+12bo$10b2o$obo5bo2b2o$b2o3bobo$bo5b2o15b2o$24bo3b2o$2b3o6bo13bobobo$4bo5bo$3bo6b3o10bobobo$23b2o3bo$6b2o5bo13b2o$6bobo3b2o$2b2o2bo5bobo$3b2o$2bo!

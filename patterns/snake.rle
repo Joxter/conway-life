@@ -1,5 +1,6 @@
 #N Snake
 #C A common 6-cell still life.
 #C https://www.conwaylife.com/wiki/index.php?title=Snake
-x = 4, y = 2, rule = B3/S23
+#C population=6
+x = 4, y = 2, rule = b3/s23
 2obo$ob2o!

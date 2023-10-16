@@ -2,5 +2,6 @@
 #O Robert Wainwright
 #C A period-3 oscillator, the trans version of the candlefrobra; discovered by Robert Wainwright in 1984.
 #C https://conwaylife.com/wiki/Trans-block_and_long_hook_eating_tub
-x = 10, y = 5, rule = B3/S23
+#C population=16
+x = 10, y = 5, rule = b3/s23
 5bo$bob2obo$obo3bo$bo4bob2o$5b2ob2o!

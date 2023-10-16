@@ -1,5 +1,6 @@
 #N bargesiameseloaf.rle
 #C https://conwaylife.com/wiki/Barge_siamese_loaf
 #C https://conwaylife.com/patterns/bargesiameseloaf.rle
-x = 5, y = 5, rule = B3/S23
+#C population=10
+x = 5, y = 5, rule = b3/s23
 2b2o$bo2bo$obobo$bobo$2bo!

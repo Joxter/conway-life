@@ -1,5 +1,6 @@
 #N cisbunandwing.rle
 #C https://conwaylife.com/wiki/Cis-bun_and_wing
 #C https://www.conwaylife.com/patterns/cisbunandwing.rle
-x = 8, y = 4, rule = B3/S23
+#C population=15
+x = 8, y = 4, rule = b3/s23
 bo3b2o$obobo2bo$obobobo$b2ob2o!

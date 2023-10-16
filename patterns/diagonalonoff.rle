@@ -1,5 +1,6 @@
 #N diagonalonoff.rle
 #C https://conwaylife.com/wiki/Diagonal_on-off
 #C https://conwaylife.com/patterns/diagonalonoff.rle
-x = 2, y = 2, rule = B3/S23
+#C population=2
+x = 2, y = 2, rule = b3/s23
 bo$o!

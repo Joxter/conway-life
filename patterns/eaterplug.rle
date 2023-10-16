@@ -2,5 +2,6 @@
 #O Robert Wainwright
 #C A period 2 oscillator found in February 1973.
 #C https://www.conwaylife.com/wiki/index.php?title=Eater_plug
-x = 8, y = 8, rule = B3/S23
+#C population=14
+x = 8, y = 8, rule = b3/s23
 7bo$5b3o$4bo3b$5bo2b$2bo2bo2b$bob2o3b$bo6b$2o!

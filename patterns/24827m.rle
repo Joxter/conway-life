@@ -2,5 +2,6 @@
 #O Simon Ekstrom, 2017
 #C https://conwaylife.com/wiki/24827M
 #C https://www.conwaylife.com/patterns/24827m.rle
-x = 8, y = 7, rule = B3/S23
+#C population=13
+x = 8, y = 7, rule = b3/s23
 6bo$3bobo$o4bo$b2o$2bobo$3bo$5b3o!

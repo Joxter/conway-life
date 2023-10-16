@@ -1,5 +1,6 @@
 #N pondbridgewing.rle
 #C https://conwaylife.com/wiki/Pond_bridge_wing
 #C https://www.conwaylife.com/patterns/pondbridgewing.rle
-x = 8, y = 7, rule = B3/S23
+#C population=16
+x = 8, y = 7, rule = b3/s23
 b2o$o2bo$o2bo$b2ob2o$4bobo$4bo2bo$5b2o!

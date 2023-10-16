@@ -1,5 +1,6 @@
 #N transblockonlonghookeatingtub.rle
 #C https://conwaylife.com/wiki/Trans-block_on_long_hook_eating_tub
 #C https://www.conwaylife.com/patterns/transblockonlonghookeatingtub.rle
-x = 5, y = 10, rule = B3/S23
+#C population=16
+x = 5, y = 10, rule = b3/s23
 2o$2o2$4o$o3bo$3bo$3bo$2bo$bobo$2bo!

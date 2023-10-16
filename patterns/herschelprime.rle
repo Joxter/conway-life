@@ -1,5 +1,6 @@
 #N herschelprime.rle
 #C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
 #C https://www.conwaylife.com/patterns/herschelprime.rle
-x = 5, y = 4, rule = B3/S23
+#C population=10
+x = 5, y = 4, rule = b3/s23
 2o$o2b2o$bo2bo$b3o!

@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Ship_on_bipole
 #C https://conwaylife.com/patterns/shiponbipole.rle
-x = 8, y = 8, rule = B3/S23
+#C population=14
+x = 8, y = 8, rule = b3/s23
 2o$obo$b2o$3b2o$3bobo2$5bobo$6b2o!

@@ -1,5 +1,6 @@
 #N thirteenloop.rle
 #C https://conwaylife.com/wiki/Thirteen_loop
 #C https://www.conwaylife.com/patterns/thirteenloop.rle
-x = 6, y = 6, rule = B3/S23
+#C population=13
+x = 6, y = 6, rule = b3/s23
 4b2o$2obobo$bobo$bo2bo$2bobo$3bo!

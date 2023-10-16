@@ -1,5 +1,6 @@
 #N racetrackweldracetrack.rle
 #C https://conwaylife.com/wiki/Racetrack
 #C https://www.conwaylife.com/patterns/racetrackweldracetrack.rle
-x = 6, y = 6, rule = B3/S23
+#C population=14
+x = 6, y = 6, rule = b3/s23
 4bo$3bobo$3bobo$b2o2bo$o4bo$b4o!

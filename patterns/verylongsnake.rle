@@ -1,5 +1,6 @@
 #N verylongsnake.rle
 #C https://conwaylife.com/wiki/Very_long_snake
 #C https://www.conwaylife.com/patterns/verylongsnake.rle
-x = 6, y = 4, rule = B3/S23
+#C population=8
+x = 6, y = 4, rule = b3/s23
 2o$obo$3bobo$4b2o!

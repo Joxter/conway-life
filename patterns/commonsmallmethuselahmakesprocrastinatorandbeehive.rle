@@ -1,5 +1,6 @@
 #N commonsmallmethuselahmakesprocrastinatorandbeehive.rle
 #C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
 #C https://www.conwaylife.com/patterns/commonsmallmethuselahmakesprocrastinatorandbeehive.rle
-x = 5, y = 3, rule = B3/S23
+#C population=7
+x = 5, y = 3, rule = b3/s23
 b2o$bobo$o2b2o!

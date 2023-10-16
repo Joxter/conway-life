@@ -1,5 +1,6 @@
 #N cissnaketie.rle
 #C https://conwaylife.com/wiki/Cis-snake-tie
 #C https://conwaylife.com/patterns/cissnaketie.rle
-x = 4, y = 8, rule = B3/S23
+#C population=12
+x = 4, y = 8, rule = b3/s23
 2b2o$3bo$2bo$2b2o$2o$bo$o$2o!

@@ -1,5 +1,6 @@
 #N obosparkparent.rle
 #C https://conwaylife.com/wiki/Obo!_spark
 #C https://www.conwaylife.com/patterns/obosparkparent.rle
-x = 3, y = 3, rule = B3/S23
+#C population=7
+x = 3, y = 3, rule = b3/s23
 b2o$3o$2o!

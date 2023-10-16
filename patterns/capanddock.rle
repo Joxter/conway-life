@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Cap_and_dock
 #C https://conwaylife.com/patterns/capanddock.rle
-x = 7, y = 6, rule = B3/S23
+#C population=18
+x = 7, y = 6, rule = b3/s23
 5b2o$b2obobo$obobo$obobo$b2obobo$5b2o!

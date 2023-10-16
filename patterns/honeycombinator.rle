@@ -1,5 +1,6 @@
 #N honeycombinator.rle
 #C https://conwaylife.com/wiki/Honeycombinator
 #C https://www.conwaylife.com/patterns/honeycombinator.rle
-x = 5, y = 5, rule = B3/S23
+#C population=11
+x = 5, y = 5, rule = b3/s23
 2bo$bobo$obobo$o3bo$b3o!

@@ -1,5 +1,6 @@
 #N boatongriddle.rle
 #C https://conwaylife.com/wiki/Boat_on_griddle
 #C https://www.conwaylife.com/patterns/boatongriddle.rle
-x = 6, y = 8, rule = B3/S23
+#C population=16
+x = 6, y = 8, rule = b3/s23
 3bo$bobo$o4bo$6o2$2b2o$bobo$2bo!

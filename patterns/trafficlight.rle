@@ -1,5 +1,6 @@
 #N Traffic light
 #C A common period 2 oscillator made up of four blinkers.
 #C www.conwaylife.com/wiki/index.php?title=Traffic_light
-x = 7, y = 7, rule = B3/S23
+#C population=12
+x = 7, y = 7, rule = b3/s23
 2b3o2b2$o5bo$o5bo$o5bo2$2b3o!

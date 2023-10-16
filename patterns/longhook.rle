@@ -1,5 +1,6 @@
 #N Long hook
 #C An induction coil that is a longer version of a bookend (aka. a hook).
 #C https://www.conwaylife.com/wiki/index.php?title=Long_hook
-x = 5, y = 3, rule = B3/S23
+#C population=8
+x = 5, y = 3, rule = b3/s23
 3b2o$o3bo$4o!

@@ -1,5 +1,6 @@
 #N octominoii.rle
 #C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
 #C https://www.conwaylife.com/patterns/octominoii.rle
-x = 4, y = 4, rule = B3/S23
+#C population=8
+x = 4, y = 4, rule = b3/s23
 bo$3o$ob2o$3bo!

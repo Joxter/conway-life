@@ -1,5 +1,6 @@
 #N iheptomino.rle
 #C https://conwaylife.com/wiki/I-heptomino
 #C https://www.conwaylife.com/patterns/iheptomino.rle
-x = 4, y = 4, rule = B3/S23
+#C population=7
+x = 4, y = 4, rule = b3/s23
 2o$bo$b2o$2b2o!

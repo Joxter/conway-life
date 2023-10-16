@@ -1,5 +1,6 @@
 #N angelpredecessor.rle
 #C https://conwaylife.com/wiki/Angel
 #C https://www.conwaylife.com/patterns/angelpredecessor.rle
-x = 4, y = 4, rule = B3/S23
+#C population=6
+x = 4, y = 4, rule = b3/s23
 2bo$bobo$o2bo$o!

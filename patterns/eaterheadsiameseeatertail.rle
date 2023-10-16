@@ -1,5 +1,6 @@
 #N eaterheadsiameseeatertail.rle
 #C https://conwaylife.com/wiki/Eater_head_siamese_eater_tail
 #C https://conwaylife.com/patterns/eaterheadsiameseeatertail.rle
-x = 7, y = 4, rule = B3/S23
+#C population=12
+x = 7, y = 4, rule = b3/s23
 2o3b2o$bo4bo$bob3o$2b2o!

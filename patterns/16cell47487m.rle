@@ -3,5 +3,6 @@
 #C   optimized by Tanner Jacobi and Aidan F. Pierce.
 #C https://conwaylife.com/wiki/47575M
 #C https://www.conwaylife.com/patterns/16cell47487m.rle
-x = 22, y = 17, rule = B3/S23
+#C population=16
+x = 22, y = 17, rule = b3/s23
 19b3o$20bo$6bo$6bo$6bo8$11bo$o10b2o$o$obo$b2o!

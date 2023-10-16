@@ -1,5 +1,6 @@
 #N upsnakeontable.rle
 #C https://conwaylife.com/wiki/Up_snake_on_table
 #C https://www.conwaylife.com/patterns/upsnakeontable.rle
-x = 7, y = 4, rule = B3/S23
+#C population=12
+x = 7, y = 4, rule = b3/s23
 ob2ob2o$2obobo$5bo$5b2o!

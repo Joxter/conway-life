@@ -1,5 +1,6 @@
 #N preprepreblock.rle
 #C https://conwaylife.com/wiki/Pre-pre-pre-block
 #C https://www.conwaylife.com/patterns/preprepreblock.rle
-x = 4, y = 3, rule = B3/S23
+#C population=5
+x = 4, y = 3, rule = b3/s23
 3bo$obo$2o!

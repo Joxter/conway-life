@@ -1,5 +1,6 @@
 #N hookwithtailwithcape.rle
 #C https://conwaylife.com/wiki/Hook_with_tail_with_cape
 #C https://conwaylife.com/patterns/hookwithtailwithcape.rle
-x = 7, y = 4, rule = B3/S23
+#C population=12
+x = 7, y = 4, rule = b3/s23
 obo2b2o$2obo2bo$3bobo$3b2o!

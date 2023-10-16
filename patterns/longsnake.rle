@@ -1,5 +1,6 @@
 #N Long snake
 #C A 7-cell still life.
 #C https://www.conwaylife.com/wiki/index.php?title=Long_snake
-x = 5, y = 3, rule = B3/S23
+#C population=7
+x = 5, y = 3, rule = b3/s23
 2o3b$obobo$3b2o!

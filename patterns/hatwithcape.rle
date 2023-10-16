@@ -1,5 +1,6 @@
 #N hatwithcape.rle
 #C https://conwaylife.com/wiki/Hat_with_cape
 #C https://www.conwaylife.com/patterns/hatwithcape.rle
-x = 7, y = 4, rule = B3/S23
+#C population=13
+x = 7, y = 4, rule = b3/s23
 2b2ob2o$bobobo$o2bobo$2o2bo!

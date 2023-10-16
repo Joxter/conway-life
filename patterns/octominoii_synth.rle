@@ -1,5 +1,6 @@
 #N octominoii_synth.rle
 #C https://conwaylife.com/wiki/Octomino_II
 #C https://conwaylife.com/patterns/octominoii_synth.rle
-x = 10, y = 7, rule = B3/S23
+#C population=15
+x = 10, y = 7, rule = b3/s23
 3bo$4b2o$3b2o2$2o6bo$b2o4b2o$o6bobo!

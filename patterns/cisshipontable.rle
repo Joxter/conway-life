@@ -1,5 +1,6 @@
 #N cisshipontable.rle
 #C https://conwaylife.com/wiki/Cis-ship_on_table
 #C https://conwaylife.com/patterns/cisshipontable.rle
-x = 6, y = 4, rule = B3/S23
+#C population=12
+x = 6, y = 4, rule = b3/s23
 b2ob2o$obobo$2o2bo$4b2o!

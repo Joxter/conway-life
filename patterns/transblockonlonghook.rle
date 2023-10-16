@@ -1,5 +1,6 @@
 #N transblockonlonghook.rle
 #C https://conwaylife.com/wiki/Trans-block_on_long_hook
 #C https://conwaylife.com/patterns/transblockonlonghook.rle
-x = 5, y = 6, rule = B3/S23
+#C population=12
+x = 5, y = 6, rule = b3/s23
 3b2o$o3bo$4o2$2o$2o!

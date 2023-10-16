@@ -1,5 +1,6 @@
 #N krake.rle
 #C https://conwaylife.com/wiki/Krake
 #C https://www.conwaylife.com/patterns/krake.rle
-x = 7, y = 5, rule = B3/S23
+#C population=13
+x = 7, y = 5, rule = b3/s23
 2o3b2o$obobobo$2bobo$2bobo$3bo!

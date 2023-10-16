@@ -1,5 +1,6 @@
 #N teardropwithbeehive.rle
 #C https://conwaylife.com/wiki/Teardrop_with_beehive
 #C https://www.conwaylife.com/patterns/teardropwithbeehive.rle
-x = 7, y = 6, rule = B3/S23
+#C population=14
+x = 7, y = 6, rule = b3/s23
 4b2o$3bo2bo$3b2obo$b2o2bo$o2bo$b2o!

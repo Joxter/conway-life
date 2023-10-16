@@ -1,5 +1,6 @@
 #N long8boat.rle
 #C https://conwaylife.com/wiki/Long%5E8_boat
 #C https://www.conwaylife.com/patterns/long8boat.rle
-x = 11, y = 11, rule = B3/S23
+#C population=21
+x = 11, y = 11, rule = b3/s23
 9bo$8bobo$7bobo$6bobo$5bobo$4bobo$3bobo$2bobo$bobo$obo$2o!

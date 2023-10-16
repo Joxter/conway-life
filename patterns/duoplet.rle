@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Duoplet
 #C https://conwaylife.com/patterns/duoplet.rle
-x = 2, y = 2, rule = B3/S23
+#C population=2
+x = 2, y = 2, rule = b3/s23
 bo$o!

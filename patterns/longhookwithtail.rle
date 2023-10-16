@@ -1,5 +1,6 @@
 #N Long hook with tail
 #C A 9-cell still life.
 #C https://www.conwaylife.com/wiki/index.php?title=Long_hook_with_tail
-x = 6, y = 4, rule = B3/S23
+#C population=9
+x = 6, y = 4, rule = b3/s23
 2o4b$bo2b2o$bobobo$2bo!

@@ -1,5 +1,6 @@
 #N carriersiameselongsnake.rle
 #C https://conwaylife.com/wiki/Carrier_siamese_long_snake
 #C https://conwaylife.com/patterns/carriersiameselongsnake.rle
-x = 4, y = 8, rule = B3/S23
+#C population=11
+x = 4, y = 8, rule = b3/s23
 2b2o$3bo$bo$b2o$2bo$bo$o$2o!

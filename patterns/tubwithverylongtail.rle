@@ -1,5 +1,6 @@
 #N tubwithverylongtail.rle
 #C https://conwaylife.com/wiki/Tub_with_very_long_tail
 #C https://www.conwaylife.com/patterns/tubwithverylongtail.rle
-x = 4, y = 7, rule = B3/S23
+#C population=10
+x = 4, y = 7, rule = b3/s23
 bo$obo$bobo$3bo$2bo$bo$b2o!

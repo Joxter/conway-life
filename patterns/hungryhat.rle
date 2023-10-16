@@ -2,5 +2,6 @@
 #O Unknown
 #C https://conwaylife.com/wiki/Hungry_hat
 #C https://conwaylife.com/patterns/hungryhat.rle
-x = 6, y = 5, rule = B3/S23
+#C population=11
+x = 6, y = 5, rule = b3/s23
 4b2o$2obobo$bobo$bobo$2bo!

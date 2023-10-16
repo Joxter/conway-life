@@ -1,5 +1,6 @@
 #N House
 #C An induction coil.
 #C https://www.conwaylife.com/wiki/index.php?title=House
-x = 5, y = 3, rule = 23/3
+#C population=9
+x = 5, y = 3, rule = b3/s23
 b3ob$o3bo$2ob2o!

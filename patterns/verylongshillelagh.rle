@@ -1,5 +1,6 @@
 #N verylongshillelagh.rle
 #C https://conwaylife.com/wiki/Very_long_shillelagh
 #C https://www.conwaylife.com/patterns/verylongshillelagh.rle
-x = 4, y = 7, rule = B3/S23
+#C population=10
+x = 4, y = 7, rule = b3/s23
 b2o$bobo$3bo$2bo$bo$o$2o!

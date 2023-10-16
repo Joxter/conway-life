@@ -1,5 +1,6 @@
 #N loafpull.rle
 #C https://conwaylife.com/wiki/Loaf_pull
 #C https://www.conwaylife.com/patterns/loafpull.rle
-x = 17, y = 19, rule = B3/S23
+#C population=12
+x = 17, y = 19, rule = b3/s23
 bo$obo$o2bo$b2o13$14b3o$14bo$15bo!
