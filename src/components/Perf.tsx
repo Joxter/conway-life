@@ -1,5 +1,4 @@
 import { fieldSize, $faunaData, $field, perf, $viewHoveredCell } from "../model/field";
-import css from "./styles.module.css";
 import { useUnit } from "effector-solid";
 import { throttle } from "patronum";
 import { restore } from "effector";
@@ -58,11 +57,30 @@ export function Perf() {
 
   return (
     <div>
+      {" "}
       <div
         style={{
           position: "absolute",
-          top: "45px",
+          top: "20px",
           left: "10px",
+          display: "grid",
+          "font-size": "12px",
+          "line-height": "1",
+        }}
+      >
+        <span>generation: {faunaStat().generation}</span>
+        <span>
+          population: {faunaStat().pop} ({cellsOnScreen()})
+        </span>
+        <span>{getSize()}</span>
+        {!isTouchDevice && <span>cursor: {hoveredCoords()}</span>}
+        <span>center: {screenCenterCoords()}</span>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "10px",
           display: "grid",
           "font-size": "12px",
           "line-height": "1",
@@ -72,15 +90,6 @@ export function Perf() {
         <span>calc time {time()} msec</span>
         <span>generaion/sec {genPerSec()}</span>
       </div>
-      <p class={css.perf}>
-        <span>generation: {faunaStat().generation}</span>
-        <span>
-          population: {faunaStat().pop} ({cellsOnScreen()})
-        </span>
-        <span>{getSize()}</span>
-        {!isTouchDevice && <span>cursor: {hoveredCoords()}</span>}
-        <span>center: {screenCenterCoords()}</span>
-      </p>
     </div>
   );
 }

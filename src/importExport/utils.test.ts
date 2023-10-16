@@ -163,7 +163,6 @@ O...O....................................O...O
   });
 
   describe("parseNormRleFile", () => {
-    // todo FIX
     test("case 1", () => {
       let pattern = `#N pentoad2_synth.rle
 #O Jeremy Tan and Goldtiger997, 1 April 2019

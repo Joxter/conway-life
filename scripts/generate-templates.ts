@@ -42,6 +42,11 @@ Done in 30.354 sec
 Types: {"still-live":580,"oscillator":1572,"ship":235,"gun":74,"unknown":1887,"died-at":53}
 Done in 32.677 sec
 
+=== 16 oct
++ norm patterns
+Types: {"still-live":580,"oscillator":1569,"ship":234,"gun":74,"unknown":1851,"will-die":46}
+Done in 32.504 sec
+
 */
 
 function normalizeRleFiles(inputFolder: string, output: string) {
@@ -89,7 +94,7 @@ function generateAllTemplateFile(folder: string) {
     ship: 0,
     gun: 0,
     unknown: 0,
-    "died-at": 0,
+    "will-die": 0,
   };
 
   fs.readdirSync(folder)

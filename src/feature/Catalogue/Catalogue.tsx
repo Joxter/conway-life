@@ -6,7 +6,7 @@ import { Modal } from "../../components/Modal/Modal";
 import { JSX } from "solid-js/types/jsx";
 import { createEffect, For, on } from "solid-js";
 import { Checkbox } from "../../components/Form";
-import { Pattern } from "../../types";
+import { AllPatTypes, Pattern } from "../../types";
 
 export function CurrentPattern(props: { style: JSX.CSSProperties }) {
   const [currentPattern] = useUnit([catalogue.$currentPattern]);
@@ -78,36 +78,15 @@ export const CatalogueModal = () => {
             </span>
             <p class={css.types}>
               <b>Type:</b>
-              <Checkbox
-                label={"still-live"}
-                value={patType()["still-live"]}
-                onChange={(v) => catalogue.typeChanged({ "still-live": v })}
-              />
-              <Checkbox
-                label={"died-at"}
-                value={patType()["died-at"]}
-                onChange={(v) => catalogue.typeChanged({ "died-at": v })}
-              />
-              <Checkbox
-                label={"oscillator"}
-                value={patType().oscillator}
-                onChange={(v) => catalogue.typeChanged({ oscillator: v })}
-              />
-              <Checkbox
-                label={"ship"}
-                value={patType().ship}
-                onChange={(v) => catalogue.typeChanged({ ship: v })}
-              />
-              <Checkbox
-                label={"gun"}
-                value={patType().gun}
-                onChange={(v) => catalogue.typeChanged({ gun: v })}
-              />
-              <Checkbox
-                label={"unknown"}
-                value={patType().unknown}
-                onChange={(v) => catalogue.typeChanged({ unknown: v })}
-              />
+              {AllPatTypes.map((name) => {
+                return (
+                  <Checkbox
+                    label={name}
+                    value={patType()[name]}
+                    onChange={(v) => catalogue.typeChanged({ [name]: v })}
+                  />
+                );
+              })}
             </p>
           </div>
         </div>
@@ -164,8 +143,8 @@ function PatType(props: { type: Pattern["type"] }) {
   if (props.type.name === "oscillator") {
     return <b>oscillator ({props.type.period})</b>;
   }
-  if (props.type.name === "died-at") {
-    return <b>died-at ({props.type.gen})</b>;
+  if (props.type.name === "will-die") {
+    return <b>will-die ({props.type.gen})</b>;
   }
   if (props.type.name === "ship") {
     return <b>ship ({props.type.period})</b>;

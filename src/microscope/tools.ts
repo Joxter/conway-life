@@ -110,7 +110,7 @@ export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, 
     for (let i = 1; i <= max; i++) {
       currFauna.nextGen();
       if (currFauna.getPopulation() === 0) {
-        return Some({ name: "died-at", gen: i });
+        return Some({ name: "will-die", gen: i });
       }
       let { left, top } = currFauna.getBounds()!;
 

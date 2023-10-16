@@ -42,19 +42,7 @@ function App() {
       <div>
         <Field />
         <Palette />
-        <WhiteBox
-          style={{
-            top: "0",
-            left: "0",
-            right: "0",
-            "border-radius": "0",
-            border: "0",
-            padding: "5px",
-            "border-bottom": "1px solid #aaa",
-          }}
-        >
-          <Perf />
-        </WhiteBox>
+        <Perf />
 
         <CurrentPattern
           style={{ position: "absolute", bottom: "150px", right: "10px", "font-size": "14px" }}

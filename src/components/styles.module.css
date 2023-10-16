@@ -35,17 +35,3 @@
   border-radius: 4px;
   border: 1px solid #aaa;
 }
-
-.perf {
-  font-size: 13px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.perf span:not(:last-child) {
-  border-right: 2px solid #222;
-}
-
-.perf span {
-  padding: 0 8px;
-}

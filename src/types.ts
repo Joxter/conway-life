@@ -9,12 +9,21 @@ export type Size = { left: number; right: number; top: number; bottom: number };
 export type PatternTypes =
   | { name: "still-live" }
   | { name: "oscillator"; period: number }
+  | { name: "will-die"; gen: number }
   | { name: "ship"; period: number } // add direction
-  | { name: "died-at"; gen: number }
   | { name: "gun"; period: number }
   | { name: "unknown" };
 
-export type PatternTypeNames = "still-live" | "oscillator" | "died-at" | "ship" | "gun" | "unknown";
+export const AllPatTypes = [
+  "still-live",
+  "oscillator",
+  "ship",
+  "gun",
+  "unknown",
+  "will-die",
+] as const;
+
+export type PatternTypeNames = (typeof AllPatTypes)[number];
 
 export type Pattern = {
   fileName: string;

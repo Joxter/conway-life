@@ -23,20 +23,15 @@ export function adjustOffset(cursor: XY, screenOffset: XY, size: number, prevSiz
 }
 
 export function getMiddleOfFauna(fauna: IFauna) {
-  let middleX = 0;
-  let middleY = 0;
-  if (fauna.getPopulation() === 0) return { x: middleX, y: middleY };
+  let bounds = fauna.getBounds();
+  if (bounds) {
+    return {
+      x: (bounds.left + bounds.right) / 2,
+      y: (bounds.top + bounds.bottom) / 2,
+    };
+  }
 
-  fauna.getCells().forEach(([x, y]) => {
-    // todo overflow???
-    middleX += x;
-    middleY += y;
-  });
-
-  return {
-    x: Math.round(middleX / fauna.getPopulation()),
-    y: Math.round(middleY / fauna.getPopulation()),
-  };
+  return { x: 0, y: 0 };
 }
 
 export function getStrFromLS(key: string, fallback: string): string {

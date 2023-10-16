@@ -1,7 +1,7 @@
 import { combine, createEffect, createEvent, createStore, sample } from "effector";
 import { allTemplates } from "../../all-templates";
 import { fuzzy, objEntries } from "../../utils";
-import { Pattern, PatternTypeNames } from "../../types";
+import { AllPatTypes, Pattern, PatternTypeNames } from "../../types";
 import { parseNormRleFile, rleToFauna } from "../../importExport/utils";
 import { IFauna } from "../../lifes/interface";
 import { MyFauna } from "../../lifes/myFauna";
@@ -20,7 +20,7 @@ export type OrderBy = (typeof orderOptions)[number];
 
 export const catalogue = createCatalogue();
 
-type PatTypes = Record<PatternTypeNames, boolean> & { unknown: boolean };
+type PatTypes = Record<PatternTypeNames, boolean>;
 
 export function createCatalogue() {
   const PAGE_SIZE = 50;
@@ -32,7 +32,7 @@ export function createCatalogue() {
     oscillator: false,
     ship: false,
     gun: false,
-    "died-at": false,
+    "will-die": false,
     unknown: false,
   });
   const typeChanged = createEvent<Partial<PatTypes>>();
