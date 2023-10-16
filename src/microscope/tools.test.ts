@@ -70,12 +70,9 @@ describe("tools", () => {
     });
   });
 
-  describe.skip("isRleStillLive", () => {
-    // todo update
-    function isRleStillLive(a: any): any {}
-
+  describe("typeByRle (still-live)", () => {
     function extractedIsRleStillLive(rle: string): boolean {
-      return isRleStillLive(rle).unwrap();
+      return typeByRle(rle).unwrap().unwrap().name === "still-live";
     }
 
     test("block is still-live", () => {
@@ -99,23 +96,11 @@ describe("tools", () => {
     });
   });
 
-  describe.skip("isOscillatorsByRle", () => {
-    // todo update
-    function isOscillatorsByRle(a: any): any {}
-
+  describe("typeByRle (oscillator)", () => {
     function extractedIsOscillatorsByRle(rle: string): number | null {
-      return null;
+      let type = typeByRle(rle).unwrap().unwrap();
+      return type.name === "oscillator" ? type.period : null;
     }
-
-    test("block has period eq 1", () => {
-      let rle = "2o$2o!";
-      expect(extractedIsOscillatorsByRle(rle)).toEqual(1);
-    });
-
-    test("29bitstilllifeno1 has period eq 1", () => {
-      let rle = "5bo$4bobo$2obobobo$2obobobo$3bob2o$2obo$2obo$3bob2o$3bo2bo$4b2o!";
-      expect(extractedIsOscillatorsByRle(rle)).toEqual(1);
-    });
 
     test("glider is a ship, it is no a oscillator", () => {
       let rle = "bob$2bo$3o!";

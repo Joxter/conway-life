@@ -286,7 +286,9 @@ export function parseNormRleFile(rleFile: string, fileName: string): Pattern {
         // todo fix case "#C link: conwaylife.com"
         patternLink = line.slice(2).trim();
       }
-      comment.push(line.slice(2).trim());
+      if (line.slice(2).trim()) {
+        comment.push(line.slice(2).trim());
+      }
     } else if (line.startsWith("x ")) {
       let match = line.match(ruleRegexp);
       if (match) {

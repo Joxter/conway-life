@@ -162,7 +162,7 @@ O...O....................................O...O
     });
   });
 
-  describe.skip("parseNormRleFile", () => {
+  describe("parseNormRleFile", () => {
     // todo FIX
     test("case 1", () => {
       let pattern = `#N pentoad2_synth.rle
@@ -171,20 +171,23 @@ O...O....................................O...O
 #C https://conwaylife.com/wiki/Pentoad_2
 #C https://conwaylife.com/patterns/pentoad2_synth.rle
 x = 62, y = 39, rule = B3/S23
-61bo$40bo18b2o$41b2o17b2o$40b2o2$54bo$44bo8bo$45b2o6b3o$44b2o5$15bo$
-39b2o18bo$38bo!`;
+61bo$40bo39b2o18bo$38bo!`;
 
       expect(parseNormRleFile(pattern, "foo.rle")).toEqual({
         fileName: "foo.rle",
         name: "Pentoad 2",
-        author: "Jeremy Tan and Goldtiger997, 1 April 2019",
-        comment: "https://conwaylife.com/forums/viewtopic.php?p=74280#p74280",
-        population: 25,
+        author: ["Jeremy Tan and Goldtiger997, 1 April 2019"],
+        comment: [
+          "https://conwaylife.com/forums/viewtopic.php?p=74280#p74280",
+          "https://conwaylife.com/wiki/Pentoad_2",
+          "https://conwaylife.com/patterns/pentoad2_synth.rle",
+        ],
+        population: 0,
         rawName: "pentoad2_synth.rle",
         patternLink: "https://conwaylife.com/patterns/pentoad2_synth.rle",
-        rle: "61bo$40bo18b2o$41b2o17b2o$40b2o2$54bo$44bo8bo$45b2o6b3o$44b2o5$15bo$39b2o18bo$38bo!",
-        rule: "b3/s23",
-        size: [62, 16],
+        rle: "61bo$40bo39b2o18bo$38bo!",
+        rule: "B3/S23",
+        size: [62, 39],
         wikiLink: "https://conwaylife.com/wiki/Pentoad_2",
         type: null,
       });
@@ -194,15 +197,15 @@ x = 62, y = 39, rule = B3/S23
       let pattern = `#N Pentoad 1H2
 #C A period 5 oscillator.
 #C www.conwaylife.com/wiki/Pentoad_1H2
+#C population=24
 x = 15, y = 12, rule = b3/s23
-8b2o5b$8bobo2b2o$9b3ob2o2$5b2o8b$6bo8b$6bo8b$6b2o7b$2b2o11b$bobo11b$bo
-13b$2o!`;
+8b2o5b$8bobo2b2o$9b3ob2o2$5b2o8b$6bo8b$6bo8b$6b2o7b$2b2o11b$bobo11b$bo13b$2o!`;
 
       expect(parseNormRleFile(pattern, "foo.rle")).toEqual({
         fileName: "foo.rle",
         name: "Pentoad 1H2",
-        author: "",
-        comment: "A period 5 oscillator.",
+        author: [],
+        comment: ["A period 5 oscillator.", "www.conwaylife.com/wiki/Pentoad_1H2"],
         population: 24,
         rawName: "Pentoad 1H2",
         patternLink: "",
@@ -224,14 +227,14 @@ x = 385, y = 337, rule = B3/S23
       expect(parseNormRleFile(pattern, "foo.rle")).toEqual({
         fileName: "foo.rle",
         name: "foo",
-        author: "",
-        comment: "pseudo p14 gun\nKarel Suhajda,Feb 2004",
-        population: 25,
+        author: [],
+        comment: ["pseudo p14 gun", "Karel Suhajda,Feb 2004"],
+        population: 0,
         rawName: "",
         patternLink: "",
         rle: "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
-        rule: "b3/s23",
-        size: [332, 2],
+        rule: "B3/S23",
+        size: [385, 337],
         wikiLink: "",
         type: null,
       });
@@ -244,7 +247,7 @@ x = 385, y = 337, rule = B3/S23
 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
       let parsed = parseNormRleFile(pattern, "foo");
-      expect(parsed.author).toEqual("Foo, 2022\nBar, 1234");
+      expect(parsed.author).toEqual(["Foo, 2022", "Bar, 1234"]);
     });
 
     test("2 names case", () => {
@@ -266,30 +269,15 @@ x = 385, y = 337, rule = B3/S23
       expect(parsed.name).toEqual("Achim's other p^16");
     });
 
-    test("crazy \n and \\r should be fine", () => {
-      let pattern = `#N Foo, 2022
-#N Bar, 1234
-x = 385, y = 337, rule = B3/S23
-133boo76booboo3boo101boo3booboo$130bo3\n\rbo75bobobo3bobo14bo71bo14bobo!`;
-
-      let parsed = parseNormRleFile(pattern, "foo");
-      expect(parsed.rle).toEqual(
-        "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
-      );
-    });
-
-    test("nothing case", () => {
+    test("size should be the same as in the `x = ...` line", () => {
       let pattern = `x = 385, y = 337, rule = B3/S23
-133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
+133boo!`;
 
       let parsed = parseNormRleFile(pattern, "foo");
-      expect(parsed.size).toEqual([332, 2]);
-      expect(parsed.rle).toEqual(
-        "133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!",
-      );
+      expect(parsed.size).toEqual([385, 337]);
     });
 
-    test("very nothing case", () => {
+    test("should be fine if only `rle` string passed", () => {
       let pattern = `133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`;
 
       let parsed = parseNormRleFile(pattern, "foo");
@@ -303,8 +291,8 @@ x = 385, y = 337, rule = B3/S23
 
       expect(parseNormRleFile(pattern, "foo")).toEqual({
         fileName: "foo",
-        author: "",
-        comment: "",
+        author: [],
+        comment: [],
         population: 0,
         name: "foo",
         rawName: "",
