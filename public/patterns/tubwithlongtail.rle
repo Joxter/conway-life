@@ -1,0 +1,6 @@
+#N Tub with long tail
+#C A 9-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Tub_with_long_tail
+#C population=9
+x = 4, y = 6, rule = b3/s23
+bo2b$obob$bobo$3bo$2bob$2b2o!

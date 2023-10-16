@@ -1,0 +1,6 @@
+#N longshipgenerator.rle
+#C https://conwaylife.com/wiki/Long_ship
+#C https://www.conwaylife.com/patterns/longshipgenerator.rle
+#C population=8
+x = 7, y = 5, rule = b3/s23
+o$2o$o4bo$4bobo$5bo!

@@ -1,0 +1,6 @@
+#N Paperclip
+#C A 14-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Paperclip
+#C population=14
+x = 5, y = 6, rule = b3/s23
+2b2ob$bo2bo$bob2o$2obob$o2bob$b2o!

@@ -1,0 +1,6 @@
+#N zquadloaf.rle
+#C https://conwaylife.com/wiki/Z_quad-loaf
+#C https://www.conwaylife.com/patterns/zquadloaf.rle
+#C population=28
+x = 7, y = 13, rule = b3/s23
+5bo$4bobo$3bo2bo$2bob2o$bobo$o2bo$b2ob2o$3bo2bo$3bobo$b2obo$o2bo$obo$bo!

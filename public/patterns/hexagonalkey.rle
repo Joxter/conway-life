@@ -1,0 +1,6 @@
+#N hexagonalkey.rle
+#C https://conwaylife.com/wiki/Hexagonal_key
+#C https://www.conwaylife.com/patterns/hexagonalkey.rle
+#C population=13
+x = 6, y = 6, rule = b3/s23
+2b2o$3bo$bo$ob4o$obo2bo$bo!

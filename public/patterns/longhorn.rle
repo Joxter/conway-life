@@ -1,0 +1,6 @@
+#N Longhorn
+#C A 19-bit still life.
+#C https://conwaylife.com/wiki/Longhorn
+#C population=19
+x = 9, y = 6, rule = b3/s23
+b2o3b2o$o2bobo2bo$2obobob2o$3bobo$3bobo$4bo!

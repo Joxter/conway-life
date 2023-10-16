@@ -1,0 +1,6 @@
+#N Piston
+#C A period 2 oscillator found in 1971.
+#C www.conwaylife.com/wiki/index.php?title=Piston
+#C population=23
+x = 11, y = 5, rule = b3/s23
+2o7b2o$obo2bo2bobo$2b4o2bo2b$obo2bo2bobo$2o7b2o!

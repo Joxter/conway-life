@@ -1,0 +1,6 @@
+#N boatamphisbaena.rle
+#C https://conwaylife.com/wiki/Cis-boat_amphisbaena
+#C https://conwaylife.com/patterns/boatamphisbaena.rle
+#C population=12
+x = 6, y = 7, rule = b3/s23
+3b2o$3bobo$4bo$b3o$o$bo$2o!

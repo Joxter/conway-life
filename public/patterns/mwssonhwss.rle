@@ -1,0 +1,6 @@
+#N mwssonhwss.rle
+#C https://conwaylife.com/wiki/MWSS_on_HWSS_1
+#C https://www.conwaylife.com/patterns/mwssonhwss.rle
+#C population=24
+x = 9, y = 13, rule = b3/s23
+5b2o$3bo4bo$2bo$2bo5bo$2b6o4$5o$o4bo$o$bo3bo$3bo!

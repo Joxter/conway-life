@@ -1,0 +1,7 @@
+#N Snake with feather
+#O
+#C A small 11-bit still life.
+#C https://conwaylife.com/wiki/Snake_with_feather
+#C population=11
+x = 7, y = 4, rule = b3/s23
+2o$o2b2obo$bobob2o$2bo!

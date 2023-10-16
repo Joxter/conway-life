@@ -1,0 +1,7 @@
+#N Amphisbaena
+#O Unknown
+#C https://conwaylife.com/wiki/Amphisbaena
+#C https://conwaylife.com/patterns/amphisbaena.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+obo$2obo$3bo$3bob2o$4bobo!

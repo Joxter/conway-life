@@ -1,0 +1,6 @@
+#N unnamedsmalllakerelative.rle
+#C https://conwaylife.com/wiki/Small_lake
+#C https://www.conwaylife.com/patterns/unnamedsmalllakerelative.rle
+#C population=23
+x = 9, y = 9, rule = b3/s23
+4bo$3bobo$3bobo$b2obob2o$o3bo3bo$b2obob2o$3bobo$3bobo$4bo!

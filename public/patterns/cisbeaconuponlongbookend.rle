@@ -1,0 +1,6 @@
+#N cisbeaconuponlongbookend.rle
+#C https://conwaylife.com/wiki/Cis-beacon_up_on_long_bookend
+#C https://www.conwaylife.com/patterns/cisbeaconuponlongbookend.rle
+#C population=14
+x = 5, y = 8, rule = b3/s23
+2b2o$3bo$o$2o2$4o$o3bo$3b2o!

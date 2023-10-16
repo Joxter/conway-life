@@ -1,0 +1,6 @@
+#N egyptianwalk.rle
+#C https://conwaylife.com/wiki/Egyptian_walk
+#C https://conwaylife.com/patterns/egyptianwalk.rle
+#C population=12
+x = 7, y = 4, rule = b3/s23
+ob2o$2obo$3bob2o$3b2obo!

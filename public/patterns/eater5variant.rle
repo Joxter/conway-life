@@ -1,0 +1,6 @@
+#N eater5variant.rle
+#C https://conwaylife.com/wiki/Tub-with-tail_eater
+#C https://www.conwaylife.com/patterns/eater5variant.rle
+#C population=17
+x = 10, y = 6, rule = b3/s23
+3bo3b2o$2bobo3bo$bobo3bo$bo4bo$2o5b3o$9bo!

@@ -1,0 +1,6 @@
+#N Pi-heptomino
+#C One of 108 heptominoes.
+#C www.conwaylife.com/wiki/index.php?title=Pi-heptomino
+#C population=7
+x = 3, y = 3, rule = b3/s23
+3o$obo$obo!

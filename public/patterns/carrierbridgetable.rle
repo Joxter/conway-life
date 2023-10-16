@@ -1,0 +1,6 @@
+#N carrierbridgetable.rle
+#C https://conwaylife.com/wiki/Carrier_bridge_table
+#C https://www.conwaylife.com/patterns/carrierbridgetable.rle
+#C population=12
+x = 6, y = 5, rule = b3/s23
+o2bo$4o$4b2o$2bo2bo$2b2o!

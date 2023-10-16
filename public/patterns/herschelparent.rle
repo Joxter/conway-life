@@ -1,0 +1,6 @@
+#N Herschel parent
+#C A parent of the herschel.
+#C https://www.conwaylife.com/wiki/index.php?title=Herschel_parent
+#C population=6
+x = 5, y = 4, rule = b3/s23
+2bo2b$2o3b$2bobo$4bo!

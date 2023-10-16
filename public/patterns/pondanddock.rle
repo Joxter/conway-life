@@ -1,0 +1,7 @@
+#N Pond and dock
+#O Unknown
+#C https://conwaylife.com/wiki/Pond_and_dock
+#C https://conwaylife.com/patterns/pondanddock.rle
+#C population=18
+x = 8, y = 6, rule = b3/s23
+b2o3b2o$o2bobobo$o2bobo$b2o2bo$5bobo$6b2o!

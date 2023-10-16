@@ -1,0 +1,6 @@
+#N transblockoncandlefrobra.rle
+#C https://conwaylife.com/wiki/Trans-block_on_candlefrobra
+#C https://www.conwaylife.com/patterns/transblockoncandlefrobra.rle
+#C population=16
+x = 5, y = 10, rule = b3/s23
+2o$2o2$4o$o3bo$3bo$3bo$2bo$bobo$2bo!

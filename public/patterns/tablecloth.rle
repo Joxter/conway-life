@@ -1,0 +1,5 @@
+#N Tablecloth agar
+#C https://conwaylife.com/wiki/Tablecloth
+#C population=12
+x = 4, y = 4, rule = b3/s23
+4o$o2bo$o2bo$4o!

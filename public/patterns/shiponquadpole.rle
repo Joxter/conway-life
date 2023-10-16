@@ -1,0 +1,6 @@
+#N Ship on quadpole
+#C A period 2 oscillator made up of a ship diagonally touching a quadpole.
+#C www.conwaylife.com/wiki/index.php?title=Ship_on_quadpole
+#C population=16
+x = 10, y = 10, rule = b3/s23
+2o8b$obo7b$b2o7b$3b2o5b$3bobo4b2$5bobo2b2$7bobo$8b2o!

@@ -1,0 +1,6 @@
+#N lei.rle
+#C https://conwaylife.com/wiki/Lei
+#C https://www.conwaylife.com/patterns/lei.rle
+#C population=12
+x = 7, y = 6, rule = b3/s23
+4bo$2bobobo$o5bo$o5bo$obobo$2bo!

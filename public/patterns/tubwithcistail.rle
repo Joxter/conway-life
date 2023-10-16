@@ -1,0 +1,7 @@
+#N Tub with cis-tail
+#O Unknown
+#C https://conwaylife.com/wiki/Tub_with_cis-tail
+#C https://conwaylife.com/patterns/tubwithcistail.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+2o$o4bo$bo2bobo$2bo2bo$3b2o!

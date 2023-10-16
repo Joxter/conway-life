@@ -1,0 +1,7 @@
+#N Boat on aircraft
+#O Unknown
+#C https://conwaylife.com/wiki/Boat_on_aircraft
+#C https://conwaylife.com/patterns/boatonaircraft.rle
+#C population=11
+x = 6, y = 7, rule = b3/s23
+bo$obo$b2o$3b2o$3bo$5bo$4b2o!

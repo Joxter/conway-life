@@ -1,0 +1,6 @@
+#N Tub with tail
+#C An 8-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Tub_with_tail
+#C population=8
+x = 5, y = 5, rule = b3/s23
+bo3b$obo2b$bobob$3bob$3b2o!

@@ -1,0 +1,6 @@
+#N Pre-block
+#C A block parent.
+#C https://www.conwaylife.com/wiki/index.php?title=Pre-block
+#C population=3
+x = 2, y = 2, rule = b3/s23
+ob$2o!

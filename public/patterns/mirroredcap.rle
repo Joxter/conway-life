@@ -1,0 +1,6 @@
+#N mirroredcap.rle
+#C https://conwaylife.com/wiki/Mirrored_cap
+#C https://www.conwaylife.com/patterns/mirroredcap.rle
+#C population=16
+x = 7, y = 4, rule = b3/s23
+b2ob2o$obobobo$obobobo$b2ob2o!

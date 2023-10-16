@@ -1,0 +1,7 @@
+#N Omnibus with tubs
+#O Unknown
+#C https://conwaylife.com/wiki/Omnibus_with_tubs
+#C https://conwaylife.com/patterns/omnibuswithtubs.rle
+#C population=42
+x = 9, y = 11, rule = b3/s23
+bo5bo$obo3bobo$bobobobo$3bobo$3bobo$2obobob2o$2obobob2o$3bobo$2obobob2o$o2bobo2bo$b2o3b2o!

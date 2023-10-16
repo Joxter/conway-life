@@ -1,0 +1,6 @@
+#N cisboatandcap.rle
+#C https://conwaylife.com/wiki/Cis-boat_and_cap
+#C https://conwaylife.com/patterns/cisboatandcap.rle
+#C population=13
+x = 7, y = 4, rule = b3/s23
+b2ob2o$obobobo$bo2bobo$4b2o!

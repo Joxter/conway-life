@@ -1,0 +1,6 @@
+#N honeybarge.rle
+#C https://conwaylife.com/wiki/Honeybarge
+#C https://conwaylife.com/patterns/honeybarge.rle
+#C population=12
+x = 6, y = 5, rule = b3/s23
+2o2bo$o2bobo$bobobo$2bobo$3bo!

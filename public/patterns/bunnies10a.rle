@@ -1,0 +1,7 @@
+#N bunnies10a.rle
+#O Nick Gotts, 2019
+#C https://conwaylife.com/wiki/Bunnies_10a
+#C https://www.conwaylife.com/patterns/bunnies10a.rle
+#C population=10
+x = 7, y = 5, rule = b3/s23
+bo$3obo$5bo$o3b2o$6bo!

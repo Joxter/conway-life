@@ -1,0 +1,6 @@
+#N trafficlighthitsblock6.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/trafficlighthitsblock6.rle
+#C population=8
+x = 8, y = 4, rule = b3/s23
+6b2o$o5b2o$2o$o!

@@ -1,0 +1,6 @@
+#N xp2_3lgh1lo.rle
+#C https://conwaylife.com/wiki/Xp2_3lgh1lo
+#C https://www.conwaylife.com/patterns/xp2_3lgh1lo.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+2ob3o$o$bo3bo$6bo$b3ob2o!

@@ -1,0 +1,6 @@
+#N Integral sign
+#C A 9-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Integral_sign
+#C population=9
+x = 5, y = 5, rule = b3/s23
+3b2o$2bobo$2bo2b$obo2b$2o!

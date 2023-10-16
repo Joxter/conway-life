@@ -1,0 +1,6 @@
+#N prepreblockmakesmwss.rle
+#C https://conwaylife.com/wiki/Pre-pre-block
+#C https://www.conwaylife.com/patterns/prepreblockmakesmwss.rle
+#C population=15
+x = 22, y = 18, rule = b3/s23
+$obo$b2o$bo11$4bo$4b2o13b3o$3bobo13bo$20bo!

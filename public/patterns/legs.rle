@@ -1,0 +1,6 @@
+#N legs.rle
+#C https://conwaylife.com/wiki/Legs
+#C https://www.conwaylife.com/patterns/legs.rle
+#C population=8
+x = 4, y = 4, rule = b3/s23
+2o$o$o2bo$b3o!

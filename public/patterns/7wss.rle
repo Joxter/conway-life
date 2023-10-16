@@ -1,0 +1,7 @@
+#N 7wss.rle
+#O John Conway, 1970
+#C https://conwaylife.com/wiki/Overweight_spaceship
+#C https://www.conwaylife.com/patterns/7wss.rle
+#C population=15
+x = 8, y = 5, rule = b3/s23
+3b3o$bo5bo$o$o6bo$7o!

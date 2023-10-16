@@ -1,0 +1,7 @@
+#N nwminus2t16.rle
+#O Simon Ekstr�m, 2022
+#C https://conwaylife.com/wiki/NW-2T16
+#C https://www.conwaylife.com/patterns/nwminus2t16.rle
+#C population=43
+x = 20, y = 14, rule = b3/s23
+10b2o$10b2o3$b2o$3ob2o$b2ob3o11b2o$3ob2o3b2o8bo$2o6bobo5b3o$7bobo6bo$8bo8b2o$18bo$17bo$17b2o!

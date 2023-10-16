@@ -1,0 +1,6 @@
+#N 7x7maxdensity.rle
+#C https://conwaylife.com/wiki/Density
+#C https://www.conwaylife.com/patterns/7x7maxdensity.rle
+#C population=28
+x = 7, y = 7, rule = b3/s23
+ob2ob2o$2obobo$3bo2bo$3ob3o$o2bo$bobob2o$2ob2obo!

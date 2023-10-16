@@ -1,0 +1,6 @@
+#N 180degreekickback.rle
+#C https://conwaylife.com/wiki/180-degree_kickback
+#C https://www.conwaylife.com/patterns/180degreekickback.rle
+#C population=10
+x = 13, y = 18, rule = b3/s23
+11bo$10bo$10b3o13$b2o$obo$2bo!

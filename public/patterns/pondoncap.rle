@@ -1,0 +1,6 @@
+#N pondoncap.rle
+#C https://conwaylife.com/wiki/Pond_on_cap
+#C https://www.conwaylife.com/patterns/pondoncap.rle
+#C population=16
+x = 8, y = 5, rule = b3/s23
+b2o$o2bob2o$o2bobobo$b2o2bobo$5b2o!

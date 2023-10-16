@@ -1,0 +1,7 @@
+#N Omnibus
+#O Unknown
+#C https://conwaylife.com/wiki/Omnibus
+#C https://conwaylife.com/patterns/omnibus.rle
+#C population=40
+x = 9, y = 10, rule = b3/s23
+b2o3b2o$bobobobo$3bobo$3bobo$2obobob2o$2obobob2o$3bobo$2obobob2o$o2bobo2bo$b2o3b2o!

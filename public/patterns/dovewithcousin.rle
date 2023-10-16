@@ -1,0 +1,6 @@
+#N dovewithcousin.rle
+#C https://conwaylife.com/wiki/Dove
+#C https://www.conwaylife.com/patterns/dovewithcousin.rle
+#C population=16
+x = 29, y = 5, rule = b3/s23
+o24b2o$2o23bobo$obo22bo2bo$2b2o22bobo$27bo!

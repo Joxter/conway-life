@@ -1,0 +1,6 @@
+#N Teardrop
+#C An induction coil that evolves into two beehives after 20 generations.
+#C https://www.conwaylife.com/wiki/index.php?title=Teardrop
+#C population=9
+x = 4, y = 4, rule = b3/s23
+b3o$o2bo$o2bo$b2o!

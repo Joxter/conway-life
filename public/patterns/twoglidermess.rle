@@ -1,0 +1,5 @@
+#N 10gm.rle
+#C https://conwaylife.com/ref/mniemiec/10/10gm.rle
+#C population=22
+x = 87, y = 8, rule = b3/s23
+84bo$82bo2bo$3bobo80bo$4b2o75bo4bo$4bo76bo4bo$3o78bo3bo$2bo79bobo$bo!

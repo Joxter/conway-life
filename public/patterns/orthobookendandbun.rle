@@ -1,0 +1,6 @@
+#N orthobookendandbun.rle
+#C https://conwaylife.com/wiki/Ortho-bookend_and_bun
+#C https://www.conwaylife.com/patterns/orthobookendandbun.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+4b2o$2o2bobo$obobobo$2bo2bo$b2o!

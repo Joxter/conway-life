@@ -1,0 +1,6 @@
+#N cissnakeonbookend.rle
+#C https://conwaylife.com/wiki/Cis-snake_on_bookend
+#C https://www.conwaylife.com/patterns/cissnakeonbookend.rle
+#C population=13
+x = 6, y = 4, rule = b3/s23
+2o2b2o$o2bobo$bobo$2ob2o!

@@ -1,0 +1,6 @@
+#N rephaser.rle
+#C https://conwaylife.com/wiki/Rephaser
+#C https://www.conwaylife.com/patterns/rephaser.rle
+#C population=14
+x = 20, y = 13, rule = b3/s23
+2bo14bo$obo14bobo$b2o14b2o9$9b2o$9b2o!

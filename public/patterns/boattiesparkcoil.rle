@@ -1,0 +1,6 @@
+#N boattiesparkcoil.rle
+#C https://conwaylife.com/wiki/Boat_tie_spark_coil
+#C https://www.conwaylife.com/patterns/boattiesparkcoil.rle
+#C population=23
+x = 8, y = 11, rule = b3/s23
+2ob2o$o3bo$b3o3$b3o$o3bo$2ob2o$5b2o$5bobo$6bo!

@@ -1,0 +1,6 @@
+#N cisbeehiveoncandlefrobra.rle
+#C https://conwaylife.com/wiki/Cis-beehive_on_candlefrobra
+#C https://www.conwaylife.com/patterns/cisbeehiveoncandlefrobra.rle
+#C population=18
+x = 5, y = 11, rule = b3/s23
+2b2o$bo2bo$2b2o2$4o$o3bo$3bo$3bo$2bo$bobo$2bo!

@@ -1,0 +1,7 @@
+#N Octapole
+#O Unknown
+#C https://conwaylife.com/wiki/Octapole
+#C https://conwaylife.com/patterns/octapole.rle
+#C population=14
+x = 11, y = 11, rule = b3/s23
+9b2o$8bobo2$6bobo2$4bobo2$2bobo2$obo$2o!

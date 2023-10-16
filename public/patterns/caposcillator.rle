@@ -1,0 +1,6 @@
+#N caposcillator.rle
+#C https://conwaylife.com/wiki/Cap
+#C https://conwaylife.com/patterns/caposcillator.rle
+#C population=28
+x = 14, y = 6, rule = b3/s23
+3b2o4b2o$3bo6bo$2obo6bob2o$o2bob4obo2bo$2b2obo2bob2o$6b2o!

@@ -1,0 +1,6 @@
+#N tubwithtwodowncistails.rle
+#C https://conwaylife.com/wiki/Tub_with_two_down_cis_tails
+#C https://conwaylife.com/patterns/tubwithtwodowncistails.rle
+#C population=12
+x = 7, y = 5, rule = b3/s23
+2o3b2o$bo3bo$bobobo$2bobo$3bo!

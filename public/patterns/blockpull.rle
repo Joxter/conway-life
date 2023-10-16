@@ -1,0 +1,6 @@
+#N blockpull.rle
+#C https://conwaylife.com/wiki/Block_pull
+#C https://www.conwaylife.com/patterns/blockpull.rle
+#C population=9
+x = 13, y = 19, rule = b3/s23
+2o$2o15$10b3o$10bo$11bo!

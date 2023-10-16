@@ -1,0 +1,7 @@
+#N Cis-long boat with tail
+#O Unknown
+#C https://conwaylife.com/wiki/Cis-long_boat_with_tail
+#C https://conwaylife.com/patterns/cislongboatwithtail.rle
+#C population=11
+x = 6, y = 5, rule = b3/s23
+2o$bo2b2o$bobobo$2bobo$3bo!

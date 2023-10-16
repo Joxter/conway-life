@@ -1,0 +1,6 @@
+#N Trans-boat with nine
+#C An 11-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Trans-boat_with_nine
+#C population=11
+x = 6, y = 6, rule = b3/s23
+2o4b$obo3b$bo4b$2b3ob$5bo$4b2o!

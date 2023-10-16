@@ -1,0 +1,6 @@
+#N tubgenerator.rle
+#C https://conwaylife.com/wiki/Tub
+#C https://www.conwaylife.com/patterns/tubgenerator.rle
+#C population=7
+x = 5, y = 5, rule = b3/s23
+2o$o3bo$2b2o2$2bo!

@@ -1,0 +1,6 @@
+#N fumaroleonp18biblockhassler.rle
+#C https://conwaylife.com/wiki/Fumarole_on_p18_bi-block_hassler
+#C https://conwaylife.com/patterns/fumaroleonp18biblockhassler.rle
+#C population=61
+x = 23, y = 18, rule = b3/s23
+4b2o$4b2o$4b2o$4bo13bo2bo$3bobo12bo$4bobob3o6bo4bo$5bob4o5bobo2b2o$6bo7b2obo2$10bo$2o7bo4bo2bo$o2b2o5bo5b2o$b2obo$5bo4b2o$5bo4b2o$b2obo$o2b2o$2o!

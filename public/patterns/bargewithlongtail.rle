@@ -1,0 +1,7 @@
+#N Barge with long tail
+#O Unknown
+#C https://conwaylife.com/wiki/Barge_with_long_tail
+#C https://conwaylife.com/patterns/bargewithlongtail.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+bo$obo$bobo$2bo2b2o$3b2obo!

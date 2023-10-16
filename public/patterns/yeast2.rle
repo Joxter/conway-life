@@ -1,0 +1,6 @@
+#N yeast2.rle
+#C https://conwaylife.com/wiki/Bakery
+#C https://www.conwaylife.com/patterns/yeast2.rle
+#C population=7
+x = 4, y = 4, rule = b3/s23
+3bo$bobo$2obo$bo!

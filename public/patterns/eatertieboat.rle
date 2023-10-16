@@ -1,0 +1,6 @@
+#N eatertieboat.rle
+#C https://conwaylife.com/wiki/Boat_tie_eater_head
+#C https://conwaylife.com/patterns/eatertieboat.rle
+#C population=12
+x = 7, y = 7, rule = b3/s23
+5bo$4bobo$4b2o$2b2o$bobo$bo$2o!

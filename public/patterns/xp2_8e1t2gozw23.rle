@@ -1,0 +1,7 @@
+#N xp2_8e1t2gozw23.rle
+#O Achim Flammenkamp, 2004
+#C https://conwaylife.com/wiki/Xp2_8e1t2gozw23
+#C https://www.conwaylife.com/patterns/xp2_8e1t2gozw23.rle
+#C population=16
+x = 7, y = 7, rule = b3/s23
+3bo$b3o$o5bo$ob5o$bo$4bo$3b2o!

@@ -1,0 +1,6 @@
+#N Big S
+#C A 14-cell still life.
+#C www.conwaylife.com/wiki/index.php?title=Big_S
+#C population=14
+x = 7, y = 6, rule = b3/s23
+4b2ob$3bo2bo$3bob2o$2obo3b$o2bo3b$b2o!

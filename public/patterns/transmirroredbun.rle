@@ -1,0 +1,6 @@
+#N transmirroredbun.rle
+#C https://conwaylife.com/wiki/Trans-mirrored_bun
+#C https://www.conwaylife.com/patterns/transmirroredbun.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+bo$obob2o$obobobo$b2obobo$5bo!

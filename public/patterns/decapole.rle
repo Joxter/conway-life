@@ -1,0 +1,7 @@
+#N Decapole
+#O Unknown
+#C https://conwaylife.com/wiki/Decapole
+#C https://conwaylife.com/patterns/decapole.rle
+#C population=16
+x = 13, y = 13, rule = b3/s23
+11b2o$10bobo2$8bobo2$6bobo2$4bobo2$2bobo2$obo$2o!

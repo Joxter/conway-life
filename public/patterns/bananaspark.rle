@@ -1,0 +1,6 @@
+#N bananaspark.rle
+#C https://conwaylife.com/wiki/Banana_spark
+#C https://www.conwaylife.com/patterns/bananaspark.rle
+#C population=8
+x = 7, y = 5, rule = b3/s23
+2bo$obo$b2o$4b2o$6bo!

@@ -1,0 +1,6 @@
+#N Tub
+#C A very common 4-cell still life.
+#C www.conwaylife.com/wiki/index.php?title=Tub
+#C population=4
+x = 3, y = 3, rule = b3/s23
+bob$obo$bo!

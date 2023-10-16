@@ -1,0 +1,6 @@
+#N transtubwithlong3tail.rle
+#C https://conwaylife.com/wiki/Trans-tub_with_long%5E3_tail
+#C https://www.conwaylife.com/patterns/transtubwithlong3tail.rle
+#C population=11
+x = 4, y = 8, rule = b3/s23
+bo$obo$bobo$3bo$2bo$bo$o$2o!

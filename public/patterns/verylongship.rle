@@ -1,0 +1,6 @@
+#N verylongship.rle
+#C https://conwaylife.com/wiki/Very_long_ship
+#C https://conwaylife.com/patterns/verylongship.rle
+#C population=10
+x = 5, y = 5, rule = b3/s23
+2o$obo$bobo$2bobo$3b2o!

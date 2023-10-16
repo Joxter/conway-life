@@ -1,0 +1,6 @@
+#N pt9b.rle
+#C https://conwaylife.com/wiki/PT9B
+#C https://conwaylife.com/patterns/pt9b.rle
+#C population=22
+x = 11, y = 10, rule = b3/s23
+10bo$b2o5b3o$b2o4bo$7b2o3$6b2o$3o3b2o$obo$obo!

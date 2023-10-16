@@ -1,0 +1,6 @@
+#N beehiveedgeshooter.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/beehiveedgeshooter.rle
+#C population=10
+x = 6, y = 5, rule = b3/s23
+2bo2bo$bo3bo$o4bo$o$b3o!

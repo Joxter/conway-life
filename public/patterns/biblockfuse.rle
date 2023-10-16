@@ -1,0 +1,6 @@
+#N biblockfuse.rle
+#C https://conwaylife.com/wiki/Bi-block_fuse
+#C https://www.conwaylife.com/patterns/biblockfuse.rle
+#C population=94
+x = 47, y = 5, rule = b3/s23
+2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o$2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2obo2bo$44b2o$2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o$2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o2b2o!

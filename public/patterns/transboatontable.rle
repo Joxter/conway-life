@@ -1,0 +1,6 @@
+#N transboatontable.rle
+#C https://conwaylife.com/wiki/Trans-boat_on_table
+#C https://conwaylife.com/patterns/transboatontable.rle
+#C population=11
+x = 6, y = 5, rule = b3/s23
+bo$obob2o$b2obo$4bo$4b2o!

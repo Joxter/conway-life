@@ -1,0 +1,6 @@
+#N metabookendandbun.rle
+#C https://conwaylife.com/wiki/Meta-bookend_and_bun
+#C https://www.conwaylife.com/patterns/metabookendandbun.rle
+#C population=14
+x = 7, y = 7, rule = b3/s23
+2o$obo$2bo$b2ob2o$4bobo$4bobo$5bo!

@@ -1,0 +1,7 @@
+#N Integral with tub and hook
+#O Unknown
+#C https://conwaylife.com/wiki/Integral_with_tub_and_hook
+#C https://conwaylife.com/patterns/integralwithtubandhook.rle
+#C population=11
+x = 6, y = 7, rule = b3/s23
+4bo$3bobo$4bo$b3o$o$bo$2o!

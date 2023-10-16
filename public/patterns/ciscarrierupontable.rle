@@ -1,0 +1,6 @@
+#N ciscarrierupontable.rle
+#C https://conwaylife.com/wiki/Cis-aircraft_carrier_up_on_table
+#C https://conwaylife.com/patterns/ciscarrierupontable.rle
+#C population=12
+x = 6, y = 4, rule = b3/s23
+2o2b2o$o3bo$2bobo$b2ob2o!

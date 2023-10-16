@@ -1,0 +1,6 @@
+#N 2ttetrominoes.rle
+#C https://conwaylife.com/wiki/Boat-tie
+#C https://www.conwaylife.com/patterns/2ttetrominoes.rle
+#C population=8
+x = 8, y = 7, rule = b3/s23
+bo$3o4$6bo$5b3o!

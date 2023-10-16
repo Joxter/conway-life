@@ -1,0 +1,6 @@
+#N eaterwithtailfeather.rle
+#C https://conwaylife.com/wiki/Eater_with_tail_feather
+#C https://conwaylife.com/patterns/eaterwithtailfeather.rle
+#C population=12
+x = 7, y = 5, rule = b3/s23
+2o$o4b2o$b3o2bo$3bobo$4bo!

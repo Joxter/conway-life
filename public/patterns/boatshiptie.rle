@@ -1,0 +1,6 @@
+#N Boat-ship-tie
+#C An 11-cell still life made up of a ship and a boat.
+#C www.conwaylife.com/wiki/index.php?title=Boat-ship-tie
+#C population=11
+x = 6, y = 6, rule = b3/s23
+2o4b$obo3b$b2o3b$3b2ob$3bobo$4bo!

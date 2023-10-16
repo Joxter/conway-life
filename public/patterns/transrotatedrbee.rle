@@ -1,0 +1,6 @@
+#N Trans-rotated R-bee
+#C A 14-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Trans-rotated_R-bee
+#C population=14
+x = 7, y = 7, rule = b3/s23
+bo5b$obo4b$obo4b$b2ob2ob$4bobo$4bobo$5bo!

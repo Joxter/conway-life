@@ -1,0 +1,6 @@
+#N diehard1217.rle
+#C https://conwaylife.com/wiki/Die_hard
+#C https://www.conwaylife.com/patterns/diehard1217.rle
+#C population=128
+x = 16, y = 16, rule = b3/s23
+3o3b4o2bo2bo$b4ob4o2bo2bo$3o2bo2b3ob2o$bob2obo2bob2ob2o$2ob3o$2obobobo2bo2bobo$b3o2b2o2b2o2b2o$bobo2b4obob3o$2o3b2o3bob2o$3ob3ob2obobobo$2o2bobo3bobobo$b3obob4o3bo$bob2o2bobo$obo5b2obo3bo$3obo2bo4bob2o$obob3o4bo!

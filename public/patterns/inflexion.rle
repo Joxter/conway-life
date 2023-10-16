@@ -1,0 +1,6 @@
+#N inflexion.rle
+#C https://conwaylife.com/wiki/Inflexion
+#C https://conwaylife.com/patterns/inflexion.rle
+#C population=12
+x = 7, y = 4, rule = b3/s23
+2o2bo$o2bobo$bobo2bo$2bo2b2o!

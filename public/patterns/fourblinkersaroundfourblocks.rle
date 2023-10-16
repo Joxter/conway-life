@@ -1,0 +1,6 @@
+#N fourblinkersaroundfourblocks.rle
+#C https://conwaylife.com/wiki/Four_blinkers_around_four_blocks
+#C https://www.conwaylife.com/patterns/fourblinkersaroundfourblocks.rle
+#C population=24
+x = 10, y = 10, rule = b3/s23
+2b3o2$2b2o2b2obo$2bo4bobo$9bo$o$obo4bo$ob2o2b2o2$5b3o!

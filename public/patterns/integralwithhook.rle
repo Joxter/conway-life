@@ -1,0 +1,6 @@
+#N Integral with hook
+#C A 10-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Integral_with_hook
+#C population=10
+x = 6, y = 5, rule = b3/s23
+2o4b$obo3b$2bo3b$2bob2o$3bobo!

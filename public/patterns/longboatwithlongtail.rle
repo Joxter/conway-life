@@ -1,0 +1,6 @@
+#N longboatwithlongtail.rle
+#C https://conwaylife.com/wiki/Long_boat_with_long_tail
+#C https://conwaylife.com/patterns/longboatwithlongtail.rle
+#C population=12
+x = 7, y = 5, rule = b3/s23
+ob2o$2o2bo$3bobo$4bobo$5b2o!

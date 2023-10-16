@@ -1,0 +1,6 @@
+#N transsnakeonbunpredecessor.rle
+#C https://conwaylife.com/wiki/Trans-snake_on_bun
+#C https://www.conwaylife.com/patterns/transsnakeonbunpredecessor.rle
+#C population=24
+x = 8, y = 15, rule = b3/s23
+4b2o$4b2o3$2b3o$bo3bo$o5bo$o5bo$o5bo$bo3bo$2b3o3$6b2o$6b2o!

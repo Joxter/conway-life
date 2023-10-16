@@ -1,0 +1,6 @@
+#N cisrotatedbookend.rle
+#C https://conwaylife.com/wiki/Cis-rotated_bookend
+#C https://www.conwaylife.com/patterns/cisrotatedbookend.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+4b2o$2o2bo$obobobo$2bo2b2o$b2o!

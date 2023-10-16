@@ -1,0 +1,6 @@
+#N cisbunanddove.rle
+#C https://conwaylife.com/wiki/Cis-bun_and_dove
+#C https://www.conwaylife.com/patterns/cisbunanddove.rle
+#C population=16
+x = 8, y = 5, rule = b3/s23
+6bo$bo3bobo$obobo2bo$obobobo$b2ob2o!

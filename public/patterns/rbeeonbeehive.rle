@@ -1,0 +1,6 @@
+#N rbeeonbeehive.rle
+#C https://conwaylife.com/wiki/R-bee_on_beehive
+#C https://www.conwaylife.com/patterns/rbeeonbeehive.rle
+#C population=13
+x = 6, y = 7, rule = b3/s23
+4bo$3bobo$3bobo$bob2o$obo$obo$bo!

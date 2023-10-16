@@ -1,0 +1,6 @@
+#N ghostherschel_synth.rle
+#C https://conwaylife.com/wiki/Ghost_Herschel
+#C https://www.conwaylife.com/patterns/ghostherschel_synth.rle
+#C population=10
+x = 11, y = 4, rule = b3/s23
+o$b2o5bo$2o6bobo$8b2o!

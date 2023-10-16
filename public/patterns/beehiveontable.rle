@@ -1,0 +1,6 @@
+#N beehiveontable.rle
+#C https://conwaylife.com/wiki/Beehive_on_table
+#C https://conwaylife.com/patterns/beehiveontable.rle
+#C population=12
+x = 6, y = 5, rule = b3/s23
+bo$obob2o$obobo$bo2bo$4b2o!

@@ -1,0 +1,6 @@
+#N crinklyheptomino.rle
+#C https://conwaylife.com/wiki/Crinkly_heptomino
+#C https://www.conwaylife.com/patterns/crinklyheptomino.rle
+#C population=7
+x = 5, y = 2, rule = b3/s23
+4o$o2b2o!

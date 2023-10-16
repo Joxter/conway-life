@@ -1,0 +1,6 @@
+#N 4eaters.rle
+#C https://conwaylife.com/wiki/Composers
+#C https://www.conwaylife.com/patterns/4eaters.rle
+#C population=28
+x = 15, y = 15, rule = b3/s23
+3bo7bo$b3o7b3o$o13bo$2o11b2o8$2o11b2o$o13bo$b3o7b3o$3bo7bo!

@@ -1,0 +1,7 @@
+#N Cis-rotated hook
+#O Unknown
+#C https://conwaylife.com/wiki/Cis-rotated_hook
+#C https://conwaylife.com/patterns/cisrotatedhook.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+b2o$2bo2b2o$obobobo$2o2bo$4b2o!

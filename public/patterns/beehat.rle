@@ -1,0 +1,6 @@
+#N Bee hat
+#C A 15-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Bee_hat
+#C population=15
+x = 6, y = 6, rule = b3/s23
+b2o3b$o2bo2b$b2obob$2bobob$obob2o$2o!

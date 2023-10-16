@@ -1,0 +1,7 @@
+#N 31.4.rle
+#O Mike Playle, 2013
+#C https://conwaylife.com/wiki/31.4
+#C https://conwaylife.com/patterns/31.4.rle
+#C population=31
+x = 13, y = 8, rule = b3/s23
+2b2o$2bobo$4bo4b2o$4ob2o2bo2bo$o2bobobobob2o$3bobobobo$4b2obobo$8bo!

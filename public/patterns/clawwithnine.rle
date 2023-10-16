@@ -1,0 +1,6 @@
+#N clawwithnine.rle
+#C https://conwaylife.com/wiki/Claw_with_nine
+#C https://www.conwaylife.com/patterns/clawwithnine.rle
+#C population=12
+x = 6, y = 7, rule = b3/s23
+4b2o$3bobo$3bo$4bo$b3o$o$2o!

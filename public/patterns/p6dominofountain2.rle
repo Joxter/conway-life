@@ -1,0 +1,6 @@
+#N p6dominofountain2.rle
+#C https://conwaylife.com/wiki/P6_domino_fountain
+#C https://www.conwaylife.com/patterns/p6dominofountain2.rle
+#C population=66
+x = 26, y = 13, rule = b3/s23
+12b2o2$8bo8bo$7b2o8b2o$3b2o2b2o8b2o2b2o$3bo6b6o6bo$bobobo14bobobo$obob4o10b4obobo$obo4bo10bo4bobo$bobob2o12b2obobo$3bobo14bobo$3bobo14bobo$4bo16bo!

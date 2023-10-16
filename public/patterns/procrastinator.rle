@@ -1,0 +1,6 @@
+#N procrastinator.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/procrastinator.rle
+#C population=8
+x = 4, y = 4, rule = b3/s23
+o$3o$3bo$b3o!

@@ -1,0 +1,6 @@
+#N shorttable.rle
+#C https://conwaylife.com/wiki/Short_table
+#C https://www.conwaylife.com/patterns/shorttable.rle
+#C population=5
+x = 3, y = 2, rule = b3/s23
+3o$obo!

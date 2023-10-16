@@ -1,0 +1,6 @@
+#N curl.rle
+#C https://conwaylife.com/wiki/Curl_(still_life_component)
+#C https://www.conwaylife.com/patterns/curl.rle
+#C population=7
+x = 4, y = 3, rule = b3/s23
+2obo$o2bo$b2o!

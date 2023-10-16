@@ -1,0 +1,6 @@
+#N integralwithhookandtail.rle
+#C https://conwaylife.com/wiki/Integral_with_hook_and_tail
+#C https://conwaylife.com/patterns/integralwithhookandtail.rle
+#C population=12
+x = 7, y = 5, rule = b3/s23
+4bobo$2obob2o$bobo$bobo$2bo!

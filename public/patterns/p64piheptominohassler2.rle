@@ -1,0 +1,6 @@
+#N p64piheptominohassler2.rle
+#C https://conwaylife.com/wiki/Figure_eight
+#C https://www.conwaylife.com/patterns/p64piheptominohassler2.rle
+#C population=84
+x = 30, y = 30, rule = b3/s23
+2o26b2o$2obo22bob2o$4bo20bo$bo26bo$2bob2o18b2obo$4b2o18b2o2$9b2o8b2o$9bobo6bobo$11bo6bo$9bobo6bobo$9b2o8b2o7$9b2o8b2o$9bobo6bobo$11bo6bo$9bobo6bobo$9b2o8b2o2$4b2o18b2o$2bob2o18b2obo$bo26bo$4bo20bo$2obo22bob2o$2o26b2o!

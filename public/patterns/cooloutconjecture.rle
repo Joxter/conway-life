@@ -1,0 +1,7 @@
+#N Coolout Conjecture
+#O Richard Schroeppel
+#C A counterexample disproving the Coolout Conjecture, found by Richard Schroeppel in 2001.
+#C https://conwaylife.com/wiki/Coolout_Conjecture
+#C population=8
+x = 6, y = 2, rule = b3/s23
+2o2b2o$ob2obo!

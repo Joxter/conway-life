@@ -1,0 +1,6 @@
+#N cisbiboat.rle
+#C https://conwaylife.com/wiki/Cis-bi-boat
+#C https://www.conwaylife.com/patterns/cisbiboat.rle
+#C population=10
+x = 7, y = 3, rule = b3/s23
+bo3bo$obobobo$b2ob2o!

@@ -1,0 +1,6 @@
+#N superpond.rle
+#C https://conwaylife.com/wiki/Super_pond
+#C https://conwaylife.com/patterns/superpond.rle
+#C population=24
+x = 8, y = 8, rule = b3/s23
+3b2o$2bo2bo$bob2obo$obo2bobo$obo2bobo$bob2obo$2bo2bo$3b2o!

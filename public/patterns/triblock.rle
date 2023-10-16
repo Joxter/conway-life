@@ -1,0 +1,6 @@
+#N Tri-block
+#C A relatively common pseudo still life.
+#C www.conwaylife.com/wiki/index.php?title=Bi-block
+#C population=12
+x = 8, y = 2, rule = b3/s23
+2ob2ob2o$2ob2ob2o!

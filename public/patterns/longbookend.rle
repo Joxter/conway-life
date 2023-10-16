@@ -1,0 +1,6 @@
+#N longbookend.rle
+#C https://conwaylife.com/wiki/Long_bookend
+#C https://www.conwaylife.com/patterns/longbookend.rle
+#C population=8
+x = 5, y = 3, rule = b3/s23
+3b2o$o3bo$4o!

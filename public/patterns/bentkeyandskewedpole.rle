@@ -1,0 +1,6 @@
+#N bentkeyandskewedpole.rle
+#C https://conwaylife.com/wiki/Bent_key_and_skewed_pole
+#C https://www.conwaylife.com/patterns/bentkeyandskewedpole.rle
+#C population=17
+x = 12, y = 6, rule = b3/s23
+2o$o9bo$bobo5bobo$3b2o2b2obo$4bo2bo$4bo2bo!

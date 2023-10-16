@@ -1,0 +1,6 @@
+#N octominoiiintermidategeneration.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/octominoiiintermidategeneration.rle
+#C population=12
+x = 7, y = 6, rule = b3/s23
+2bo$bo$o4b2o$bo4bo$2b2o2bo$3b2o!

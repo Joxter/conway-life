@@ -1,0 +1,6 @@
+#N Bipole
+#C The barberpole of length 2 and thus a period 2 oscillator.
+#C www.conwaylife.com/wiki/index.php?title=Bipole
+#C population=8
+x = 5, y = 5, rule = b3/s23
+2o3b$obo2b2$2bobo$3b2o!

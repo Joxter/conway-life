@@ -1,0 +1,7 @@
+#N Middleweight spaceship
+#O John Conway
+#C A very well-known period 4 c/2 orthogonal spaceship.
+#C www.conwaylife.com/wiki/index.php?title=Middleweight_spaceship
+#C population=11
+x = 6, y = 5, rule = b3/s23
+3bo2b$bo3bo$o5b$o4bo$5o!

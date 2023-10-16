@@ -1,0 +1,6 @@
+#N longsnakewithfeather.rle
+#C https://conwaylife.com/wiki/Long_snake_with_feather
+#C https://www.conwaylife.com/patterns/longsnakewithfeather.rle
+#C population=12
+x = 4, y = 8, rule = b3/s23
+2b2o$bobo$o$b2o$2bo$bo$o$2o!

@@ -1,0 +1,6 @@
+#N Block on table
+#C A simple 10-cell still life.
+#C www.conwaylife.com/wiki/index.php?title=Block_on_table
+#C population=10
+x = 4, y = 5, rule = b3/s23
+2b2o$2b2o2$4o$o2bo!

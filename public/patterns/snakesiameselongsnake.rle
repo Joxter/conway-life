@@ -1,0 +1,6 @@
+#N snakesiameselongsnake.rle
+#C https://conwaylife.com/wiki/Snake_siamese_long_snake
+#C https://www.conwaylife.com/patterns/snakesiameselongsnake.rle
+#C population=11
+x = 3, y = 8, rule = b3/s23
+b2o$2bo$bo$b2o$2bo$bo$o$2o!

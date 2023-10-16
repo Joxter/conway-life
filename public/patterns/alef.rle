@@ -1,0 +1,6 @@
+#N alef.rle
+#C https://conwaylife.com/wiki/Alef
+#C https://www.conwaylife.com/patterns/alef.rle
+#C population=12
+x = 6, y = 4, rule = b3/s23
+2ob2o$bobo$bo3bo$2b4o!

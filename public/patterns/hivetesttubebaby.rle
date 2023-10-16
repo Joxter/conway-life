@@ -1,0 +1,7 @@
+#N Hive test tube baby
+#O Unknown
+#C https://conwaylife.com/wiki/Hive_test_tube_baby
+#C https://conwaylife.com/patterns/hivetesttubebaby.rle
+#C population=20
+x = 12, y = 6, rule = b3/s23
+b2o6b2o$o2bo4bo2bo$b2obo2bob2o$4bo2bo$4bo2bo$5b2o!

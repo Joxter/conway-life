@@ -1,0 +1,6 @@
+#N tubtranslinetub.rle
+#C https://conwaylife.com/wiki/Tub_trans-line_tub
+#C https://www.conwaylife.com/patterns/tubtranslinetub.rle
+#C population=11
+x = 7, y = 7, rule = b3/s23
+5bo$4bobo$3bobo$3bo$bobo$obo$bo!

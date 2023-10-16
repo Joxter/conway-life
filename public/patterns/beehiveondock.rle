@@ -1,0 +1,6 @@
+#N beehiveondock.rle
+#C https://conwaylife.com/wiki/Beehive_on_dock
+#C https://conwaylife.com/patterns/beehiveondock.rle
+#C population=16
+x = 7, y = 6, rule = b3/s23
+2o3bo$obobobo$2bobobo$2bo2bo$obo$2o!

@@ -1,0 +1,6 @@
+#N arrow.rle
+#C https://conwaylife.com/wiki/Blinker
+#C https://www.conwaylife.com/patterns/arrow.rle
+#C population=10
+x = 5, y = 3, rule = b3/s23
+5o$o3bo$b3o!

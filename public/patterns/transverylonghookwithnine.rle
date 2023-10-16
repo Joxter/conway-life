@@ -1,0 +1,6 @@
+#N transverylonghookwithnine.rle
+#C https://conwaylife.com/wiki/Trans-very_long_hook_with_nine
+#C https://www.conwaylife.com/patterns/transverylonghookwithnine.rle
+#C population=12
+x = 8, y = 5, rule = b3/s23
+2o$obo3b2o$2bo2bobo$2bobo$3bo!

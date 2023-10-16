@@ -1,0 +1,6 @@
+#N Carrier siamese carrier
+#C A 10-cell still life composed of two aircraft carriers attached together.
+#C https://www.conwaylife.com/wiki/index.php?title=Carrier_siamese_carrier
+#C population=10
+x = 7, y = 4, rule = b3/s23
+2o5b$o2b2o2b$2b2o2bo$5b2o!

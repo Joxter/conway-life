@@ -1,0 +1,6 @@
+#N schumann.rle
+#C https://conwaylife.com/wiki/Composers
+#C https://www.conwaylife.com/patterns/schumann.rle
+#C population=11
+x = 6, y = 9, rule = b3/s23
+4bo$3bobo$4bo2$3o2$4bo$3bobo$4bo!

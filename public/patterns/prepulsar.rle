@@ -1,0 +1,6 @@
+#N Pre-pulsar
+#C A common predecessor of the pulsar. It duplicates itself after 15 generations, although it fails to be a true replicator because of the way the that two copies then interact.
+#C www.conwaylife.com/wiki/index.php?title=Pre-pulsar
+#C population=16
+x = 9, y = 3, rule = b3/s23
+3o3b3o$obo3bobo$3o3b3o!

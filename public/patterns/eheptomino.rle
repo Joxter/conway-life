@@ -1,0 +1,7 @@
+#N E-heptomino
+#O Unknown
+#C https://conwaylife.com/wiki/E-heptomino
+#C https://conwaylife.com/patterns/eheptomino.rle
+#C population=7
+x = 4, y = 3, rule = b3/s23
+b3o$2o$b2o!

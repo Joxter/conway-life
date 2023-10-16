@@ -1,0 +1,6 @@
+#N bunwithfeather.rle
+#C https://conwaylife.com/wiki/Bun_with_feather
+#C https://www.conwaylife.com/patterns/bunwithfeather.rle
+#C population=12
+x = 6, y = 5, rule = b3/s23
+3bo$obobo$2obobo$3bobo$3b2o!

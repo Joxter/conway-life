@@ -1,0 +1,6 @@
+#N fheptomino.rle
+#C https://conwaylife.com/wiki/F-heptomino
+#C https://conwaylife.com/patterns/fheptomino.rle
+#C population=7
+x = 4, y = 4, rule = b3/s23
+2o$bo$bo$b3o!

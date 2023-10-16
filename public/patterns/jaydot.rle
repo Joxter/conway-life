@@ -1,0 +1,7 @@
+#N Jaydot
+#O Kazyan
+#C https://conwaylife.com/wiki/Jaydot
+#C https://conwaylife.com/patterns/jaydot.rle
+#C population=9
+x = 3, y = 6, rule = b3/s23
+b2o$3o2$bo$b2o$o!

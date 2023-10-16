@@ -1,0 +1,6 @@
+#N boattiesnake.rle
+#C https://conwaylife.com/wiki/Boat_tie_snake
+#C https://www.conwaylife.com/patterns/boattiesnake.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+bo$obo$b2o$3b2obo$3bob2o!

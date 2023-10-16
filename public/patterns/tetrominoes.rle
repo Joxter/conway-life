@@ -1,0 +1,6 @@
+#N Tetrominoes
+#C A collection of all five tetrominoes.
+#C www.conwaylife.com/wiki/index.php?title=Polyomino#Tetrominoes
+#C population=20
+x = 39, y = 2, rule = b3/s23
+2o6b3o6b4o6b3o6b2ob$2o7bo19bo7b2o!

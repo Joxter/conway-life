@@ -1,0 +1,6 @@
+#N blonktie.rle
+#C https://conwaylife.com/wiki/Blonk-tie
+#C https://www.conwaylife.com/patterns/blonktie.rle
+#C population=7
+x = 3, y = 5, rule = b3/s23
+2o$2o$2bo$2bo$2bo!

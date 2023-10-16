@@ -1,0 +1,6 @@
+#N Pre-pulsar predecessor
+#C A common four-generation predecessor of the pre-pulsar.
+#C www.conwaylife.com/wiki/index.php?title=Pre-pulsar
+#C population=8
+x = 9, y = 2, rule = b3/s23
+bo5bob$3o3b3o!

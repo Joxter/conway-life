@@ -1,0 +1,6 @@
+#N fheptomino_synth.rle
+#C Glider synthesis of an F-heptomino.
+#C https://conwaylife.com/wiki/F-heptomino
+#C population=15
+x = 8, y = 11, rule = b3/s23
+4bo$2b2o$3b2o4$bo$2bo$3o2bo$5bobo$5b2o!

@@ -1,0 +1,6 @@
+#N fourskewedblocks.rle
+#C https://conwaylife.com/wiki/Four_skewed_blocks
+#C https://www.conwaylife.com/patterns/fourskewedblocks.rle
+#C population=16
+x = 10, y = 13, rule = b3/s23
+3b2o$3b2o4$8b2o$2o6b2o$2o4$5b2o$5b2o!

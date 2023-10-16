@@ -1,0 +1,6 @@
+#N inverteddoubleclaw.rle
+#C https://conwaylife.com/wiki/Inverted_double_claw
+#C https://conwaylife.com/patterns/inverteddoubleclaw.rle
+#C population=12
+x = 6, y = 6, rule = b3/s23
+4b2o$2bo2bo$bob2o$2bo$obo$2o!

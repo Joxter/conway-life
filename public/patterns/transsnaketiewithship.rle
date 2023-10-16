@@ -1,0 +1,6 @@
+#N transsnaketiewithship.rle
+#C https://conwaylife.com/wiki/Density
+#C https://www.conwaylife.com/patterns/transsnaketiewithship.rle
+#C population=18
+x = 6, y = 6, rule = b3/s23
+2o2b2o$o2bobo$bob2o$2o$2b2obo$2bob2o!

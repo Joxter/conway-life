@@ -1,0 +1,6 @@
+#N beehivewithhookednine.rle
+#C https://conwaylife.com/wiki/Beehive_with_hooked_nine
+#C https://www.conwaylife.com/patterns/beehivewithhookednine.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+2o3bo$obobobo$2bobobo$2bo2bo$3b2o!

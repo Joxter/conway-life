@@ -1,0 +1,6 @@
+#N boatlinetub.rle
+#C https://conwaylife.com/wiki/Cis-boat_line_tub
+#C https://conwaylife.com/patterns/boatlinetub.rle
+#C population=12
+x = 7, y = 7, rule = b3/s23
+5bo$4bobo$3bob2o$3bo$bobo$obo$bo!

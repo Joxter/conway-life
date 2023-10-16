@@ -1,0 +1,7 @@
+#N Feather
+#O Unknown
+#C https://conwaylife.com/wiki/Feather
+#C https://conwaylife.com/patterns/feather.rle
+#C population=5
+x = 3, y = 4, rule = b3/s23
+2o$o$bo$2bo!

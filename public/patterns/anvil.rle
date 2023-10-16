@@ -1,0 +1,5 @@
+#N Anvil
+#C An induction coil.
+#C population=13
+x = 7, y = 4, rule = b3/s23
+b4o2b$o4bob$b3obob$3bob2o!

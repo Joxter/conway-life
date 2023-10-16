@@ -1,0 +1,6 @@
+#N Loaf siamese barge
+#C A 10-cell still life.
+#C www.conwaylife.com/wiki/index.php?title=Loaf_siamese_barge
+#C population=10
+x = 5, y = 5, rule = b3/s23
+2b2ob$bo2bo$obobo$bobob$2bo!

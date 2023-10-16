@@ -1,0 +1,6 @@
+#N Tub test tube baby
+#C A period 2 oscillator.
+#C www.conwaylife.com/wiki/index.php?title=Tub_test_tube_baby
+#C population=16
+x = 10, y = 6, rule = b3/s23
+bo6bob$obo4bobo$bobo2bobob$3bo2bo3b$3bo2bo3b$4b2o!

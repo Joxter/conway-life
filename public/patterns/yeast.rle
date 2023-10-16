@@ -1,0 +1,6 @@
+#N yeast.rle
+#C https://conwaylife.com/wiki/Bakery
+#C https://www.conwaylife.com/patterns/yeast.rle
+#C population=8
+x = 5, y = 5, rule = b3/s23
+2bo$3bo$bo2bo$3o$bo!

@@ -1,0 +1,6 @@
+#N vspark.rle
+#C https://conwaylife.com/wiki/V_spark
+#C https://www.conwaylife.com/patterns/vspark.rle
+#C population=3
+x = 3, y = 2, rule = b3/s23
+obo$bo!

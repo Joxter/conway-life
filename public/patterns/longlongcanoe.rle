@@ -1,0 +1,6 @@
+#N Long long canoe
+#C A 10-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Long_long_canoe
+#C population=10
+x = 7, y = 7, rule = b3/s23
+5b2o$6bo$5bob$4bo2b$3bo3b$obo4b$2o!

@@ -1,0 +1,7 @@
+#N Monogram
+#O Dean Hickerson
+#C A period 4 oscillator found in August 1989.
+#C www.conwaylife.com/wiki/index.php?title=Monogram
+#C population=18
+x = 7, y = 5, rule = b3/s23
+2o3b2o$bobobob$b2ob2ob$bobobob$2o3b2o!

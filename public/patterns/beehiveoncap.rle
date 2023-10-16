@@ -1,0 +1,6 @@
+#N beehiveoncap.rle
+#C https://conwaylife.com/wiki/Beehive_on_cap
+#C https://www.conwaylife.com/patterns/beehiveoncap.rle
+#C population=14
+x = 5, y = 7, rule = b3/s23
+b2o$o2bo$4o2$2b2o$bo2bo$2b2o!

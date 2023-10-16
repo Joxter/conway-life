@@ -1,0 +1,7 @@
+#N p196pihassler.rle
+#O Aidan F. Pierce, 2021
+#C https://conwaylife.com/wiki/P196_pi-heptomino_hassler
+#C https://www.conwaylife.com/patterns/p196pihassler.rle
+#C population=68
+x = 34, y = 34, rule = b3/s23
+29bo$28bobo$19b2o7bobo$19b2o6b2ob3o$33bo$27b2ob3o$27b2obo7$24b3o3b2o$24bobo3b2o$24bobo3$7bobo$2b2o3bobo$2b2o3b3o7$3bob2o$b3ob2o$o$b3ob2o6b2o$3bobo7b2o$3bobo$4bo!

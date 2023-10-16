@@ -1,0 +1,6 @@
+#N boatcislinehook.rle
+#C https://conwaylife.com/wiki/Cis-boat_trans-line_hook
+#C https://www.conwaylife.com/patterns/boatcislinehook.rle
+#C population=12
+x = 4, y = 6, rule = b3/s23
+obo$2obo$3bo$2obo$obo$bo!

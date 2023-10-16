@@ -1,0 +1,6 @@
+#N triplecandelabra.rle
+#C https://conwaylife.com/wiki/Candelabra
+#C https://www.conwaylife.com/patterns/triplecandelabra.rle
+#C population=70
+x = 34, y = 6, rule = b3/s23
+4b2o4b2ob2o4b2ob2o4b2o$bo2bo6bobo6bobo6bo2bo$obobo6bobo2b2o2bobobo2bobobobo$bo2bob4obobob4obobobo2bobo2bo$4bobo2bobobobo2bobobobo2bobo$5bo4bo3bo4bo3bo4bo!

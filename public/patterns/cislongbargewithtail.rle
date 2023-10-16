@@ -1,0 +1,6 @@
+#N cislongbargewithtail.rle
+#C https://conwaylife.com/wiki/Cis-long_barge_with_tail
+#C https://conwaylife.com/patterns/cislongbargewithtail.rle
+#C population=12
+x = 7, y = 5, rule = b3/s23
+2o3bo$bo2bobo$bobobo$2bobo$3bo!

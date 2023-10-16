@@ -1,0 +1,6 @@
+#N lwssonlwss.rle
+#C https://conwaylife.com/wiki/Object
+#C https://www.conwaylife.com/patterns/lwssonlwss.rle
+#C population=24
+x = 11, y = 5, rule = b3/s23
+b2o5b2o$3o5b3o$2obo3bob2o$b3o3b3o$2bo5bo!

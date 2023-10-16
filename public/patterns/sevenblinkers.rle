@@ -1,0 +1,6 @@
+#N sevenblinkers.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/sevenblinkers.rle
+#C population=7
+x = 5, y = 3, rule = b3/s23
+o$obo$2ob2o!

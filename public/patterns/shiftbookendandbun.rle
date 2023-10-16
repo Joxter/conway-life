@@ -1,0 +1,6 @@
+#N shiftbookendandbun.rle
+#C https://conwaylife.com/wiki/Shift-bookend_and_bun
+#C https://www.conwaylife.com/patterns/shiftbookendandbun.rle
+#C population=14
+x = 7, y = 6, rule = b3/s23
+2o$obo$2bo2bo$b2obobo$4bobo$4b2o!

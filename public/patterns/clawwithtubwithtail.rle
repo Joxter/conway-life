@@ -1,0 +1,7 @@
+#N Claw with tub with tail
+#O Unknown
+#C https://conwaylife.com/wiki/Claw_with_tub_with_tail
+#C https://conwaylife.com/patterns/clawwithtubwithtail.rle
+#C population=11
+x = 6, y = 7, rule = b3/s23
+bo$obo$bobo$3bo$2bo$3b3o$5bo!

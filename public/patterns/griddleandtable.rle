@@ -1,0 +1,7 @@
+#N Griddle and table
+#O Unknown
+#C https://conwaylife.com/wiki/Griddle_and_table
+#C https://conwaylife.com/patterns/griddleandtable.rle
+#C population=17
+x = 6, y = 7, rule = b3/s23
+3bo$bobo$o4bo$6o2$4o$o2bo!

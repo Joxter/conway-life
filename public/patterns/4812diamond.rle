@@ -1,0 +1,5 @@
+#N 4-8-12_diamond
+#C A pure glider generator.
+#C population=36
+x = 12, y = 9, rule = b3/s23
+4b4o4b2$2b8o2b2$12o2$2b8o2b2$4b4o!

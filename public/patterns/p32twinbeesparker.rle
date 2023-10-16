@@ -1,0 +1,6 @@
+#N p32twinbeesparker.rle
+#C https://conwaylife.com/wiki/Honey_farm_hasslers
+#C https://www.conwaylife.com/patterns/p32twinbeesparker.rle
+#C population=77
+x = 19, y = 29, rule = b3/s23
+2b2o2$o3bo$o4bo$2bobobo$3bobobo7bo$4bo4bo3b3o$5bo3bo2bo$12b2o$6b2o$2o$obo$2bo13bo$2b2o7bo4b2o$10b2o4b3o$2b2o7bo4b2o$2bo13bo$obo$2o$6b2o$12b2o$5bo3bo2bo$4bo4bo3b3o$3bobobo7bo$2bobobo$o4bo$o3bo2$2b2o!

@@ -1,0 +1,6 @@
+#N verylongshipgenerator.rle
+#C https://conwaylife.com/wiki/Very_long_ship
+#C https://www.conwaylife.com/patterns/verylongshipgenerator.rle
+#C population=14
+x = 7, y = 6, rule = b3/s23
+b3o$o3bo$o4bo$o5bo$bo3bo$2b3o!

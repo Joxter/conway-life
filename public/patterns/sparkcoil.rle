@@ -1,0 +1,6 @@
+#N Spark coil
+#C A period 2 oscillator found in 1971.
+#C www.conwaylife.com/wiki/index.php?title=Spark_coil
+#C population=18
+x = 8, y = 5, rule = b3/s23
+2o4b2o$obo2bobo$2bo2bo2b$obo2bobo$2o4b2o!

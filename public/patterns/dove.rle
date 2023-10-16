@@ -1,0 +1,7 @@
+#N Dove
+#O Unknown
+#C https://conwaylife.com/wiki/Dove
+#C https://conwaylife.com/patterns/dove.rle
+#C population=9
+x = 5, y = 4, rule = b3/s23
+2b2o$bo2bo$o2bo$3o!

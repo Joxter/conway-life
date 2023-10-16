@@ -1,0 +1,7 @@
+#N p72quasishuttle.rle
+#O Jason Summers, 2005
+#C https://conwaylife.com/wiki/P72_quasi-shuttle
+#C https://www.conwaylife.com/patterns/p72quasishuttle.rle
+#C population=104
+x = 37, y = 23, rule = b3/s23
+30bo$29b2o$28bob2o$b4o22b3o2bo$o4bo23bobobo$o3bobo23bobobo$bo3bobo6b2o15bo2b3o$7bo5bobo16b2obo$7bo5bo19b2o$4bo2bo5b3o17bo$5b2o2$5b2o$4bo2bo5b3o17bo$7bo5bo19b2o$7bo5bobo16b2obo$bo3bobo6b2o15bo2b3o$o3bobo23bobobo$o4bo23bobobo$b4o22b3o2bo$28bob2o$29b2o$30bo!

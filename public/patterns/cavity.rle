@@ -1,0 +1,6 @@
+#N cavity.rle
+#C https://conwaylife.com/wiki/Cavity
+#C https://www.conwaylife.com/patterns/cavity.rle
+#C population=6
+x = 4, y = 3, rule = b3/s23
+bobo$o2bo$b2o!

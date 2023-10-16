@@ -1,0 +1,6 @@
+#N cisrotatedbun.rle
+#C https://conwaylife.com/wiki/Cis-rotated_bun
+#C https://www.conwaylife.com/patterns/cisrotatedbun.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+4b2o$bo2bobo$obobobo$obo2bo$b2o!

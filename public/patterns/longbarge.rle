@@ -1,0 +1,6 @@
+#N Long barge
+#C An 8-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Long_barge
+#C population=8
+x = 5, y = 5, rule = b3/s23
+bo3b$obo2b$bobob$2bobo$3bo!

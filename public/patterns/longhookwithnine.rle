@@ -1,0 +1,6 @@
+#N longhookwithnine.rle
+#C https://conwaylife.com/wiki/Long_hook_with_nine
+#C https://www.conwaylife.com/patterns/longhookwithnine.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+2o$obo$2bo2b2o$2bobobo$3bo!

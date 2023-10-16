@@ -1,0 +1,6 @@
+#N Table
+#C A simple induction coil.
+#C www.conwaylife.com/wiki/index.php?title=Table
+#C population=6
+x = 4, y = 2, rule = b3/s23
+4o$o2bo!

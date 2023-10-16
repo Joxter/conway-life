@@ -1,0 +1,6 @@
+#N Dock
+#C An induction coil.
+#C www.conwaylife.com/wiki/index.php?title=Dock
+#C population=10
+x = 6, y = 3, rule = b3/s23
+b4ob$o4bo$2o2b2o!

@@ -1,0 +1,6 @@
+#N cisbipoleontable.rle
+#C https://conwaylife.com/wiki/Cis-bipole_on_table
+#C https://www.conwaylife.com/patterns/cisbipoleontable.rle
+#C population=14
+x = 5, y = 8, rule = b3/s23
+3b2o$2bobo2$obo$2o2$4o$o2bo!

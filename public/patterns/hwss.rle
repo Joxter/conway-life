@@ -1,0 +1,7 @@
+#N Heavyweight spaceship
+#O John Conway
+#C A very well-known period 4 c/2 orthogonal spaceship.
+#C www.conwaylife.com/wiki/index.php?title=Heavyweight_spaceship
+#C population=13
+x = 7, y = 5, rule = b3/s23
+3b2o2b$bo4bo$o6b$o5bo$6o!

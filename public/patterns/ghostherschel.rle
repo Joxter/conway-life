@@ -1,0 +1,6 @@
+#N ghostherschel.rle
+#C https://conwaylife.com/wiki/Ghost_Herschel
+#C https://www.conwaylife.com/patterns/ghostherschel.rle
+#C population=6
+x = 3, y = 4, rule = b3/s23
+o$o$3o$2bo!

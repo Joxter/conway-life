@@ -1,0 +1,6 @@
+#N twelveloop.rle
+#C https://conwaylife.com/wiki/Twelve_loop
+#C https://conwaylife.com/patterns/twelveloop.rle
+#C population=12
+x = 6, y = 5, rule = b3/s23
+2o$obob2o$2bobo$2bo2bo$3b2o!

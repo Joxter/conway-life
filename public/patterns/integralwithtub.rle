@@ -1,0 +1,6 @@
+#N Integral with tub
+#C A 10-cell still life.
+#C www.conwaylife.com/wiki/index.php?title=Integral_with_tub
+#C population=10
+x = 6, y = 6, rule = b3/s23
+2o4b$obo3b$2bo3b$2bobob$3bobo$4bo!

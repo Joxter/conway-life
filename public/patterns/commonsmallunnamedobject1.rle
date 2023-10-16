@@ -1,0 +1,6 @@
+#N commonsmallunnamedobject1.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/commonsmallunnamedobject1.rle
+#C population=6
+x = 5, y = 3, rule = b3/s23
+3o$4bo$3b2o!

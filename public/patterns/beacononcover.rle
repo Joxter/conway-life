@@ -1,0 +1,6 @@
+#N beacononcover.rle
+#C https://conwaylife.com/wiki/Beacon_on_cover
+#C https://www.conwaylife.com/patterns/beacononcover.rle
+#C population=14
+x = 7, y = 7, rule = b3/s23
+2o$o$3bob2o$2b2obo$5bo$2b3o$2bo!

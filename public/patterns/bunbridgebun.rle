@@ -1,0 +1,6 @@
+#N bunbridgebun.rle
+#C https://conwaylife.com/wiki/Bun_bridge_bun
+#C https://www.conwaylife.com/patterns/bunbridgebun.rle
+#C population=14
+x = 6, y = 6, rule = b3/s23
+3b2o$3bobo$bobobo$obobo$obo$b2o!

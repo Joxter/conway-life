@@ -1,0 +1,7 @@
+#N Hook test tube baby
+#O Unknown
+#C https://conwaylife.com/wiki/Hook_test_tube_baby
+#C https://conwaylife.com/patterns/hooktesttubebaby.rle
+#C population=16
+x = 10, y = 5, rule = b3/s23
+obo4bobo$2obo2bob2o$3bo2bo$3bo2bo$4b2o!

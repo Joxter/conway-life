@@ -1,0 +1,6 @@
+#N herschel_synth.rle
+#C https://conwaylife.com/wiki/Herschel
+#C https://www.conwaylife.com/patterns/herschel_synth.rle
+#C population=15
+x = 12, y = 14, rule = b3/s23
+9bobo$9b2o$10bo2$9b2o$9bobo$9bo5$b2o$obo$2bo!

@@ -1,0 +1,6 @@
+#N translongboatwithnine.rle
+#C https://conwaylife.com/wiki/Trans-long_boat_with_nine
+#C https://www.conwaylife.com/patterns/translongboatwithnine.rle
+#C population=13
+x = 7, y = 7, rule = b3/s23
+5b2o$4bobo$3bobo$2bobo$2bo$obo$2o!

@@ -1,0 +1,6 @@
+#N uturner.rle
+#C https://conwaylife.com/wiki/List_of_common_evolutionary_sequences
+#C https://www.conwaylife.com/patterns/uturner.rle
+#C population=10
+x = 4, y = 4, rule = b3/s23
+b3o$b3o$obo$2o!

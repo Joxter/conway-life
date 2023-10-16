@@ -1,0 +1,6 @@
+#N transcarrierdownontable.rle
+#C https://conwaylife.com/wiki/Trans-aircraft_carrier_down_on_table
+#C https://conwaylife.com/patterns/transcarrierdownontable.rle
+#C population=12
+x = 7, y = 5, rule = b3/s23
+2o$o2bob2o$2b2obo$5bo$5b2o!

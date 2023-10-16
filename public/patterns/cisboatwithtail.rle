@@ -1,0 +1,6 @@
+#N Cis-boat with tail
+#C A 9-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Cis-boat_with_tail
+#C population=9
+x = 5, y = 5, rule = b3/s23
+3b2o$3bob$2obob$obo2b$bo!

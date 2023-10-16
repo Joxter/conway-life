@@ -1,0 +1,6 @@
+#N Herschel great-grandparent
+#C A specific 3-tick Herschel predecessor occasionally useful for displaying dependent conduits.
+#C https://conwaylife.com/wiki/Herschel_great-grandparent
+#C population=19
+x = 7, y = 5, rule = b3/s23
+b2o$3ob2o$b2ob3o$3ob2o$2o!

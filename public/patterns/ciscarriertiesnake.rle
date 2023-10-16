@@ -1,0 +1,6 @@
+#N ciscarriertiesnake.rle
+#C https://conwaylife.com/wiki/Cis-aircraft_carrier_tie_snake
+#C https://conwaylife.com/patterns/ciscarriertiesnake.rle
+#C population=12
+x = 8, y = 5, rule = b3/s23
+2obo$ob2o$4b2o$4bo2bo$6b2o!

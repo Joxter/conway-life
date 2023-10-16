@@ -1,0 +1,6 @@
+#N carriersiamesehookwithtailhook.rle
+#C https://conwaylife.com/wiki/Carrier_siamese_hook-with-tail_hook
+#C https://conwaylife.com/patterns/carriersiamesehookwithtailhook.rle
+#C population=12
+x = 8, y = 4, rule = b3/s23
+2o$bo4b2o$bob2o2bo$2bob2o!

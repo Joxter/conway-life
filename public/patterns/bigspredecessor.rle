@@ -1,0 +1,6 @@
+#N bigspredecessor.rle
+#C https://conwaylife.com/wiki/Big_S
+#C https://www.conwaylife.com/patterns/bigspredecessor.rle
+#C population=12
+x = 5, y = 8, rule = b3/s23
+2o$obo$bo3$2b3o$2bobo$2bobo!

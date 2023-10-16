@@ -1,0 +1,7 @@
+#N Bent keys
+#O Dean Hickerson
+#C A period 3 oscillator found in August 1989.
+#C www.conwaylife.com/wiki/index.php?title=Bent_keys
+#C population=16
+x = 12, y = 5, rule = b3/s23
+bo8bob$obo6bobo$bob2o2b2obob$4bo2bo4b$4bo2bo!

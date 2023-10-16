@@ -1,0 +1,6 @@
+#N verylongmelusine.rle
+#C https://conwaylife.com/wiki/Very_long_melusine
+#C https://www.conwaylife.com/patterns/verylongmelusine.rle
+#C population=12
+x = 8, y = 4, rule = b3/s23
+2o3bo$bo2bobo$bobo2bo$2bo3b2o!

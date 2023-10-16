@@ -1,0 +1,7 @@
+#N LWSS on MWSS
+#O Unknown
+#C https://conwaylife.com/wiki/LWSS_on_MWSS
+#C https://conwaylife.com/patterns/lwssonmwss.rle
+#C population=20
+x = 6, y = 12, rule = b3/s23
+bo2bo$o$o3bo$4o4$5o$o4bo$o$bo3bo$3bo!

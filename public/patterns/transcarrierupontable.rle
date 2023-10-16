@@ -1,0 +1,6 @@
+#N transcarrierupontable.rle
+#C https://conwaylife.com/wiki/Trans-aircraft_carrier_up_on_table
+#C https://conwaylife.com/patterns/transcarrierupontable.rle
+#C population=12
+x = 7, y = 4, rule = b3/s23
+5b2o$2o3bo$o2bobo$2b2ob2o!

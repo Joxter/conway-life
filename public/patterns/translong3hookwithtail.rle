@@ -1,0 +1,6 @@
+#N translong3hookwithtail.rle
+#C https://conwaylife.com/wiki/Trans-long%5E3_hook_with_tail
+#C https://www.conwaylife.com/patterns/translong3hookwithtail.rle
+#C population=11
+x = 8, y = 5, rule = b3/s23
+5bo$4bobo$3bo2bo$obo3b2o$2o!

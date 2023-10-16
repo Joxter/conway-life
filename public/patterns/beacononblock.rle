@@ -1,0 +1,6 @@
+#N beacononblock.rle
+#C https://conwaylife.com/wiki/Object
+#C https://www.conwaylife.com/patterns/beacononblock.rle
+#C population=10
+x = 7, y = 4, rule = b3/s23
+2b2ob2o$3bob2o$o$2o!

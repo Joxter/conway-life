@@ -1,0 +1,6 @@
+#N Hat
+#C A 9-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Hat
+#C population=9
+x = 5, y = 4, rule = b3/s23
+2bo2b$bobob$bobob$2ob2o!

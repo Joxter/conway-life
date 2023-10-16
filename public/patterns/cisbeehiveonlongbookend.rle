@@ -1,0 +1,6 @@
+#N cisbeehiveonlongbookend.rle
+#C https://conwaylife.com/wiki/Cis-beehive_on_long_bookend
+#C https://www.conwaylife.com/patterns/cisbeehiveonlongbookend.rle
+#C population=14
+x = 7, y = 5, rule = b3/s23
+2o3bo$obobobo$2bobobo$2bo2bo$b2o!

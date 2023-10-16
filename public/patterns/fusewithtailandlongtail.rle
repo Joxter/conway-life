@@ -1,0 +1,7 @@
+#N Fuse with tail and long tail
+#O Unknown
+#C https://conwaylife.com/wiki/Fuse_with_tail_and_long_tail
+#C https://conwaylife.com/patterns/fusewithtailandlongtail.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+ob2o$2o2bo$3bo$4b3o$6bo!

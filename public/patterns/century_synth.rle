@@ -1,0 +1,6 @@
+#N century_synth.rle
+#C Glider synthesis of a century.
+#C https://conwaylife.com/wiki/Century
+#C population=15
+x = 7, y = 12, rule = b3/s23
+4bobo$5b2o$5bo2$3bo$4bo$2b3o3$bo$b2o$obo!

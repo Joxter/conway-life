@@ -1,0 +1,6 @@
+#N carrierbridgesnake.rle
+#C https://conwaylife.com/wiki/Aircraft_carrier_bridge_snake
+#C https://conwaylife.com/patterns/carrierbridgesnake.rle
+#C population=12
+x = 6, y = 6, rule = b3/s23
+2b2o$2bo2bo$2o2b2o$o$bo$2o!

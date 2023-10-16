@@ -1,0 +1,6 @@
+#N dove_synth.rle
+#C https://conwaylife.com/wiki/Dove
+#C https://www.conwaylife.com/patterns/dove_synth.rle
+#C population=15
+x = 8, y = 11, rule = b3/s23
+6bo$2bo2bo$obo2b3o$b2o5$2b3o$2bo$3bo!

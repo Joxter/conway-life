@@ -1,0 +1,6 @@
+#N bananaspark_synth
+#C Glider synthesis of banana spark.
+#C https://www.conwaylife.com/wiki/Banana_spark
+#C population=10
+x = 4, y = 11, rule = b3/s23
+bo$o$3o6$2bo$b2o$bobo!

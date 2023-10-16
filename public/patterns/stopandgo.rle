@@ -1,0 +1,6 @@
+#N stopandgo.rle
+#C https://conwaylife.com/wiki/Stop_and_go
+#C https://www.conwaylife.com/patterns/stopandgo.rle
+#C population=43
+x = 42, y = 11, rule = b3/s23
+40bo$39bo$2o14b2o9b2o10b3o$2o15b2o8b2o$13b5o$13b4o2$13b4o$13b5o$2o15b2o$2o14b2o!

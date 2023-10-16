@@ -1,0 +1,7 @@
+#N Racetrack
+#O Unknown
+#C https://conwaylife.com/wiki/Racetrack
+#C https://conwaylife.com/patterns/racetrack.rle
+#C population=12
+x = 6, y = 4, rule = b3/s23
+3b2o$b3obo$o4bo$b4o!

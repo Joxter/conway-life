@@ -1,0 +1,7 @@
+#N Tub with extra long tail
+#O
+#C A small 11-bit still life.
+#C https://conwaylife.com/wiki/Tub_with_extra_long_tail
+#C population=11
+x = 4, y = 8, rule = b3/s23
+bo$obo$bobo$3bo$2bo$bo$o$2o!

@@ -1,0 +1,7 @@
+#N Mangled 1 beacon
+#O Unknown
+#C https://conwaylife.com/wiki/Mangled_1_beacon
+#C https://conwaylife.com/patterns/mangled1beacon.rle
+#C population=16
+x = 7, y = 7, rule = b3/s23
+3b2o$3bobo$o5bo$5obo$5bo$2bo$2b2o!

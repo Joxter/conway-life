@@ -1,0 +1,7 @@
+#N Nine
+#O Unknown
+#C https://conwaylife.com/wiki/Nine
+#C https://conwaylife.com/patterns/nine.rle
+#C population=6
+x = 3, y = 4, rule = b3/s23
+o$o$obo$b2o!

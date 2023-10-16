@@ -1,0 +1,6 @@
+#N beehivegenerator.rle
+#C https://conwaylife.com/wiki/Beehive
+#C https://www.conwaylife.com/patterns/beehivegenerator.rle
+#C population=11
+x = 9, y = 4, rule = b3/s23
+b2o$o2bo3b2o$obo4b2o$2bo!

@@ -1,0 +1,7 @@
+#N Eater 1
+#O Bill Gosper
+#C The first discovered eater and a 7-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Eater_1
+#C population=7
+x = 4, y = 4, rule = b3/s23
+2o2b$obob$2bob$2b2o!

@@ -1,0 +1,6 @@
+#N doubleclaw.rle
+#C https://conwaylife.com/wiki/Double_claw
+#C https://conwaylife.com/patterns/doubleclaw.rle
+#C population=12
+x = 6, y = 6, rule = b3/s23
+b2o$obo$o$bo2b2o$2bo2bo$3b2o!

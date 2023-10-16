@@ -1,0 +1,6 @@
+#N Q-pentomino
+#C One of the 12 pentominoes.
+#C www.conwaylife.com/wiki/index.php?title=Polyomino#Pentominoes
+#C population=5
+x = 4, y = 2, rule = b3/s23
+4o$3bo!

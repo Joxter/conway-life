@@ -1,0 +1,6 @@
+#N hooklinelonghook.rle
+#C https://conwaylife.com/wiki/Hook_line_long_hook
+#C https://www.conwaylife.com/patterns/hooklinelonghook.rle
+#C population=12
+x = 8, y = 5, rule = b3/s23
+5bobo$4bob2o$2o2bo$obobo$3bo!

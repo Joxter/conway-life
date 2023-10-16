@@ -1,0 +1,6 @@
+#N longtubclawwithtail.rle
+#C https://conwaylife.com/wiki/Long_tub-claw_with_tail
+#C https://conwaylife.com/patterns/longtubclawwithtail.rle
+#C population=12
+x = 8, y = 5, rule = b3/s23
+2o$bo2b2o$bobo2bo$2bo2bobo$6bo!

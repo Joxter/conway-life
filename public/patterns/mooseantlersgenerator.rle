@@ -1,0 +1,6 @@
+#N mooseantlersgenerator.rle
+#C https://conwaylife.com/wiki/Moose_antlers
+#C https://www.conwaylife.com/patterns/mooseantlersgenerator.rle
+#C population=13
+x = 5, y = 7, rule = b3/s23
+2b2o$2b2o$2b2o$bobo$o3bo$bobo$2bo!

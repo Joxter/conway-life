@@ -1,0 +1,6 @@
+#N Trans-R-bee and R-loaf
+#C A 15-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Trans-R-bee_and_R-loaf
+#C population=15
+x = 5, y = 8, rule = b3/s23
+2b2ob$bo2bo$b3ob2$b3ob$o2bob$obo2b$bo!

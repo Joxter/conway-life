@@ -1,0 +1,7 @@
+#N pulshuttlev.rle
+#O Robert Wainwright, 1985
+#C https://conwaylife.com/wiki/Pulshuttle_V
+#C https://www.conwaylife.com/patterns/pulshuttlev.rle
+#C population=166
+x = 42, y = 29, rule = b3/s23
+13bo14bo$12bobo7bo4bobo$13bo6b2ob2o3bo$22bo$2b2o6b2o18b2o6b2o$o4bo2bo4bo14bo4bo2bo4bo$o4bo2bo4bo14bo4bo2bo4bo$o4bo2bo4bo8bo5bo4bo2bo4bo$2b2o6b2o8b2ob2o5b2o6b2o$22bo3$2b2o6b2o18b2o6b2o$o4bo2bo4bo8bo5bo4bo2bo4bo$o4bo2bo4bo6b2ob2o3bo4bo2bo4bo$o4bo2bo4bo8bo5bo4bo2bo4bo$2b2o6b2o18b2o6b2o3$22bo$2b2o6b2o8b2ob2o5b2o6b2o$o4bo2bo4bo8bo5bo4bo2bo4bo$o4bo2bo4bo14bo4bo2bo4bo$o4bo2bo4bo14bo4bo2bo4bo$2b2o6b2o18b2o6b2o$22bo$13bo6b2ob2o3bo$12bobo7bo4bobo$13bo14bo!

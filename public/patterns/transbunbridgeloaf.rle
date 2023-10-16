@@ -1,0 +1,6 @@
+#N transbunbridgeloaf.rle
+#C https://conwaylife.com/wiki/Trans-bun_bridge_loaf
+#C https://www.conwaylife.com/patterns/transbunbridgeloaf.rle
+#C population=14
+x = 7, y = 7, rule = b3/s23
+4bo$3bobo$3bo2bo$b2ob2o$obo$obo$bo!

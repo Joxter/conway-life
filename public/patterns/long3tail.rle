@@ -1,0 +1,6 @@
+#N long3tail.rle
+#C https://conwaylife.com/wiki/Tail
+#C https://www.conwaylife.com/patterns/long3tail.rle
+#C population=7
+x = 4, y = 6, rule = b3/s23
+3bo$3bo$2bo$bo$o$2o!

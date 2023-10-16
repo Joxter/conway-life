@@ -1,0 +1,6 @@
+#N Beehive and cap
+#C The 14-cell still life.
+#C https://www.conwaylife.com/wiki/index.php?title=Beehive_and_cap
+#C population=14
+x = 5, y = 7, rule = b3/s23
+b2o2b$o2bob$4ob2$2b2ob$bo2bo$2b2o!

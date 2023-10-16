@@ -1,0 +1,6 @@
+#N Bookend
+#C An induction coil.
+#C www.conwaylife.com/wiki/index.php?title=Bookend
+#C population=7
+x = 4, y = 3, rule = b3/s23
+2b2o$o2bo$3o!

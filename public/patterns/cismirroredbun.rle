@@ -1,0 +1,6 @@
+#N cismirroredbun.rle
+#C https://conwaylife.com/wiki/Cis-mirrored_bun
+#C https://www.conwaylife.com/patterns/cismirroredbun.rle
+#C population=14
+x = 7, y = 4, rule = b3/s23
+bo3bo$obobobo$obobobo$b2ob2o!

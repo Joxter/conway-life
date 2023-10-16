@@ -1,0 +1,6 @@
+#N long3hookwithtail.rle
+#C https://conwaylife.com/wiki/Long%5E3_hook_with_tail
+#C https://www.conwaylife.com/patterns/long3hookwithtail.rle
+#C population=11
+x = 5, y = 8, rule = b3/s23
+bo$b3o$4bo$3bo$2bo$bo$o$2o!

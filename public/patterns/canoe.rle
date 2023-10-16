@@ -1,0 +1,6 @@
+#N Canoe
+#C An 8-cell still life.
+#C www.conwaylife.com/wiki/index.php?title=Canoe
+#C population=8
+x = 5, y = 5, rule = b3/s23
+3b2o$4bo$3bob$obo2b$2o!

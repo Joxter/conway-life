@@ -1,0 +1,6 @@
+#N metabunandhouse.rle
+#C https://conwaylife.com/wiki/Meta-bun_and_house
+#C https://www.conwaylife.com/patterns/metabunandhouse.rle
+#C population=16
+x = 7, y = 5, rule = b3/s23
+bo3b2o$obobobo$obobo$b2obobo$5b2o!

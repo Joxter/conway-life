@@ -1,0 +1,6 @@
+#N transshipondock.rle
+#C https://conwaylife.com/wiki/Trans-ship_on_dock
+#C https://www.conwaylife.com/patterns/transshipondock.rle
+#C population=16
+x = 6, y = 7, rule = b3/s23
+2o$obo$b2o2$b4o$o4bo$2o2b2o!

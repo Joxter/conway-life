@@ -1,0 +1,6 @@
+#N long3boat.rle
+#C https://conwaylife.com/wiki/Long%5E3_boat
+#C https://www.conwaylife.com/patterns/long3boat.rle
+#C population=11
+x = 6, y = 6, rule = b3/s23
+4bo$3bobo$2bobo$bobo$obo$2o!

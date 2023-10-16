@@ -1,0 +1,8 @@
+#N Original diuresis
+#O David Eppstein
+#C The original form of diuresis using pentadecathlons for stabilizati
+#C on
+#C https://www.conwaylife.com/wiki/index.php?title=Diuresis
+#C population=94
+x = 44, y = 21, rule = b3/s23
+bo2b2o4b2o2bo14bo2b2o4b2o2bob$o3b3o2b3o3bo12bo3b3o2b3o3bo$bo2b2o4b2o2bo14bo2b2o4b2o2bob2$24b2o18b$23bobo18b$23b2o19b$23bo20b6$23bo20b$23b2o19b$23bobo18b$24b2o18b2$bo2b2o4b2o2bo14bo2b2o4b2o2bob$o3b3o2b3o3bo12bo3b3o2b3o3bo$bo2b2o4b2o2bo14bo2b2o4b2o2bo!

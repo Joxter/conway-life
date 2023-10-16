@@ -1,0 +1,6 @@
+#N quadpredecessor.rle
+#C https://conwaylife.com/wiki/Quad
+#C https://www.conwaylife.com/patterns/quadpredecessor.rle
+#C population=35
+x = 19, y = 6, rule = b3/s23
+9b3o$bo7bo2b2o$3ob3o2b2o2bo3bo$4bo2b2o2b3ob2obo$4b2o2bo7bobo$6b3o8bo!

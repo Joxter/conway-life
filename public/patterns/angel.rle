@@ -1,0 +1,6 @@
+#N angel.rle
+#C https://conwaylife.com/wiki/Angel
+#C https://www.conwaylife.com/patterns/angel.rle
+#C population=8
+x = 5, y = 4, rule = b3/s23
+2bo$2ob2o$bobo$2bo!

@@ -1,0 +1,7 @@
+#N Up wing on wing
+#O Unknown
+#C https://conwaylife.com/wiki/Up_wing_on_wing
+#C https://conwaylife.com/patterns/upwingonwing.rle
+#C population=16
+x = 9, y = 4, rule = b3/s23
+b2o3b2o$o2bobo2bo$bobobobo$2b2ob2o!

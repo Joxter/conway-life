@@ -1,0 +1,6 @@
+#N cistubwithlong3tail.rle
+#C https://conwaylife.com/wiki/Cis-tub_with_long%5E3_tail
+#C https://www.conwaylife.com/patterns/cistubwithlong3tail.rle
+#C population=11
+x = 7, y = 5, rule = b3/s23
+2o$o4bo$bo2bobo$2bo2bo$3b2o!
