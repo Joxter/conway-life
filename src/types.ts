@@ -20,8 +20,8 @@ export type Pattern = {
   fileName: string;
   rawName: string;
   name: string;
-  comment: string;
-  author: string;
+  comment: string[];
+  author: string[];
   wikiLink: string;
   patternLink: string;
   population: number; // the population grows with a coefficient of x2.999...4 maximum

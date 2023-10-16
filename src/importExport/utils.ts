@@ -71,18 +71,19 @@ export function rleToHashLife(rle: string): Result<IFauna, string> {
 
 export function rleToPopulationAndSize(
   rle: string,
-): Result<{ pop: number; x: number; y: number }, string> {
+): Result<{ pop: number; width: number; height: number }, string> {
   let pop = 0;
-  let maxX = 0;
-  let maxY = 0;
+  let width = 0;
+  let height = 0;
 
   return parseRle(rle, (x, y) => {
     pop++;
-    if (x > maxX) maxX = x;
-    if (y > maxY) maxY = y;
-  }).map(() => {
-    if (pop === 0) return { pop, x: 0, y: 0 };
-    return { pop, x: maxX + 1, y: maxY + 1 };
+    if (x > width) width = x;
+    if (y > height) height = y;
+  }).andThen((): Result<{ pop: number; width: number; height: number }, string> => {
+    if (width === 0 || height === 0 || pop === 0) return Err("Empty pattern");
+
+    return Ok({ pop, width: width + 1, height: height + 1 });
   });
 }
 
@@ -204,73 +205,117 @@ export function cellsToGrid(cells: string): boolean[][] {
   return grid;
 }
 
-export function parseRleFile(rleFile: string, fileName: string): Pattern {
-  // todo add Result<>
+export function fixRleFile(content: string): Result<string, string> {
+  // fix size, filter non "b3/s23" rules
+  let lines = content.split("\n");
+
+  let result = "";
+
+  let ruleRegexp = /^x\s*=\s*(\d+),\s*y\s*=\s*(\d+),\s*rule\s*=\s*(.+)$/;
+  let i = 0;
+  let rule = "b3/s23";
+
+  let fineRule = ["b3/s23", "B3/s23", "b3/S23", "B3/S23", "3/23", "23/3"];
+
+  while (i < lines.length) {
+    let line = lines[i].trim();
+    i++;
+
+    if (line.startsWith("#")) {
+      result += line + "\n";
+    }
+
+    if (ruleRegexp.test(line)) {
+      let match = line.match(ruleRegexp);
+      if (match) {
+        let [, x, y, _fileRule] = match;
+        _fileRule = _fileRule.trim();
+
+        if (!fineRule.includes(_fileRule)) {
+          return Err(`Only "${rule}" possible, but got "${_fileRule}"`);
+        }
+      }
+      break;
+    }
+  }
+
+  let rle = "";
+  while (i < lines.length) {
+    rle += lines[i].trim();
+    i++;
+  }
+
+  return rleToPopulationAndSize(rle).map(({ width, height, pop }) => {
+    result += POPULATION_RLE_LINE_PREFIX + `${pop}\n`;
+    result += `x = ${width}, y = ${height}, rule = ${rule}\n`;
+    result += rle;
+
+    return result;
+  });
+}
+
+const POPULATION_RLE_LINE_PREFIX = "#C population=";
+
+export function parseNormRleFile(rleFile: string, fileName: string): Pattern {
   let lines = rleFile.split("\n");
 
   let rawName = "";
-  let author = "";
+  let author: string[] = [];
   let wikiLink = "";
   let patternLink = "";
-  let comment = "";
-  let rle = "";
+  let comment: string[] = [];
   let rule = "";
-  let size: [number, number] = [0, 0];
+  let population = 0;
+  let size = [0, 0] as [number, number];
 
-  let rleLineFound = false;
+  let ruleRegexp = /^x = (\d+), y = (\d+), rule = (.+)$/;
 
-  lines.forEach((line) => {
+  for (let line of lines) {
     line = line.trim();
-    if (rleLineFound) {
-      rle += line;
-      return;
-    }
-
-    if (line.startsWith("#N")) {
+    if (line.startsWith(POPULATION_RLE_LINE_PREFIX)) {
+      population = +line.slice(POPULATION_RLE_LINE_PREFIX.length);
+    } else if (line.startsWith("#N")) {
       rawName += line.slice(2).trim() + " ";
     } else if (line.startsWith("#O")) {
-      author += line.slice(2).trim() + "\n";
+      author.push(line.slice(2).trim());
     } else if (line.startsWith("#C")) {
       if (line.includes("conwaylife.com/wiki/")) {
+        // todo fix case "#C link: conwaylife.com"
         wikiLink = line.slice(2).trim();
       } else if (line.includes("conwaylife.com/patterns/")) {
+        // todo fix case "#C link: conwaylife.com"
         patternLink = line.slice(2).trim();
-      } else {
-        comment += line.slice(2).trim() + "\n";
       }
+      comment.push(line.slice(2).trim());
     } else if (line.startsWith("x ")) {
-      let regexp = /x\s*=\s*(\d+),\s*y\s*=\s*(\d+),\s*rule\s*=\s*(.+)/;
-      let match = line.match(regexp);
+      let match = line.match(ruleRegexp);
       if (match) {
         let [, x, y, _rule] = match;
-
         size = [+x, +y];
-        rule = _rule.toLowerCase();
+        rule = _rule;
       }
-    } else if (line.match(/^[bo\d!$]+$/)) {
-      rle += line;
-      rleLineFound = true;
+      break;
     }
-  });
-  rawName = rawName.trim();
+  }
+  let rle = lines[lines.length - 1];
 
-  let statsFromRle = rleToPopulationAndSize(rle).unwrapOr({ pop: 0, x: size[0], y: size[1] });
-
-  return {
+  let pat: Pattern = {
     fileName,
     rawName: rawName.trim(),
     name:
       prettifyName(getFromWikiLink(wikiLink)) || prettifyName(rawName) || prettifyName(fileName),
-    author: author.trim(),
-    comment: comment.trim(),
-    population: statsFromRle.pop,
+    author,
+    comment,
+    population,
     wikiLink,
     patternLink,
-    size: [statsFromRle.x, statsFromRle.y],
+    size,
     rule,
     rle,
     type: null,
   };
+
+  return pat;
 
   function getFromWikiLink(wikiLink: string) {
     // #C www.conwaylife.com/wiki/index.php?title=20P2

@@ -2,7 +2,7 @@ import { combine, createEffect, createEvent, createStore, sample } from "effecto
 import { allTemplates } from "../../all-templates";
 import { fuzzy, objEntries } from "../../utils";
 import { Pattern, PatternTypeNames } from "../../types";
-import { parseRleFile, rleToFauna } from "../../importExport/utils";
+import { parseNormRleFile, rleToFauna } from "../../importExport/utils";
 import { IFauna } from "../../lifes/interface";
 import { MyFauna } from "../../lifes/myFauna";
 
@@ -156,7 +156,7 @@ function apiFetchPattern(fileName: string): Promise<{ pattern: Pattern; faunaDat
       return res.text();
     })
     .then((rleFile): { pattern: Pattern; faunaData: IFauna } => {
-      let pattern = parseRleFile(rleFile, fileName);
+      let pattern = parseNormRleFile(rleFile, fileName);
 
       let faunaData = rleToFauna(pattern.rle).unwrapOr(new MyFauna());
       return { faunaData, pattern };

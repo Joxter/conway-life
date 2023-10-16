@@ -2,7 +2,7 @@ import fs from "fs";
 
 // @ts-ignore
 import { PNG } from "pngjs";
-import { parseRle, parseRleFile } from "../src/importExport/utils";
+import { parseRle, parseNormRleFile } from "../src/importExport/utils";
 import path from "node:path";
 import { Result } from "@sniptt/monads";
 
@@ -24,7 +24,7 @@ function run(folder: string, output: string) {
         let noExtName = fileName.slice(0, -4);
         let content = fs.readFileSync(`${folder}/${fileName}`, "utf8").toString();
 
-        let { rle, size } = parseRleFile(content, fileName);
+        let { rle, size } = parseNormRleFile(content, fileName);
 
         // console.log(fileName);
         rleToGrid(rle, size).match({
@@ -74,10 +74,7 @@ function generateImage(grid: boolean[][], fileName: string) {
   png.pack().pipe(fs.createWriteStream(fileName));
 }
 
-function rleToGrid(
-  rle: string,
-  [width, height]: [number, number],
-): Result<boolean[][], string> {
+function rleToGrid(rle: string, [width, height]: [number, number]): Result<boolean[][], string> {
   let maxSize = 500;
 
   let scale = Math.max(width, height) / maxSize;
@@ -100,4 +97,3 @@ function rleToGrid(
 
   return res.map(() => grid);
 }
-
