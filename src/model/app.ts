@@ -6,7 +6,7 @@ import { allTemplates } from "../all-templates";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
 import { MyFauna } from "../lifes/myFauna";
 
-const importExport = createImportExport();
+export const importExport = createImportExport();
 
 sample({
   clock: [

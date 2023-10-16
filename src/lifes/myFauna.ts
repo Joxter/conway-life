@@ -140,6 +140,17 @@ export class MyFauna implements IFauna<SerData> {
     this.generation++;
   }
 
+  shallowClone() {
+    let newFauna = new MyFauna();
+    newFauna.fauna = new Map(this.fauna);
+    newFauna.time = this.time;
+    newFauna.bounds = this.bounds;
+    newFauna.population = this.population;
+    newFauna.generation = this.generation;
+    newFauna.cells = this.cells;
+    return newFauna;
+  }
+
   serialise() {
     return {
       fauna: this.fauna,

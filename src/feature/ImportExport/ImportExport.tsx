@@ -1,8 +1,7 @@
-import css from "./styles.module.css";
-import { importExport } from "./importExport.model";
 import { useUnit } from "effector-solid";
 import { Modal } from "../../components/Modal/Modal";
 import { WhiteBox } from "../../components/WhiteBox/WhiteBox";
+import { importExport } from "../../model/app";
 
 export function ImportExportButton() {
   return <button onClick={importExport.open}>import/export</button>;
