@@ -1,10 +1,12 @@
 import { sample } from "effector";
-import { importExport } from "../feature/ImportExport/importExport.model";
+import { createImportExport } from "../feature/ImportExport/importExport.model";
 import { $faunaData, focusToTheMiddle, progress, resetFieldPressed, screen } from "./field";
 import { catalogue } from "../feature/Catalogue/Catalogue.model";
 import { allTemplates } from "../all-templates";
 import { faunaToRle, rleToFauna } from "../importExport/utils";
 import { MyFauna } from "../lifes/myFauna";
+
+const importExport = createImportExport();
 
 sample({
   clock: [
@@ -64,6 +66,15 @@ sample({
 
 progress.reset.watch(() => {
   window.location.hash = "";
+});
+
+importExport.imported.err.watch((err: any) => {
+  console.error(err);
+  if (typeof err === "string") {
+    alert(err);
+  }
+
+  alert(err || err?.message || "Failed to import pattern");
 });
 
 export function initWW() {
