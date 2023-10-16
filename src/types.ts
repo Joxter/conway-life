@@ -10,8 +10,9 @@ export type PatternTypes =
   | { name: "still-live" }
   | { name: "oscillator"; period: number }
   | { name: "will-die"; gen: number }
-  | { name: "ship"; period: number } // add direction
+  | { name: "ship"; period: number } // todo add direction
   | { name: "gun"; period: number }
+  | { name: "stable-at"; gen: number, period: number } // becomes stable at generation with period
   | { name: "unknown" };
 
 export const AllPatTypes = [
@@ -19,6 +20,7 @@ export const AllPatTypes = [
   "oscillator",
   "ship",
   "gun",
+  "stable-at",
   "unknown",
   "will-die",
 ] as const;

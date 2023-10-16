@@ -58,6 +58,19 @@ export function redraw(node: TreeNode) {
   }
 }
 
+const BIT_COUNTS = new Int8Array(0x758);
+BIT_COUNTS.set([0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4]);
+
+for (var i = 0x10; i < 0x758; i++) {
+  BIT_COUNTS[i] = BIT_COUNTS[i & 0xf] + BIT_COUNTS[(i >> 4) & 0xf] + BIT_COUNTS[i >> 8];
+}
+
+const POWERS = new Float64Array(1024);
+POWERS[0] = 1;
+for (let i = 1; i < 1024; i++) {
+  POWERS[i] = POWERS[i - 1] * 2;
+}
+
 export class LifeUniverse {
   last_id: number;
   hashmap_size: number;
@@ -65,8 +78,6 @@ export class LifeUniverse {
   hashmap: (TreeNode | undefined)[];
   empty_tree_cache: TreeNode[];
   level2_cache: TreeNode[];
-  _powers: Float64Array;
-  _bitcounts: Int8Array;
 
   rule_b: number;
   rule_s: number;
@@ -78,7 +89,6 @@ export class LifeUniverse {
   false_leaf: TreeNode;
   true_leaf: TreeNode;
 
-  // LifeUniverse
   constructor() {
     // last id for nodes
     /** @type {number} */
@@ -97,21 +107,6 @@ export class LifeUniverse {
     this.empty_tree_cache = [];
     this.level2_cache = [];
 
-    this._powers = new Float64Array(1024);
-    this._powers[0] = 1;
-
-    for (let i = 1; i < 1024; i++) {
-      this._powers[i] = this._powers[i - 1] * 2;
-    }
-
-    this._bitcounts = new Int8Array(0x758);
-    this._bitcounts.set([0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4]);
-
-    for (var i = 0x10; i < 0x758; i++) {
-      this._bitcounts[i] =
-        this._bitcounts[i & 0xf] + this._bitcounts[(i >> 4) & 0xf] + this._bitcounts[i >> 8];
-    }
-
     // current rule setting
     this.rule_b = 1 << 3;
     this.rule_s = (1 << 2) | (1 << 3);
@@ -123,33 +118,39 @@ export class LifeUniverse {
     /**
      * number of generations to calculate at one time,
      * written as 2^n
-     * @type {number}
      */
     this.step = 0;
 
     // in which generation are we
-    /** @type {number} */
     this.generation = 0;
 
     // living or dead leaf
-    this.false_leaf = {
-      id: 3,
-      population: 0,
-      level: 0,
-    } as TreeNode;
-    this.true_leaf = {
-      id: 2,
-      population: 1,
-      level: 0,
-    } as TreeNode;
+    this.false_leaf = { id: 3, population: 0, level: 0 } as TreeNode;
+    this.true_leaf = { id: 2, population: 1, level: 0 } as TreeNode;
 
     this.clear_pattern();
+  }
+
+  clone(): LifeUniverse {
+    let cloned = new LifeUniverse();
+    cloned.last_id = this.last_id;
+    cloned.hashmap_size = this.hashmap_size;
+    cloned.max_load = this.max_load;
+    cloned.hashmap = [...this.hashmap];
+    cloned.empty_tree_cache = [...this.empty_tree_cache];
+    cloned.level2_cache = [...this.level2_cache];
+    cloned.root = this.root;
+    cloned.rewind_state = this.rewind_state;
+    cloned.step = this.step;
+    cloned.generation = this.generation;
+
+    return cloned;
   }
 
   pow2(x: number) {
     if (x >= 1024) return Infinity;
 
-    return this._powers[x];
+    return POWERS[x];
   }
 
   save_rewind_state() {
@@ -167,7 +168,7 @@ export class LifeUniverse {
   eval_mask(bitmask: number) {
     var rule = bitmask & 32 ? this.rule_s : this.rule_b;
 
-    return (rule >> this._bitcounts[bitmask & 0x757]) & 1;
+    return (rule >> BIT_COUNTS[bitmask & 0x757]) & 1;
   }
 
   level1_create(bitmask: number) {
@@ -755,7 +756,7 @@ export class LifeUniverse {
 
   get_field(node: TreeNode) {
     let offset = this.pow2(node.level - 1);
-    let field: { x: number; y: number }[] = [];
+    let field: [number, number][] = [];
 
     this.node_get_field(node, -offset, -offset, field);
 
@@ -838,13 +839,13 @@ export class LifeUniverse {
     }
   }
 
-  node_get_field(node: TreeNode, left: number, top: number, field: { x: number; y: number }[]) {
+  node_get_field(node: TreeNode, left: number, top: number, field: [number, number][]) {
     if (node.population === 0) {
       return;
     }
 
     if (node.level === 0) {
-      field.push({ x: left, y: top });
+      field.push([left, top]);
     } else {
       var offset = this.pow2(node.level - 1);
 

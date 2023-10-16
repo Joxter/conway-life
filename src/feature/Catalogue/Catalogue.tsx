@@ -152,6 +152,13 @@ function PatType(props: { type: Pattern["type"] }) {
   if (props.type.name === "gun") {
     return <b>gun ({props.type.period})</b>;
   }
+  if (props.type.name === "stable-at") {
+    return (
+      <b>
+        stable-at (gen {props.type.gen} per{props.type.period})
+      </b>
+    );
+  }
   if (props.type.name === "unknown") {
     return <b>unknown</b>;
   }

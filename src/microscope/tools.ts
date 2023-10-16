@@ -1,4 +1,4 @@
-import { rleToHashLife } from "../importExport/utils";
+import { rleToFauna } from "../importExport/utils";
 import { PatternTypes, XY } from "../types";
 import { IFauna } from "../lifes/interface";
 import { Result, Option, Some } from "@sniptt/monads";
@@ -102,17 +102,34 @@ export function isSpaceship(init: IFauna, currFauna: IFauna, max: number): boole
 }
 
 export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, string> {
-  return rleToHashLife(rle).map((initFauna) => {
+  return rleToFauna(rle).map((initFauna) => {
     if (initFauna.getPopulation() === 0) return Some({ name: "unknown" });
 
-    let currFauna = rleToHashLife(rle).unwrap(); // todo add .clone() method?
+    let currFauna = initFauna.shallowClone();
+    let prevFaunas: IFauna[] = [];
 
     for (let i = 1; i <= max; i++) {
+      prevFaunas.push(currFauna.shallowClone());
       currFauna.nextGen();
       if (currFauna.getPopulation() === 0) {
         return Some({ name: "will-die", gen: i });
       }
       let { left, top } = currFauna.getBounds()!;
+
+      if (i > 4) {
+        // last 5 vars
+        for (let j = prevFaunas.length - 1; j >= 0; j--) {
+          let prFauna = prevFaunas[j];
+          if (prFauna.getGeneration() > 0 && isFaunaEq(prFauna, currFauna)) {
+            return Some({
+              name: "stable-at",
+              period: currFauna.getGeneration() - prFauna.getGeneration(),
+              gen: prFauna.getGeneration(),
+            });
+          }
+        }
+        prevFaunas.shift();
+      }
 
       if (isFaunaEq(initFauna, currFauna)) {
         if (i === 1) {

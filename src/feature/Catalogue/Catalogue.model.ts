@@ -32,6 +32,7 @@ export function createCatalogue() {
     oscillator: false,
     ship: false,
     gun: false,
+    "stable-at": false,
     "will-die": false,
     unknown: false,
   });

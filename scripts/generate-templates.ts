@@ -11,7 +11,7 @@ let outputAllTemplatePath = path.join(import.meta.dir, "../src/all-templates.ts"
 let startTime = Date.now();
 // normalizeRleFiles(normInputPath, normResultPath);
 
-let res = generateAllTemplateFile(normResultPath);
+let res = sortPatternsByTypes(normResultPath);
 fs.writeFileSync(
   //
   outputAllTemplatePath,
@@ -46,6 +46,15 @@ Done in 32.677 sec
 + norm patterns
 Types: {"still-live":580,"oscillator":1569,"ship":234,"gun":74,"unknown":1851,"will-die":46}
 Done in 32.504 sec
+
++ stable-at
+Types: {"still-live":580,"oscillator":1569,"ship":234,"gun":74,"stable-at":447,"unknown":1404,"will-die":46}
+Done in 198.597 sec
+
++ restore MyFauna
+Types: {"still-live":580,"oscillator":1569,"ship":234,"gun":74,"stable-at":447,"unknown":1404,"will-die":46}
+Done in 53.129 sec
+
 
 */
 
@@ -84,7 +93,7 @@ function normalizeRleFiles(inputFolder: string, output: string) {
   console.log("Ok:", ok);
 }
 
-function generateAllTemplateFile(folder: string) {
+function sortPatternsByTypes(folder: string) {
   let patternsNames: Record<string, number> = {};
   let patterns: PatternRow[] = [];
 
@@ -93,21 +102,21 @@ function generateAllTemplateFile(folder: string) {
     oscillator: 0,
     ship: 0,
     gun: 0,
+    "stable-at": 0,
     unknown: 0,
     "will-die": 0,
   };
 
   fs.readdirSync(folder)
-    // .slice(0, 20)
+    // .slice(0, 2)
     .forEach((fileName: string, i: number, all: string[]) => {
-      if (i % 500 === 0) {
+      if (i % 200 === 0) {
         let percent = Math.round((i / all.length) * 100);
         console.log(`${percent}% ${i}/${all.length}`);
       }
 
       let filePath = path.join(folder, fileName);
       let content = fs.readFileSync(filePath, "utf8").toString();
-
       let { rle, ...res } = parseNormRleFile(content, fileName);
 
       let limit = res.population < 100 ? 300 : res.population < 500 ? 100 : 10;
@@ -115,6 +124,8 @@ function generateAllTemplateFile(folder: string) {
       let type = typeByRle(rle, limit).unwrap().unwrap();
 
       res.type = type;
+
+      // console.log(fileName, JSON.stringify(type));
 
       patternTypesStat[type.name]++;
 

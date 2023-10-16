@@ -19,6 +19,13 @@ export class HashlifeAdapter implements IFauna<any> {
     this.universe.set_bit(x, y, !this.universe.get_bit(x, y));
   }
 
+  shallowClone() {
+    let cloned = new HashlifeAdapter();
+    cloned.universe = this.universe.clone();
+
+    return cloned;
+  }
+
   getCell(x: number, y: number): boolean {
     return this.universe.get_bit(x, y);
   }
@@ -35,7 +42,7 @@ export class HashlifeAdapter implements IFauna<any> {
   }
 
   getCells(): Coords[] {
-    return this.universe.get_field(this.universe.root!).map(({ x, y }) => [x, y]);
+    return this.universe.get_field(this.universe.root!);
   }
 
   getGeneration(): number {
