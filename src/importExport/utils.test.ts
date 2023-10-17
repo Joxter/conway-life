@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
-  faunaToCells,
+  faunaToCellsOld,
   faunaToGrid,
   faunaToRle,
   rleToFauna,
@@ -87,23 +87,23 @@ describe("import-export utils", () => {
   describe("rleToFauna", () => {
     test("glider", () => {
       expect(faunaToRle(rleToFauna(glider).unwrap())).toEqual(glider);
-      expect(faunaToCells(rleToFauna(glider).unwrap())).toEqual(".O\n..O\nOOO");
+      expect(faunaToCellsOld(rleToFauna(glider).unwrap())).toEqual(".O\n..O\nOOO");
     });
     test("gliderGun", () => {
       expect(faunaToRle(rleToFauna(gliderGun).unwrap())).toEqual(gliderGun);
-      expect(faunaToCells(rleToFauna(gliderGun).unwrap())).toEqual(
+      expect(faunaToCellsOld(rleToFauna(gliderGun).unwrap())).toEqual(
         "........................O\n......................O.O\n............OO......OO............OO\n...........O...O....OO............OO\nOO........O.....O...OO\nOO........O...O.OO....O.O\n..........O.....O.......O\n...........O...O\n............OO",
       );
     });
     test("gliderGunTest", () => {
       expect(faunaToRle(rleToFauna(gliderGunTest).unwrap())).toEqual(gliderGunTest);
-      expect(faunaToCells(rleToFauna(gliderGunTest).unwrap())).toEqual(
+      expect(faunaToCellsOld(rleToFauna(gliderGunTest).unwrap())).toEqual(
         "........................O\n......................O.O\n............OO......OO............OO\n\n\n...........O...O....OO............OO\nOO........O.....O...OO\n\n\n\n\n\nOO........O...O.OO....O.O\n..........O.....O.......O\n...........O...O\n............OO",
       );
     });
   });
 
-  describe("faunaToCells", () => {
+  describe("faunaToCellsOld", () => {
     test("104P177 should work", () => {
       let rle = `16bo12bo16b$9b2o24b2o9b$8b3o3b2o14b2o3b3o8b$14b2ob2o8b2ob2o14b$16bo12b
 o16b4$2bo40bo2b$b2o40b2ob$b2o40b2ob4$2b2o38b2o2b$2b2o38b2o2b$o3bo36bo
@@ -158,7 +158,7 @@ O...O....................................O...O
 .........OO........................OO
 ................O............O`;
 
-      expect(faunaToCells(rleToFauna(rle).unwrap())).toEqual(cells);
+      expect(faunaToCellsOld(rleToFauna(rle).unwrap())).toEqual(cells);
     });
   });
 

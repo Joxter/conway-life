@@ -7,7 +7,7 @@ import { HashlifeAdapter } from "../lifes/hashlifeAdapter";
 const DEAD = "b";
 const LIVE = "o";
 
-export function faunaToCells(fauna: IFauna): string {
+export function faunaToCellsOld(fauna: IFauna): string {
   let grid = faunaToGrid(fauna);
 
   return grid
@@ -22,6 +22,42 @@ export function faunaToCells(fauna: IFauna): string {
       }
     })
     .join("\n");
+}
+
+export function faunaToCells(fauna: IFauna): string {
+  let grid = faunaToGrid(fauna);
+
+  return grid
+    .map((row) => {
+      if (row.includes(1)) {
+        return row.map((c) => (c === 1 ? "X" : ".")).join("");
+      } else {
+        return "";
+      }
+    })
+    .join("\n");
+}
+
+/**
+ * .X.
+ * ..X
+ * XXX
+ *
+ * to Fauna
+ * */
+export function cellsToFauna(fauna: IFauna, str: string): IFauna {
+  str
+    .trim()
+    .split("\n")
+    .forEach((row, y) => {
+      row.split("").forEach((cell, x) => {
+        if (cell === "X") {
+          fauna.setCell(x, y, true);
+        }
+      });
+    });
+
+  return fauna;
 }
 
 export function faunaToGrid(fauna: IFauna): Array<(0 | 1)[]> {
