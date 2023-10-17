@@ -12,12 +12,8 @@ export function createImportExport() {
   const exportClicked = createEvent<any>();
   const importClicked = createEvent<any>();
 
-  $textField.on(exportFieldChanged, (_, val) => val);
-  $isOpen.on(open, () => true).on([close, importClicked], () => false);
-
   let importToFaunaFx = createEffect((content: string) => {
     let fixed = fixRleFile(content);
-
     if (fixed.isErr()) {
       throw new Error(fixed.unwrapErr());
     }
@@ -31,6 +27,9 @@ export function createImportExport() {
     clock: importClicked,
     target: importToFaunaFx,
   });
+
+  $textField.on(exportFieldChanged, (_, val) => val).reset(open);
+  $isOpen.on(open, () => true).on([close, importToFaunaFx.doneData], () => false);
 
   return {
     $textField,

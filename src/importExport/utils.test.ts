@@ -7,6 +7,7 @@ import {
   rleToFauna,
   parseNormRleFile,
   getRectOfFauna,
+  fixRleFile,
 } from "./utils";
 import { MyFauna } from "../lifes/myFauna";
 
@@ -314,6 +315,26 @@ x = 385, y = 337, rule = B3/S23
 
       let size = getRectOfFauna(rleToFauna("3b3o$bo5bo$o$o6bo$7o!").unwrap());
       expect(size).toEqual({ bottom: 4, left: 0, right: 7, top: 0 }); //
+    });
+  });
+
+  describe("fixRleFile", () => {
+    test("basic", () => {
+      let content = ` #N Achim%27s other_p%5E16
+x = 385, y = 337, rule = B3/S23
+133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!
+`;
+      expect(fixRleFile(content).unwrap()).toEqual(`#N Achim%27s other_p%5E16
+#C population=25
+x = 332, y = 2, rule = b3/s23
+133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`);
+    });
+
+    test("rle only", () => {
+      let content = ` 133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo! `;
+      expect(fixRleFile(content).unwrap()).toEqual(`#C population=25
+x = 332, y = 2, rule = b3/s23
+133boo76booboo3boo101boo3booboo$130bo3bo75bobobo3bobo14bo71bo14bobo!`); //
     });
   });
 });

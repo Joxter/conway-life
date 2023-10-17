@@ -12,7 +12,7 @@ sample({
   clock: [
     resetFieldPressed,
     importExport.exportClicked,
-    importExport.importClicked,
+    importExport.imported.ok,
     catalogue.patternFetched,
   ],
   target: progress.reset,
@@ -23,15 +23,6 @@ sample({
   clock: importExport.exportClicked,
   fn: (faunaRef) => faunaToRle(faunaRef.ref),
   target: importExport.$textField,
-});
-
-sample({
-  source: importExport.$textField,
-  clock: importExport.importClicked,
-  fn: (str) => {
-    return { ref: rleToFauna(str).unwrapOr(new MyFauna()) };
-  },
-  target: $faunaData,
 });
 
 setTimeout(() => {
@@ -55,7 +46,15 @@ sample({
 });
 
 sample({
-  clock: [importExport.importClicked, catalogue.patternFetched],
+  clock: importExport.imported.ok,
+  fn: (fauna) => {
+    return { ref: fauna };
+  },
+  target: $faunaData,
+});
+
+sample({
+  clock: [catalogue.patternFetched, importExport.imported.ok],
   target: focusToTheMiddle,
 });
 

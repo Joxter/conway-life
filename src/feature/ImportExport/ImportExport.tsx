@@ -2,6 +2,7 @@ import { useUnit } from "effector-solid";
 import { Modal } from "../../components/Modal/Modal";
 import { WhiteBox } from "../../components/WhiteBox/WhiteBox";
 import { importExport } from "../../model/app";
+import css from "./styles.module.css";
 
 export function ImportExportButton() {
   return <button onClick={importExport.open}>import/export</button>;
@@ -23,14 +24,20 @@ export function ImportExportModal() {
       >
         <div>
           <h2>Import/Export RLE</h2>
-          <button onClick={importExport.exportClicked}>Export</button>
-          <button onClick={importExport.importClicked}>Import</button>
         </div>
         <textarea
           onChange={(ev) => importExport.exportFieldChanged(ev.target.value)}
           style={{ width: "100%" }}
           value={exported()}
         ></textarea>
+        <div style={{ display: "flex", "justify-content": "space-between", "margin-top": "8px" }}>
+          <button class={css.buttons} onClick={importExport.exportClicked}>
+            Generate RLE
+          </button>
+          <button class={css.buttons} onClick={importExport.importClicked}>
+            Import from RLE
+          </button>
+        </div>
       </WhiteBox>
     </Modal>
   );

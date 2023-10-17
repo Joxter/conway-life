@@ -160,9 +160,15 @@ export function getRectOfFauna(fauna: IFauna): Size | null {
 }
 
 export function faunaToRle(fauna: IFauna): string {
+  // todo optimize
   let grid = faunaToGrid(fauna);
 
-  return squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join("$")) + "!";
+  let size = fauna.getSize();
+  let sizeLine = `x = ${size[0]}, y = ${size[1]}, rule = b3/s23\n`;
+
+  return (
+    sizeLine + squashMultiplyDollarsInString(grid.map((row) => squashRowToRle(row)).join("$")) + "!"
+  );
 
   function squashRowToRle(row: (0 | 1)[]): string {
     let res = "";
@@ -243,6 +249,7 @@ export function cellsToGrid(cells: string): boolean[][] {
 
 export function fixRleFile(content: string): Result<string, string> {
   // fix size, filter non "b3/s23" rules
+  content = content.trim();
   let lines = content.split("\n");
 
   let result = "";
@@ -255,23 +262,27 @@ export function fixRleFile(content: string): Result<string, string> {
 
   while (i < lines.length) {
     let line = lines[i].trim();
-    i++;
 
     if (line.startsWith("#")) {
       result += line + "\n";
-    }
-
-    if (ruleRegexp.test(line)) {
-      let match = line.match(ruleRegexp);
-      if (match) {
-        let [, x, y, _fileRule] = match;
-        _fileRule = _fileRule.trim();
-
-        if (!fineRule.includes(_fileRule)) {
-          return Err(`Only "${rule}" possible, but got "${_fileRule}"`);
-        }
-      }
+      i++;
+    } else {
       break;
+    }
+  }
+
+  let line = lines[i].trim();
+
+  if (ruleRegexp.test(line)) {
+    let match = line.match(ruleRegexp);
+    if (match) {
+      let [, x, y, _fileRule] = match;
+      _fileRule = _fileRule.trim();
+
+      if (!fineRule.includes(_fileRule)) {
+        return Err(`Only "${rule}" possible, but got "${_fileRule}"`);
+      }
+      i++;
     }
   }
 
