@@ -104,26 +104,22 @@ export function createCatalogue() {
 
   const fetchPatternFx = createEffect(apiFetchPattern);
 
-  const patternFetched = fetchPatternFx.doneData;
+  const patternFetched = fetchPatternFx.done;
 
-  $currentPattern.on(patternFetched, (_, { pattern }) => {
-    return pattern.fileName;
+  $currentPattern.on(patternFetched, (_, { result }) => {
+    return result.pattern.fileName;
   });
 
   fetchPatternFx.fail.watch(({ params, error }) => {
+    console.error(error);
     if (typeof error === "string") {
       alert(error);
     } else {
-      console.error(error);
       alert("Failed to fetch pattern: " + params);
     }
   });
 
   sample({ clock: [selectPattern, loadInitPattern], target: fetchPatternFx });
-
-  selectPattern.watch((filename) => {
-    window.location.hash = filename;
-  });
 
   return {
     $pageItems,

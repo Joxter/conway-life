@@ -4,10 +4,10 @@
 .buttons {
   background-color: #fff;
   padding: 10px;
-  border-radius: 30px;
-  border: 5px solid #5583e5;
+  font-weight: bold;
 }
 
-.buttons:hover {
-  border: 5px solid #efb49e;
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

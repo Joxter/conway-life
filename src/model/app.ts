@@ -39,8 +39,8 @@ setTimeout(() => {
 
 sample({
   clock: catalogue.patternFetched,
-  fn: ({ faunaData }) => {
-    return { ref: faunaData };
+  fn: ({ result }) => {
+    return { ref: result.faunaData };
   },
   target: $faunaData,
 });
@@ -63,8 +63,12 @@ sample({
   target: progress.stop,
 });
 
-progress.reset.watch(() => {
+resetFieldPressed.watch(() => {
   window.location.hash = "";
+});
+
+catalogue.patternFetched.watch(({ params }) => {
+  window.location.hash = params;
 });
 
 importExport.imported.err.watch((err: any) => {
