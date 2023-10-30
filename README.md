@@ -3,6 +3,10 @@
 ## TODO
 
 - [ ] scale less then 1px (1/2, 1/4, ...)
+- [ ] microscope:
+  - [ ] amount of islands
+  - [ ] determine symmetry
+  - [ ] detect shapes (glider, rock, etc..)
 - [ ] tools:
   - [ ] grab unit
   - [x] toggle one cell

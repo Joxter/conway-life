@@ -57,6 +57,11 @@ export class HashlifeAdapter implements IFauna<any> {
     return this.time;
   }
 
+  // @ts-ignore
+  eachCell() {
+    throw new Error(`Method "eachCell" not implemented.`);
+  }
+
   nextGen(): any {
     let start = Date.now();
     this.universe.next_generation(true);

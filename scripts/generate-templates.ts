@@ -110,6 +110,7 @@ function sortPatternsByTypes(folder: string) {
   fs.readdirSync(folder)
     // .slice(0, 2)
     .forEach((fileName: string, i: number, all: string[]) => {
+      // console.log(fileName);
       if (i % 200 === 0) {
         let percent = Math.round((i / all.length) * 100);
         console.log(`${percent}% ${i}/${all.length}`);

@@ -25,13 +25,13 @@ export function isFaunaEq(a: IFauna, b: IFauna, offset?: XY): boolean {
   }
 
   if (offset) {
-    for (let [x, y] of a.getCells()) {
+    for (let [x, y] of a.eachCell()) {
       if (!b.getCell(x + offset.x, y + offset.y)) {
         return false;
       }
     }
   } else {
-    for (let [x, y] of a.getCells()) {
+    for (let [x, y] of a.eachCell()) {
       if (!b.getCell(x, y)) {
         return false;
       }
@@ -62,7 +62,7 @@ export function isFaunaAinB(a: IFauna, b: IFauna): boolean {
     return false;
   }
 
-  for (let [x, y] of a.getCells()) {
+  for (let [x, y] of a.eachCell()) {
     if (!b.getCell(x, y)) {
       return false;
     }
@@ -74,7 +74,7 @@ export function isFaunaAinB(a: IFauna, b: IFauna): boolean {
 export function aMinusB(a: IFauna, b: IFauna): IFauna {
   let fauna = new MyFauna();
 
-  for (let [x, y] of a.getCells()) {
+  for (let [x, y] of a.eachCell()) {
     if (!b.getCell(x, y)) {
       fauna.setCell(x, y, true);
     }
