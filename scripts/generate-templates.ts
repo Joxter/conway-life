@@ -12,11 +12,11 @@ let startTime = Date.now();
 // normalizeRleFiles(normInputPath, normResultPath);
 
 let res = sortPatternsByTypes(normResultPath);
-fs.writeFileSync(
-  //
-  outputAllTemplatePath,
-  getAllTemplateContent(res.patterns, res.patternsNames),
-);
+// fs.writeFileSync(
+//   //
+//   outputAllTemplatePath,
+//   getAllTemplateContent(res.patterns, res.patternsNames),
+// );
 
 let endTime = Date.now();
 
@@ -100,14 +100,14 @@ function sortPatternsByTypes(folder: string) {
   let patternsNames: Record<string, number> = {};
   let patterns: PatternRow[] = [];
 
-  let patternTypesStat: Record<PatternTypeNames, number> = {
-    "still-live": 0,
-    oscillator: 0,
-    ship: 0,
-    gun: 0,
-    "stable-at": 0,
-    unknown: 0,
-    "will-die": 0,
+  let patternTypesStat: Record<PatternTypeNames, string[]> = {
+    "still-live": [],
+    oscillator: [],
+    ship: [],
+    gun: [],
+    "stable-at": [],
+    unknown: [],
+    "will-die": [],
   };
 
   fs.readdirSync(folder)
@@ -134,14 +134,22 @@ function sortPatternsByTypes(folder: string) {
 
       // console.log(fileName, JSON.stringify(type));
 
-      patternTypesStat[type.name]++;
+      patternTypesStat[type.name].push(fileName);
 
       patterns.push(PATTERN_COLS.map((colName) => res[colName]) as PatternRow);
       patternsNames[fileName] = patterns.length - 1;
     });
 
   console.log("Types: ");
-  console.log(JSON.stringify(patternTypesStat));
+  let patternTypesCnt = Object.fromEntries(
+    Object.entries(patternTypesStat)
+      //
+      .map(([name, arr]) => {
+        return [name, arr.length];
+      }),
+  );
+
+  console.log(JSON.stringify(patternTypesCnt));
 
   return { patterns, patternsNames };
 }

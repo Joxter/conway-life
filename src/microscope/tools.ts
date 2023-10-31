@@ -87,7 +87,7 @@ export function isSpaceship(init: IFauna, currFauna: IFauna, max: number): boole
   init.normalise();
   currFauna.normalise();
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= max; i++) {
     currFauna.nextGen();
     if (currFauna.getPopulation() === 0) {
       return false;
@@ -146,7 +146,7 @@ export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, 
             //
             aMinusB(currFauna, initFauna),
             aMinusB(currFauna, initFauna),
-            max,
+            10,
           )
         ) {
           return Some({ name: "gun", period: i });
