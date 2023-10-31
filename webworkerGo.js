@@ -175,17 +175,30 @@ class MyFauna {
     }
     return this.cells;
   }
+  eachCell() {
+    const f = this.fauna;
+    const obj = {
+      *[Symbol.iterator]() {
+        for (let [col, colMap] of f) {
+          for (let row of colMap) {
+            yield [col, row];
+          }
+        }
+      }
+    };
+    return obj;
+  }
   normalise() {
     if (this.population === 0)
       return;
     let newFauna = new Map;
     let { left, top } = this.getBounds();
-    this.getCells().forEach(([x, y]) => {
+    for (let [x, y] of this.eachCell()) {
       if (!newFauna.has(x - left)) {
         newFauna.set(x - left, new Set);
       }
       newFauna.get(x - left).add(y - top);
-    });
+    }
     this.fauna = newFauna;
     this.cells = null;
     this.bounds.top = 0;
