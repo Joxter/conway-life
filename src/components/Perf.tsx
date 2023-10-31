@@ -1,4 +1,4 @@
-import { fieldSize, $faunaData, $field, perf, $viewHoveredCell } from "../model/field";
+import { fieldSize, $faunaData, $field, perf, $viewHoveredCell, $islands } from "../model/field";
 import { useUnit } from "effector-solid";
 import { throttle } from "patronum";
 import { restore } from "effector";
@@ -28,7 +28,7 @@ let $cellsOnScreen = restore(
 );
 
 export function Perf() {
-  const [time, fps] = useUnit([perf.$time, perf.$fps]);
+  const [time, fps, islands] = useUnit([perf.$time, perf.$fps, $islands]);
   const [genPerSec, cellsOnScreen, hovered, centerScreenColRow, faunaStat] = useUnit([
     perf.$stepsPerSec,
     $cellsOnScreen,
@@ -75,6 +75,7 @@ export function Perf() {
         <span>{getSize()}</span>
         {!isTouchDevice && <span>cursor: {hoveredCoords()}</span>}
         <span>center: {screenCenterCoords()}</span>
+        <span>islands: {islands()}</span>
       </div>
       <div
         style={{

@@ -14,7 +14,7 @@ export interface IFauna<T = any> {
   getBounds: () => Size | null; // null for empty life
   getSize: () => readonly [width: number, height: number];
 
-  shallowClone: () => IFauna;
+  shallowClone: () => IFauna; // todo rewrite to getSnapshot or something similar
   normalise: () => void; // move cells to make left ant top border = 0 // TODO do I need it?
   serialise: () => T;
   deserialise: (data: T) => void;

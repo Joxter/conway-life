@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "node:path";
 import { PATTERN_COLS, PatternRow, PatternTypeNames } from "../src/types";
-import { fixRleFile, parseNormRleFile } from "../src/importExport/utils";
-import { typeByRle } from "../src/microscope/tools";
+import { fixRleFile, parseNormRleFile, rleToFauna } from "../src/importExport/utils";
+import { amountOfIslands, typeByRle } from "../src/microscope/tools";
 
 let normInputPath = path.join(import.meta.dir, "../raw-patterns/all");
 let normResultPath = path.join(import.meta.dir, "../public/patterns");
@@ -55,6 +55,9 @@ Done in 198.597 sec
 Types: {"still-live":580,"oscillator":1569,"ship":234,"gun":74,"stable-at":447,"unknown":1404,"will-die":46}
 Done in 53.129 sec
 
++ add amountOfIslands
+Types: {"still-live":580,"oscillator":1569,"ship":234,"gun":74,"stable-at":447,"unknown":1404,"will-die":46}
+Done in 70.340 sec
 
 */
 
@@ -108,7 +111,7 @@ function sortPatternsByTypes(folder: string) {
   };
 
   fs.readdirSync(folder)
-    // .slice(0, 2)
+    // .slice(0, 200)
     .forEach((fileName: string, i: number, all: string[]) => {
       // console.log(fileName);
       if (i % 200 === 0) {
@@ -125,6 +128,9 @@ function sortPatternsByTypes(folder: string) {
       let type = typeByRle(rle, limit).unwrap().unwrap();
 
       res.type = type;
+      res.islands = rleToFauna(rle)
+        .map<number | null>((f) => amountOfIslands(f))
+        .unwrapOr(null);
 
       // console.log(fileName, JSON.stringify(type));
 

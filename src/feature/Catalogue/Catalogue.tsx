@@ -108,7 +108,7 @@ export const CatalogueModal = () => {
                           {it.size[0]}x{it.size[1]}
                         </b>
                         ; population: <b>{it.population}</b>
-                        ; type: <PatType type={it.type} />
+                        ; type: <PatType type={it.type} />; islands: <b>{it.islands || "-"}</b>
                       </p>
                     </div>
                     {it.comment && <p>{it.comment}</p>}

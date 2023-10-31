@@ -1,6 +1,7 @@
-import { expect, test, describe } from "bun:test";
-import { isFaunaEq, typeByRle } from "./tools";
-import { rleToFauna } from "../importExport/utils";
+import { expect, test, describe, it } from "bun:test";
+import { amountOfIslands, isFaunaEq, typeByRle } from "./tools";
+import { cellsToFauna, rleToFauna } from "../importExport/utils";
+import { MyFauna } from "../lifes/myFauna";
 
 describe("tools", () => {
   describe("isFaunaEq", () => {
@@ -123,6 +124,32 @@ describe("tools", () => {
       let rle = `25b2o5b2o$25b2o5b2o12$27b2ob2o$26bo5bo2$25bo7bo$25bo2bobo2bo$25b3o3b3o
 3$17b2o$2o15bobo$2o17bo$17b3o4$17b3o$2o17bo$2o15bobo$17b2o!`;
       expect(extractedIsOscillatorsByRle(rle)).toEqual(92);
+    });
+  });
+
+  describe("amountOfIslands", () => {
+    it("should be 1", () => {
+      let fauna1 = cellsToFauna(new MyFauna(), `X`);
+      expect(amountOfIslands(fauna1)).toEqual(1);
+
+      let fauna2 = cellsToFauna(new MyFauna(), `XX\nXX`);
+      expect(amountOfIslands(fauna2)).toEqual(1);
+
+      let fauna3 = cellsToFauna(new MyFauna(), `X.\n.X`);
+      expect(amountOfIslands(fauna3)).toEqual(1);
+    });
+
+    it("should be 1 with gap 1", () => {
+      let fauna = cellsToFauna(new MyFauna(), `XX\n..\nXX`);
+      expect(amountOfIslands(fauna)).toEqual(1);
+    });
+
+    it("should be 2", () => {
+      let fauna1 = cellsToFauna(new MyFauna(), `XX\nXX\n..\n..\nXX\nXX`);
+      expect(amountOfIslands(fauna1)).toEqual(2);
+
+      let fauna2 = cellsToFauna(new MyFauna(), `XX\nXX\n..\n..\n..\nXX\nXX`);
+      expect(amountOfIslands(fauna2)).toEqual(2);
     });
   });
 });

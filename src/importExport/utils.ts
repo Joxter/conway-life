@@ -362,6 +362,7 @@ export function parseNormRleFile(rleFile: string, fileName: string): Pattern {
     rule,
     rle,
     type: null,
+    islands: null,
   };
 
   return pat;

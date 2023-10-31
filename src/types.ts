@@ -12,7 +12,7 @@ export type PatternTypes =
   | { name: "will-die"; gen: number }
   | { name: "ship"; period: number } // todo add direction
   | { name: "gun"; period: number }
-  | { name: "stable-at"; gen: number, period: number } // becomes stable at generation with period
+  | { name: "stable-at"; gen: number; period: number } // becomes stable at generation with period
   | { name: "unknown" };
 
 export const AllPatTypes = [
@@ -39,6 +39,7 @@ export type Pattern = {
   size: [x: number, y: number];
   rule: string;
   rle: string;
+  islands: number | null;
   type: PatternTypes | null;
 };
 
@@ -55,6 +56,7 @@ export const PATTERN_COLS = [
   "population",
   "size",
   "rule",
+  "islands",
   "type",
 ] as const;
 

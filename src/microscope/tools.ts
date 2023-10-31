@@ -157,3 +157,41 @@ export function typeByRle(rle: string, max = 100): Result<Option<PatternTypes>, 
     return Some({ name: "unknown" });
   });
 }
+
+export function amountOfIslands(fauna: IFauna): number {
+  // todo optimize
+  let cnt = 0;
+  let visited: Record<string, boolean> = {};
+
+  for (let [x, y] of fauna.eachCell()) {
+    let key = `${x},${y}`;
+    if (visited[key]) continue;
+
+    cnt++;
+
+    let stack: [x: number, y: number, hasLifeNeib: boolean][] = [[x, y, false]];
+
+    while (stack.length) {
+      let [x, y, hasLifeNeib] = stack.pop()!;
+      let key = `${x},${y}`;
+
+      let isLive = fauna.getCell(x, y);
+
+      if (visited[key]) continue;
+      visited[key] = true;
+
+      if (isLive || hasLifeNeib) {
+        stack.push([x + 1, y - 1, isLive]);
+        stack.push([x + 1, y, isLive]);
+        stack.push([x + 1, y + 1, isLive]);
+        stack.push([x, y - 1, isLive]);
+        stack.push([x, y + 1, isLive]);
+        stack.push([x - 1, y - 1, isLive]);
+        stack.push([x - 1, y, isLive]);
+        stack.push([x - 1, y + 1, isLive]);
+      }
+    }
+  }
+
+  return cnt;
+}

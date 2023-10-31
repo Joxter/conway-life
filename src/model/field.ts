@@ -8,10 +8,12 @@ import { MyFauna } from "../lifes/myFauna";
 import { IFauna } from "../lifes/interface";
 import { createLabels } from "../feature/Labels/labels.model";
 import { createPalette } from "../feature/Palette/palette.model";
+import { amountOfIslands } from "../microscope/tools";
 
 const ViewPort = getViewPortParams();
 
 export const $faunaData = createStore<{ ref: IFauna }>({ ref: new MyFauna() });
+export const $islands = $faunaData.map((it) => amountOfIslands(it.ref));
 
 export const fieldSize = createFieldSize();
 export const screen = createScreen(fieldSize.$screenOffsetXY);
