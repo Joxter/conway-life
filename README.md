@@ -2,25 +2,19 @@
 
 ## TODO
 
-- [ ] scale less then 1px (1/2, 1/4, ...)
+- [x] (WIP) scale less then 1px (1/2, 1/4, ...)
 - [ ] microscope:
-  - [ ] amount of islands
+  - [x] amount of islands
   - [ ] determine symmetry
   - [ ] detect shapes (glider, rock, etc..)
 - [ ] tools:
   - [ ] grab unit
   - [x] toggle one cell
   - [ ] draw pen
-  - [ ] add undo/redo
+  - [ ] undo/redo
   - [ ] area to focus
-  - [ ] ??? a line, selections to move/remove
-- [ ] better palette:
-  - [ ] grab unit
-  - [x] toggle one cell
-  - [ ] draw pen
-  - [ ] add undo/redo
-  - [ ] area to focus
-  - [ ] ??? a line, selections to move/remove
+  - [ ] ??? a line
+  - [ ] select area to move/delete
 - [ ] add keyboard support
 - [ ] better catalogue
   - [ ] better search, search by name/author/comment

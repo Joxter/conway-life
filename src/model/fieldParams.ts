@@ -4,12 +4,27 @@ import { getStrFromLS, getViewPortParams, setStrToLS } from "../utils";
 
 const vp = getViewPortParams();
 
+function parseCellSize(str: string): [number, number] {
+  let fallback: [number, number] = [1, 10];
+  if (str.includes(":")) {
+    let [cellCnt, cellSize] = str.split(":").map((it) => +it);
+    if (!cellCnt) cellCnt = 1;
+
+    if (!cellSize) return fallback;
+    return [cellCnt, cellSize];
+  }
+
+  let cellSize = +str;
+  if (!cellSize) return fallback;
+
+  return [1, cellSize];
+}
+
 export function createFieldSize() {
   const lsCellSizeName = "cellSize";
-  const options = [1, 50] as const;
   const SCALE = 1.1;
 
-  let initCellSize = +getStrFromLS(lsCellSizeName, "10") || 10;
+  let initCellSize = parseCellSize(getStrFromLS(lsCellSizeName, "1:10")) || [1, 10];
   const $cellSize = createStore({ size: initCellSize, prevSize: initCellSize });
 
   const $viewPortSize = createStore({ width: vp.width, height: vp.height });
@@ -21,28 +36,40 @@ export function createFieldSize() {
 
   $cellSize
     .on(minus, ({ size }) => {
-      let newSize = Math.max(options[0], Math.floor(size / SCALE));
+      let [cellCnt, cellSize] = size;
 
-      return { size: newSize, prevSize: size };
+      if (cellSize === 1) {
+        let newCellCnt = Math.ceil(cellCnt * SCALE);
+        return { size: [newCellCnt, 1], prevSize: [newCellCnt, 1] };
+      }
+
+      let newSize = Math.max(1, Math.floor(cellSize / SCALE));
+      return { size: [1, newSize], prevSize: [1, cellSize] };
     })
     .on(plus, ({ size }) => {
-      let newSize = Math.min(options[1], Math.ceil(size * SCALE));
+      let [cellCnt, cellSize] = size;
 
-      return { size: newSize, prevSize: size };
+      if (cellCnt > 1) {
+        let newCellCnt = Math.floor(cellCnt / SCALE);
+        return { size: [newCellCnt, 1], prevSize: [newCellCnt, 1] };
+      }
+
+      let newSize = Math.min(50, Math.ceil(cellSize * SCALE));
+      return { size: [1, newSize], prevSize: [1, cellSize] };
     });
 
   $cellSize.watch((val) => {
-    setStrToLS(lsCellSizeName, String(val.size));
+    setStrToLS(lsCellSizeName, val.size.join(","));
   });
 
   const $centerScreenColRow = combine($cellSize, $screenOffsetXY, ({ size }, screenOffsetXY) => {
-    const cellCol = Math.floor((vp.width / 2 - screenOffsetXY.x) / size);
-    const cellRow = Math.floor((vp.height / 2 - screenOffsetXY.y) / size);
+    const cellCol = Math.floor((vp.width / 2 - screenOffsetXY.x) / size[1]);
+    const cellRow = Math.floor((vp.height / 2 - screenOffsetXY.y) / size[1]);
 
     return { col: cellCol, row: cellRow };
   });
 
-  return { options, $cellSize, plus, minus, $viewPortSize, $screenOffsetXY, $centerScreenColRow };
+  return { $cellSize, plus, minus, $viewPortSize, $screenOffsetXY, $centerScreenColRow };
 }
 
 export function createScreen($screenOffset: Store<XY>) {

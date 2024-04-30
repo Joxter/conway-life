@@ -59,13 +59,13 @@ export function Field() {
 
       ctx.beginPath();
 
-      if (size > 10) {
+      if (size[1] > 10) {
         field.forEach((c) => {
-          ctx.rect(c[0] + 1, c[1] + 1, size - 1, size - 1);
+          ctx.rect(c[0] + 1, c[1] + 1, size[1] - 1, size[1] - 1);
         });
       } else {
         field.forEach((c) => {
-          ctx.rect(c[0], c[1], size, size);
+          ctx.rect(c[0], c[1], size[1], size[1]);
         });
       }
 

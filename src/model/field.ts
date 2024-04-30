@@ -42,30 +42,59 @@ sample({
   fn: ([screenOffset, hovered], { size, prevSize }) => {
     let cursor = hovered || { x: ViewPort.width / 2, y: ViewPort.height / 2 };
 
-    return adjustOffset(cursor, screenOffset, size, prevSize);
+    return adjustOffset(cursor, screenOffset, size[1], prevSize[1]);
   },
   target: fieldSize.$screenOffsetXY,
 });
+
+function create2dObj() {
+  const fieldObj: Record<number, Record<number, true>> = {};
+
+  return {
+    get: () => {
+      return fieldObj;
+    },
+    forEach: (cb: (x: number, y: number) => void) => {
+      Object.entries(fieldObj).forEach(([col, colMap]) => {
+        Object.keys(colMap).forEach((row) => {
+          cb(+col, +row);
+        });
+      });
+    },
+    set: (x: number, y: number) => {
+      if (!fieldObj[x]) {
+        fieldObj[x] = {};
+      }
+      fieldObj[x][y] = true;
+    },
+  };
+}
 
 export const $field = combine(
   $faunaData,
   fieldSize.$screenOffsetXY,
   fieldSize.$viewPortSize,
   fieldSize.$cellSize,
-  (fauna, focus, { width, height }, { size }): Field => {
-    const field: Field = [];
-    let screenWidth = width - focus.x;
-    let screenHeight = height - focus.y;
+  (fauna, screenOffsetXY, { width, height }, { size }): Field => {
+    let [cellCnt, cellSize] = size;
+
+    const fieldObj = create2dObj();
+    let screenWidthX = width * cellCnt - screenOffsetXY.x;
+    let screenHeightY = height * cellCnt - screenOffsetXY.y;
 
     fauna.ref.getCells().forEach(([cellCol, cellRow]) => {
-      let cellX = cellCol * size;
-      let cellY = cellRow * size;
+      let cellX = cellCol * (cellSize / cellCnt);
+      let cellY = cellRow * (cellSize / cellCnt);
 
-      if (cellX >= -focus.x && cellX < screenWidth) {
-        if (cellY >= -focus.y && cellY < screenHeight) {
-          field.push([cellX + focus.x, cellY + focus.y]);
+      if (cellX >= -screenOffsetXY.x && cellX < screenWidthX) {
+        if (cellY >= -screenOffsetXY.y && cellY < screenHeightY) {
+          fieldObj.set(cellX + screenOffsetXY.x, cellY + screenOffsetXY.y);
         }
       }
+    });
+    const field: Field = [];
+    fieldObj.forEach((x, y) => {
+      field.push([Math.ceil(+x), Math.ceil(+y)]);
     });
 
     return field;
@@ -83,8 +112,8 @@ export const $viewLabels = combine(
     let screenHeight = height - focus.y;
 
     labels.forEach(({ col, row, label }) => {
-      let cellX = col * size;
-      let cellY = row * size;
+      let cellX = col * size[1];
+      let cellY = row * size[1];
 
       if (cellX >= -focus.x && cellX < screenWidth) {
         if (cellY >= -focus.y && cellY < screenHeight) {
@@ -108,10 +137,10 @@ export const $viewHoveredCell = combine(
   palette.$currentPalette,
   (hovered, { size }, screenOffsetXY, currentPalette) => {
     if (hovered) {
-      const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size);
-      const cellRow = Math.floor((hovered.y - screenOffsetXY.y) / size);
-      const finX = (cellCol * size + screenOffsetXY.x).toFixed(0);
-      const finY = (cellRow * size + screenOffsetXY.y).toFixed(0);
+      const cellCol = Math.floor((hovered.x - screenOffsetXY.x) / size[1]);
+      const cellRow = Math.floor((hovered.y - screenOffsetXY.y) / size[1]);
+      const finX = (cellCol * size[1] + screenOffsetXY.x).toFixed(0);
+      const finY = (cellRow * size[1] + screenOffsetXY.y).toFixed(0);
 
       return {
         x: finX,
@@ -120,8 +149,8 @@ export const $viewHoveredCell = combine(
         row: cellRow,
         size: currentPalette
           ? {
-              width: currentPalette.width * size || size,
-              height: currentPalette.height * size || size,
+              width: currentPalette.width * size[1] || size,
+              height: currentPalette.height * size[1] || size,
             }
           : { width: size, height: size },
       };
@@ -148,12 +177,19 @@ sample({
     let maxVisualWidth = ViewPort.width * 0.6;
     let maxVisualHeight = ViewPort.height * 0.6;
 
-    let pixelSize = Math.floor(Math.min(maxVisualWidth / width, maxVisualHeight / height));
+    let pixelSize = Math.min(maxVisualWidth / width, maxVisualHeight / height);
 
-    if (pixelSize < 1) pixelSize = 1;
-    if (pixelSize > 25) pixelSize = 25;
+    let cellCnt = 1;
+    if (pixelSize < 1) {
+      cellCnt = Math.ceil(1 / pixelSize);
+      pixelSize = 1;
+    }
+    pixelSize = Math.floor(pixelSize);
 
-    return { size: pixelSize, prevSize: cellSize.size };
+    return {
+      size: [cellCnt, pixelSize] as [number, number],
+      prevSize: [...cellSize.size] as [number, number],
+    };
   },
   target: fieldSize.$cellSize,
 });
@@ -165,11 +201,15 @@ sample({
     cellSize: fieldSize.$cellSize,
   },
   clock: focusToTheMiddle,
-  fn: ({ fauna, viewPort, cellSize }) => {
+  fn: ({ fauna, viewPort, cellSize: cellSizeData }) => {
     const middle = getMiddleOfFauna(fauna.ref);
+
+    let [cellCnt, cellSize] = cellSizeData.size;
+    cellSize = cellSize / cellCnt;
+
     return {
-      x: viewPort.width / 2 - middle.x * cellSize.size,
-      y: viewPort.height / 2 - middle.y * cellSize.size,
+      x: viewPort.width / 2 - middle.x * cellSize,
+      y: viewPort.height / 2 - middle.y * cellSize,
     };
   },
   target: fieldSize.$screenOffsetXY,
@@ -186,14 +226,14 @@ sample({
   fn: ({ faunaData, screenOffsetXY, cellSize: { size }, currentPalette }, coords) => {
     if (currentPalette) {
       currentPalette.cells.forEach(([x, y]) => {
-        const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size) + x;
-        const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size) + y;
+        const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size[1]) + x;
+        const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size[1]) + y;
 
         faunaData.ref.toggleCell(faunaX, faunaY);
       });
     } else {
-      const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size);
-      const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size);
+      const faunaX = Math.floor((coords.x - screenOffsetXY.x) / size[1]);
+      const faunaY = Math.floor((coords.y - screenOffsetXY.y) / size[1]);
 
       faunaData.ref.toggleCell(faunaX, faunaY);
     }

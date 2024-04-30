@@ -9,10 +9,10 @@ export function Navigation() {
     <>
       <div>
         <PlusMinus
-          value={cellSize().size}
+          value={cellSize().size.join(":")}
           onPlusClicked={fieldSize.plus}
           onMinusClicked={fieldSize.minus}
-          range={fieldSize.options}
+          // range={fieldSize.options}
         />
       </div>
       <button style={{ padding: "4px", "margin-top": "10px" }} onClick={focusToTheMiddle}>
